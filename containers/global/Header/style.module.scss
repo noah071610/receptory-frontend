@@ -1,0 +1,24 @@
+@import "@/styles/variables.scss";
+
+.header {
+  width: 100%;
+  padding: 5px 8px;
+  min-height: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  @include z-index(header);
+
+  border-bottom: 1px solid rgba(214, 214, 214, 0.7);
+  background-color: var(--white);
+
+  .inner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.ghost {
+  height: calc(50px);
+}

@@ -1,0 +1,22 @@
+@import "@/styles/variables.scss";
+
+$footer-width: calc(var(--editor-width) + var(--preview-width));
+
+.footer {
+  position: fixed;
+  width: $footer-width;
+  @include z-index(edit-footer);
+  bottom: 0;
+  left: 50%;
+  height: 50px;
+  transform: translateX(calc(-50%));
+  display: grid;
+  grid-template-columns: var(--editor-width) var(--preview-width);
+  .main {
+    border-top: 1px solid var(--border);
+    background-color: var(--white);
+    width: 100%;
+    height: 100%;
+    padding: 5px 8px;
+  }
+}

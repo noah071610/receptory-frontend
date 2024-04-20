@@ -1,0 +1,47 @@
+@import "@/styles/variables.scss";
+
+.section {
+  width: 100%;
+  padding: 16px;
+  position: relative;
+  background-color: var(--white);
+  &.active {
+    @include z-index(edit-content);
+  }
+  .tools {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    align-items: center;
+    visibility: hidden;
+    &.active {
+      visibility: visible;
+    }
+    .grab {
+      width: 22px;
+      height: 22px;
+      cursor: grab;
+      transform: rotate(90deg);
+      svg {
+        color: var(--gray);
+        path {
+          fill: var(--gray);
+          color: var(--gray);
+        }
+      }
+    }
+    .delete {
+      width: 22px;
+      height: 22px;
+      @include flex;
+      svg {
+        font-size: 15px;
+        color: var(--gray);
+        @include action {
+          color: var(--pink);
+        }
+      }
+    }
+  }
+}
