@@ -2,7 +2,38 @@
 
 .contact {
   .main {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .title {
+      width: 80%;
+      background-color: var(--input-color);
+      color: var(--black-soft);
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 20px;
+    }
+    .btn-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      button {
+        img {
+          transition: 200ms all;
+        }
+        @include action {
+          img {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -40,8 +71,20 @@
       text-align: start;
       margin-bottom: 2px;
     }
-    input {
-      font-size: 15px;
+    .input {
+      width: 100%;
+      font-size: 13px;
+    }
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox  */
+    input[type="number"] {
+      -moz-appearance: textfield;
     }
   }
   .end {

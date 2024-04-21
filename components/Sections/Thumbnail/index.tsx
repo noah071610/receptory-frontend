@@ -66,13 +66,13 @@ export default function Thumbnail({ section }: { section: SectionType }) {
       }}
       className={cx(style.wrapper)}
     >
-      {section.src[1] && <ImageDelete srcIndex={1} />}
+      {section.src[1] && <ImageDelete section={section} srcIndex={1} />}
       <div className={cx(style.main)}>
         <div
           style={{ background: getImageUrl({ isCenter: true, url: section.src[0] ?? "" }) }}
           className={cx(style.thumbnail)}
         >
-          {section.src[0] && <ImageDelete srcIndex={0} />}
+          {section.src[0] && <ImageDelete section={section} srcIndex={0} />}
           <div className={cx(style["drop-zone"], { [style.active]: isDragActive })} {...getRootProps()}>
             <input {...getInputProps()} />
             <FontAwesomeIcon icon={faPlus} />

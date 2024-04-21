@@ -62,10 +62,55 @@ const createNewSection = (type: SectionTypes, index: number) => {
       case "contact":
         return {
           list: [
-            { value: "twitter", color: "rgba(29, 161, 242, 0.2)", isActive: false }, // 트위터 파란색
-            { value: "facebook", color: "rgba(24, 119, 242, 0.2)", isActive: false }, // 페이스북 파란색
-            { value: "kakaoTalk", color: "rgba(255, 235, 0, 0.2)", isActive: false }, // 카카오톡 노란색
-            { value: "line", color: "rgba(0, 195, 0, 0.2)", isActive: false }, // 라인 녹색
+            {
+              type: "call",
+              value: "",
+              isActive: true,
+              onClick: (str: string) => {
+                return `${str}`
+              },
+            }, // 라인 녹색
+            {
+              type: "email",
+              value: "",
+              isActive: false,
+              onClick: (str: string) => {
+                const mailtoLink = `mailto:${str}}`
+                window.location.href = mailtoLink
+              },
+            }, // 라인 녹색
+            {
+              type: "line",
+              value: "",
+              isActive: false,
+              onClick: (str: string) => {
+                return `${str}`
+              },
+            }, // 라인 녹색
+            {
+              type: "twitter",
+              cvalue: "",
+              isActive: false,
+              onClick: (str: string) => {
+                return `${str}`
+              },
+            }, // 트위터 파란색
+            {
+              type: "facebook",
+              cvalue: "",
+              isActive: false,
+              onClick: (str: string) => {
+                return `${str}`
+              },
+            }, // 페이스북 파란색
+            {
+              type: "kakaoTalk",
+              value: "",
+              isActive: false,
+              onClick: (str: string) => {
+                return `${str}`
+              },
+            }, // 카카오톡 노란색
           ],
         }
 
