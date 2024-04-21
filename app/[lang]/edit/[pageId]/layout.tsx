@@ -3,7 +3,7 @@ import { fallbackLng, languages } from "@/i18n/settings"
 import { LangParams, LayoutLangParams } from "@/types/Main"
 
 import EditorFooter from "@/containers/edit-page/EditorFooter"
-import Overlay from "@/containers/edit-page/Overlay"
+import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
 import style from "@/containers/edit-page/style.module.scss"
 import classNames from "classNames"
@@ -17,9 +17,10 @@ export async function generateMetadata({ params: { lang } }: LangParams) {
     title: t("createNew"),
   }
 }
+
 export default async function EditPageLayout({ children, params: { lang } }: Readonly<LayoutLangParams>) {
   return (
-    <div className={cx(style.page)}>
+    <PageLayout>
       <div className={cx(style.main)}>
         <div className={cx(style.editor)}>
           {children}
@@ -27,7 +28,6 @@ export default async function EditPageLayout({ children, params: { lang } }: Rea
         </div>
         <Preview />
       </div>
-      <Overlay />
-    </div>
+    </PageLayout>
   )
 }

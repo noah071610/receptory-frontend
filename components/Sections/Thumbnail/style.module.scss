@@ -1,0 +1,102 @@
+@import "@/styles/variables.scss";
+
+.wrapper {
+  width: 100%;
+  position: relative;
+  height: calc(100svh - 50px - 50px - 32px);
+  max-height: calc(100svh - 50px - 50px - 32px);
+  min-height: 600px;
+  position: relative;
+  overflow: hidden;
+  @include flex;
+  flex-direction: column;
+}
+
+.main {
+  width: 80%;
+
+  textarea {
+    width: 100%;
+    background-color: var(--input-color);
+    color: var(--black-soft);
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .title-input {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .description-input {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+}
+
+.thumbnail {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 10px;
+  @include flex;
+  flex-direction: column;
+  .drop-zone {
+    width: 100%;
+    height: 100%;
+    @include flex;
+    svg {
+      color: var(--input-color);
+      font-size: 40px;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(100% - 30px);
+      height: calc(100% - 30px);
+      border: 15px solid var(--input-color);
+    }
+
+    @include action {
+      svg {
+        color: var(--pink-soft);
+      }
+      &::before {
+        border-color: var(--pink-soft);
+      }
+    }
+    &.active {
+      svg {
+        color: var(--pink-soft);
+      }
+      &::before {
+        border-color: var(--pink-soft);
+      }
+    }
+  }
+}
+
+.cta-wrapper {
+  width: 100%;
+  @include flex;
+  .cta {
+    width: 220px;
+    border-radius: 100px;
+    background-color: white;
+    padding: 15px 20px;
+    input,
+    span {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+  }
+}

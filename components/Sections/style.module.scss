@@ -2,16 +2,21 @@
 
 .section {
   width: 100%;
-  padding: 16px;
+  padding: 14px;
   position: relative;
   background-color: var(--white);
+  border: 2px dashed transparent;
   &.active {
     @include z-index(edit-content);
+    border-color: var(--pink-soft);
   }
   .tools {
     position: absolute;
     top: 5px;
     right: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--border);
     display: flex;
     align-items: center;
     visibility: hidden;
@@ -24,10 +29,10 @@
       cursor: grab;
       transform: rotate(90deg);
       svg {
-        color: var(--gray);
+        color: var(--white);
         path {
-          fill: var(--gray);
-          color: var(--gray);
+          fill: var(--white);
+          color: var(--white);
         }
       }
     }
@@ -37,7 +42,7 @@
       @include flex;
       svg {
         font-size: 15px;
-        color: var(--gray);
+        color: var(--white);
         @include action {
           color: var(--pink);
         }

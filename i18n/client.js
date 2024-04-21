@@ -48,7 +48,7 @@ export function useTranslation(lng, ns, options) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       if (cookies.i18next === lng) return
-      setCookie(cookieName, lng, { path: "/" })
+      setCookie(cookieName, lng ?? "ko", { path: "/" })
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lng, cookies.i18next])
   }
