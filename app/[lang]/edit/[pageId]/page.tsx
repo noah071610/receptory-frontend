@@ -1,29 +1,51 @@
 "use client"
 
 import SectionLayout from "@/components/Sections"
-import Contact from "@/components/Sections/Contact"
-import Text from "@/components/Sections/Text"
+import Empty from "@/components/Sections/Empty"
 import Thumbnail from "@/components/Sections/Thumbnail"
-import style from "@/containers/edit-page/style.module.scss"
 import { useEditStore } from "@/store/edit"
-import { SectionType } from "@/types/Edit"
+import { SectionListTypes, SectionType } from "@/types/Edit"
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd"
-import classNames from "classNames"
-const cx = classNames.bind(style)
+import dynamic from "next/dynamic"
 
-const getSection = (section: SectionType) => {
-  switch (section.type) {
-    case "text":
-      return <Text section={section} />
-    case "contact":
-      return <Contact section={section} />
-    default:
-      return <></>
-  }
+const Callout = dynamic(() => import("@/components/Sections/Callout"), {
+  ssr: true,
+})
+const Album = dynamic(() => import("@/components/Sections/Album"), {
+  ssr: true,
+})
+const Contact = dynamic(() => import("@/components/Sections/Contact"), {
+  ssr: true,
+})
+const Slider = dynamic(() => import("@/components/Sections/Slider"), {
+  ssr: true,
+})
+const Text = dynamic(() => import("@/components/Sections/Text"), {
+  ssr: true,
+})
+const Title = dynamic(() => import("@/components/Sections/Title"), {
+  ssr: true,
+})
+const Map = dynamic(() => import("@/components/Sections/Map"), {
+  ssr: true,
+})
+
+const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
+  album: (section) => <Album section={section} />,
+  text: (section) => <Text section={section} />,
+  title: (section) => <Title section={section} />,
+  contact: (section) => <Contact section={section} />,
+  callout: (section) => <Callout section={section} />,
+  slider: (section) => <Slider section={section} />,
+  map: (section) => <Map section={section} />,
+  card: () => <></>,
+  qAnda: () => <></>,
+  thumbnail: () => <></>,
+  empty: () => <Empty />,
 }
 
 const EditPage = () => {
-  const { sections, moveSection, setSelectedSection, selectedSection } = useEditStore()
+  const { sections, moveSection } = useEditStore()
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result
@@ -46,11 +68,11 @@ const EditPage = () => {
             <div {...provided.droppableProps} ref={provided.innerRef}>
               <div>
                 {sections.slice(1).map((v, i) => (
-                  <Draggable index={i} key={v.id} draggableId={v.id}>
+                  <Draggable index={i + 1} key={v.id} draggableId={v.id}>
                     {(draggableProvided) => {
                       return (
                         <SectionLayout draggableProvided={draggableProvided} section={v} key={`${v.id}`}>
-                          {getSection(v)}
+                          {sectionMap[v.type](v)}
                         </SectionLayout>
                       )
                     }}

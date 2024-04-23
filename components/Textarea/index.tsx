@@ -2,6 +2,7 @@
 
 import { useTranslation } from "@/i18n/client"
 import { useEditStore } from "@/store/edit"
+import { AlignTypes } from "@/types/Edit"
 import { useParams } from "next/navigation"
 import { memo } from "react"
 import TextareaAutosize from "react-textarea-autosize"
@@ -9,27 +10,46 @@ import TextareaAutosize from "react-textarea-autosize"
 function Textarea({
   className,
   inputType,
-  targetIndex,
   value,
+  listIndex,
   isOptional,
   color,
+  textAlign,
 }: {
   className?: string
-  inputType: "title" | "description" | "cta"
-  targetIndex?: number
+  inputType: "title" | "description" | "cta" | "label" | "map"
   isOptional: boolean
+  listIndex?: number
   value: string
   color?: string
+  textAlign?: AlignTypes
 }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
-  const { setSection } = useEditStore()
+  const { setTitle, setDescription, setValues, setValue, setList, setLabel } = useEditStore()
   const onChangeInput = (e: any) => {
-    if (typeof targetIndex === "number") {
-      setSection({ type: "values", payload: e.target.value, arrIndex: targetIndex })
-    } else {
-      setSection({ type: "value", payload: e.target.value })
+    const map = {
+      title: () => {
+        if (typeof listIndex === "number") return setList({ payload: e.target.value, index: listIndex, key: "title" })
+        setTitle({ payload: e.target.value })
+      },
+      description: () => {
+        if (typeof listIndex === "number")
+          return setList({ payload: e.target.value, index: listIndex, key: "description" })
+        setDescription({ payload: e.target.value })
+      },
+      label: () => {
+        if (typeof listIndex === "number") return setList({ payload: e.target.value, index: listIndex, key: "label" })
+        setLabel({ payload: e.target.value })
+      },
+      cta: () => {
+        setValues({ payload: e.target.value, key: "ctaText" })
+      },
+      map: () => {
+        setValue({ payload: e.target.value })
+      },
     }
+    map[inputType]()
   }
 
   return (
@@ -39,7 +59,7 @@ function Textarea({
       placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
       value={value ?? ""}
       onChange={onChangeInput}
-      style={{ color: !!color ? color : "#505056" }}
+      style={{ color: !!color ? color : "#505056", textAlign }}
     />
   )
 }

@@ -7,11 +7,12 @@ import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 export default function PageLayout({ children }: { children: ReactNode }) {
-  const { selectedSection, setSelectedSection, setActiveListType } = useEditStore()
+  const { setOpenedTooltip, setSelectedSection, setOpenedSubmenu } = useEditStore()
   const onClickPage = (e: any) => {
     if (!e.target.closest("#editor")) {
       setSelectedSection({ payload: null })
-      setActiveListType({ type: null })
+      setOpenedSubmenu({ type: null })
+      setOpenedTooltip({ type: null })
     }
   }
   return (

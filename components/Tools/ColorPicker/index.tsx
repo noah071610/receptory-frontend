@@ -2,15 +2,15 @@
 import { HexColorPicker } from "react-colorful"
 
 import { useEditStore } from "@/store/edit"
-import { ColorsObj } from "@/types/Edit"
+import { SectionColorType } from "@/types/Edit"
 import classNames from "classNames"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-export default function ColorPicker({ colorKey }: { colorKey: keyof ColorsObj }) {
-  const { setSection, selectedSection } = useEditStore()
+export default function ColorPicker({ colorKey }: { colorKey: keyof SectionColorType }) {
+  const { setColor, selectedSection } = useEditStore()
   const onChangeColor = (color: string) => {
-    if (selectedSection) setSection({ type: "colors", key: colorKey, payload: color })
+    if (selectedSection) setColor({ key: colorKey, payload: color })
   }
   return (
     selectedSection && (

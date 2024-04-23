@@ -20,12 +20,9 @@ const cx = classNames.bind(style)
 export default function Thumbnail({ section }: { section: SectionType }) {
   const { lang } = useParams()
 
-  const { setSection } = useEditStore()
+  const { setSrc } = useEditStore()
   const { t } = useTranslation(lang, ["new-post-page"])
 
-  const onChangeInput = (targetIndex: number, e: any) => {
-    setSection({ type: "values", payload: e.target.value, arrIndex: targetIndex })
-  }
   const onDrop = useCallback((acceptedFiles: File[]) => {
     acceptedFiles.forEach(async (file: any) => {
       const formData = new FormData()
@@ -35,11 +32,10 @@ export default function Thumbnail({ section }: { section: SectionType }) {
       // if (msg === "ok") {
       // }
       if (process.env.NODE_ENV === "development") {
-        setSection({
-          type: "src",
+        setSrc({
+          key: "thumbnail",
           payload:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxMX47KdHnDG65nL8gniQhv5v37xWUjWlMJWZa24-syw&s",
-          arrIndex: 0,
         })
       }
     })
@@ -60,19 +56,19 @@ export default function Thumbnail({ section }: { section: SectionType }) {
   return (
     <div
       style={{
-        background: section.src[1]
-          ? getImageUrl({ isCenter: true, url: section.src[1] ?? "" })
+        background: section.src["bgImage"]
+          ? getImageUrl({ isCenter: true, url: section.src["bgImage"] ?? "" })
           : `linear-gradient(180deg, ${customColors.bgColor} 87%, rgba(0,0,0,0) 100%)`,
       }}
       className={cx(style.wrapper)}
     >
-      {section.src[1] && <ImageDelete section={section} srcIndex={1} />}
+      {section.src["bgImage"] && <ImageDelete section={section} srcKey={"bgImage"} />}
       <div className={cx(style.main)}>
         <div
-          style={{ background: getImageUrl({ isCenter: true, url: section.src[0] ?? "" }) }}
+          style={{ background: getImageUrl({ isCenter: true, url: section.src["thumbnail"] ?? "" }) }}
           className={cx(style.thumbnail)}
         >
-          {section.src[0] && <ImageDelete section={section} srcIndex={0} />}
+          {section.src["thumbnail"] && <ImageDelete section={section} srcKey={"thumbnail"} />}
           <div className={cx(style["drop-zone"], { [style.active]: isDragActive })} {...getRootProps()}>
             <input {...getInputProps()} />
             <FontAwesomeIcon icon={faPlus} />
@@ -83,20 +79,18 @@ export default function Thumbnail({ section }: { section: SectionType }) {
           inputType="title"
           isOptional={true}
           color={customColors.textColor}
-          targetIndex={0}
-          value={section.values[0]}
+          value={section.title}
         />
         <Textarea
           className={cx(style["description-input"])}
           inputType="description"
           isOptional={true}
           color={customColors.textColor}
-          targetIndex={1}
-          value={section.values[1]}
+          value={section.description}
         />
         <div className={cx(style["cta-wrapper"])}>
           <button style={{ backgroundColor: customColors.ctaColor }} className={cx(style.cta)}>
-            <Input inputType="cta" isOptional={false} color={ctaTextColor} targetIndex={2} value={section.values[2]} />
+            <Input inputType="cta" isOptional={false} color={ctaTextColor} value={section.values["ctaText"] ?? ""} />
           </button>
         </div>
       </div>

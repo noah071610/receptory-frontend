@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import "swiper/css"
 import "swiper/css/free-mode"
+
 config.autoAddCss = false
 
 const pretendard = localFont({

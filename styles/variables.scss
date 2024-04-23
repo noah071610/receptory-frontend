@@ -45,6 +45,44 @@
   height: 100%;
 }
 
+@mixin label-style($input: false) {
+  width: 30%;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--purple);
+  @if $input {
+    background-color: var(--input-color);
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+}
+
+@mixin header-style($input: false) {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--black-soft);
+  @if $input {
+    background-color: var(--input-color);
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+}
+
+@mixin description-style($input: false) {
+  width: 100%;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--black-soft);
+  @if $input {
+    background-color: var(--input-color);
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+}
+
 $z-index-map: (
   edit-overlay: 100,
   edit-content: 150,

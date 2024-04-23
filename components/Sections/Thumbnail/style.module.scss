@@ -16,22 +16,14 @@
   width: 80%;
 
   textarea {
-    width: 100%;
-    background-color: var(--input-color);
-    color: var(--black-soft);
-    padding: 10px 15px;
-    border-radius: 5px;
     text-align: center;
   }
   .title-input {
-    font-size: 22px;
-    font-weight: 700;
-    line-height: 1.35;
+    @include header-style($input: true);
     margin-bottom: 10px;
   }
   .description-input {
-    font-size: 15px;
-    line-height: 1.5;
+    @include description-style($input: true);
     margin-bottom: 15px;
   }
 }

@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/i18n/client"
 import { useEditStore } from "@/store/edit"
-import { FooterListActionTypes, FooterListType, SectionTypes } from "@/types/Edit"
+import { EditorFooterList, EditorFooterListActions, EditorFooterListTypes, SectionListTypes } from "@/types/Edit"
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
@@ -11,37 +11,44 @@ import { useCallback } from "react"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import ColorPicker from "../../../../components/Tools/ColorPicker"
-import style from "./style.module.scss"
+import style from "../style.module.scss"
 const cx = classNames.bind(style)
 
-export default function List({ list, isSectionList }: { list: FooterListType[]; isSectionList: boolean }) {
+export default function List({ list, isSectionList }: { list: EditorFooterList[]; isSectionList: boolean }) {
   const { lang } = useParams()
-  const { addSection, setSelectedSection, setActiveListType, setSection, activeListType, selectedSection } =
-    useEditStore()
+  const {
+    addSection,
+    setSelectedSection,
+    setOpenedTooltip,
+    openedTooltip,
+    setOpenedSubmenu,
+    setSrc,
+    openedSubmenu,
+    selectedSection,
+  } = useEditStore()
   const { t } = useTranslation()
-  const onClickAddSection = (type: SectionTypes) => {
+
+  const onClickAddSection = (type: SectionListTypes) => {
     addSection(type)
   }
   const onClickClose = () => {
     setSelectedSection({ payload: null })
-    setActiveListType({ type: null })
+    setOpenedSubmenu({ type: null })
   }
 
-  const onClickList = (value: string, type: FooterListActionTypes) => {
-    if (type === "tooltip") setActiveListType({ type: value })
-    if (type === "cta") {
-      switch (value) {
-        case "bgImage":
-          break
-
-        default:
-          break
-      }
+  const onClickList = (value: string, type: EditorFooterListActions) => {
+    if (type === "submenu") {
+      setOpenedSubmenu({ type: value })
+      setOpenedTooltip({ type: null })
+    }
+    if (type === "tooltip") {
+      setOpenedSubmenu({ type: null })
+      setOpenedTooltip({ type: value })
     }
   }
 
   const handleUpload = useCallback(
-    (e: any, type: string) => {
+    (e: any, type: EditorFooterListTypes, parent?: SectionListTypes) => {
       if (selectedSection) {
         const formData = new FormData()
         formData.append("image", e.target.files[0])
@@ -51,12 +58,13 @@ export default function List({ list, isSectionList }: { list: FooterListType[]; 
         // }
 
         if (process.env.NODE_ENV === "development") {
-          setSection({
-            type: "src",
-            payload:
-              "https://png.pngtree.com/thumb_back/fw800/back_our/20200814/ourmid/pngtree-romantic-sky-gradient-background-png-image_392970.jpg",
-            arrIndex: selectedSection.type === "thumbnail" ? 1 : 0,
-          })
+          if (parent === "thumbnail" && type === "bgImage") {
+            return setSrc({
+              payload:
+                "https://png.pngtree.com/thumb_back/fw800/back_our/20200814/ourmid/pngtree-romantic-sky-gradient-background-png-image_392970.jpg",
+              key: "bgImage",
+            })
+          }
         }
       }
     },
@@ -70,33 +78,42 @@ export default function List({ list, isSectionList }: { list: FooterListType[]; 
         slidesPerView={"auto"}
         freeMode={true}
         modules={[FreeMode]}
-        className={cx(style.slider)}
+        className={cx(style.slider, "editor-footer-slider")}
       >
-        {list.map((v, i) => (
-          <SwiperSlide className={cx(style.slide)} key={`tournament_candidate_${i}`}>
-            {v.actionType === "file" ? (
-              <label id="file-upload" className={cx(style.btn, style["file-upload"])}>
-                <input id="file-upload" multiple={false} type="file" onChange={(e) => handleUpload(e, v.value)} />
-                <div className={cx(style.icon)}>
-                  <FontAwesomeIcon icon={v.icon} />
-                </div>
-                <span>{t(v.value)}</span>
-              </label>
-            ) : (
-              <button
-                onClick={() => {
-                  !isSectionList ? onClickAddSection(v.value as SectionTypes) : onClickList(v.value, v.actionType)
-                }}
-                className={cx(style.btn)}
-              >
-                <div className={cx(style.icon)}>
-                  <FontAwesomeIcon icon={v.icon} />
-                </div>
-                <span>{t(v.value)}</span>
-              </button>
-            )}
-          </SwiperSlide>
-        ))}
+        {list.map((list, i) => {
+          return (
+            <SwiperSlide className={cx(style.slide)} key={`tournament_candidate_${i}`}>
+              {list.actionType === "file" ? (
+                <label id="file-upload" className={cx(style.btn, style["file-upload"])}>
+                  <input
+                    id="file-upload"
+                    multiple={false}
+                    type="file"
+                    onChange={(e) => handleUpload(e, list.value, list.parent)}
+                  />
+                  <div className={cx(style.icon)}>
+                    <FontAwesomeIcon icon={list.icon} />
+                  </div>
+                  <span>{t(list.value)}</span>
+                </label>
+              ) : (
+                <button
+                  onClick={() => {
+                    !isSectionList
+                      ? onClickAddSection(list.value as SectionListTypes)
+                      : onClickList(list.value, list.actionType)
+                  }}
+                  className={cx(style.btn, { [style.active]: openedSubmenu === list.value })}
+                >
+                  <div className={cx(style.icon)}>
+                    <FontAwesomeIcon icon={list.icon} />
+                  </div>
+                  <span>{t(list.value)}</span>
+                </button>
+              )}
+            </SwiperSlide>
+          )
+        })}
       </Swiper>
       {isSectionList && (
         <div className={cx(style.close)}>
@@ -107,9 +124,9 @@ export default function List({ list, isSectionList }: { list: FooterListType[]; 
           </button>
         </div>
       )}
-      {activeListType === "bgColor" && <ColorPicker colorKey="bgColor" />}
-      {activeListType === "textColor" && <ColorPicker colorKey="textColor" />}
-      {activeListType === "ctaColor" && <ColorPicker colorKey="ctaColor" />}
+      {(openedTooltip === "bgColor" || openedTooltip === "textColor" || openedTooltip === "ctaColor") && (
+        <ColorPicker colorKey={openedTooltip} />
+      )}
     </div>
   )
 }

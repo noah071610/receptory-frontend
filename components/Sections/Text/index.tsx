@@ -5,14 +5,12 @@ import { useEffect, useRef, useState } from "react"
 import Toolbar from "./Toolbar"
 
 import { editorStyleMap } from "@/config/edit"
-import { useEditStore } from "@/store/edit"
 import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 const Text = ({ section }: { section: SectionType }) => {
-  const { selectedSection } = useEditStore()
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const editor = useRef(null)
 

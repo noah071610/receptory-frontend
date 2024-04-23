@@ -1,0 +1,33 @@
+@import "@/styles/variables.scss";
+
+.card {
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+  @include border;
+  overflow: hidden;
+
+  .card-image {
+    width: 100%;
+    height: 160px;
+    .image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .content {
+    padding: 10px;
+    height: 100%;
+    .title-input {
+      width: 100%;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .description-input {
+      width: 100%;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+  }
+}

@@ -1,206 +1,55 @@
-import { ColorsObj, EditStage, FooterListType, SectionType, SectionTypes } from "@/types/Edit"
+import {
+  AnimationTypes,
+  EditStage,
+  SectionColorType,
+  SectionListType,
+  SectionListTypes,
+  SectionType,
+  StyleTypes,
+} from "@/types/Edit"
+import { Image } from "react-grid-gallery"
+
 import { produce } from "immer"
 import { create } from "zustand"
 
-import getId from "@/utils/getId"
-import {
-  faBrush,
-  faCommentAlt,
-  faFont,
-  faImage,
-  faImages,
-  faMap,
-  faPalette,
-  faPhone,
-} from "@fortawesome/free-solid-svg-icons"
-
-export const sectionList: FooterListType[] = [
-  { value: "text", icon: faFont, actionType: "cta" },
-  { value: "contact", icon: faPhone, actionType: "cta" },
-  { value: "image", icon: faImage, actionType: "cta" },
-  { value: "images", icon: faImages, actionType: "cta" },
-  { value: "map", icon: faMap, actionType: "cta" },
-  { value: "q&a", icon: faCommentAlt, actionType: "cta" },
-]
-
-export const thumbnailList: FooterListType[] = [
-  { value: "bgColor", icon: faPalette, actionType: "tooltip" },
-  { value: "textColor", icon: faFont, actionType: "tooltip" },
-  { value: "ctaColor", icon: faBrush, actionType: "tooltip" },
-  { value: "bgImage", icon: faImage, actionType: "file" },
-]
+import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
+import { cloneDeep } from "lodash"
 
 export interface EditStates {
   sections: SectionType[]
   stage: EditStage
   selectedSection: SectionType | null
-  activeListType: string | null
+  openedSubmenu: string | null
+  openedTooltip: string | null
 }
 
 type Actions = {
   setSelectedSection: ({ payload }: { payload: EditStates["selectedSection"] }) => void
-  addSection: (payload: SectionTypes) => void
-  setSection: ({
-    type,
-    payload,
-    arrIndex,
-    key,
-  }: {
-    type: keyof SectionType
-    payload: any
-    arrIndex?: number
-    key?: string
-  }) => void
-  setActiveListType: ({ type }: { type: string | null }) => void
+  addSection: (payload: SectionListTypes) => void
+  addList: ({ totalNum }: { totalNum: number }) => void
+  addImages: ({ width, height, src }: { width: number; height: number; src: string }) => void
+  setColor: ({ payload, key }: { payload: string; key: keyof SectionColorType }) => void
+  setTitle: ({ payload }: { payload: string }) => void
+  setStyle: ({ payload }: { payload: StyleTypes }) => void
+  setAnimation: ({ payload }: { payload: AnimationTypes }) => void
+  setDescription: ({ payload }: { payload: string }) => void
+  setLabel: ({ payload }: { payload: string }) => void
+  setList: ({ index, payload, key }: { index: number; payload: any; key: keyof SectionListType }) => void
+  setImages: ({ index, payload, key }: { index: number; payload: any; key: keyof Image }) => void
+  setValue: ({ payload }: { payload: string }) => void
+  setValues: ({ payload, key }: { payload: any; key: string }) => void
+  setSrc: ({ payload, key }: { payload: string; key: string }) => void
+  setOpenedSubmenu: ({ type }: { type: string | null }) => void
+  setOpenedTooltip: ({ type }: { type: string | null }) => void
   deleteSection: (id: string) => void
   moveSection: ({ from, to }: { from: number; to: number }) => void
 }
 
-const createNewSection = (type: SectionTypes, index: number) => {
-  const obj = () => {
-    switch (type) {
-      case "contact":
-        return {
-          list: [
-            {
-              type: "call",
-              value: "",
-              isActive: true,
-              onClick: (str: string) => {
-                return `${str}`
-              },
-            }, // 라인 녹색
-            {
-              type: "email",
-              value: "",
-              isActive: false,
-              onClick: (str: string) => {
-                const mailtoLink = `mailto:${str}}`
-                window.location.href = mailtoLink
-              },
-            }, // 라인 녹색
-            {
-              type: "line",
-              value: "",
-              isActive: false,
-              onClick: (str: string) => {
-                return `${str}`
-              },
-            }, // 라인 녹색
-            {
-              type: "twitter",
-              cvalue: "",
-              isActive: false,
-              onClick: (str: string) => {
-                return `${str}`
-              },
-            }, // 트위터 파란색
-            {
-              type: "facebook",
-              cvalue: "",
-              isActive: false,
-              onClick: (str: string) => {
-                return `${str}`
-              },
-            }, // 페이스북 파란색
-            {
-              type: "kakaoTalk",
-              value: "",
-              isActive: false,
-              onClick: (str: string) => {
-                return `${str}`
-              },
-            }, // 카카오톡 노란색
-          ],
-        }
-
-      default:
-        return {}
-    }
-  }
-  return {
-    id: getId(),
-    index,
-    type,
-    value: "",
-    values: [],
-    src: [],
-    style: "",
-    list: [],
-    colors: {
-      bgColor: "#ffffff",
-      ctaColor: "#d9abffdf",
-      textColor: "#505056",
-      mainColor: "#ffffff",
-      subColor: "#ffffff",
-    },
-    animation: null,
-    ...obj(),
-  }
-}
-
-const setTargetSection = (
-  selectedSection: SectionType,
-  target: SectionType,
-  type: keyof SectionType,
-  payload: any,
-  index?: number,
-  key?: string
-) => {
-  switch (type) {
-    case "colors":
-      if (!target.colors[key as keyof ColorsObj]) return alert("key 값 없음")
-      if (key) {
-        target.colors[key as keyof ColorsObj] = payload as string
-        selectedSection.colors[key as keyof ColorsObj] = payload as string
-      } else {
-        alert("key 값 없음")
-      }
-
-      break
-    case "value":
-      target.value = payload as string
-      selectedSection.value = payload as string
-      break
-    case "values":
-      if (typeof index === "number") {
-        target.values[index] = payload
-        selectedSection.values[index] = payload
-      } else {
-        alert("index 값 없음")
-      }
-      break
-    case "list":
-      if (key) {
-        if (typeof index === "number") {
-          target.list[index][key] = payload
-          selectedSection.list[index][key] = payload
-        } else {
-          alert("index 값 없음")
-        }
-      } else {
-        alert("key 값 없음")
-      }
-      break
-    case "src":
-      if (typeof index !== "number") return alert("index 값 없음")
-      if (!!payload) {
-        target.src[index] = payload
-        selectedSection.src[index] = payload
-      } else {
-        target.src = target.src.map((v, i) => (i === index ? "" : v))
-        selectedSection.src = selectedSection.src.map((v, i) => (i === index ? "" : v))
-      }
-      break
-    default:
-      alert("setTargetSection 값 없음")
-      break
-  }
-}
 export const useEditStore = create<EditStates & Actions>()((set) => ({
   sections: [createNewSection("thumbnail", 0)],
   stage: "init",
-  activeListType: null,
+  openedSubmenu: null,
+  openedTooltip: null,
   selectedSection: null,
   setSelectedSection: ({ payload }) =>
     set((origin) =>
@@ -208,21 +57,127 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
         draft.selectedSection = payload
       })
     ),
-  setSection: ({ type, payload, arrIndex, key }) =>
+
+  setColor: ({ payload, key }) =>
     set((origin) =>
       produce(origin, (draft) => {
         if (draft.selectedSection) {
           const target = draft.sections[draft.selectedSection.index]
-          if (target) {
-            setTargetSection(draft.selectedSection, target, type, payload, arrIndex, key)
-          }
+          target.colors[key] = payload as string
+          draft.selectedSection.colors[key] = payload as string
         }
       })
     ),
-  setActiveListType: ({ type }) =>
+  setValue: ({ payload }) =>
     set((origin) =>
       produce(origin, (draft) => {
-        draft.activeListType = type
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.value = payload
+          draft.selectedSection.value = payload
+        }
+      })
+    ),
+  setValues: ({ payload, key }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.values[key] = payload
+          draft.selectedSection.values[key] = payload
+        }
+      })
+    ),
+  setList: ({ index, payload, key }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.list[index][key] = payload as never
+          draft.selectedSection.list[index][key] = payload as never
+        }
+      })
+    ),
+  setImages: ({ index, payload, key }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.images[index][key] = payload as never
+          draft.selectedSection.images[index][key] = payload as never
+        }
+      })
+    ),
+  setTitle: ({ payload }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.title = payload
+          draft.selectedSection.title = payload
+        }
+      })
+    ),
+  setLabel: ({ payload }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.label = payload
+          draft.selectedSection.label = payload
+        }
+      })
+    ),
+  setAnimation: ({ payload }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.animation = payload
+          draft.selectedSection.animation = payload
+        }
+      })
+    ),
+  setStyle: ({ payload }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.style = payload
+          draft.selectedSection.style = payload
+        }
+      })
+    ),
+  setDescription: ({ payload }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.description = payload
+          draft.selectedSection.description = payload
+        }
+      })
+    ),
+  setSrc: ({ payload, key }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.src[key] = payload
+          draft.selectedSection.src[key] = payload
+        }
+      })
+    ),
+  setOpenedSubmenu: ({ type }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        draft.openedSubmenu = type
+      })
+    ),
+  setOpenedTooltip: ({ type }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        draft.openedTooltip = type
       })
     ),
   addSection: (payload) =>
@@ -233,14 +188,42 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
         draft.selectedSection = target
       })
     ),
+  addList: ({ totalNum }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          Array.from({ length: totalNum }, (_, i) => i).forEach((i) =>
+            target.list.push(createNewSectionList("slider", i))
+          )
+          draft.selectedSection.list = target.list
+        }
+      })
+    ),
+  addImages: ({ src, width, height }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          const obj = {
+            src,
+            width,
+            height,
+            thumbnailCaption: "",
+          }
+          target.images.push(obj)
+          draft.selectedSection.images.push(obj)
+        }
+      })
+    ),
 
   moveSection: ({ from, to }) =>
     set((origin) =>
       produce(origin, (draft) => {
-        const _target = { ...draft.sections[from] }
+        const _target = cloneDeep(draft.sections[from])
         draft.sections.splice(from, 1)
         draft.sections.splice(to, 0, _target)
-        draft.sections = draft.sections.map((v, i) => ({ ...v, index: i + 1 }))
+        draft.sections = draft.sections.map((v, i) => ({ ...v, index: i }))
       })
     ),
 
@@ -249,7 +232,7 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
       produce(origin, (draft) => {
         draft.sections = draft.sections.filter((v) => v.id !== payload)
         draft.selectedSection = null
-        draft.sections = draft.sections.map((v, i) => ({ ...v, index: i + 1 }))
+        draft.sections = draft.sections.map((v, i) => ({ ...v, index: i }))
       })
     ),
 }))
