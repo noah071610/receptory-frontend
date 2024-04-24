@@ -29,6 +29,9 @@ const Title = dynamic(() => import("@/components/Sections/Title"), {
 const Map = dynamic(() => import("@/components/Sections/Map"), {
   ssr: true,
 })
+const QnA = dynamic(() => import("@/components/Sections/QnA"), {
+  ssr: true,
+})
 
 const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
   album: (section) => <Album section={section} />,
@@ -38,8 +41,7 @@ const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
   callout: (section) => <Callout section={section} />,
   slider: (section) => <Slider section={section} />,
   map: (section) => <Map section={section} />,
-  card: () => <></>,
-  qAnda: () => <></>,
+  qna: (section) => <QnA section={section} />,
   thumbnail: () => <></>,
   empty: () => <Empty />,
 }

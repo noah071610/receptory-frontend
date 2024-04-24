@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import "swiper/css"
 import "swiper/css/free-mode"
+import "swiper/css/thumbs"
 
 config.autoAddCss = false
 

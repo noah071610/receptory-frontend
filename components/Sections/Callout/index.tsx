@@ -1,25 +1,27 @@
 "use client"
 
 import { SectionType } from "@/types/Edit"
+import getContrastTextColor from "@/utils/getContrastTextColor"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
-import { memo } from "react"
+import { memo, useMemo } from "react"
 import Text from "../Text"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 function Callout({ section }: { section: SectionType }) {
+  const textColor = useMemo(() => getContrastTextColor(section.colors.bgColor), [section.colors.bgColor])
   return (
     <div className={cx(style["layout"])}>
-      <div className={cx(style.callout)}>
+      <div style={{ background: section.colors.bgColor }} className={cx(style.callout)}>
         <div className={cx(style["image-container"])}>
           <button>
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
         <div className={cx(style.main)}>
-          <Text section={section} />
+          <Text textColor={textColor} section={section} />
         </div>
       </div>
     </div>

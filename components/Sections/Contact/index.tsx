@@ -47,24 +47,14 @@ function Contact({ section }: { section: SectionType }) {
               switch (v.type) {
                 case "call":
                   return (
-                    <a
-                      style={{
-                        animation: getAnimation(section.animation, i * 130),
-                        opacity: section.animation === "none" ? 1 : 0,
-                      }}
-                      href={`tel:${v.value}`}
-                      key={`btn_${v.type}`}
-                    >
+                    <a style={getAnimation(section.animation, i * 130)} href={`tel:${v.value}`} key={`btn_${v.type}`}>
                       <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
                     </a>
                   )
                 default:
                   return (
                     <button
-                      style={{
-                        animation: getAnimation(section.animation, i * 130),
-                        opacity: section.animation === "none" ? 1 : 0,
-                      }}
+                      style={getAnimation(section.animation, i * 130)}
                       // onClick={() => v.onClick(v.value)} todo:
                       key={`btn_${v.type}`}
                     >

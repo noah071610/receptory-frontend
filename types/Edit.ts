@@ -6,12 +6,11 @@ export type SectionListTypes =
   | "text"
   | "title"
   | "contact"
-  | "card"
   | "callout"
   | "slider"
   | "album"
   | "map"
-  | "qAnda"
+  | "qna"
   | "empty"
 export type TargetSectionListTypes =
   | "bgColor"
@@ -24,7 +23,15 @@ export type TargetSectionListTypes =
   | "select"
 
 export type AlignTypes = "left" | "center" | "right"
-export type StyleTypes = "basicStyle" | "cardStyle" | "albumStyle" | "gridTwoStyle" | "gridOneStyle" | AlignTypes
+export type StyleTypes =
+  | "basicStyle"
+  | "cardStyle"
+  | "albumStyle"
+  | "gridTwoStyle"
+  | "gridOneStyle"
+  | "thumbnailStyle"
+  | "circleStyle"
+  | AlignTypes
 export type AnimationTypes = "none" | "fadeUp" | "flip" | "fadeIn" | "bounce" | "scaleUp"
 export type TitleSelectTypes = "title" | "description" | "label"
 

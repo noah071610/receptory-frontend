@@ -1,3 +1,4 @@
+import { colors, defaultColors } from "@/config/colors"
 import { SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
 import getId from "./getId"
 
@@ -15,13 +16,7 @@ export const createNewSectionList = (subType: string, index: number): SectionLis
     list: [],
     src: "",
     style: "basicStyle",
-    colors: {
-      bgColor: "#ffffff",
-      ctaColor: "#d9abffdf",
-      textColor: "#505056",
-      mainColor: "#ffffff",
-      subColor: "#ffffff",
-    },
+    colors: defaultColors,
     animation: "none",
   }
 }
@@ -30,12 +25,21 @@ export const createNewSection = (type: SectionListTypes, index: number): Section
   const temp: any = () => {
     switch (type) {
       case "contact":
-        return {
+        const target = {
           list: ["call", "email", "line", "twitter", "facebook", "kakaoTalk"].map((v, i) => createNewSectionList(v, i)),
         }
+        target.list[0].isActive = true
+        return target
       case "album":
         return {
           style: "albumStyle",
+        }
+      case "callout":
+        return {
+          colors: {
+            ...defaultColors,
+            bgColor: colors.graySoft,
+          },
         }
       case "title":
         return {
@@ -43,6 +47,10 @@ export const createNewSection = (type: SectionListTypes, index: number): Section
           list: ["title", "description", "label"]
             .map((v, i) => createNewSectionList(v, i))
             .map((v) => ({ ...v, isActive: true })),
+        }
+      case "qna":
+        return {
+          list: [{ ...createNewSectionList("qna", 0), isActive: true }],
         }
       default:
         return {}
@@ -62,13 +70,7 @@ export const createNewSection = (type: SectionListTypes, index: number): Section
     list: [],
     src: {},
     style: "basicStyle",
-    colors: {
-      bgColor: "#ffffff",
-      ctaColor: "#d9abffdf",
-      textColor: "#505056",
-      mainColor: "#ffffff",
-      subColor: "#ffffff",
-    },
+    colors: defaultColors,
     animation: "none",
     ...temp(),
   }

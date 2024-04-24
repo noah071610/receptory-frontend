@@ -1,8 +1,9 @@
 "use client"
 
+import { useTranslation } from "@/i18n/client"
 import { useEditStore } from "@/store/edit"
 import { SectionType } from "@/types/Edit"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faImages } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
 import { memo, useCallback } from "react"
@@ -25,6 +26,7 @@ function Dropzone({
   srcKey: string
   section: SectionType
 }) {
+  const { t } = useTranslation()
   const { setSrc, setList, addImages, addList, selectedSection, setSelectedSection } = useEditStore()
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -89,12 +91,15 @@ function Dropzone({
 
   return (
     <div
-      style={{ height: height ? `${height}px` : "200px" }}
+      style={{ height: height ? `${height}px` : "250px" }}
       className={cx(className ?? style["drop-zone"])}
       {...getRootProps()}
     >
       <input {...getInputProps()} />
-      <FontAwesomeIcon icon={faPlus} />
+      <div className={cx(style.icon)}>
+        <FontAwesomeIcon icon={faImages} />
+        <label>{t("imageDragAndDrop")}</label>
+      </div>
     </div>
   )
 }

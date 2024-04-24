@@ -1,5 +1,6 @@
 "use client"
 
+import { colors } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
 import { useEditStore } from "@/store/edit"
 import { AlignTypes } from "@/types/Edit"
@@ -58,7 +59,7 @@ function Input({
       placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
       value={value ?? ""}
       onChange={onChangeInput}
-      style={{ color: !!color ? color : "#505056", textAlign }}
+      style={{ color: !!color ? color : colors.blackSoft, textAlign }}
     />
   )
 }

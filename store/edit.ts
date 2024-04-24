@@ -28,6 +28,7 @@ type Actions = {
   addSection: (payload: SectionListTypes) => void
   addList: ({ totalNum }: { totalNum: number }) => void
   addImages: ({ width, height, src }: { width: number; height: number; src: string }) => void
+  deleteListOrImages: ({ type, targetIndex }: { type: "images" | "list"; targetIndex: number }) => void
   setColor: ({ payload, key }: { payload: string; key: keyof SectionColorType }) => void
   setTitle: ({ payload }: { payload: string }) => void
   setStyle: ({ payload }: { payload: StyleTypes }) => void
@@ -193,8 +194,9 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
       produce(origin, (draft) => {
         if (draft.selectedSection) {
           const target = draft.sections[draft.selectedSection.index]
+          const j = target.list.length
           Array.from({ length: totalNum }, (_, i) => i).forEach((i) =>
-            target.list.push(createNewSectionList("slider", i))
+            target.list.push(createNewSectionList("list", i + j))
           )
           draft.selectedSection.list = target.list
         }
@@ -233,6 +235,21 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
         draft.sections = draft.sections.filter((v) => v.id !== payload)
         draft.selectedSection = null
         draft.sections = draft.sections.map((v, i) => ({ ...v, index: i }))
+      })
+    ),
+  deleteListOrImages: ({ targetIndex, type }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          if (type === "images") {
+            target.images = target.images.filter((_, i) => i !== targetIndex)
+            draft.selectedSection.images = target.images
+          } else {
+            target.list = target.list.filter((_, i) => i !== targetIndex)
+            draft.selectedSection.list = target.list
+          }
+        }
       })
     ),
 }))

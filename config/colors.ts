@@ -18,3 +18,49 @@ export const backgroundColors = [
 ]
 
 export const borderColors = backgroundColors.map((v) => v.replace("0.2)", "1)"))
+
+export const colors = {
+  white: "white",
+  textWhite: "white",
+  black: "black",
+
+  pinkSoft: "#FFB0B0B3",
+  pink: "#FF8A8ADF",
+  pinkHard: "#E56A6AE6",
+
+  graySoftest: "#E1E1E124",
+  graySoft: "#EBEBEB73",
+  gray: "#A1A1A199",
+  grayHard: "#9E9E9E",
+
+  border: "#D6D6DAB3",
+
+  purple: "#D9ABFFDE",
+  purpleHard: "#AA44FE",
+
+  orange: "#FFB67EDE",
+  orangeHover: "#FF9422E6",
+
+  blackSoft: "#434348",
+
+  bgColor: "#F9F9F9CC",
+  shadowColor: "#00000014",
+
+  red: "#FF524FB3",
+
+  inputColor: "#EAEAEAAA",
+  radialBg: "radial-gradient(circle, #FFFFFF 70%, #FFF1F4 100%)",
+  blackTransparent: "#0000001A",
+  overlay: "#0000004D",
+
+  green: "#63CE63E6",
+  greenHard: "#51FF51E6",
+}
+
+export const defaultColors = {
+  bgColor: colors.white,
+  ctaColor: colors.purple,
+  textColor: colors.blackSoft,
+  mainColor: colors.white,
+  subColor: colors.white,
+}

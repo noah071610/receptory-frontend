@@ -1,21 +1,29 @@
 import { AnimationTypes } from "@/types/Edit"
 
 export const getAnimation = (type: AnimationTypes, delay: number) => {
+  let temp = ""
   switch (type) {
     case "none":
-      return "none"
+      temp = "none"
+      break
     case "fadeIn":
-      return `${type} 600ms ${delay}ms forwards`
+      temp = `${type} 600ms ${delay}ms forwards`
+      break
     case "fadeUp":
-      return `${type} 1000ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
+      temp = `${type} 1000ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
+      break
     case "flip":
-      return `${type} 800ms ${delay}ms forwards`
+      temp = `${type} 800ms ${delay}ms forwards`
+      break
     case "bounce":
-      return `${type} 1000ms ${delay}ms forwards`
+      temp = `${type} 1000ms ${delay}ms forwards`
+      break
     case "scaleUp":
-      return `${type} 700ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
-
+      temp = `${type} 700ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
+      break
     default:
-      return "none"
+      temp = "none"
+      break
   }
+  return { animation: temp, opacity: type === "none" ? 1 : 0 }
 }

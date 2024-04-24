@@ -21,20 +21,18 @@ import {
   faPhone,
   faPhotoFilm,
   faRectangleXmark,
-  faVectorSquare,
 } from "@fortawesome/free-solid-svg-icons"
 
 const sectionList: EditorFooterList[] = [
   { value: "text", icon: faFont, actionType: "cta" },
   { value: "title", icon: faHeading, actionType: "cta" },
   { value: "empty", icon: faRectangleXmark, actionType: "cta" },
-  { value: "card", icon: faVectorSquare, actionType: "cta" },
   { value: "callout", icon: faIdCard, actionType: "cta" },
   { value: "slider", icon: faPhotoFilm, actionType: "cta" },
   { value: "album", icon: faImages, actionType: "cta" },
   { value: "contact", icon: faPhone, actionType: "cta" },
   { value: "map", icon: faMap, actionType: "cta" },
-  { value: "qAnda", icon: faCommentAlt, actionType: "cta" },
+  { value: "qna", icon: faCommentAlt, actionType: "cta" },
 ]
 
 const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
@@ -48,15 +46,18 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "style", icon: faPaintRoller, actionType: "submenu" },
     { value: "animation", icon: faFilm, actionType: "submenu" },
   ],
-  callout: [],
-  card: [],
+  callout: [{ value: "bgColor", icon: faPalette, actionType: "tooltip" }],
+
   contact: [
     { value: "style", icon: faPaintRoller, actionType: "submenu" },
     { value: "animation", icon: faFilm, actionType: "submenu" },
   ],
   map: [],
-  qAnda: [],
-  slider: [],
+  qna: [],
+  slider: [
+    { value: "style", icon: faPaintRoller, actionType: "submenu" },
+    { value: "animation", icon: faFilm, actionType: "submenu" },
+  ],
   text: [],
   title: [
     { value: "align", icon: faAlignJustify, actionType: "submenu" },
@@ -95,8 +96,8 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   album: {
     style: [
       { value: "albumStyle", icon: faCheck, actionType: "cta" },
-      { value: "gridTwoStyle", icon: faCheck, actionType: "cta" },
       { value: "gridOneStyle", icon: faCheck, actionType: "cta" },
+      { value: "gridTwoStyle", icon: faCheck, actionType: "cta" },
     ],
     animation: [
       { value: "none", icon: faCheck, actionType: "cta" },
@@ -105,10 +106,20 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
     ],
   },
   callout: {},
-  card: {},
   map: {},
-  qAnda: {},
-  slider: {},
+  qna: {},
+  slider: {
+    style: [
+      { value: "basicStyle", icon: faCheck, actionType: "cta" },
+      { value: "circleStyle", icon: faCheck, actionType: "cta" },
+      { value: "thumbnailStyle", icon: faCheck, actionType: "cta" },
+    ],
+    animation: [
+      { value: "none", icon: faCheck, actionType: "cta" },
+      { value: "fadeIn", icon: faCheck, actionType: "cta" },
+      { value: "flip", icon: faCheck, actionType: "cta" },
+    ],
+  },
   text: {},
   empty: {},
   thumbnail: {},
@@ -123,7 +134,6 @@ export const getSubmenuList = (openedSubmenu: string | null, selectedSection: Se
   if (selectedSection === null || openedSubmenu === null) return []
 
   const target = footerSubmenuMap[selectedSection.type][openedSubmenu]
-  console.log(target)
 
   return target ? target.map((v) => ({ ...v, parent: selectedSection.type })) : []
 }

@@ -5,9 +5,19 @@
   @include flex;
   position: relative;
   cursor: pointer;
-  svg {
-    color: var(--input-color);
-    font-size: 40px;
+
+  .icon {
+    @include flex;
+    flex-direction: column;
+    svg {
+      color: var(--gray);
+      font-size: 40px;
+      transform: rotateZ(-20deg);
+      margin-bottom: 8px;
+    }
+    label {
+      @include description-style;
+    }
   }
 
   &::before {
@@ -24,6 +34,9 @@
     svg {
       color: var(--pink-soft);
     }
+    label {
+      color: var(--pink);
+    }
     &::before {
       border-color: var(--pink-soft);
     }
@@ -31,6 +44,9 @@
   &.active {
     svg {
       color: var(--pink-soft);
+    }
+    label {
+      color: var(--pink);
     }
     &::before {
       border-color: var(--pink-soft);

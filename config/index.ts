@@ -25,7 +25,7 @@ API.interceptors.response.use(
 
 export const getImageUrl = ({ isCenter, url }: { url: string; isCenter?: boolean }) => {
   if (isCenter) {
-    return `url('${url}') center / cover`
+    return `url('${url}') no-repeat center/cover`
   } else {
     return `url('${url}')`
   }

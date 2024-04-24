@@ -1,16 +1,17 @@
 // @ts-ignore
 import { ContentBlock, DraftHandleValue, Editor, EditorState, RichUtils } from "draft-js"
-import { useEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 
 import Toolbar from "./Toolbar"
 
+import { colors } from "@/config/colors"
 import { editorStyleMap } from "@/config/edit"
 import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-const Text = ({ section }: { section: SectionType }) => {
+const Text = ({ section, textColor }: { section: SectionType; textColor?: string }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const editor = useRef(null)
 
@@ -52,10 +53,12 @@ const Text = ({ section }: { section: SectionType }) => {
     }
   }
 
+  console.log(textColor)
+
   return (
     <div className={cx(style.editor)} onClick={focusEditor}>
-      <Toolbar editorState={editorState} setEditorState={setEditorState} />
-      <div className={cx(style.container)}>
+      <Toolbar textColor={textColor} editorState={editorState} setEditorState={setEditorState} />
+      <div style={{ color: textColor ?? colors.blackSoft }} className={cx(style.container)}>
         <Editor
           ref={editor}
           handleKeyCommand={handleKeyCommand}
@@ -71,4 +74,4 @@ const Text = ({ section }: { section: SectionType }) => {
   )
 }
 
-export default Text
+export default memo(Text)

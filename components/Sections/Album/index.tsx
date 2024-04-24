@@ -1,23 +1,24 @@
 "use client"
 
 import Dropzone from "@/components/Dropzone"
+import ImageDelete from "@/components/ImageDelete"
 import { getImageUrl } from "@/config"
-import { AnimationTypes, SectionType } from "@/types/Edit"
+import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/getAnimation"
 import classNames from "classNames"
-import { memo } from "react"
+import { memo, useEffect, useState } from "react"
 import { Gallery, ThumbnailImageProps } from "react-grid-gallery"
 import style from "./style.module.scss"
 
-const ImageComponent = (props: ThumbnailImageProps, animation: AnimationTypes) => {
+const ImageComponent = (props: ThumbnailImageProps, section: SectionType) => {
   return (
     <div
       style={{
         ...props.imageProps.style,
-        animation: getAnimation(animation, props.index * 180),
-        opacity: animation === "none" ? 1 : 0,
+        ...getAnimation(section.animation, props.index * 180),
       }}
     >
+      <ImageDelete section={section} srcKey="images" listIndex={props.index} />
       <img {...(props.imageProps as any)} key={`album_${props.index}`} />
     </div>
   )
@@ -27,13 +28,18 @@ const cx = classNames.bind(style)
 
 function Album({ section }: { section: SectionType }) {
   const handleClick = () => {}
+  const [thumbsSwiper, setThumbsSwiper] = useState(null)
+
+  useEffect(() => {
+    setThumbsSwiper(null)
+  }, [section.style])
 
   return (
     <div className={cx(style["layout"])}>
-      {section.images.length > 0 ? (
-        section.style === "albumStyle" ? (
+      <div className={cx(style.album)}>
+        {section.style === "albumStyle" ? (
           <Gallery
-            thumbnailImageComponent={(props) => ImageComponent(props, section.animation)}
+            thumbnailImageComponent={(props) => ImageComponent(props, section)}
             images={section.images}
             onClick={handleClick}
             enableImageSelection={false}
@@ -48,18 +54,18 @@ function Album({ section }: { section: SectionType }) {
                 key={`album_${section.id}_${i}`}
                 style={{
                   background: getImageUrl({ isCenter: true, url: v.src }),
-                  opacity: section.animation === "none" ? 1 : 0,
-                  animation: getAnimation(section.animation, i * 200),
                   height: section.style === "gridOneStyle" ? "250px" : "200px",
+                  ...getAnimation(section.animation, i * 200),
                 }}
                 className={cx(style.photo)}
-              ></div>
+              >
+                <ImageDelete section={section} srcKey="images" listIndex={i} />
+              </div>
             ))}
           </div>
-        )
-      ) : (
-        <Dropzone section={section} multiple={true} srcKey="images" />
-      )}
+        )}
+      </div>
+      <Dropzone section={section} multiple={true} srcKey="images" />
       {/* <Lightbox slides={slides} open={index >= 0} index={index} close={() => setIndex(-1)} /> */}
     </div>
   )

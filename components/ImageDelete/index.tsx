@@ -8,13 +8,27 @@ import classNames from "classNames"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-export default function ImageDelete({ section, srcKey }: { section: SectionType; srcKey: string }) {
-  const { selectedSection, setSelectedSection, setSrc } = useEditStore()
+export default function ImageDelete({
+  section,
+  srcKey,
+  listIndex,
+}: {
+  section: SectionType
+  srcKey: string
+  listIndex?: number
+}) {
+  const { selectedSection, setSelectedSection, setSrc, deleteListOrImages } = useEditStore()
   const onClickDelete = () => {
     if (!selectedSection) {
       setSelectedSection({ payload: section })
     }
-    setSrc({ payload: "", key: srcKey })
+    if (typeof listIndex === "number") {
+      if (srcKey === "images" || srcKey === "list") {
+        deleteListOrImages({ type: srcKey, targetIndex: listIndex })
+      }
+    } else {
+      setSrc({ payload: "", key: srcKey })
+    }
   }
   return (
     <div className={cx(style["image-delete"])}>

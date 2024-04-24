@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 // @ts-ignore
+import { colors } from "@/config/colors"
 import classNames from "classNames"
 import { RichUtils } from "draft-js"
 import style from "./style.module.scss"
@@ -97,7 +98,15 @@ const tools = [
   { label: "H3", style: "header-three", method: "block" },
 ]
 
-const Toolbar = ({ editorState, setEditorState }: { editorState: any; setEditorState: any }) => {
+const Toolbar = ({
+  editorState,
+  setEditorState,
+  textColor,
+}: {
+  editorState: any
+  setEditorState: any
+  textColor?: string
+}) => {
   const applyStyle = (e: any, style: any, method: any) => {
     e.preventDefault()
     method === "block"
@@ -121,7 +130,14 @@ const Toolbar = ({ editorState, setEditorState }: { editorState: any; setEditorS
       {tools.map((item, idx) => (
         <button
           style={{
-            color: isActive(item.style, item.method) ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.3)",
+            color:
+              textColor !== colors.white
+                ? isActive(item.style, item.method)
+                  ? "rgba(0, 0, 0, 1)"
+                  : "rgba(0, 0, 0, 0.3)"
+                : isActive(item.style, item.method)
+                  ? "rgba(255, 255, 255, 1)"
+                  : "rgba(255, 255, 255, 0.6)",
           }}
           key={`${item.label}-${idx}`}
           title={item.label}
