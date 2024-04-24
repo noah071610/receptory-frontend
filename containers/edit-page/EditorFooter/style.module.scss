@@ -10,10 +10,22 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
   left: 50%;
   height: 50px;
   transform: translateX(calc(-50%));
+  @include medium {
+    width: 100%;
+    left: 0;
+    transform: translateX(0);
+  }
   .main-wrapper {
     display: grid;
     grid-template-columns: var(--editor-width) var(--preview-width);
     height: 100%;
+
+    @include medium {
+      display: block;
+      .preview-ghost {
+        display: none;
+      }
+    }
   }
   .main {
     position: relative;

@@ -19,8 +19,8 @@ export interface EditStates {
   sections: SectionType[]
   stage: EditStage
   selectedSection: SectionType | null
-  openedSubmenu: string | null
-  openedTooltip: string | null
+  currentSubmenu: string | null
+  currentTooltip: string | null
 }
 
 type Actions = {
@@ -40,8 +40,8 @@ type Actions = {
   setValue: ({ payload }: { payload: string }) => void
   setValues: ({ payload, key }: { payload: any; key: string }) => void
   setSrc: ({ payload, key }: { payload: string; key: string }) => void
-  setOpenedSubmenu: ({ type }: { type: string | null }) => void
-  setOpenedTooltip: ({ type }: { type: string | null }) => void
+  setCurrentSubmenu: ({ type }: { type: string | null }) => void
+  setCurrentTooltip: ({ type }: { type: string | null }) => void
   deleteSection: (id: string) => void
   moveSection: ({ from, to }: { from: number; to: number }) => void
 }
@@ -49,8 +49,8 @@ type Actions = {
 export const useEditStore = create<EditStates & Actions>()((set) => ({
   sections: [createNewSection("thumbnail", 0)],
   stage: "init",
-  openedSubmenu: null,
-  openedTooltip: null,
+  currentSubmenu: null,
+  currentTooltip: null,
   selectedSection: null,
   setSelectedSection: ({ payload }) =>
     set((origin) =>
@@ -94,6 +94,7 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
       produce(origin, (draft) => {
         if (draft.selectedSection) {
           const target = draft.sections[draft.selectedSection.index]
+
           target.list[index][key] = payload as never
           draft.selectedSection.list[index][key] = payload as never
         }
@@ -169,16 +170,16 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
         }
       })
     ),
-  setOpenedSubmenu: ({ type }) =>
+  setCurrentSubmenu: ({ type }) =>
     set((origin) =>
       produce(origin, (draft) => {
-        draft.openedSubmenu = type
+        draft.currentSubmenu = type
       })
     ),
-  setOpenedTooltip: ({ type }) =>
+  setCurrentTooltip: ({ type }) =>
     set((origin) =>
       produce(origin, (draft) => {
-        draft.openedTooltip = type
+        draft.currentTooltip = type
       })
     ),
   addSection: (payload) =>
@@ -246,7 +247,7 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
             target.images = target.images.filter((_, i) => i !== targetIndex)
             draft.selectedSection.images = target.images
           } else {
-            target.list = target.list.filter((_, i) => i !== targetIndex)
+            target.list = target.list.filter((_, i) => i !== targetIndex).map((v, i) => ({ ...v, index: i }))
             draft.selectedSection.list = target.list
           }
         }

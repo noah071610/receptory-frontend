@@ -13,13 +13,13 @@ const cx = classNames.bind(style)
 
 export default function SubList({ list }: { list: EditorFooterList[] }) {
   const { lang } = useParams()
-  const { openedSubmenu, selectedSection, setStyle, setAnimation, setList } = useEditStore()
+  const { currentSubmenu, selectedSection, setStyle, setAnimation, setList } = useEditStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, i: number) => {
     if (!selectedSection) return
 
-    switch (openedSubmenu) {
+    switch (currentSubmenu) {
       case "style":
         setStyle({ payload: value as StyleTypes })
         break
@@ -49,7 +49,7 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
       >
         {list.map((list, i) => {
           const isActive = () => {
-            switch (openedSubmenu) {
+            switch (currentSubmenu) {
               case "style":
                 return selectedSection?.style === list.value
               case "animation":

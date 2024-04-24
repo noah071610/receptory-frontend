@@ -13,7 +13,8 @@
 }
 
 .main {
-  width: 80%;
+  width: 100%;
+  max-width: 380px;
 
   textarea {
     text-align: center;
@@ -30,7 +31,7 @@
 
 .thumbnail {
   width: 100%;
-  height: 250px;
+  height: 230px;
   overflow: hidden;
   position: relative;
   cursor: pointer;

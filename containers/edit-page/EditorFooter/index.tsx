@@ -11,18 +11,18 @@ import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 export default function EditorFooter() {
-  const { selectedSection, openedSubmenu } = useEditStore()
+  const { selectedSection, currentSubmenu } = useEditStore()
   const { lang } = useParams()
   const targetList = useMemo(() => {
     return getEditorFooterList(selectedSection)
   }, [selectedSection])
   const submenuList = useMemo(() => {
-    return getSubmenuList(openedSubmenu, selectedSection)
-  }, [selectedSection, openedSubmenu])
+    return getSubmenuList(currentSubmenu, selectedSection)
+  }, [selectedSection, currentSubmenu])
 
   const isOpened = useMemo(() => {
-    return !!openedSubmenu && targetList
-  }, [openedSubmenu, targetList])
+    return !!currentSubmenu && targetList
+  }, [currentSubmenu, targetList])
 
   return (
     <div id="editor" className={cx(style.footer)}>

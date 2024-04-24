@@ -1,4 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+
 import { Image } from "react-grid-gallery"
 
 export type SectionListTypes =
@@ -84,4 +85,8 @@ export interface EditorFooterList {
   icon: IconDefinition
   actionType: EditorFooterListActions
   parent?: SectionListTypes
+}
+
+export interface ImageUpload extends File {
+  preview?: string
 }

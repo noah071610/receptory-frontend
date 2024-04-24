@@ -4,4 +4,7 @@
   border-left: 1px solid var(--border);
   padding: 16px;
   background-color: var(--gray);
+  @include medium {
+    display: none;
+  }
 }

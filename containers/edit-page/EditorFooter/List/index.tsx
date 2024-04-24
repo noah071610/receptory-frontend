@@ -19,31 +19,34 @@ export default function List({ list, isSectionList }: { list: EditorFooterList[]
   const {
     addSection,
     setSelectedSection,
-    setOpenedTooltip,
-    openedTooltip,
-    setOpenedSubmenu,
+    setCurrentTooltip,
+    currentTooltip,
+    setCurrentSubmenu,
     setSrc,
-    openedSubmenu,
+    currentSubmenu,
     selectedSection,
   } = useEditStore()
   const { t } = useTranslation()
 
   const onClickAddSection = (type: SectionListTypes) => {
+    if (type === "slider" || type === "album") {
+      return setCurrentTooltip({ type })
+    }
     addSection(type)
   }
   const onClickClose = () => {
     setSelectedSection({ payload: null })
-    setOpenedSubmenu({ type: null })
+    setCurrentSubmenu({ type: null })
   }
 
   const onClickList = (value: string, type: EditorFooterListActions) => {
     if (type === "submenu") {
-      setOpenedSubmenu({ type: value })
-      setOpenedTooltip({ type: null })
+      setCurrentSubmenu({ type: value })
+      setCurrentTooltip({ type: null })
     }
     if (type === "tooltip") {
-      setOpenedSubmenu({ type: null })
-      setOpenedTooltip({ type: value })
+      setCurrentSubmenu({ type: null })
+      setCurrentTooltip({ type: value })
     }
   }
 
@@ -103,7 +106,7 @@ export default function List({ list, isSectionList }: { list: EditorFooterList[]
                       ? onClickAddSection(list.value as SectionListTypes)
                       : onClickList(list.value, list.actionType)
                   }}
-                  className={cx(style.btn, { [style.active]: openedSubmenu === list.value })}
+                  className={cx(style.btn, { [style.active]: currentSubmenu === list.value })}
                 >
                   <div className={cx(style.icon)}>
                     <FontAwesomeIcon icon={list.icon} />
@@ -124,8 +127,8 @@ export default function List({ list, isSectionList }: { list: EditorFooterList[]
           </button>
         </div>
       )}
-      {(openedTooltip === "bgColor" || openedTooltip === "textColor" || openedTooltip === "ctaColor") && (
-        <ColorPicker colorKey={openedTooltip} />
+      {(currentTooltip === "bgColor" || currentTooltip === "textColor" || currentTooltip === "ctaColor") && (
+        <ColorPicker colorKey={currentTooltip} />
       )}
     </div>
   )

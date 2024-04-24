@@ -20,15 +20,15 @@ export default function SectionLayout({
   section: SectionType
   draggableProvided?: DraggableProvided
 }) {
-  const { selectedSection, setOpenedSubmenu, setOpenedTooltip, setSelectedSection, deleteSection } = useEditStore()
+  const { selectedSection, setCurrentSubmenu, setCurrentTooltip, setSelectedSection, deleteSection } = useEditStore()
   const onClickSection = (e: any) => {
     if (e.target.closest(".delete")) {
       setSelectedSection({ payload: null })
     } else {
       setSelectedSection({ payload: section })
     }
-    setOpenedSubmenu({ type: null })
-    setOpenedTooltip({ type: null })
+    setCurrentSubmenu({ type: null })
+    setCurrentTooltip({ type: null })
   }
   const onClickDelete = () => {
     deleteSection(section.id)

@@ -56,7 +56,6 @@ function Textarea({
   return (
     <TextareaAutosize
       className={className}
-      maxRows={3}
       placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
       value={value ?? ""}
       onChange={onChangeInput}

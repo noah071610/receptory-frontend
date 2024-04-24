@@ -6,12 +6,12 @@ import Toolbar from "./Toolbar"
 
 import { colors } from "@/config/colors"
 import { editorStyleMap } from "@/config/edit"
-import { SectionType } from "@/types/Edit"
+import { SectionListType, SectionType } from "@/types/Edit"
 import classNames from "classNames"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-const Text = ({ section, textColor }: { section: SectionType; textColor?: string }) => {
+const Text = ({ section, textColor }: { section: SectionType | SectionListType; textColor?: string }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const editor = useRef(null)
 

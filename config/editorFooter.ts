@@ -130,10 +130,10 @@ export const getEditorFooterList = (selectedSection: SectionType | null) => {
   if (selectedSection === null) return sectionList
   return footerListMap[selectedSection.type].map((v) => ({ ...v, parent: selectedSection.type }))
 }
-export const getSubmenuList = (openedSubmenu: string | null, selectedSection: SectionType | null) => {
-  if (selectedSection === null || openedSubmenu === null) return []
+export const getSubmenuList = (currentSubmenu: string | null, selectedSection: SectionType | null) => {
+  if (selectedSection === null || currentSubmenu === null) return []
 
-  const target = footerSubmenuMap[selectedSection.type][openedSubmenu]
+  const target = footerSubmenuMap[selectedSection.type][currentSubmenu]
 
   return target ? target.map((v) => ({ ...v, parent: selectedSection.type })) : []
 }
