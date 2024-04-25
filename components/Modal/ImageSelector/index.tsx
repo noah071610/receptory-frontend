@@ -17,40 +17,44 @@ const cx = classNames.bind(style)
 
 export default function ImageSelector() {
   const [selectedImages, setSelectedImages] = useState<ImageUpload[]>([])
+
   const { t } = useTranslation()
-  const { currentTooltip, setCurrentTooltip, setList, addSection, addList, addImages } = useEditStore()
+  const { active, setActive, addSection, addList } = useEditStore()
+  const modal = active.modal ?? active.sectionModal
   const onClickImage = (i: number) => {
     setSelectedImages((prev) => prev.filter((_, j) => i !== j))
   }
+
   const onClickUpload = async () => {
     // todo:
-    setCurrentTooltip({ type: null })
-    if (currentTooltip === "slider") {
-      addSection(currentTooltip)
-      addList({ totalNum: selectedImages.length })
+    setActive({ payload: null, key: "modal" })
+    setActive({ payload: null, key: "sectionModal" })
+
+    if (modal === "album" || modal === "slider") {
+      if (active.modal) {
+        addSection(modal)
+      }
+
       await Promise.all(
         selectedImages.map(async ({ preview, ...file }, index) => {
           const formData = new FormData()
           formData.append("image", file)
+
+          const img = new Image()
+
+          img.addEventListener("load", () => {
+            addList({
+              type: active.modal as string,
+              obj: { src: preview ?? "", width: img.naturalWidth, height: img.naturalHeight },
+            })
+          })
+
+          img.src = preview ?? ""
+
           // const { msg, data: imageSrc } = await uploadImage(formData)
           // if (msg === "ok") {
           // }
-          // todo: 프레뷰도 수정해줘야함. 이건 예시임
-          setList({ index, key: "src", payload: preview ?? "" })
-        })
-      )
-    }
-    if (currentTooltip === "album") {
-      addSection(currentTooltip)
-      await Promise.all(
-        selectedImages.map(async ({ preview, ...file }, index) => {
-          const formData = new FormData()
-          formData.append("image", file)
-          // const { msg, data: imageSrc } = await uploadImage(formData)
-          // if (msg === "ok") {
-          // }
-          // todo: 이건 왜이러지? 일단 보류
-          addImages({ src: preview ?? "", width: 400, height: 500 })
+          // todo:  일단 보류
         })
       )
     }

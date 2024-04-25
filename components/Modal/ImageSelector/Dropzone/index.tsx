@@ -19,7 +19,7 @@ function Dropzone({
   setSelectedImages: Dispatch<SetStateAction<ImageUpload[]>>
 }) {
   const { t } = useTranslation()
-  const { setSrc, setList, addImages, addList, selectedSection, setSelectedSection } = useEditStore()
+  const { selectedSection } = useEditStore()
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -33,7 +33,8 @@ function Dropzone({
         if (process.env.NODE_ENV === "development") {
           const reader = new FileReader()
           reader.readAsDataURL(file)
-          reader.onloadend = () => {
+
+          reader.onloadend = async () => {
             setSelectedImages((prev) => [...prev, { ...file, preview: reader.result }])
           }
         }

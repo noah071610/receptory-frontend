@@ -1,5 +1,6 @@
 "use client"
 
+import ImageSelector from "@/components/Modal/ImageSelector"
 import SectionLayout from "@/components/Sections"
 import Empty from "@/components/Sections/Empty"
 import Thumbnail from "@/components/Sections/Thumbnail"
@@ -7,6 +8,7 @@ import { useEditStore } from "@/store/edit"
 import { SectionListTypes, SectionType } from "@/types/Edit"
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd"
 import dynamic from "next/dynamic"
+import { useMemo } from "react"
 
 const Callout = dynamic(() => import("@/components/Sections/Callout"), {
   ssr: true,
@@ -47,7 +49,7 @@ const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
 }
 
 const EditPage = () => {
-  const { sections, moveSection } = useEditStore()
+  const { sections, moveSection, active } = useEditStore()
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result
@@ -56,6 +58,11 @@ const EditPage = () => {
 
     moveSection({ from: source.index, to: destination.index })
   }
+
+  const openImageSelector = useMemo(
+    () => (active.modal ?? active.sectionModal) === "album" || (active.modal ?? active.sectionModal) === "slider",
+    [active]
+  )
 
   return (
     <>
@@ -86,6 +93,7 @@ const EditPage = () => {
           )}
         </Droppable>
       </DragDropContext>
+      {openImageSelector && <ImageSelector />}
     </>
   )
 }

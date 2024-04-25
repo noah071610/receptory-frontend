@@ -2,10 +2,12 @@ import { colors, defaultColors } from "@/config/colors"
 import { SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
 import getId from "./getId"
 
-export const createNewSectionList = (subType: string, index: number): SectionListType => {
+export const createNewSectionList = (subType: string, index: number, obj?: any): SectionListType => {
   return {
     id: getId(),
     index,
+    width: 0,
+    height: 0,
     type: subType,
     value: "",
     isActive: false,
@@ -18,6 +20,7 @@ export const createNewSectionList = (subType: string, index: number): SectionLis
     style: "basicStyle",
     colors: defaultColors,
     animation: "none",
+    ...obj,
   }
 }
 
@@ -59,6 +62,8 @@ export const createNewSection = (type: SectionListTypes, index: number): Section
   return {
     id: getId(),
     index,
+    width: 0,
+    height: 0,
     type,
     value: "",
     values: {},
@@ -68,7 +73,7 @@ export const createNewSection = (type: SectionListTypes, index: number): Section
     description: "",
     label: "",
     list: [],
-    src: {},
+    src: "",
     style: "basicStyle",
     colors: defaultColors,
     animation: "none",

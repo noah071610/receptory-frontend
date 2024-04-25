@@ -1,5 +1,5 @@
 // @ts-ignore
-import { ContentBlock, DraftHandleValue, Editor, EditorState, RichUtils } from "draft-js"
+import { ContentBlock, DraftHandleValue, Editor, EditorState, RichUtils, convertFromRaw, convertToRaw } from "draft-js"
 import { memo, useEffect, useRef, useState } from "react"
 
 import Toolbar from "./Toolbar"
@@ -14,6 +14,13 @@ const cx = classNames.bind(style)
 const Text = ({ section, textColor }: { section: SectionType | SectionListType; textColor?: string }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const editor = useRef(null)
+
+  useEffect(() => {
+    const contentState = editorState.getCurrentContent()
+    const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+    console.log(raw)
+    console.log(convertFromRaw(JSON.parse(raw)))
+  }, [editorState])
 
   useEffect(() => {
     focusEditor()
@@ -52,8 +59,6 @@ const Text = ({ section, textColor }: { section: SectionType | SectionListType; 
         break
     }
   }
-
-  console.log(textColor)
 
   return (
     <div className={cx(style.editor)} onClick={focusEditor}>

@@ -1,0 +1,28 @@
+.spinner {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  animation: spinner-plncf9 4s infinite;
+}
+
+.spinner::before,
+.spinner::after {
+  content: "";
+  grid-area: 1/1;
+  border: 6px solid;
+  border-radius: 50%;
+  border-color: var(--pink-hard) var(--pink-hard) #0000 #0000;
+  mix-blend-mode: darken;
+  animation: spinner-plncf9 1s infinite linear;
+}
+
+.spinner::after {
+  border-color: #0000 #0000 var(--pink-soft) var(--pink-soft);
+  animation-direction: reverse;
+}
+
+@keyframes spinner-plncf9 {
+  100% {
+    transform: rotate(1turn);
+  }
+}

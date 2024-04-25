@@ -6,6 +6,8 @@
   @include flex;
   position: relative;
   cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
 
   .icon {
     @include flex;

@@ -1,7 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 
-import { Image } from "react-grid-gallery"
-
 export type SectionListTypes =
   | "thumbnail"
   | "text"
@@ -53,12 +51,20 @@ export interface SectionColorType {
   mainColor: string
   subColor: string
 }
+export interface ImageType {
+  src: string
+  width: number
+  height: number
+}
 
 interface _SectionType {
   id: string
   index: number
+  width: number
+  height: number
   value: any
   values: { [key: string]: any }
+  src: string
   isActive: boolean
   title: string
   description: string
@@ -70,12 +76,9 @@ interface _SectionType {
 }
 export interface SectionType extends _SectionType {
   type: SectionListTypes
-  images: Image[]
-  src: { [key: string]: string }
 }
 export interface SectionListType extends _SectionType {
   type: string
-  src: string
 }
 
 export type EditorFooterListActions = "cta" | "tooltip" | "submenu" | "file" | "modal"

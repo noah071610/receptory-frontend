@@ -4,7 +4,7 @@ import { ReactNode } from "react"
 
 import { useEditStore } from "@/store/edit"
 import { SectionType } from "@/types/Edit"
-import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { DraggableProvided } from "@hello-pangea/dnd"
 import classNames from "classNames"
@@ -20,18 +20,22 @@ export default function SectionLayout({
   section: SectionType
   draggableProvided?: DraggableProvided
 }) {
-  const { selectedSection, setCurrentSubmenu, setCurrentTooltip, setSelectedSection, deleteSection } = useEditStore()
+  const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditStore()
   const onClickSection = (e: any) => {
     if (e.target.closest(".delete")) {
       setSelectedSection({ payload: null })
     } else {
+      if (e.target.closest(".copy")) return
       setSelectedSection({ payload: section })
     }
-    setCurrentSubmenu({ type: null })
-    setCurrentTooltip({ type: null })
+    setActive({ payload: null, key: "tooltip" })
+    setActive({ payload: null, key: "submenu" })
   }
   const onClickDelete = () => {
     deleteSection(section.id)
+  }
+  const onClickCopy = () => {
+    copySection({ payload: section })
   }
 
   return (
@@ -46,6 +50,9 @@ export default function SectionLayout({
 
       {section.type !== "thumbnail" && (
         <div id="editor" className={cx(style.tools, { [style.active]: selectedSection?.id === section.id })}>
+          <button onClick={onClickCopy} className={cx(style.copy, "copy")}>
+            <FontAwesomeIcon icon={faCopy} />
+          </button>
           <button onClick={onClickDelete} className={cx(style.delete, "delete")}>
             <FontAwesomeIcon icon={faTrash} />
           </button>

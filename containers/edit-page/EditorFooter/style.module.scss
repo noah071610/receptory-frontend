@@ -9,24 +9,37 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
   bottom: 0;
   left: 50%;
   height: 50px;
+
+  &.isOpenAllList {
+    height: auto;
+    .main {
+      padding: 10px;
+    }
+    .list {
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+    }
+    .footer-btn > .icon {
+      svg {
+        transform: rotateX(180deg);
+      }
+    }
+  }
+
   transform: translateX(calc(-50%));
   @include medium {
     width: 100%;
     left: 0;
     transform: translateX(0);
   }
-  .main-wrapper {
-    display: grid;
-    grid-template-columns: var(--editor-width) var(--preview-width);
-    height: 100%;
+}
 
-    @include medium {
-      display: block;
-      .preview-ghost {
-        display: none;
-      }
-    }
-  }
+.main-wrapper {
+  display: grid;
+  grid-template-columns: var(--editor-width) var(--preview-width);
+  height: 100%;
+
   .main {
     position: relative;
     z-index: 1;
@@ -36,25 +49,34 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
     height: 100%;
     padding: 5px 8px;
   }
-  .sub-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: grid;
-    grid-template-columns: var(--editor-width) var(--preview-width);
+
+  @include medium {
+    display: block;
+    .preview-ghost {
+      display: none;
+    }
+  }
+}
+.sub-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: var(--editor-width) var(--preview-width);
+  width: 100%;
+  height: 50px;
+  transform: translateY(50px);
+
+  .sub {
+    position: relative;
+    border-top: 1px solid var(--border);
+    background-color: var(--white);
     width: 100%;
-    height: 50px;
-    transform: translateY(50px);
-    &.active {
-      transform: translateY(-50px);
-    }
-    .sub {
-      position: relative;
-      border-top: 1px solid var(--border);
-      background-color: var(--white);
-      width: 100%;
-      padding: 5px 8px;
-    }
+    padding: 5px 8px;
+  }
+
+  &.active {
+    transform: translateY(-50px);
   }
 }
 
@@ -63,9 +85,6 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
   display: flex;
   align-items: center;
   height: 100%;
-  &.isSectionList {
-    padding-right: 50px;
-  }
 
   .slider {
     width: 100%;
@@ -121,13 +140,35 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
       }
     }
   }
+}
 
-  .close {
-    padding-left: 10px;
-    border-left: 1px solid var(--border);
-    margin-left: 10px;
+.footer-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 100%;
+  border-left: 1px solid var(--border);
+  background-color: var(--white);
+  z-index: 10;
+  @include flex;
+  .icon {
+    border-radius: 5px;
+    background-color: var(--gray);
+    width: 26px;
+    height: 26px;
+    @include flex();
+
+    svg {
+      color: var(--white);
+      font-size: 13px;
+      transition: 400ms transform;
+    }
+  }
+
+  @include action {
     .icon {
-      margin: 0;
+      background-color: var(--pink);
     }
   }
 }

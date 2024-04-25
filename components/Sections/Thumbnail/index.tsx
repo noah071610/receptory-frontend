@@ -20,7 +20,7 @@ const cx = classNames.bind(style)
 export default function Thumbnail({ section }: { section: SectionType }) {
   const { lang } = useParams()
 
-  const { setSrc } = useEditStore()
+  const { setValues } = useEditStore()
   const { t } = useTranslation(lang, ["new-post-page"])
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -32,7 +32,7 @@ export default function Thumbnail({ section }: { section: SectionType }) {
       // if (msg === "ok") {
       // }
       if (process.env.NODE_ENV === "development") {
-        setSrc({
+        setValues({
           key: "thumbnail",
           payload:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxMX47KdHnDG65nL8gniQhv5v37xWUjWlMJWZa24-syw&s",
@@ -56,19 +56,19 @@ export default function Thumbnail({ section }: { section: SectionType }) {
   return (
     <div
       style={{
-        background: section.src["bgImage"]
-          ? getImageUrl({ isCenter: true, url: section.src["bgImage"] ?? "" })
+        background: section.values["bgImage"]
+          ? getImageUrl({ isCenter: true, url: section.values["bgImage"] ?? "" })
           : `linear-gradient(180deg, ${customColors.bgColor} 87%, rgba(0,0,0,0) 100%)`,
       }}
       className={cx(style.wrapper)}
     >
-      {section.src["bgImage"] && <ImageDelete section={section} srcKey={"bgImage"} />}
+      {section.values["bgImage"] && <ImageDelete section={section} srcKey={"bgImage"} />}
       <div className={cx(style.main)}>
         <div
-          style={{ background: getImageUrl({ isCenter: true, url: section.src["thumbnail"] ?? "" }) }}
+          style={{ background: getImageUrl({ isCenter: true, url: section.values["thumbnail"] ?? "" }) }}
           className={cx(style.thumbnail)}
         >
-          {section.src["thumbnail"] && <ImageDelete section={section} srcKey={"thumbnail"} />}
+          {section.values["thumbnail"] && <ImageDelete section={section} srcKey={"thumbnail"} />}
           <div className={cx(style["drop-zone"], { [style.active]: isDragActive })} {...getRootProps()}>
             <input {...getInputProps()} />
             <FontAwesomeIcon icon={faPlus} />

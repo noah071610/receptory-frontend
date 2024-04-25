@@ -1,0 +1,21 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  .label {
+    @include label-style($input: false);
+  }
+  .title {
+    margin-top: 5px;
+    @include header-style($input: false);
+  }
+  .description {
+    // margin-top: 10px;
+    margin-top: 5px;
+    @include description-style($input: false);
+  }
+}
+
+.label-wrapper {
+  width: 100%;
+  display: flex;
+}

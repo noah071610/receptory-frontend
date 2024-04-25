@@ -42,10 +42,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "ctaColor", icon: faBrush, actionType: "tooltip" },
     { value: "bgImage", icon: faImage, actionType: "file" },
   ],
-  album: [
-    { value: "style", icon: faPaintRoller, actionType: "submenu" },
-    { value: "animation", icon: faFilm, actionType: "submenu" },
-  ],
+  album: [{ value: "style", icon: faPaintRoller, actionType: "submenu" }],
   callout: [{ value: "bgColor", icon: faPalette, actionType: "tooltip" }],
 
   contact: [
@@ -99,11 +96,11 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "gridOneStyle", icon: faCheck, actionType: "cta" },
       { value: "gridTwoStyle", icon: faCheck, actionType: "cta" },
     ],
-    animation: [
-      { value: "none", icon: faCheck, actionType: "cta" },
-      { value: "fadeIn", icon: faCheck, actionType: "cta" },
-      { value: "scaleUp", icon: faCheck, actionType: "cta" },
-    ],
+    // animation: [
+    //   { value: "none", icon: faCheck, actionType: "cta" },
+    //   { value: "fadeIn", icon: faCheck, actionType: "cta" },
+    //   { value: "scaleUp", icon: faCheck, actionType: "cta" },
+    // ],
   },
   callout: {},
   map: {},

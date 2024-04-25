@@ -7,28 +7,28 @@ import {
   SectionType,
   StyleTypes,
 } from "@/types/Edit"
-import { Image } from "react-grid-gallery"
 
 import { produce } from "immer"
 import { create } from "zustand"
 
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
+import getId from "@/utils/getId"
 import { cloneDeep } from "lodash"
 
 export interface EditStates {
   sections: SectionType[]
   stage: EditStage
   selectedSection: SectionType | null
-  currentSubmenu: string | null
-  currentTooltip: string | null
+  active: {
+    submenu: string | null
+    tooltip: string | null
+    modal: string | null
+    sectionModal: string | null
+  }
 }
 
 type Actions = {
   setSelectedSection: ({ payload }: { payload: EditStates["selectedSection"] }) => void
-  addSection: (payload: SectionListTypes) => void
-  addList: ({ totalNum }: { totalNum: number }) => void
-  addImages: ({ width, height, src }: { width: number; height: number; src: string }) => void
-  deleteListOrImages: ({ type, targetIndex }: { type: "images" | "list"; targetIndex: number }) => void
   setColor: ({ payload, key }: { payload: string; key: keyof SectionColorType }) => void
   setTitle: ({ payload }: { payload: string }) => void
   setStyle: ({ payload }: { payload: StyleTypes }) => void
@@ -36,29 +36,45 @@ type Actions = {
   setDescription: ({ payload }: { payload: string }) => void
   setLabel: ({ payload }: { payload: string }) => void
   setList: ({ index, payload, key }: { index: number; payload: any; key: keyof SectionListType }) => void
-  setImages: ({ index, payload, key }: { index: number; payload: any; key: keyof Image }) => void
   setValue: ({ payload }: { payload: string }) => void
   setValues: ({ payload, key }: { payload: any; key: string }) => void
-  setSrc: ({ payload, key }: { payload: string; key: string }) => void
-  setCurrentSubmenu: ({ type }: { type: string | null }) => void
-  setCurrentTooltip: ({ type }: { type: string | null }) => void
+  setActive: ({
+    key,
+    payload,
+  }: {
+    key: "submenu" | "tooltip" | "modal" | "sectionModal" | "all"
+    payload: string | null
+  }) => void
+
+  addSection: (payload: SectionListTypes) => void
+  addList: ({ type, obj }: { type: string; obj?: { [key: string]: any } }) => void
+
   deleteSection: (id: string) => void
+  deleteList: ({ targetIndex }: { targetIndex: number }) => void
+
   moveSection: ({ from, to }: { from: number; to: number }) => void
+  copySection: (payload: { payload: SectionType }) => void
 }
 
 export const useEditStore = create<EditStates & Actions>()((set) => ({
+  // STATE
   sections: [createNewSection("thumbnail", 0)],
   stage: "init",
-  currentSubmenu: null,
-  currentTooltip: null,
   selectedSection: null,
+  active: {
+    submenu: null,
+    tooltip: null,
+    modal: null,
+    sectionModal: null,
+  },
+
+  // SET
   setSelectedSection: ({ payload }) =>
     set((origin) =>
       produce(origin, (draft) => {
         draft.selectedSection = payload
       })
     ),
-
   setColor: ({ payload, key }) =>
     set((origin) =>
       produce(origin, (draft) => {
@@ -97,16 +113,6 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
 
           target.list[index][key] = payload as never
           draft.selectedSection.list[index][key] = payload as never
-        }
-      })
-    ),
-  setImages: ({ index, payload, key }) =>
-    set((origin) =>
-      produce(origin, (draft) => {
-        if (draft.selectedSection) {
-          const target = draft.sections[draft.selectedSection.index]
-          target.images[index][key] = payload as never
-          draft.selectedSection.images[index][key] = payload as never
         }
       })
     ),
@@ -160,28 +166,20 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
         }
       })
     ),
-  setSrc: ({ payload, key }) =>
+  setActive: ({ key, payload }) =>
     set((origin) =>
       produce(origin, (draft) => {
-        if (draft.selectedSection) {
-          const target = draft.sections[draft.selectedSection.index]
-          target.src[key] = payload
-          draft.selectedSection.src[key] = payload
+        if (key === "all") {
+          draft.active.modal = payload
+          draft.active.submenu = payload
+          draft.active.tooltip = payload
+          draft.active.sectionModal = payload
+        } else {
+          draft.active[key] = payload
         }
       })
     ),
-  setCurrentSubmenu: ({ type }) =>
-    set((origin) =>
-      produce(origin, (draft) => {
-        draft.currentSubmenu = type
-      })
-    ),
-  setCurrentTooltip: ({ type }) =>
-    set((origin) =>
-      produce(origin, (draft) => {
-        draft.currentTooltip = type
-      })
-    ),
+  // ADD
   addSection: (payload) =>
     set((origin) =>
       produce(origin, (draft) => {
@@ -190,43 +188,27 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
         draft.selectedSection = target
       })
     ),
-  addList: ({ totalNum }) =>
+  addList: ({ type, obj }) =>
     set((origin) =>
       produce(origin, (draft) => {
         if (draft.selectedSection) {
           const target = draft.sections[draft.selectedSection.index]
-          const j = target.list.length
-          Array.from({ length: totalNum }, (_, i) => i).forEach((i) =>
-            target.list.push(createNewSectionList("list", i + j))
-          )
-          draft.selectedSection.list = target.list
-        }
-      })
-    ),
-  addImages: ({ src, width, height }) =>
-    set((origin) =>
-      produce(origin, (draft) => {
-        if (draft.selectedSection) {
-          const target = draft.sections[draft.selectedSection.index]
-          const obj = {
-            src,
-            width,
-            height,
-            thumbnailCaption: "",
-          }
-          target.images.push(obj)
-          draft.selectedSection.images.push(obj)
+          const newList = createNewSectionList(type, target.list.length, obj)
+          target.list.push(newList)
+          draft.selectedSection.list.push(newList)
         }
       })
     ),
 
-  moveSection: ({ from, to }) =>
+  // DELETE
+  deleteList: ({ targetIndex }) =>
     set((origin) =>
       produce(origin, (draft) => {
-        const _target = cloneDeep(draft.sections[from])
-        draft.sections.splice(from, 1)
-        draft.sections.splice(to, 0, _target)
-        draft.sections = draft.sections.map((v, i) => ({ ...v, index: i }))
+        if (draft.selectedSection) {
+          const target = draft.sections[draft.selectedSection.index]
+          target.list = target.list.filter((_, i) => i !== targetIndex).map((v, i) => ({ ...v, index: i }))
+          draft.selectedSection.list = target.list
+        }
       })
     ),
 
@@ -238,19 +220,27 @@ export const useEditStore = create<EditStates & Actions>()((set) => ({
         draft.sections = draft.sections.map((v, i) => ({ ...v, index: i }))
       })
     ),
-  deleteListOrImages: ({ targetIndex, type }) =>
+
+  // ETC
+  copySection: ({ payload }) =>
     set((origin) =>
       produce(origin, (draft) => {
-        if (draft.selectedSection) {
-          const target = draft.sections[draft.selectedSection.index]
-          if (type === "images") {
-            target.images = target.images.filter((_, i) => i !== targetIndex)
-            draft.selectedSection.images = target.images
-          } else {
-            target.list = target.list.filter((_, i) => i !== targetIndex).map((v, i) => ({ ...v, index: i }))
-            draft.selectedSection.list = target.list
-          }
-        }
+        const copy = cloneDeep({ ...payload, id: getId() })
+
+        draft.sections.splice(payload.index + 1, 0, copy)
+        draft.sections = draft.sections.map((v, i) => ({ ...v, index: i }))
+
+        draft.selectedSection = draft.sections.find((v) => v.id === copy.id) ?? null
+      })
+    ),
+
+  moveSection: ({ from, to }) =>
+    set((origin) =>
+      produce(origin, (draft) => {
+        const _target = cloneDeep(draft.sections[from])
+        draft.sections.splice(from, 1)
+        draft.sections.splice(to, 0, _target)
+        draft.sections = draft.sections.map((v, i) => ({ ...v, index: i }))
       })
     ),
 }))

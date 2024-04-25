@@ -1,0 +1,24 @@
+@import "@/styles/variables.scss";
+
+.btn-wrapper {
+  width: 100%;
+  @include flex;
+  margin-top: 10px;
+  .add {
+    width: 36px;
+    height: 36px;
+    border-radius: 100%;
+    @include border;
+    @include flex;
+    svg {
+      font-size: 17px;
+      color: var(--gray);
+    }
+    @include action {
+      border-color: var(--pink);
+      svg {
+        color: var(--pink);
+      }
+    }
+  }
+}
