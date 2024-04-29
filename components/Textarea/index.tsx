@@ -1,9 +1,8 @@
 "use client"
 
-import { colors } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
-import { useEditStore } from "@/store/edit"
-import { AlignTypes } from "@/types/Edit"
+import { useEditorStore } from "@/store/editor"
+import { StyleProperties } from "@/types/Edit"
 import { useParams } from "next/navigation"
 import { memo } from "react"
 import TextareaAutosize from "react-textarea-autosize"
@@ -11,46 +10,32 @@ import TextareaAutosize from "react-textarea-autosize"
 function Textarea({
   className,
   inputType,
+  style,
   value,
+  dataKey,
   listIndex,
   isOptional,
-  color,
-  textAlign,
 }: {
   className?: string
-  inputType: "title" | "description" | "cta" | "label" | "map"
+  inputType: "title" | "description" | "label" | "cta" | "map"
+  dataKey?: "title" | "description"
   isOptional: boolean
   listIndex?: number
   value: string
-  color?: string
-  textAlign?: AlignTypes
+  style?: StyleProperties
 }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
-  const { setTitle, setDescription, setValues, setValue, setList, setLabel } = useEditStore()
+  const { setValue, setList, setData } = useEditorStore()
   const onChangeInput = (e: any) => {
-    const map = {
-      title: () => {
-        if (typeof listIndex === "number") return setList({ payload: e.target.value, index: listIndex, key: "title" })
-        setTitle({ payload: e.target.value })
-      },
-      description: () => {
-        if (typeof listIndex === "number")
-          return setList({ payload: e.target.value, index: listIndex, key: "description" })
-        setDescription({ payload: e.target.value })
-      },
-      label: () => {
-        if (typeof listIndex === "number") return setList({ payload: e.target.value, index: listIndex, key: "label" })
-        setLabel({ payload: e.target.value })
-      },
-      cta: () => {
-        setValues({ payload: e.target.value, key: "ctaText" })
-      },
-      map: () => {
-        setValue({ payload: e.target.value })
-      },
+    if (dataKey) {
+      if (typeof listIndex === "number")
+        return setList({ payload: e.target.value, index: listIndex, key: "data", dataKey })
+      setData({ payload: e.target.value, key: dataKey })
+    } else {
+      if (typeof listIndex === "number") return setList({ payload: e.target.value, index: listIndex, key: "value" })
+      setValue({ payload: e.target.value })
     }
-    map[inputType]()
   }
 
   return (
@@ -59,7 +44,7 @@ function Textarea({
       placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
       value={value ?? ""}
       onChange={onChangeInput}
-      style={{ color: !!color ? color : colors.blackSoft, textAlign }}
+      style={style as any}
     />
   )
 }

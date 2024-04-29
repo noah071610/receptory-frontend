@@ -4,93 +4,84 @@ import ImageDelete from "@/components/ImageDelete"
 import Input from "@/components/Input"
 import Textarea from "@/components/Textarea"
 import { getImageUrl } from "@/config"
+import { colors } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
-import { useEditStore } from "@/store/edit"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import getContrastTextColor from "@/utils/getContrastTextColor"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
 import { useParams } from "next/navigation"
-import { useCallback, useMemo } from "react"
-import { useDropzone } from "react-dropzone"
+import { useMemo } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 export default function Thumbnail({ section }: { section: SectionType }) {
   const { lang } = useParams()
 
-  const { setValues } = useEditStore()
+  const { setActive } = useEditorStore()
   const { t } = useTranslation(lang, ["new-post-page"])
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    acceptedFiles.forEach(async (file: any) => {
-      const formData = new FormData()
-      formData.append("image", file)
+  const title = section.list[0]
 
-      // const { msg, data: imageSrc } = await uploadImage(formData)
-      // if (msg === "ok") {
-      // }
-      if (process.env.NODE_ENV === "development") {
-        setValues({
-          key: "thumbnail",
-          payload:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxMX47KdHnDG65nL8gniQhv5v37xWUjWlMJWZa24-syw&s",
-        })
-      }
-    })
-  }, [])
+  const description = section.list[1]
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    multiple: false,
-    accept: {
-      "image/*": [],
-    },
-    maxSize: 8000000,
-  })
+  const cta = section.list[2]
+  const ctaStyle = section.list[2].style
 
-  const customColors = useMemo(() => section.colors, [section.colors])
-  const ctaTextColor = useMemo(() => getContrastTextColor(section.colors.ctaColor), [section.colors.ctaColor])
+  const ctaTextColor = useMemo(
+    () => getContrastTextColor(ctaStyle.backgroundColor ?? colors.blackSoft),
+    [ctaStyle.backgroundColor]
+  )
+  const textColor = useMemo(
+    () => getContrastTextColor(section.style.backgroundColor ?? colors.white),
+    [section.style.backgroundColor]
+  )
+
+  const onClickThumbnailUpload = () => {
+    setActive({ key: "modal", payload: "thumbnail" })
+  }
 
   return (
     <div
       style={{
-        background: section.values["bgImage"]
-          ? getImageUrl({ isCenter: true, url: section.values["bgImage"] ?? "" })
-          : `linear-gradient(180deg, ${customColors.bgColor} 87%, rgba(0,0,0,0) 100%)`,
+        background: section.style.background
+          ? getImageUrl({ isCenter: true, url: section.style.background ?? "" })
+          : `linear-gradient(180deg, ${section.style.backgroundColor} 87%, rgba(0,0,0,0) 100%)`,
       }}
       className={cx(style.wrapper)}
     >
-      {section.values["bgImage"] && <ImageDelete section={section} srcKey={"bgImage"} />}
+      {section.style.background && <ImageDelete section={section} srcKey={"background"} />}
       <div className={cx(style.main)}>
         <div
-          style={{ background: getImageUrl({ isCenter: true, url: section.values["thumbnail"] ?? "" }) }}
+          style={{ background: getImageUrl({ isCenter: true, url: section.src ?? "" }) }}
           className={cx(style.thumbnail)}
         >
-          {section.values["thumbnail"] && <ImageDelete section={section} srcKey={"thumbnail"} />}
-          <div className={cx(style["drop-zone"], { [style.active]: isDragActive })} {...getRootProps()}>
-            <input {...getInputProps()} />
+          {section.src && <ImageDelete section={section} srcKey={"thumbnail"} />}
+          <button onClick={onClickThumbnailUpload} className={cx(style["drop-zone"])}>
             <FontAwesomeIcon icon={faPlus} />
-          </div>
+          </button>
         </div>
         <Textarea
           className={cx(style["title-input"])}
           inputType="title"
           isOptional={true}
-          color={customColors.textColor}
-          value={section.title}
+          listIndex={0}
+          style={{ color: textColor }}
+          value={title.value}
         />
         <Textarea
           className={cx(style["description-input"])}
           inputType="description"
           isOptional={true}
-          color={customColors.textColor}
-          value={section.description}
+          listIndex={1}
+          style={{ color: textColor }}
+          value={description.value}
         />
         <div className={cx(style["cta-wrapper"])}>
-          <button style={{ backgroundColor: customColors.ctaColor }} className={cx(style.cta)}>
-            <Input inputType="cta" isOptional={false} color={ctaTextColor} value={section.values["ctaText"] ?? ""} />
+          <button style={{ backgroundColor: ctaStyle.backgroundColor }} className={cx(style.cta)}>
+            <Input inputType="cta" listIndex={2} isOptional={false} style={{ color: ctaTextColor }} value={cta.value} />
           </button>
         </div>
       </div>

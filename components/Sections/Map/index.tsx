@@ -3,6 +3,7 @@
 import Input from "@/components/Input"
 import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
+import hasString from "@/utils/hasString"
 import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
@@ -30,10 +31,7 @@ function Map({ section }: { section: SectionType }) {
   const { t } = useTranslation()
 
   const mapCode = useMemo(() => {
-    if (
-      !!(section.value ?? "").trim() &&
-      section.value.includes('<iframe src="https://www.google.com/maps/embed?pb=')
-    ) {
+    if (hasString(section.value) && section.value.includes('<iframe src="https://www.google.com/maps/embed?pb=')) {
       let temp = section.value
       const srcRegex = /<iframe\s+src="(.+?)"/
       const match = temp.match(srcRegex)
@@ -41,7 +39,7 @@ function Map({ section }: { section: SectionType }) {
       // 추출된 src 속성 값
       temp = match ? match[1] : ""
       if (temp) {
-        return temp.replace("https://www.google.com/maps/embed?pb=", "")
+        return temp
       } else {
         return ""
       }
@@ -49,15 +47,20 @@ function Map({ section }: { section: SectionType }) {
       return ""
     }
   }, [section.value])
+
   return (
     <div className={cx(style["map"])}>
-      <iframe
-        className={cx(style.iframe)}
-        src={`https://www.google.com/maps/embed?pb=${mapCode}`}
-        allowFullScreen={true}
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-      ></iframe>
+      {mapCode ? (
+        <iframe
+          className={cx(style.iframe)}
+          src={mapCode}
+          allowFullScreen={true}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      ) : (
+        <div className={cx(style.empty)}></div>
+      )}
       <div className={cx(style["input-wrapper"])}>
         <h3 className={cx(style["input-title"])}>{t("임베드 코드 입력")}</h3>
         <Input className={cx(style.input)} inputType="map" isOptional={false} value={section.value} />

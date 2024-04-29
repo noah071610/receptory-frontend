@@ -17,15 +17,15 @@
   max-width: 380px;
 
   textarea {
+    @include input-style;
     text-align: center;
   }
+
   .title-input {
-    @include header-style($input: true);
-    margin-bottom: 10px;
+    @include header-style;
   }
   .description-input {
-    @include description-style($input: true);
-    margin-bottom: 15px;
+    @include description-style;
   }
 }
 
@@ -79,6 +79,7 @@
 .cta-wrapper {
   width: 100%;
   @include flex;
+  margin-top: 20px;
   .cta {
     width: 220px;
     border-radius: 100px;

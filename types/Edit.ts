@@ -1,4 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+import { EditorState } from "draft-js"
 
 export type SectionListTypes =
   | "thumbnail"
@@ -11,25 +12,33 @@ export type SectionListTypes =
   | "map"
   | "qna"
   | "empty"
+  | "calender"
+  | "time"
+  | "list"
+
 export type TargetSectionListTypes =
-  | "bgColor"
-  | "ctaColor"
-  | "textColor"
-  | "bgImage"
-  | "style"
+  | "backgroundColor"
+  | "ctaBackgroundColor"
+  | "color"
+  | "background"
+  | "design"
   | "animation"
-  | "align"
+  | "textAlign"
   | "select"
 
 export type AlignTypes = "left" | "center" | "right"
-export type StyleTypes =
-  | "basicStyle"
-  | "cardStyle"
-  | "albumStyle"
-  | "gridTwoStyle"
-  | "gridOneStyle"
-  | "thumbnailStyle"
-  | "circleStyle"
+export type DesignTypes =
+  | "basic"
+  | "card"
+  | "album"
+  | "gridTwo"
+  | "gridOne"
+  | "thumbnail"
+  | "circle"
+  | "single"
+  | "multiple"
+  | "modal"
+  | "grid"
   | AlignTypes
 export type AnimationTypes = "none" | "fadeUp" | "flip" | "fadeIn" | "bounce" | "scaleUp"
 export type TitleSelectTypes = "title" | "description" | "label"
@@ -37,42 +46,42 @@ export type TitleSelectTypes = "title" | "description" | "label"
 export type EditorFooterListTypes =
   | SectionListTypes
   | TargetSectionListTypes
-  | StyleTypes
+  | DesignTypes
   | AnimationTypes
   | AlignTypes
   | TitleSelectTypes
 
-export type EditStage = "init" | "edit" | "rending"
+export type EditStage = "init" | "form" | "rending"
 
-export interface SectionColorType {
-  bgColor: string
-  ctaColor: string
-  textColor: string
-  mainColor: string
-  subColor: string
-}
 export interface ImageType {
   src: string
   width: number
   height: number
 }
 
+export interface StyleProperties {
+  background?: string
+  color?: string
+  backgroundColor?: string
+  width?: number
+  height?: number
+  textAlign?: AlignTypes
+  animation?: AnimationTypes
+}
+
 interface _SectionType {
   id: string
   index: number
-  width: number
-  height: number
   value: any
-  values: { [key: string]: any }
+  text: EditorState
+  data: { [key: string]: any }
+  collection: any[]
   src: string
   isActive: boolean
-  title: string
-  description: string
-  label: string
   list: SectionListType[]
-  style: StyleTypes
-  colors: SectionColorType
-  animation: AnimationTypes
+  style: StyleProperties
+  design: DesignTypes
+  options: { [key: string]: any }
 }
 export interface SectionType extends _SectionType {
   type: SectionListTypes
@@ -81,7 +90,7 @@ export interface SectionListType extends _SectionType {
   type: string
 }
 
-export type EditorFooterListActions = "cta" | "tooltip" | "submenu" | "file" | "modal"
+export type EditorFooterListActions = "cta" | "colorSelector" | "submenu" | "imageSelector" | "createSection"
 
 export interface EditorFooterList {
   value: EditorFooterListTypes

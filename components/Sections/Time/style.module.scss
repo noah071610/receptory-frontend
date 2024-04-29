@@ -1,0 +1,107 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.title {
+  @include input-style;
+  @include header-style;
+  margin-bottom: 10px;
+}
+
+.time-input {
+  &-wrapper {
+    width: 100%;
+    display: flex;
+  }
+  width: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  .time-btn {
+    border-radius: 5px;
+    @include border;
+    padding: 8px 14px;
+    span {
+      font-size: 16px;
+    }
+    svg {
+      margin-left: 7px;
+      font-size: 16px;
+      color: var(--black-soft);
+    }
+  }
+}
+
+.options {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 25px 10px;
+  @include border;
+  border-radius: 10px;
+
+  .time-min-max {
+    .time-min-max-title {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    input[type="time"] {
+      margin-left: 10px;
+      border-radius: 5px;
+      @include border;
+      padding: 6px 15px;
+    }
+  }
+}
+
+.interval {
+  width: 100%;
+  .ratio-title {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .content {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 20px;
+    .ratio-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      .ratio {
+        width: 20px;
+        height: 20px;
+        @include flex;
+        border-radius: 100%;
+        @include border;
+        .circle {
+          width: 12px;
+          height: 12px;
+          border-radius: 100%;
+          transform: scale(0);
+          transition: 300ms all;
+        }
+      }
+      label {
+        cursor: pointer;
+      }
+      &.active {
+        label {
+          color: var(--pink);
+        }
+        .circle {
+          background-color: var(--pink);
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEditStore } from "@/store/edit"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -15,20 +15,25 @@ function ImageDelete({
   listIndex,
 }: {
   section: SectionType
-  srcKey: "list" | "bgImage" | "thumbnail"
+  srcKey: "list" | "background" | "thumbnail"
   listIndex?: number
 }) {
-  const { selectedSection, setSelectedSection, setValues, deleteList } = useEditStore()
+  const { selectedSection, setSelectedSection, setSrc, setStyle, deleteList } = useEditorStore()
   const onClickDelete = () => {
     if (!selectedSection) {
       setSelectedSection({ payload: section })
     }
     if (typeof listIndex === "number") {
       if (srcKey === "list") {
-        deleteList({ targetIndex: listIndex })
+        return deleteList({ targetIndex: listIndex })
       }
-    } else {
-      setValues({ payload: "", key: srcKey })
+    }
+    if (srcKey === "background") {
+      return setStyle({ key: srcKey, payload: undefined })
+    }
+
+    if (srcKey === "thumbnail") {
+      return setSrc({ payload: "" })
     }
   }
   return (

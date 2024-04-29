@@ -1,6 +1,7 @@
 "use client"
 
 import { getImageUrl } from "@/config"
+import { colors } from "@/config/colors"
 import { SectionType } from "@/types/Edit"
 import getContrastTextColor from "@/utils/getContrastTextColor"
 import hasString from "@/utils/hasString"
@@ -13,36 +14,47 @@ const cx = classNames.bind(style)
 export default function Thumbnail({ section }: { section: SectionType }) {
   const { lang } = useParams()
 
-  const customColors = useMemo(() => section.colors, [section.colors])
-  const ctaTextColor = useMemo(() => getContrastTextColor(section.colors.ctaColor), [section.colors.ctaColor])
+  const title = section.list[0]
+
+  const description = section.list[1]
+
+  const cta = section.list[2]
+  const ctaStyle = section.list[2].style
+
+  const ctaTextColor = useMemo(
+    () => getContrastTextColor(ctaStyle.backgroundColor ?? colors.blackSoft),
+    [ctaStyle.backgroundColor]
+  )
+  const textColor = useMemo(
+    () => getContrastTextColor(section.style.backgroundColor ?? colors.white),
+    [section.style.backgroundColor]
+  )
 
   return (
     <div
       style={{
-        background: section.values["bgImage"]
-          ? getImageUrl({ isCenter: true, url: section.values["bgImage"] ?? "" })
-          : `linear-gradient(180deg, ${customColors.bgColor} 87%, rgba(0,0,0,0) 100%)`,
+        background: section.style.background
+          ? getImageUrl({ isCenter: true, url: section.style.background ?? "" })
+          : `linear-gradient(180deg, ${section.style.backgroundColor} 87%, rgba(0,0,0,0) 100%)`,
       }}
       className={cx(style.wrapper, style.mobile)}
     >
       <div className={cx(style.main)}>
-        {hasString(section.values["thumbnail"]) && (
+        {hasString(section.src) && (
           <div
-            style={{ background: getImageUrl({ isCenter: true, url: section.values["thumbnail"] ?? "" }) }}
+            style={{ background: getImageUrl({ isCenter: true, url: section.src ?? "" }) }}
             className={cx(style.thumbnail)}
           ></div>
         )}
-        <h1 style={{ color: customColors.textColor }} className={cx(style.title)}>
-          {section.title}
+        <h1 style={{ color: textColor }} className={cx(style.title)}>
+          {title.value}
         </h1>
-        <p style={{ color: customColors.textColor }} className={cx(style.description)}>
-          {section.description}
+        <p style={{ color: textColor }} className={cx(style.description)}>
+          {description.value}
         </p>
         <div className={cx(style["cta-wrapper"])}>
-          <button style={{ backgroundColor: customColors.ctaColor }} className={cx(style.cta)}>
-            <span style={{ color: ctaTextColor }}>
-              {section.values["ctaText"] ? section.values["ctaText"] : "에헤"}
-            </span>
+          <button style={{ backgroundColor: ctaStyle.backgroundColor }} className={cx(style.cta)}>
+            <span style={{ color: ctaTextColor }}>{cta.value ? cta.value : "todo://"}</span>
           </button>
         </div>
       </div>

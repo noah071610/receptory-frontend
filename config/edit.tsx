@@ -13,14 +13,23 @@ import {
   faUnderline,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-// @ts-ignore
-import { colors } from "@/config/colors"
-import classNames from "classNames"
-import { RichUtils } from "draft-js"
-import style from "./style.module.scss"
-const cx = classNames.bind(style)
 
-const tools = [
+// FOR INLINE STYLES
+export const editorStyleMap = {
+  HIGHLIGHT: {
+    backgroundColor: "#F7A5F7",
+  },
+  SUPERSCRIPT: {
+    verticalAlign: "super",
+    fontSize: "80%",
+  },
+  SUBSCRIPT: {
+    verticalAlign: "sub",
+    fontSize: "80%",
+  },
+}
+
+export const tools = [
   {
     label: "bold",
     style: "BOLD",
@@ -97,58 +106,3 @@ const tools = [
   { label: "H2", style: "header-two", method: "block" },
   { label: "H3", style: "header-three", method: "block" },
 ]
-
-const Toolbar = ({
-  editorState,
-  setEditorState,
-  textColor,
-}: {
-  editorState: any
-  setEditorState: any
-  textColor?: string
-}) => {
-  const applyStyle = (e: any, style: any, method: any) => {
-    e.preventDefault()
-    method === "block"
-      ? setEditorState(RichUtils.toggleBlockType(editorState, style))
-      : setEditorState(RichUtils.toggleInlineStyle(editorState, style))
-  }
-
-  const isActive = (style: any, method: any) => {
-    if (method === "block") {
-      const selection = editorState.getSelection()
-      const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType()
-      return blockType === style
-    } else {
-      const currentStyle = editorState.getCurrentInlineStyle()
-      return currentStyle.has(style)
-    }
-  }
-
-  return (
-    <div className={cx(style["toolbar-grid"])}>
-      {tools.map((item, idx) => (
-        <button
-          style={{
-            color:
-              textColor !== colors.white
-                ? isActive(item.style, item.method)
-                  ? "rgba(0, 0, 0, 1)"
-                  : "rgba(0, 0, 0, 0.3)"
-                : isActive(item.style, item.method)
-                  ? "rgba(255, 255, 255, 1)"
-                  : "rgba(255, 255, 255, 0.6)",
-          }}
-          key={`${item.label}-${idx}`}
-          title={item.label}
-          onClick={(e) => applyStyle(e, item.style, item.method)}
-          onMouseDown={(e) => e.preventDefault()}
-        >
-          {item.icon || item.label}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-export default Toolbar

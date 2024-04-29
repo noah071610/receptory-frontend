@@ -1,16 +1,20 @@
 @import "@/styles/variables.scss";
 
 .layout {
+  input,
+  textarea {
+    @include input-style;
+  }
   .label-input {
-    @include label-style($input: true);
+    @include label-style;
   }
   .title-input {
     margin-top: 5px;
-    @include header-style($input: true);
+    @include header-style;
   }
   .description-input {
     margin-top: 10px;
-    @include description-style($input: true);
+    @include description-style;
   }
 }
 

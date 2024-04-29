@@ -7,7 +7,7 @@
 .slide {
   width: 210px;
 
-  &.circleStyle {
+  &.circle {
     width: 150px;
     input,
     textarea {
@@ -75,11 +75,11 @@
     margin-bottom: 8px;
   }
   input {
-    @include header-style($input: true);
+    @include header-style();
     margin-bottom: 5px;
   }
   textarea {
-    @include description-style($input: true);
+    @include description-style();
   }
 }
 

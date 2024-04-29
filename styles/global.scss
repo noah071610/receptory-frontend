@@ -141,6 +141,7 @@ a,
 button {
   -webkit-tap-highlight-color: transparent; /* 터치 시 하이라이트 제거 */
   -webkit-touch-callout: none; /* 터치 시 텍스트 선택 방지 */
+  color: var(--black-soft);
 }
 
 button {
@@ -191,18 +192,6 @@ input[type="password"] {
 input,
 textarea {
   touch-action: manipulation;
-}
-
-.ReactGridGallery_tile-overlay,
-.ReactGridGallery_tile {
-  background-color: transparent !important;
-}
-.ReactGridGallery_tile-viewport {
-  border-radius: 5px !important;
-  img {
-    border-radius: 5px !important;
-    overflow: hidden !important;
-  }
 }
 
 :root {

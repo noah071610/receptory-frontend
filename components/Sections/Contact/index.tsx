@@ -1,7 +1,7 @@
 "use client"
 
 import { useTranslation } from "@/i18n/client"
-import { useEditStore } from "@/store/edit"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/getAnimation"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
@@ -15,7 +15,7 @@ const cx = classNames.bind(style)
 
 function Contact({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setList, selectedSection, setSelectedSection } = useEditStore()
+  const { setList, selectedSection, setSelectedSection } = useEditorStore()
   const { t } = useTranslation(lang, ["todo:"])
   const onClickAddContact = (i: number) => {
     if (!selectedSection) {
@@ -42,19 +42,23 @@ function Contact({ section }: { section: SectionType }) {
     <div className={cx(style["contact"])}>
       <div className={cx(style.main)}>
         <div className={cx(style["btn-list"])}>
-          {section.style === "basicStyle" ? (
+          {section.design === "basic" ? (
             btnList.map((v, i) => {
               switch (v.type) {
                 case "call":
                   return (
-                    <a style={getAnimation(section.animation, i * 130)} href={`tel:${v.value}`} key={`btn_${v.type}`}>
+                    <a
+                      style={getAnimation(section.style.animation, i * 130)}
+                      href={`tel:${v.value}`}
+                      key={`btn_${v.type}`}
+                    >
                       <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
                     </a>
                   )
                 default:
                   return (
                     <button
-                      style={getAnimation(section.animation, i * 130)}
+                      style={getAnimation(section.style.animation, i * 130)}
                       // onClick={() => v.onClick(v.value)} todo:
                       key={`btn_${v.type}`}
                     >

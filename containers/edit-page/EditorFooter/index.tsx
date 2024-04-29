@@ -2,7 +2,7 @@
 
 import ColorPicker from "@/components/Tools/ColorPicker"
 import { getEditorFooterList, getSubmenuList } from "@/config/editorFooter"
-import { useEditStore } from "@/store/edit"
+import { useEditorStore } from "@/store/editor"
 import { faChevronUp, faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
@@ -14,12 +14,12 @@ import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 export default function EditorFooter() {
-  const { selectedSection, setActive, active, setSelectedSection } = useEditStore()
+  const { selectedSection, setActive, active, setSelectedSection, stage } = useEditorStore()
   const { lang } = useParams()
   const [isOpenAllList, setIsOpenAllList] = useState(false)
   const targetList = useMemo(() => {
-    return getEditorFooterList(selectedSection)
-  }, [selectedSection])
+    return getEditorFooterList(selectedSection, stage)
+  }, [selectedSection, stage])
   const submenuList = useMemo(() => {
     return getSubmenuList(active.submenu, selectedSection)
   }, [selectedSection, active.submenu])
@@ -68,9 +68,9 @@ export default function EditorFooter() {
         <div className={cx(style["preview-ghost"])}></div>
       </div>
 
-      {(active.tooltip === "bgColor" || active.tooltip === "textColor" || active.tooltip === "ctaColor") && (
-        <ColorPicker colorKey={active.tooltip} />
-      )}
+      {(active.tooltip === "backgroundColor" ||
+        active.tooltip === "color" ||
+        active.tooltip === "ctaBackgroundColor") && <ColorPicker colorKey={active.tooltip} />}
     </div>
   )
 }

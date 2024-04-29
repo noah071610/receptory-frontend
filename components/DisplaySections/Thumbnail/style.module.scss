@@ -23,11 +23,11 @@
   //   text-align: center;
   // }
   // .title-input {
-  //   @include header-style($input: true);
+  //   @include header-style();
   //   margin-bottom: 10px;
   // }
   // .description-input {
-  //   @include description-style($input: true);
+  //   @include description-style();
   //   margin-bottom: 15px;
   // }
 }
@@ -38,12 +38,12 @@
     height: 180px;
   }
   .title {
-    @include header-style($input: false);
+    @include header-style();
     text-align: center;
     margin-bottom: 10px;
   }
   .description {
-    @include description-style($input: false);
+    @include description-style();
     text-align: center;
     margin-bottom: 15px;
   }

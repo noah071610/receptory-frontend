@@ -1,82 +1,113 @@
-import { colors, defaultColors } from "@/config/colors"
+import { colors } from "@/config/colors"
 import { SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
+import { EditorState } from "draft-js"
 import getId from "./getId"
+
+const sectionMap: { [key: string]: any } = {
+  calender: () => {
+    return {
+      design: "single",
+      options: {
+        isAlways: true,
+        startDate: new Date(),
+        endDate: undefined,
+      },
+    }
+  },
+  contact: () => {
+    const target = {
+      list: ["call", "email", "line", "twitter", "facebook", "kakaoTalk"].map((v, i) => createNewSectionList(v, i)),
+    }
+    target.list[0].isActive = true
+    return target
+  },
+  title: () => {
+    return {
+      style: {
+        textAlign: "left",
+      },
+      list: ["title", "description", "label"]
+        .map((v, i) => createNewSectionList(v, i))
+        .map((v) => ({ ...v, isActive: true })),
+    }
+  },
+  callout: () => {
+    return {
+      style: {
+        backgroundColor: colors.graySoft,
+      },
+    }
+  },
+  album: () => {
+    return {
+      mode: "basic",
+    }
+  },
+  qna: () => {
+    return { list: [{ ...createNewSectionList("qna", 0), isActive: true }] }
+  },
+  time: () => {
+    return {
+      design: "grid",
+      options: {
+        isEveryTime: true,
+        startTime: "00:00",
+        endTime: "23:59",
+        interval: 1,
+        time: "00:00",
+      },
+    }
+  },
+  thumbnail: () => {
+    const list = ["title", "description", "cta"].map((v, i) => createNewSectionList(v, i))
+
+    list[2].style.backgroundColor = colors.pinkSoft
+
+    return {
+      style: {
+        backgroundColor: colors.white,
+      },
+      list,
+    }
+  },
+}
 
 export const createNewSectionList = (subType: string, index: number, obj?: any): SectionListType => {
   return {
     id: getId(),
     index,
-    width: 0,
-    height: 0,
     type: subType,
     value: "",
     isActive: false,
-    values: {},
-    title: "",
-    description: "",
-    label: "",
+    data: {},
+    collection: [],
     list: [],
+    style: {},
+    options: {},
+    design: "basic",
     src: "",
-    style: "basicStyle",
-    colors: defaultColors,
-    animation: "none",
+    text: EditorState.createEmpty(),
     ...obj,
   }
 }
 
 export const createNewSection = (type: SectionListTypes, index: number): SectionType => {
-  const temp: any = () => {
-    switch (type) {
-      case "contact":
-        const target = {
-          list: ["call", "email", "line", "twitter", "facebook", "kakaoTalk"].map((v, i) => createNewSectionList(v, i)),
-        }
-        target.list[0].isActive = true
-        return target
-      case "album":
-        return {
-          style: "albumStyle",
-        }
-      case "callout":
-        return {
-          colors: {
-            ...defaultColors,
-            bgColor: colors.graySoft,
-          },
-        }
-      case "title":
-        return {
-          style: "left",
-          list: ["title", "description", "label"]
-            .map((v, i) => createNewSectionList(v, i))
-            .map((v) => ({ ...v, isActive: true })),
-        }
-      case "qna":
-        return {
-          list: [{ ...createNewSectionList("qna", 0), isActive: true }],
-        }
-      default:
-        return {}
-    }
-  }
+  const setProperties = sectionMap[type] ? sectionMap[type]() : {}
+
   return {
     id: getId(),
     index,
-    width: 0,
-    height: 0,
     type,
     value: "",
-    values: {},
     isActive: false,
-    title: "",
-    images: [],
-    description: "",
-    label: "",
+    data: {},
+    collection: [],
     list: [],
+    style: {},
+    options: {},
+    design: "basic",
     src: "",
-    style: "basicStyle",
-    colors: defaultColors,
-    animation: "none",
-    ...temp(),
+    text: EditorState.createEmpty(),
+    ...setProperties,
   }
 }

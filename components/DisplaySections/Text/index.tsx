@@ -1,18 +1,26 @@
 // @ts-ignore
-import { Editor } from "draft-js"
 import { memo } from "react"
 
-import { SectionListType, SectionType } from "@/types/Edit"
+import { colors } from "@/config/colors"
+import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
+import { stateToHTML } from "draft-js-export-html"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-const Text = ({ section, textColor }: { section: SectionType | SectionListType; textColor?: string }) => {
+const Text = ({ section, textColor, listIndex }: { section: SectionType; textColor?: string; listIndex?: number }) => {
   return (
     <div className={cx(style.editor)}>
-      <div className={cx(style.container)}>
-        <Editor editorState={section.value} onChange={() => {}} readOnly={true} />
-      </div>
+      <div
+        dangerouslySetInnerHTML={{
+          __html:
+            typeof listIndex === "number"
+              ? stateToHTML(section.list[listIndex].text.getCurrentContent())
+              : stateToHTML(section.text.getCurrentContent()),
+        }}
+        style={{ color: textColor ?? colors.blackSoft }}
+        className={cx(style.container)}
+      ></div>
     </div>
   )
 }

@@ -1,14 +1,16 @@
 "use client"
 
 import ImageSelector from "@/components/Modal/ImageSelector"
+import TimePicker from "@/components/Modal/TimePicker"
 import SectionLayout from "@/components/Sections"
 import Empty from "@/components/Sections/Empty"
 import Thumbnail from "@/components/Sections/Thumbnail"
-import { useEditStore } from "@/store/edit"
+import { useEditorStore } from "@/store/editor"
 import { SectionListTypes, SectionType } from "@/types/Edit"
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd"
+import { convertToRaw } from "draft-js"
 import dynamic from "next/dynamic"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 
 const Callout = dynamic(() => import("@/components/Sections/Callout"), {
   ssr: true,
@@ -34,6 +36,12 @@ const Map = dynamic(() => import("@/components/Sections/Map"), {
 const QnA = dynamic(() => import("@/components/Sections/QnA"), {
   ssr: true,
 })
+const Calender = dynamic(() => import("@/components/Sections/Calender"), {
+  ssr: true,
+})
+const Time = dynamic(() => import("@/components/Sections/Time"), {
+  ssr: true,
+})
 
 const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
   album: (section) => <Album section={section} />,
@@ -44,12 +52,46 @@ const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
   slider: (section) => <Slider section={section} />,
   map: (section) => <Map section={section} />,
   qna: (section) => <QnA section={section} />,
+  calender: () => <></>,
   thumbnail: () => <></>,
+  time: (section) => <Time section={section} />,
+  list: () => <></>,
   empty: () => <Empty />,
 }
 
+const handleBeforeUnload = async ({ initSections }: any, event?: any) => {
+  if (process.env.NODE_ENV === "development") {
+    localStorage.setItem(
+      "save",
+      JSON.stringify({
+        initSections: initSections.map((v: SectionType) => {
+          switch (v.type) {
+            case "callout":
+              return { ...v, text: JSON.stringify(convertToRaw(v.text.getCurrentContent())) }
+            case "text":
+              return { ...v, text: JSON.stringify(convertToRaw(v.text.getCurrentContent())) }
+            case "qna":
+              return {
+                ...v,
+                list: v.list.map((k) => ({ ...k, text: JSON.stringify(convertToRaw(k.text.getCurrentContent())) })),
+              }
+
+            default:
+              return v
+          }
+        }),
+      })
+    )
+  } else {
+    // await savePost(data)
+  }
+  if (event) {
+    event.returnValue = "Are you sure you want to leave?"
+  }
+}
+
 const EditPage = () => {
-  const { sections, moveSection, active } = useEditStore()
+  const { initSections, isEditStart, stage, formSections, moveSection, active, loadSections } = useEditorStore()
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result
@@ -59,16 +101,43 @@ const EditPage = () => {
     moveSection({ from: source.index, to: destination.index })
   }
 
-  const openImageSelector = useMemo(
-    () => (active.modal ?? active.sectionModal) === "album" || (active.modal ?? active.sectionModal) === "slider",
-    [active]
+  useEffect(() => {
+    if (!isEditStart) return
+    const handleBeforeUnloadCallback = (e: any) => {
+      handleBeforeUnload({ initSections }, e)
+    }
+    window.addEventListener("beforeunload", handleBeforeUnloadCallback)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
+    }
+  }, [initSections, isEditStart])
+
+  useEffect(() => {
+    const _save = localStorage.getItem("save")
+
+    if (_save) {
+      const save = JSON.parse(_save ?? "{}")
+      // loadSections(save)
+    }
+  }, [])
+
+  const sections = useMemo(
+    () => (stage === "init" ? initSections : stage === "form" ? formSections : []),
+    [initSections, formSections, stage]
   )
 
   return (
     <>
       {sections?.length > 0 && (
         <SectionLayout section={sections[0]}>
-          <Thumbnail section={sections[0]} />
+          {stage === "init" ? (
+            <Thumbnail section={sections[0]} />
+          ) : stage === "form" ? (
+            <Calender section={sections[0]} />
+          ) : (
+            <></>
+          )}
         </SectionLayout>
       )}
       <DragDropContext onDragEnd={onDragEnd}>
@@ -93,7 +162,8 @@ const EditPage = () => {
           )}
         </Droppable>
       </DragDropContext>
-      {openImageSelector && <ImageSelector />}
+      {(active.modal === "slide" || active.modal === "album") && <ImageSelector />}
+      {active.modal?.includes("time") && <TimePicker />}
     </>
   )
 }

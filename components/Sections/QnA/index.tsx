@@ -1,9 +1,9 @@
 "use client"
 
 import AddBtn from "@/components/AddBtn"
-import Textarea from "@/components/Textarea"
+import Input from "@/components/Input"
 import { colors } from "@/config/colors"
-import { useEditStore } from "@/store/edit"
+import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { faChevronDown, faQ } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -18,13 +18,13 @@ const Search = memo(({}: {}) => {
 })
 
 const List = ({ section, list, index }: { section: SectionType; list: SectionListType; index: number }) => {
-  const { setList, selectedSection, setSelectedSection } = useEditStore()
+  const { setList, selectedSection, setSelectedSection } = useEditorStore()
   const onClickTitle = (e: any) => {
     if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
 
-    setList({ key: "isActive", index: list.index, payload: e.target.closest(`textarea`) ? true : !list.isActive })
+    setList({ key: "isActive", index: index, payload: e.target.closest(`input`) ? true : !list.isActive })
   }
 
   return (
@@ -34,11 +34,12 @@ const List = ({ section, list, index }: { section: SectionType; list: SectionLis
           <FontAwesomeIcon icon={faQ} />
           <span>{"."}</span>
         </div>
-        <Textarea
+        <Input
           inputType="title"
-          listIndex={list.index}
+          listIndex={index}
           isOptional={false}
-          value={list.title}
+          dataKey="title"
+          value={list.data.title}
           className={cx(style["title-input"])}
         />
         <div className={cx(style.icon, style.arrow)}>
@@ -46,7 +47,7 @@ const List = ({ section, list, index }: { section: SectionType; list: SectionLis
         </div>
       </div>
       <div className={cx(style["content-layout"])}>
-        <Text section={list} textColor={colors.blackSoft} />
+        <Text listIndex={index} section={section} textColor={colors.blackSoft} />
       </div>
     </li>
   )

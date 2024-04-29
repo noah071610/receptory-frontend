@@ -1,12 +1,10 @@
 @import "@/styles/variables.scss";
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  .photo {
-    border-radius: 5px;
-  }
+.empty {
+  width: 100%;
+  height: 300px;
+  margin-bottom: 10px;
+  background-color: var(--border);
 }
 
 .iframe {
@@ -22,7 +20,7 @@
     margin-bottom: 6px;
   }
   .input {
-    @include label-style($input: true);
+    @include label-style();
     width: 100%;
     margin-bottom: 10px;
   }

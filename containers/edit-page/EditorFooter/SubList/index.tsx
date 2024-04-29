@@ -1,8 +1,8 @@
 "use client"
 
 import { useTranslation } from "@/i18n/client"
-import { useEditStore } from "@/store/edit"
-import { AnimationTypes, EditorFooterList, StyleTypes } from "@/types/Edit"
+import { useEditorStore } from "@/store/editor"
+import { AnimationTypes, DesignTypes, EditorFooterList } from "@/types/Edit"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
 import { useParams } from "next/navigation"
@@ -13,21 +13,21 @@ const cx = classNames.bind(style)
 
 export default function SubList({ list }: { list: EditorFooterList[] }) {
   const { lang } = useParams()
-  const { active, selectedSection, setStyle, setAnimation, setList } = useEditStore()
+  const { active, selectedSection, setStyle, setList, setDesign } = useEditorStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, i: number) => {
     if (!selectedSection) return
 
     switch (active.submenu) {
-      case "style":
-        setStyle({ payload: value as StyleTypes })
+      case "design":
+        setDesign({ payload: value as DesignTypes })
         break
       case "animation":
-        setAnimation({ payload: value as AnimationTypes })
+        setStyle({ key: active.submenu, payload: value as AnimationTypes })
         break
-      case "align":
-        setStyle({ payload: value as StyleTypes })
+      case "textAlign":
+        setStyle({ key: active.submenu, payload: value })
         break
       case "select":
         setList({ index: i, key: "isActive", payload: !selectedSection.list[i].isActive })
@@ -50,12 +50,14 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
         {list.map((list, i) => {
           const isActive = () => {
             switch (active.submenu) {
-              case "style":
-                return selectedSection?.style === list.value
+              case "textAlign":
+                return selectedSection?.style.textAlign === list.value
               case "animation":
-                return selectedSection?.animation === list.value
-              case "align":
-                return selectedSection?.style === list.value
+                return selectedSection?.style.animation
+                  ? selectedSection?.style.animation === list.value
+                  : list.value === "none"
+              case "design":
+                return selectedSection?.design === list.value
               case "select":
                 return selectedSection?.list[i].isActive
 
@@ -63,6 +65,7 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
                 return false
             }
           }
+
           return (
             <SwiperSlide className={cx(style.slide)} key={`subMenuList_${list.value}`}>
               <button

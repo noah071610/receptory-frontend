@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react"
 
-import { useEditStore } from "@/store/edit"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -20,7 +20,7 @@ export default function SectionLayout({
   section: SectionType
   draggableProvided?: DraggableProvided
 }) {
-  const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditStore()
+  const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditorStore()
   const onClickSection = (e: any) => {
     if (e.target.closest(".delete")) {
       setSelectedSection({ payload: null })
@@ -48,7 +48,7 @@ export default function SectionLayout({
     >
       {children}
 
-      {section.type !== "thumbnail" && (
+      {section.type !== "thumbnail" && section.type !== "calender" && (
         <div id="editor" className={cx(style.tools, { [style.active]: selectedSection?.id === section.id })}>
           <button onClick={onClickCopy} className={cx(style.copy, "copy")}>
             <FontAwesomeIcon icon={faCopy} />

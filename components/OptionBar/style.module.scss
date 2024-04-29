@@ -1,0 +1,43 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+  @include flex;
+  .content {
+    @include flex;
+    gap: 10px;
+    h2 {
+      font-size: 17px;
+      color: var(--black-soft);
+      font-weight: 400;
+    }
+    .bar {
+      width: 52px;
+      padding: 3px 6px;
+      background-color: var(--gray-soft);
+      display: flex;
+      align-items: center;
+      border-radius: 30px;
+      transition: 300ms all;
+      .circle {
+        width: 18px;
+        height: 18px;
+        border-radius: 100%;
+        background-color: var(--gray);
+        transition: 300ms all;
+      }
+    }
+    &.active {
+      h2 {
+        color: var(--pink-hard);
+      }
+      .bar {
+        background-color: var(--pink-soft);
+      }
+      .circle {
+        transform: translateX(24px);
+        background-color: var(--white);
+      }
+    }
+  }
+}

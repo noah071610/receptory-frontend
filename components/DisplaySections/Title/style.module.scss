@@ -2,16 +2,16 @@
 
 .layout {
   .label {
-    @include label-style($input: false);
+    @include label-style();
   }
   .title {
     margin-top: 5px;
-    @include header-style($input: false);
+    @include header-style();
   }
   .description {
     // margin-top: 10px;
     margin-top: 5px;
-    @include description-style($input: false);
+    @include description-style();
   }
 }
 

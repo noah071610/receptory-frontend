@@ -1,26 +1,34 @@
 // @ts-ignore
-import { ContentBlock, DraftHandleValue, Editor, EditorState, RichUtils, convertFromRaw, convertToRaw } from "draft-js"
-import { memo, useEffect, useRef, useState } from "react"
+import { ContentBlock, DraftHandleValue, Editor, EditorState, RichUtils } from "draft-js"
+import { memo, useEffect, useRef } from "react"
 
 import Toolbar from "./Toolbar"
 
 import { colors } from "@/config/colors"
 import { editorStyleMap } from "@/config/edit"
-import { SectionListType, SectionType } from "@/types/Edit"
+import { useEditorStore } from "@/store/editor"
+import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-const Text = ({ section, textColor }: { section: SectionType | SectionListType; textColor?: string }) => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+const Text = ({ section, textColor, listIndex }: { section: SectionType; textColor?: string; listIndex?: number }) => {
+  const { selectedSection, setText, setList, setSelectedSection } = useEditorStore()
   const editor = useRef(null)
-
-  useEffect(() => {
-    const contentState = editorState.getCurrentContent()
-    const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-    console.log(raw)
-    console.log(convertFromRaw(JSON.parse(raw)))
-  }, [editorState])
+  const editorState = typeof listIndex === "number" ? section.list[listIndex].text : section.text
+  const setTextByType = (editorState: any) => {
+    if (typeof listIndex === "number") {
+      setList({ index: listIndex, key: "text", payload: editorState })
+    } else {
+      setText({ payload: editorState })
+    }
+  }
+  const onChangeEditor = (editorState: any) => {
+    if (selectedSection?.id !== section.id) {
+      setSelectedSection({ payload: section })
+    }
+    setTextByType(editorState)
+  }
 
   useEffect(() => {
     focusEditor()
@@ -35,7 +43,7 @@ const Text = ({ section, textColor }: { section: SectionType | SectionListType; 
   const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
     const newState = RichUtils.handleKeyCommand(editorState, command)
     if (newState) {
-      setEditorState(newState)
+      setTextByType(newState)
       return "handled"
     }
     return "not-handled"
@@ -62,7 +70,7 @@ const Text = ({ section, textColor }: { section: SectionType | SectionListType; 
 
   return (
     <div className={cx(style.editor)} onClick={focusEditor}>
-      <Toolbar textColor={textColor} editorState={editorState} setEditorState={setEditorState} />
+      <Toolbar textColor={textColor} editorState={editorState} listIndex={listIndex} />
       <div style={{ color: textColor ?? colors.blackSoft }} className={cx(style.container)}>
         <Editor
           ref={editor}
@@ -70,9 +78,7 @@ const Text = ({ section, textColor }: { section: SectionType | SectionListType; 
           editorState={editorState}
           customStyleMap={editorStyleMap}
           blockStyleFn={myBlockStyleFn}
-          onChange={(editorState: any) => {
-            setEditorState(editorState)
-          }}
+          onChange={onChangeEditor}
         />
       </div>
     </div>

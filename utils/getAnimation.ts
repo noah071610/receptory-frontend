@@ -1,7 +1,9 @@
 import { AnimationTypes } from "@/types/Edit"
 
-export const getAnimation = (type: AnimationTypes, delay: number, speed?: number) => {
+export const getAnimation = (type: AnimationTypes | undefined, delay: number, speed?: number) => {
   let temp = ""
+  if (!type) return { animation: "none", opacity: 1 }
+
   switch (type) {
     case "none":
       temp = "none"

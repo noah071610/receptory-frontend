@@ -57,6 +57,7 @@
 
   li {
     width: 100%;
+    cursor: pointer;
     .list {
       padding: 10px 15px;
       border-radius: 8px;
@@ -73,48 +74,51 @@
     height: 100%;
   }
   .right {
+    //
+    display: flex;
+    align-items: center;
     h4 {
       font-weight: 400;
       font-size: 15px;
       text-align: start;
       margin-bottom: 2px;
     }
-    .input {
-      width: 100%;
-      font-size: 13px;
-    }
-    /* Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+    // .input {
+    //   width: 100%;
+    //   font-size: 13px;
+    // }
+    // /* Chrome, Safari, Edge, Opera */
+    // input::-webkit-outer-spin-button,
+    // input::-webkit-inner-spin-button {
+    //   -webkit-appearance: none;
+    //   margin: 0;
+    // }
 
-    /* Firefox  */
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
+    // /* Firefox  */
+    // input[type="number"] {
+    //   -moz-appearance: textfield;
+    // }
   }
-  .end {
-    @include flex;
-    .checkbox {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-      @include border;
-      @include flex;
-      background-color: var(--white);
-      svg {
-        font-size: 13px;
-        color: var(--gray);
-      }
-      &.active {
-        border-color: var(--green);
-        background-color: var(--green);
-        svg {
-          color: var(--white);
-        }
-      }
-    }
-  }
+  // .end {
+  //   @include flex;
+  //   .checkbox {
+  //     width: 20px;
+  //     height: 20px;
+  //     border-radius: 4px;
+  //     @include border;
+  //     @include flex;
+  //     background-color: var(--white);
+  //     svg {
+  //       font-size: 13px;
+  //       color: var(--gray);
+  //     }
+  //     &.active {
+  //       border-color: var(--green);
+  //       background-color: var(--green);
+  //       svg {
+  //         color: var(--white);
+  //       }
+  //     }
+  //   }
+  // }
 }

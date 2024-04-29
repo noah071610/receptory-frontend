@@ -20,8 +20,8 @@ export const backgroundColors = [
 export const borderColors = backgroundColors.map((v) => v.replace("0.2)", "1)"))
 
 export const colors = {
-  white: "white",
-  textWhite: "white",
+  white: "#ffffff",
+  textWhite: "#ffffff",
   black: "black",
 
   pinkSoft: "#FFB0B0B3",

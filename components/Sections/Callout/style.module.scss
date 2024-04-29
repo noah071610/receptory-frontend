@@ -18,6 +18,9 @@
       width: 60px;
       height: 60px;
       @include flex;
+      &.has-image {
+        border: none;
+      }
       svg {
         color: var(--gray);
       }

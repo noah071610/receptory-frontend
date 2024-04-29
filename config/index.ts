@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios"
+import { colors } from "./colors"
 
 export const _url = {
   client: process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_CLIENT_URL : "http://localhost:3000",
@@ -27,7 +28,7 @@ export const getImageUrl = ({ isCenter, url }: { url: string; isCenter?: boolean
   if (isCenter) {
     return `url('${url}') no-repeat center/cover`
   } else {
-    return `url('${url}')`
+    return `url('${url}') no-repeat center/contain, ${colors.border}`
   }
 }
 

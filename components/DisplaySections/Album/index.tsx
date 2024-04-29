@@ -1,7 +1,5 @@
 "use client"
 
-import AddBtn from "@/components/AddBtn"
-import ImageDelete from "@/components/ImageDelete"
 import Loading from "@/components/Loading"
 import { getImageUrl } from "@/config"
 import { colors } from "@/config/colors"
@@ -13,7 +11,7 @@ import { memo, useMemo } from "react"
 import { Gallery, Image, ImageExtended, ThumbnailImageProps } from "react-grid-gallery"
 import style from "./style.module.scss"
 
-const AlbumImageComponent = (props: ThumbnailImageProps<ImageExtended<Image>>, section: SectionType) => {
+const AlbumImageComponent = (props: ThumbnailImageProps<ImageExtended<Image>>) => {
   const { isIntersecting, ref } = useIntersectionObserver({
     freezeOnceVisible: true,
   })
@@ -21,7 +19,6 @@ const AlbumImageComponent = (props: ThumbnailImageProps<ImageExtended<Image>>, s
 
   return (
     <div ref={ref}>
-      <ImageDelete section={section} srcKey="list" listIndex={props.index} />
       {status === "loading" && (
         <div style={{ height: props.imageProps.style.height }} className={cx(style["album-loader"])}>
           <Loading />
@@ -37,7 +34,7 @@ const ImageComponent = ({
   section,
   index,
 }: {
-  photo: { width: number; height: number; src: string }
+  photo: { width?: number; height?: number; src: string }
   section: SectionType
   index: number
 }) => {
@@ -49,15 +46,13 @@ const ImageComponent = ({
   return (
     <div
       ref={ref}
-      key={`album_${section.id}_${index}`}
       style={{
         background: status === "success" ? getImageUrl({ isCenter: true, url: photo.src }) : colors.graySoft,
-        height: section.style === "gridOneStyle" ? "250px" : "200px",
+        height: section.design === "gridOne" ? "250px" : "200px",
       }}
       className={cx(style.photo)}
     >
       {status === "loading" && <Loading />}
-      <ImageDelete section={section} srcKey="list" listIndex={index} />
     </div>
   )
 }
@@ -70,7 +65,7 @@ function Album({ section }: { section: SectionType }) {
   const galleryImages = useMemo(
     () =>
       section.list
-        .map(({ width, height, src }) => ({ width, height, src }))
+        .map(({ style: { width, height }, src }) => ({ width, height, src }))
         .filter(({ width, height }) => typeof width === "number" && typeof height === "number"),
     [section.list]
   )
@@ -78,26 +73,24 @@ function Album({ section }: { section: SectionType }) {
   return (
     <div className={cx(style["layout"])}>
       <div className={cx(style.album)}>
-        {section.style === "albumStyle" ? (
+        {section.design === "album" ? (
           <Gallery
-            thumbnailImageComponent={(props) => AlbumImageComponent(props, section)}
-            images={galleryImages}
+            thumbnailImageComponent={(props) => AlbumImageComponent(props)}
+            images={galleryImages as any}
             onClick={handleClick}
             enableImageSelection={false}
           />
         ) : (
           <div
-            style={{ gridTemplateColumns: `repeat(${section.style === "gridOneStyle" ? 1 : 2},1fr)` }}
+            style={{ gridTemplateColumns: `repeat(${section.design === "gridOne" ? 1 : 2},1fr)` }}
             className={cx(style.grid)}
           >
             {galleryImages.map((v, i) => (
-              <ImageComponent index={i} photo={v} section={section} />
+              <ImageComponent index={i} key={`album_${section.id}_${i}`} photo={v} section={section} />
             ))}
           </div>
         )}
       </div>
-      <AddBtn section={section} type="album" />
-      {/* <Lightbox slides={slides} open={index >= 0} index={index} close={() => setIndex(-1)} /> */}
     </div>
   )
 }

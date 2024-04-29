@@ -1,9 +1,5 @@
 "use client"
 
-import AddBtn from "@/components/AddBtn"
-import ImageDelete from "@/components/ImageDelete"
-import Input from "@/components/Input"
-import Textarea from "@/components/Textarea"
 import { getImageUrl } from "@/config"
 import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/getAnimation"
@@ -18,27 +14,14 @@ const BasicSlider = ({ section }: { section: SectionType }) => {
   return (
     <Swiper spaceBetween={10} freeMode={true} slidesPerView={"auto"} modules={[FreeMode]} className={cx(style.slider)}>
       {section.list.map((v, i) => (
-        <SwiperSlide className={cx(style.slide, style[section.style])} key={`card_${section.id}_${i}`}>
-          <div style={{ ...getAnimation(section.animation, i * 150) }} className={cx(style.card)}>
-            <ImageDelete section={section} srcKey="list" listIndex={i} />
+        <SwiperSlide className={cx(style.slide, style[section.design])} key={`card_${section.id}_${i}`}>
+          <div style={{ ...getAnimation(section.style.animation, i * 150) }} className={cx(style.card)}>
             <div className={cx(style["card-image"])}>
               <div style={{ background: getImageUrl({ isCenter: true, url: v.src }) }} className={cx(style["image"])} />
             </div>
             <div className={cx(style.content)}>
-              <Input
-                isOptional={true}
-                className={cx(style["title-input"])}
-                listIndex={i}
-                inputType="title"
-                value={v.title}
-              />
-              <Textarea
-                className={cx(style["description-input"])}
-                listIndex={i}
-                inputType="description"
-                isOptional={true}
-                value={v.description}
-              />
+              <h2>{v.data.title}</h2>
+              <p>{v.data.description}</p>
             </div>
           </div>
         </SwiperSlide>
@@ -59,23 +42,9 @@ const ThumbnailSlider = ({ section }: { section: SectionType }) => {
                   background: getImageUrl({ isCenter: true, url: v.src }),
                 }}
                 className={cx(style.photo)}
-              >
-                <ImageDelete section={section} srcKey="list" listIndex={i} />
-              </div>
-              <Input
-                isOptional={true}
-                className={cx(style["title-input"])}
-                listIndex={i}
-                inputType="title"
-                value={v.title}
-              />
-              <Textarea
-                className={cx(style["description-input"])}
-                listIndex={i}
-                inputType="description"
-                isOptional={true}
-                value={v.description}
-              />
+              ></div>
+              <h2>{v.data.title}</h2>
+              <p>{v.data.description}</p>
             </div>
           </SwiperSlide>
         ))}
@@ -94,7 +63,7 @@ const ThumbnailSlider = ({ section }: { section: SectionType }) => {
             <div
               style={{
                 background: getImageUrl({ isCenter: true, url: v.src }),
-                ...getAnimation(section.animation, i * 150),
+                ...getAnimation(section.style.animation, i * 150),
               }}
               className={cx(style["photo"])}
             />
@@ -110,14 +79,9 @@ function Slider({ section }: { section: SectionType }) {
     <div className={cx(style["layout"])}>
       {section.list.length > 0 && (
         <div className={cx(style["slider-layout"])}>
-          {section.style !== "thumbnailStyle" ? (
-            <BasicSlider section={section} />
-          ) : (
-            <ThumbnailSlider section={section} />
-          )}
+          {section.design !== "thumbnail" ? <BasicSlider section={section} /> : <ThumbnailSlider section={section} />}
         </div>
       )}
-      <AddBtn section={section} type="slider" />
     </div>
   )
 }
