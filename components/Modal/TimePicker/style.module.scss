@@ -8,7 +8,7 @@
 }
 
 .time {
-  width: 160px;
+  width: 200px;
   height: 320px;
   padding: 10px;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
@@ -16,7 +16,7 @@
   background-color: var(--white);
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   ul {
     width: 100%;

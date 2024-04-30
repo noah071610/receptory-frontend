@@ -20,7 +20,7 @@ function ImageDelete({
 }) {
   const { selectedSection, setSelectedSection, setSrc, setStyle, deleteList } = useEditorStore()
   const onClickDelete = () => {
-    if (!selectedSection) {
+    if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
     if (typeof listIndex === "number") {

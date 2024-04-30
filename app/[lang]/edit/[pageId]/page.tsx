@@ -42,6 +42,12 @@ const Calender = dynamic(() => import("@/components/Sections/Calender"), {
 const Time = dynamic(() => import("@/components/Sections/Time"), {
   ssr: true,
 })
+const Select = dynamic(() => import("@/components/Sections/Select"), {
+  ssr: true,
+})
+const FormInput = dynamic(() => import("@/components/Sections/FormInput"), {
+  ssr: true,
+})
 
 const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
   album: (section) => <Album section={section} />,
@@ -54,8 +60,9 @@ const sectionMap: Record<SectionListTypes, (section: SectionType) => any> = {
   qna: (section) => <QnA section={section} />,
   calender: () => <></>,
   thumbnail: () => <></>,
+  input: (section) => <FormInput section={section} />,
   time: (section) => <Time section={section} />,
-  list: () => <></>,
+  select: (section) => <Select section={section} />,
   empty: () => <Empty />,
 }
 
@@ -103,14 +110,14 @@ const EditPage = () => {
 
   useEffect(() => {
     if (!isEditStart) return
-    const handleBeforeUnloadCallback = (e: any) => {
-      handleBeforeUnload({ initSections }, e)
-    }
-    window.addEventListener("beforeunload", handleBeforeUnloadCallback)
+    // const handleBeforeUnloadCallback = (e: any) => {
+    //   handleBeforeUnload({ initSections }, e)
+    // }
+    // window.addEventListener("beforeunload", handleBeforeUnloadCallback)
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
-    }
+    // return () => {
+    //   window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
+    // }
   }, [initSections, isEditStart])
 
   useEffect(() => {
@@ -126,6 +133,8 @@ const EditPage = () => {
     () => (stage === "init" ? initSections : stage === "form" ? formSections : []),
     [initSections, formSections, stage]
   )
+
+  const activeModal = active.modal.type
 
   return (
     <>
@@ -162,8 +171,11 @@ const EditPage = () => {
           )}
         </Droppable>
       </DragDropContext>
-      {(active.modal === "slide" || active.modal === "album") && <ImageSelector />}
-      {active.modal?.includes("time") && <TimePicker />}
+      {(activeModal === "slider" ||
+        activeModal === "album" ||
+        activeModal === "select" ||
+        activeModal === "callout") && <ImageSelector />}
+      {activeModal?.includes("time") && <TimePicker />}
     </>
   )
 }

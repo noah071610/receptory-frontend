@@ -24,7 +24,7 @@ function OptionBar({ value, section }: { value: string; section: SectionType }) 
   return (
     <div className={cx(style["layout"])}>
       <button onClick={onClickSlider} className={cx(style.content, { [style.active]: !!isActive })}>
-        <h2>{t(value)}</h2>
+        <h4>{t(value)}</h4>
         <div className={cx(style.bar)}>
           <div className={cx(style.circle)}></div>
         </div>

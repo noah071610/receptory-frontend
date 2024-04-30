@@ -6,16 +6,12 @@
 
 .title {
   @include input-style;
-  @include header-style;
+  @include title-style;
   margin-bottom: 10px;
 }
 
 .options {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
+  @include options-style;
   .date {
     &.isAlways {
       span,

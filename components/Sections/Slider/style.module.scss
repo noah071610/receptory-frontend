@@ -75,7 +75,7 @@
     margin-bottom: 8px;
   }
   input {
-    @include header-style();
+    @include title-style();
     margin-bottom: 5px;
   }
   textarea {

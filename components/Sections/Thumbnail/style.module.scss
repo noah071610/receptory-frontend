@@ -22,7 +22,7 @@
   }
 
   .title-input {
-    @include header-style;
+    @include title-style;
   }
   .description-input {
     @include description-style;

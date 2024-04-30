@@ -6,7 +6,7 @@
 
 .title {
   @include input-style;
-  @include header-style;
+  @include title-style;
   margin-bottom: 10px;
 }
 

@@ -194,6 +194,27 @@ textarea {
   touch-action: manipulation;
 }
 
+.react-international-phone-input-container {
+  padding: 14px 14px;
+  @include border;
+  border-radius: 5px;
+  .react-international-phone-country-selector-button {
+    border: none;
+    height: auto !important;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+  .react-international-phone-input {
+    border: none !important;
+    font-size: 16px !important;
+    height: auto !important;
+  }
+}
+.react-international-phone-country-selector-dropdown {
+  border: none !important;
+}
+
 :root {
   body {
     color: var(--black);
@@ -234,7 +255,9 @@ textarea {
   --overlay: rgba(0, 0, 0, 0.3);
 
   --green: rgba(99, 206, 99, 0.9);
+  --green-soft: rgba(131, 218, 131, 0.3);
   --green-hard: rgba(81, 255, 81, 0.9);
+  --green-hover: #085f00;
 
   --candidate-height: 94px;
   --nav-width: 100px;

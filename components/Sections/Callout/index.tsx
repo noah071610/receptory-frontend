@@ -22,7 +22,7 @@ function Callout({ section }: { section: SectionType }) {
   )
 
   const onClickAddImage = () => {
-    setActive({ key: "modal", payload: "callout" })
+    setActive({ key: "modal", payload: { type: "callout" } })
   }
 
   return (

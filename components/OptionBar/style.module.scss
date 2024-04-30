@@ -5,14 +5,9 @@
   @include flex;
   .content {
     @include flex;
-    gap: 10px;
-    h2 {
-      font-size: 17px;
-      color: var(--black-soft);
-      font-weight: 400;
-    }
+    flex-direction: column;
     .bar {
-      width: 52px;
+      width: 50px;
       padding: 3px 6px;
       background-color: var(--gray-soft);
       display: flex;
@@ -28,14 +23,14 @@
       }
     }
     &.active {
-      h2 {
+      h4 {
         color: var(--pink-hard);
       }
       .bar {
         background-color: var(--pink-soft);
       }
       .circle {
-        transform: translateX(24px);
+        transform: translateX(21px);
         background-color: var(--white);
       }
     }

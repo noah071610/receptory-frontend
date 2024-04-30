@@ -11,7 +11,7 @@ export default function PageLayout({ children }: { children: ReactNode }) {
   const onClickPage = (e: any) => {
     if (!e.target.closest("#editor")) {
       setSelectedSection({ payload: null })
-      setActive({ payload: null, key: "all" })
+      setActive({ payload: { type: null }, key: "all" })
     }
   }
   return (

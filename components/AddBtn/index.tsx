@@ -1,7 +1,7 @@
 "use client"
 
 import { useEditorStore } from "@/store/editor"
-import { SectionType } from "@/types/Edit"
+import { SectionListTypes, SectionType } from "@/types/Edit"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
@@ -9,17 +9,19 @@ import { memo } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-function AddBtn({ type, section }: { type: string; section: SectionType }) {
+function AddBtn({ type, section }: { type: SectionListTypes; section: SectionType }) {
   const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore()
 
   const onClickAddList = () => {
-    if (!selectedSection) {
+    if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
     if (type === "qna") {
       addList({ type: "qna", obj: { isActive: true } })
+    } else if (type === "select") {
+      addList({ type: "select" })
     } else {
-      setActive({ payload: `add_${type}`, key: "modal" })
+      setActive({ payload: { type }, key: "modal" })
     }
   }
 

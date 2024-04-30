@@ -15,19 +15,19 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
   const { lang } = useParams()
   const { active, selectedSection, setStyle, setList, setDesign } = useEditorStore()
   const { t } = useTranslation()
-
+  const submenuType = active.submenu.type
   const onClickList = (value: string, i: number) => {
     if (!selectedSection) return
 
-    switch (active.submenu) {
+    switch (submenuType) {
       case "design":
         setDesign({ payload: value as DesignTypes })
         break
       case "animation":
-        setStyle({ key: active.submenu, payload: value as AnimationTypes })
+        setStyle({ key: submenuType, payload: value as AnimationTypes })
         break
       case "textAlign":
-        setStyle({ key: active.submenu, payload: value })
+        setStyle({ key: submenuType, payload: value })
         break
       case "select":
         setList({ index: i, key: "isActive", payload: !selectedSection.list[i].isActive })
@@ -49,7 +49,7 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
       >
         {list.map((list, i) => {
           const isActive = () => {
-            switch (active.submenu) {
+            switch (submenuType) {
               case "textAlign":
                 return selectedSection?.style.textAlign === list.value
               case "animation":

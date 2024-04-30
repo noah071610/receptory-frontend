@@ -58,12 +58,21 @@ function generateHourSlots({
   startTime?: number[]
   endTime?: number[]
   interval: number
-}): string[] {
-  const temp = interval === 15 ? [0, 15, 30, 45] : interval === 30 ? [0, 30] : interval === 60 ? [0] : [99999]
-  if (temp.filter((int) => startTime[1] <= int).length <= 0) {
-    return hours.slice(startTime[0] + 1, endTime[0] + 1)
-  }
-  return hours.slice(startTime[0], endTime[0] + 1)
+}): { [key: string]: string[] } {
+  const intervalArr = interval === 15 ? [0, 15, 30, 45] : interval === 30 ? [0, 30] : interval === 60 ? [0] : [99999]
+
+  const isDeleteFirst = intervalArr.filter((int) => startTime[1] <= int).length <= 0
+
+  return hours.slice(startTime[0] + (isDeleteFirst ? 1 : 0), endTime[0] + 1).reduce(
+    (acc, cur) => {
+      const num = parseInt(cur)
+      const key = num > 12 ? "pmArr" : "amArr"
+      const newCur = num - (num > 12 ? 12 : 0)
+      acc[key] = acc[key] ? [...acc[key], newCur.toString().padStart(2, "0")] : [newCur.toString().padStart(2, "0")]
+      return acc
+    },
+    {} as { [key: string]: string[] }
+  )
 }
 
 function getNumberFromTime(str: string) {
@@ -72,6 +81,7 @@ function getNumberFromTime(str: string) {
 
 export const TimePicker = () => {
   const { setOptions, setActive, selectedSection } = useEditorStore()
+  const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const interval = selectedSection?.options.interval
   const [_startTime, _endTime] = useMemo(
@@ -90,20 +100,36 @@ export const TimePicker = () => {
     }
   }, [_startTime, _endTime])
 
-  const onClickTime = (type: "hour" | "minute", value: string) => {
+  const onClickTime = (type: "hour" | "minute" | "meridiem", value: string) => {
     if (type === "hour") {
       setSelectedHour(value)
+    } else if (type === "meridiem") {
+      setSelectedMeridiem(value)
     } else {
-      setOptions({ payload: `${selectedHour}:${value}`, key: "time" })
+      setOptions({ payload: `${selectedHour}:${value} ${selectedMeridiem?.toUpperCase()}`, key: "time" })
       setActive({ key: "all", payload: null })
     }
   }
 
+  const { amArr, pmArr } = generateHourSlots({ startTime, endTime, interval })
+
   return (
     <div className={cx(style.overlay)}>
       <div id="editor" style={getAnimation("fadeUp", 0, 600)} className={cx(style.time)}>
+        <ul className={cx(style["meridiem"])}>
+          {amArr?.length > 0 && (
+            <li className={cx({ [style.selected]: "am" === selectedMeridiem })}>
+              <button onClick={() => onClickTime("meridiem", "am")}>AM</button>
+            </li>
+          )}
+          {pmArr?.length > 0 && (
+            <li className={cx({ [style.selected]: "pm" === selectedMeridiem })}>
+              <button onClick={() => onClickTime("meridiem", "pm")}>PM</button>
+            </li>
+          )}
+        </ul>
         <ul className={cx(style.hours)}>
-          {generateHourSlots({ startTime, endTime, interval }).map((v) => (
+          {(selectedMeridiem === "pm" ? pmArr : amArr)?.map((v) => (
             <li className={cx({ [style.selected]: v === selectedHour })} key={`hours-${v}`}>
               <button onClick={() => onClickTime("hour", v)}>{v}</button>
             </li>

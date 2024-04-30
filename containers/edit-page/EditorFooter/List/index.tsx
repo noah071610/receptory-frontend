@@ -30,16 +30,16 @@ export default function List({
         addSection({ payload: value as SectionListTypes, stage })
         break
       case "imageSelector":
-        setActive({ key: "modal", payload: value })
-        setActive({ key: "tooltip", payload: null })
+        setActive({ key: "modal", payload: { type: value } })
+        setActive({ key: "tooltip", payload: { type: null } })
         break
       case "colorSelector":
-        setActive({ key: "submenu", payload: null })
-        setActive({ key: "tooltip", payload: value })
+        setActive({ key: "submenu", payload: { type: null } })
+        setActive({ key: "tooltip", payload: { type: value } })
         break
       case "submenu":
-        setActive({ key: "tooltip", payload: null })
-        setActive({ key: "submenu", payload: value })
+        setActive({ key: "tooltip", payload: { type: null } })
+        setActive({ key: "submenu", payload: { type: value } })
         break
 
       default:
@@ -55,7 +55,7 @@ export default function List({
             <div className={cx(style.li)} key={`list_${i}`}>
               <button
                 onClick={() => onClickList(list.value, list.actionType)}
-                className={cx(style.btn, { [style.active]: active.submenu === list.value })}
+                className={cx(style.btn, { [style.active]: active.submenu.type === list.value })}
               >
                 <div className={cx(style.icon)}>
                   <FontAwesomeIcon icon={list.icon} />
@@ -78,7 +78,7 @@ export default function List({
               <SwiperSlide className={cx(style.slide)} key={`list_${i}`}>
                 <button
                   onClick={() => onClickList(list.value, list.actionType)}
-                  className={cx(style.btn, { [style.active]: active.submenu === list.value })}
+                  className={cx(style.btn, { [style.active]: active.submenu.type === list.value })}
                 >
                   <div className={cx(style.icon)}>
                     <FontAwesomeIcon icon={list.icon} />

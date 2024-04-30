@@ -5,12 +5,15 @@ import {
   faAlignJustify,
   faAlignLeft,
   faAlignRight,
+  faArrowDown19,
   faBrush,
   faCheck,
   faClock,
   faCommentAlt,
+  faEnvelope,
   faFilm,
   faFont,
+  faGlobe,
   faHandPointer,
   faHeading,
   faIdCard,
@@ -20,6 +23,7 @@ import {
   faMap,
   faPaintRoller,
   faPalette,
+  faPencil,
   faPhone,
   faPhotoFilm,
   faRectangleXmark,
@@ -39,7 +43,8 @@ const initSectionList: EditorFooterList[] = [
 const formSectionList: EditorFooterList[] = [
   { value: "text", icon: faFont, actionType: "createSection" },
   { value: "time", icon: faClock, actionType: "createSection" },
-  { value: "list", icon: faList, actionType: "createSection" },
+  { value: "select", icon: faList, actionType: "createSection" },
+  { value: "input", icon: faPencil, actionType: "createSection" },
 ]
 
 const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
@@ -69,7 +74,11 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   ],
   empty: [],
   time: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
-  list: [],
+  select: [
+    { value: "design", icon: faPaintRoller, actionType: "submenu" },
+    { value: "animation", icon: faFilm, actionType: "submenu" },
+  ],
+  input: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   calender: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
 }
 
@@ -105,11 +114,11 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "gridOne", icon: faCheck, actionType: "cta" },
       { value: "gridTwo", icon: faCheck, actionType: "cta" },
     ],
-    // animation: [
-    //   { value: "none", icon: faCheck, actionType: "cta" },
-    //   { value: "fadeIn", icon: faCheck, actionType: "cta" },
-    //   { value: "scaleUp", icon: faCheck, actionType: "cta" },
-    // ],
+    animation: [
+      { value: "none", icon: faCheck, actionType: "cta" },
+      { value: "fadeIn", icon: faCheck, actionType: "cta" },
+      { value: "scaleUp", icon: faCheck, actionType: "cta" },
+    ],
   },
   callout: {},
   map: {},
@@ -135,11 +144,31 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "modal", icon: faCheck, actionType: "cta" },
     ],
   },
-  list: {},
+  select: {
+    design: [
+      { value: "basic", icon: faCheck, actionType: "cta" },
+      { value: "circle", icon: faCheck, actionType: "cta" },
+      { value: "thumbnail", icon: faCheck, actionType: "cta" },
+    ],
+    animation: [
+      { value: "none", icon: faCheck, actionType: "cta" },
+      { value: "fadeIn", icon: faCheck, actionType: "cta" },
+      { value: "flip", icon: faCheck, actionType: "cta" },
+    ],
+  },
   calender: {
     design: [
       { value: "single", icon: faCheck, actionType: "cta" },
       { value: "multiple", icon: faCheck, actionType: "cta" },
+    ],
+  },
+  input: {
+    design: [
+      { value: "text", icon: faCheck, actionType: "cta" },
+      { value: "number", icon: faArrowDown19, actionType: "cta" },
+      { value: "country", icon: faGlobe, actionType: "cta" },
+      { value: "email", icon: faEnvelope, actionType: "cta" },
+      { value: "textarea", icon: faCommentAlt, actionType: "cta" },
     ],
   },
 }

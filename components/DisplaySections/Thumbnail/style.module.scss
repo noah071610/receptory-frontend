@@ -23,7 +23,7 @@
   //   text-align: center;
   // }
   // .title-input {
-  //   @include header-style();
+  //   @include title-style();
   //   margin-bottom: 10px;
   // }
   // .description-input {
@@ -38,7 +38,7 @@
     height: 180px;
   }
   .title {
-    @include header-style();
+    @include title-style();
     text-align: center;
     margin-bottom: 10px;
   }

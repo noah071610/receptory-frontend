@@ -24,7 +24,11 @@ function Dropzone({
 }) {
   const { t } = useTranslation()
   const { selectedSection, active } = useEditorStore()
-  const isMultiple = active.modal !== "thumbnail" && active.modal !== "background" && active.modal !== "callout"
+  const isMultiple =
+    active.modal.type !== "thumbnail" &&
+    active.modal.type !== "background" &&
+    active.modal.type !== "callout" &&
+    active.modal.type !== "select"
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {

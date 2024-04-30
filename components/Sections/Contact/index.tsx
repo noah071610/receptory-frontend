@@ -18,7 +18,7 @@ function Contact({ section }: { section: SectionType }) {
   const { setList, selectedSection, setSelectedSection } = useEditorStore()
   const { t } = useTranslation(lang, ["todo:"])
   const onClickAddContact = (i: number) => {
-    if (!selectedSection) {
+    if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
     setList({ payload: !section.list[i].isActive, key: "isActive", index: i })

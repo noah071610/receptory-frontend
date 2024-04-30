@@ -1,0 +1,91 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    .image {
+      cursor: pointer;
+      width: 100px;
+      height: 80px;
+      border-radius: 5px;
+      @include flex;
+      svg {
+        color: var(--gray);
+      }
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    p {
+      font-size: 13px;
+    }
+  }
+
+  .list-btn {
+    width: 400px;
+    padding: 16px 14px;
+    border-radius: 5px;
+    @include border;
+    text-align: left;
+  }
+
+  .list-title {
+    width: auto;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    margin-bottom: 7px;
+    h2 {
+      font-size: 15px;
+    }
+    p {
+      font-size: 13px;
+    }
+  }
+  .list-options {
+    margin-top: 5px;
+    padding: 4px;
+    width: 400px;
+    border-radius: 5px;
+    @include border;
+    background-color: var(--white);
+    li {
+      @include action {
+        background-color: var(--green-soft);
+        color: var(--green-hover);
+      }
+    }
+  }
+}
+
+.options {
+  @include options-style;
+  gap: 0;
+  .list-edit {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    li {
+      padding: 0;
+    }
+  }
+  .title {
+    @include title-style($isSmall: true);
+    @include input-style;
+
+    margin-bottom: 5px;
+  }
+  .description {
+    @include description-style($isSmall: true);
+
+    @include input-style;
+  }
+}

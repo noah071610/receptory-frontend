@@ -6,7 +6,7 @@
   }
   .title {
     margin-top: 5px;
-    @include header-style();
+    @include title-style();
   }
   .description {
     // margin-top: 10px;

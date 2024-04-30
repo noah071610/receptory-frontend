@@ -14,7 +14,8 @@ export type SectionListTypes =
   | "empty"
   | "calender"
   | "time"
-  | "list"
+  | "select"
+  | "input"
 
 export type TargetSectionListTypes =
   | "backgroundColor"
@@ -39,6 +40,11 @@ export type DesignTypes =
   | "multiple"
   | "modal"
   | "grid"
+  | "number"
+  | "country"
+  | "text"
+  | "email"
+  | "textarea"
   | AlignTypes
 export type AnimationTypes = "none" | "fadeUp" | "flip" | "fadeIn" | "bounce" | "scaleUp"
 export type TitleSelectTypes = "title" | "description" | "label"
@@ -52,6 +58,21 @@ export type EditorFooterListTypes =
   | TitleSelectTypes
 
 export type EditStage = "init" | "form" | "rending"
+
+export interface ActiveTypes {
+  modal: {
+    type: string | null
+    payload: any
+  }
+  tooltip: {
+    type: string | null
+    payload: any
+  }
+  submenu: {
+    type: string | null
+    payload: any
+  }
+}
 
 export interface ImageType {
   src: string

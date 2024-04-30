@@ -1,4 +1,12 @@
-import { DesignTypes, EditStage, SectionListType, SectionListTypes, SectionType, StyleProperties } from "@/types/Edit"
+import {
+  ActiveTypes,
+  DesignTypes,
+  EditStage,
+  SectionListType,
+  SectionListTypes,
+  SectionType,
+  StyleProperties,
+} from "@/types/Edit"
 
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import getId from "@/utils/getId"
@@ -13,11 +21,7 @@ export interface EditStates {
   formSections: SectionType[]
   stage: EditStage
   selectedSection: SectionType | null
-  active: {
-    submenu: string | null
-    tooltip: string | null
-    modal: string | null
-  }
+  active: ActiveTypes
 }
 
 type Actions = {
@@ -43,7 +47,16 @@ type Actions = {
   setText: ({ payload }: { payload: EditorState }) => void
   setData: ({ payload, key }: { payload: any; key: string }) => void
   setOptions: ({ payload, key }: { payload: any; key: string }) => void
-  setActive: ({ key, payload }: { key: "submenu" | "tooltip" | "modal" | "all"; payload: string | null }) => void
+  setActive: ({
+    key,
+    payload,
+  }: {
+    key: "submenu" | "tooltip" | "modal" | "all"
+    payload: {
+      type: string | null
+      payload?: any
+    }
+  }) => void
 
   addSection: ({ payload, stage }: { payload: SectionListTypes; stage: EditStage }) => void
   addList: ({ type, obj }: { type: string; obj?: { [key: string]: any } }) => void
@@ -70,12 +83,20 @@ export const useEditorStore = create<EditStates & Actions>()(
     initSections: [createNewSection("thumbnail", 0)],
     formSections: [createNewSection("calender", 0)],
     selectedSection: null,
-    stage: "init",
+    stage: "form",
     active: {
-      submenu: null,
-      tooltip: null,
-      modal: null,
-      sectionModal: null,
+      modal: {
+        type: null,
+        payload: null,
+      },
+      tooltip: {
+        type: null,
+        payload: null,
+      },
+      submenu: {
+        type: null,
+        payload: null,
+      },
     },
 
     // SET
@@ -136,6 +157,7 @@ export const useEditorStore = create<EditStates & Actions>()(
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
+
           target.options[key] = payload
           origin.selectedSection.options[key] = payload
         }
@@ -167,11 +189,23 @@ export const useEditorStore = create<EditStates & Actions>()(
     setActive: ({ key, payload }) =>
       set((origin) => {
         if (key === "all") {
-          origin.active.modal = payload
-          origin.active.submenu = payload
-          origin.active.tooltip = payload
+          origin.active = {
+            modal: {
+              payload: null,
+              ...payload,
+            },
+            tooltip: {
+              payload: null,
+              ...payload,
+            },
+            submenu: {
+              payload: null,
+              ...payload,
+            },
+          }
         } else {
-          origin.active[key] = payload
+          const target = { payload: null, ...payload }
+          origin.active[key] = target
         }
         origin.isEditStart = true
       }),

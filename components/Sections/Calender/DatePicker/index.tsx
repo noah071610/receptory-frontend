@@ -3,7 +3,6 @@
 import classNames from "classNames"
 import { FC, ReactNode } from "react"
 
-import { useEditorStore } from "@/store/editor"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -23,7 +22,6 @@ interface CalendarProps {
 }
 
 const CalenderComponent: FC<CalendarProps> = ({ prevButton, nextButton, calendar }) => {
-  const { setActive } = useEditorStore()
   const { weekDays } = useContextCalendars()
   const { dayButton } = useContextDaysPropGetters()
   const { days, month } = calendar

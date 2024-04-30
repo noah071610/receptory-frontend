@@ -19,16 +19,15 @@ export default function ImageSelector() {
   const [selectedImages, setSelectedImages] = useState<ImageUpload[]>([])
 
   const { t } = useTranslation()
-  const { active, setActive, addSection, addList, setSrc, setStyle, stage } = useEditorStore()
+  const { active, setActive, addSection, addList, setSrc, setList, stage } = useEditorStore()
 
   const onClickImage = (i: number) => {
     setSelectedImages((prev) => prev.filter((_, j) => i !== j))
   }
 
   const onClickUpload = async () => {
-    setActive({ payload: null, key: "modal" })
-
-    if (active.modal === "thumbnail" || active.modal === "background" || active.modal === "callout") {
+    const targetType = active.modal.type
+    if (targetType === "thumbnail" || targetType === "callout" || targetType === "select") {
       const formData = new FormData()
       const { preview, ...file } = selectedImages[0]
       formData.append("image", file)
@@ -36,50 +35,64 @@ export default function ImageSelector() {
       const img = new Image()
 
       img.addEventListener("load", () => {
-        if (active.modal === "thumbnail" || active.modal === "callout") {
+        if (targetType === "thumbnail" || targetType === "callout") {
           setSrc({
             payload: preview ?? "",
           })
         }
-        if (active.modal === "background") {
-          setStyle({
-            key: "background",
+
+        if (targetType === "select") {
+          setList({
+            index: active.modal.payload,
+            key: "src",
             payload: preview ?? "",
           })
         }
+        // if (targetType === "background") {
+        //   setStyle({
+        //     key: "background",
+        //     payload: preview ?? "",
+        //   })
+        // }
+        // if (active.modal === "listBackground") {
+        //   setStyle({
+        //     key: "background",
+        //     payload: preview ?? "",
+        //   })
+        // }
       })
 
       img.src = preview ?? ""
-
-      return
     }
 
-    if (active.modal === "album" || active.modal === "slider") {
-      addSection({ payload: active.modal, stage })
-    }
+    if (targetType === "album" || targetType === "slider") {
+      addSection({ payload: targetType, stage })
 
-    await Promise.all(
-      selectedImages.map(async ({ preview, ...file }, index) => {
-        const formData = new FormData()
-        formData.append("image", file)
+      await Promise.all(
+        selectedImages.map(async ({ preview, ...file }, index) => {
+          const formData = new FormData()
+          formData.append("image", file)
 
-        const img = new Image()
+          const img = new Image()
 
-        img.addEventListener("load", () => {
-          addList({
-            type: active.modal as string,
-            obj: { src: preview ?? "", style: { width: img.naturalWidth ?? 0, height: img.naturalHeight ?? 0 } },
+          img.addEventListener("load", () => {
+            addList({
+              type: targetType,
+              obj: { src: preview ?? "", style: { width: img.naturalWidth ?? 0, height: img.naturalHeight ?? 0 } },
+            })
           })
+
+          img.src = preview ?? ""
+
+          // const { msg, data: imageSrc } = await uploadImage(formData)
+          // if (msg === "ok") {
+          // }
+          // todo:  일단 보류
         })
+      )
+    }
 
-        img.src = preview ?? ""
-
-        // const { msg, data: imageSrc } = await uploadImage(formData)
-        // if (msg === "ok") {
-        // }
-        // todo:  일단 보류
-      })
-    )
+    setActive({ payload: { type: null, payload: null }, key: "modal" })
   }
 
   return (

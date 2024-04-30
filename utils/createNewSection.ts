@@ -21,6 +21,20 @@ const sectionMap: { [key: string]: any } = {
     target.list[0].isActive = true
     return target
   },
+  input: () => {
+    return {
+      data: {
+        title: "타이틀 입력",
+        description: "설명 입력",
+      },
+      design: "text",
+      options: {
+        min: 0,
+        max: 10,
+        phoneNumberCountry: "all",
+      },
+    }
+  },
   title: () => {
     return {
       style: {
@@ -56,6 +70,11 @@ const sectionMap: { [key: string]: any } = {
         interval: 1,
         time: "00:00",
       },
+    }
+  },
+  select: () => {
+    return {
+      list: [createNewSectionList("select", 0, { data: { title: "리스트 타이틀 todo:" } })],
     }
   },
   thumbnail: () => {

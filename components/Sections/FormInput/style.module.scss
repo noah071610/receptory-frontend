@@ -1,0 +1,70 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+  .input-wrapper {
+    width: 400px;
+  }
+  .input-title {
+    width: auto;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    margin-bottom: 7px;
+    h2 {
+      font-size: 15px;
+    }
+    p {
+      font-size: 13px;
+    }
+  }
+  .input-content {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    @include border;
+    .input {
+      padding: 16px 14px;
+      display: flex;
+      font-size: 15px;
+      flex-grow: 1;
+    }
+    .textarea {
+      padding: 16px 14px;
+      font-size: 15px;
+      display: flex;
+      flex-grow: 1;
+      line-height: 1.4;
+    }
+  }
+  .edit-inputs {
+    input {
+      width: 400px;
+      @include input-style;
+    }
+    .title {
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+    .description {
+      font-size: 13px;
+    }
+  }
+}
+
+.options {
+  @include options-style;
+
+  .minMax-wrapper {
+    display: flex;
+    input {
+      width: 100px;
+      border-radius: 5px;
+      @include border;
+      padding: 6px 15px;
+    }
+    span {
+      margin: 0 10px;
+    }
+  }
+}

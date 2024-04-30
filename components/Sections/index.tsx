@@ -28,8 +28,8 @@ export default function SectionLayout({
       if (e.target.closest(".copy")) return
       setSelectedSection({ payload: section })
     }
-    setActive({ payload: null, key: "tooltip" })
-    setActive({ payload: null, key: "submenu" })
+    setActive({ payload: { type: null }, key: "tooltip" })
+    setActive({ payload: { type: null }, key: "submenu" })
   }
   const onClickDelete = () => {
     deleteSection(section.id)

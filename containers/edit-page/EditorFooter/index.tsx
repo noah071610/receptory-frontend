@@ -21,12 +21,12 @@ export default function EditorFooter() {
     return getEditorFooterList(selectedSection, stage)
   }, [selectedSection, stage])
   const submenuList = useMemo(() => {
-    return getSubmenuList(active.submenu, selectedSection)
-  }, [selectedSection, active.submenu])
+    return getSubmenuList(active.submenu.type, selectedSection)
+  }, [selectedSection, active.submenu.type])
 
   const isOpenedSubmenu = useMemo(() => {
-    return !!active.submenu && targetList
-  }, [active.submenu, targetList])
+    return !!active.submenu.type && targetList
+  }, [active.submenu.type, targetList])
 
   const onClickFooterBtn = (type: "toggle" | "close") => {
     if (type === "toggle") {
@@ -34,7 +34,7 @@ export default function EditorFooter() {
     }
 
     setSelectedSection({ payload: null })
-    setActive({ key: "submenu", payload: null })
+    setActive({ key: "submenu", payload: { type: null } })
   }
 
   useEffect(() => {
@@ -68,9 +68,9 @@ export default function EditorFooter() {
         <div className={cx(style["preview-ghost"])}></div>
       </div>
 
-      {(active.tooltip === "backgroundColor" ||
-        active.tooltip === "color" ||
-        active.tooltip === "ctaBackgroundColor") && <ColorPicker colorKey={active.tooltip} />}
+      {(active.tooltip.type === "backgroundColor" ||
+        active.tooltip.type === "color" ||
+        active.tooltip.type === "ctaBackgroundColor") && <ColorPicker colorKey={active.tooltip.type} />}
     </div>
   )
 }

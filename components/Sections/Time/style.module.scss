@@ -4,104 +4,58 @@
   width: 100%;
 }
 
-.title {
-  @include input-style;
-  @include header-style;
-  margin-bottom: 10px;
-}
+.picker {
+  width: 400px;
 
-.time-input {
-  &-wrapper {
-    width: 100%;
+  &-title {
+    width: auto;
     display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    margin-bottom: 7px;
+    h2 {
+      font-size: 15px;
+    }
+    p {
+      font-size: 13px;
+    }
   }
-  width: auto;
-  display: flex;
-  gap: 10px;
-  align-items: center;
 
-  .time-btn {
+  &-content {
+    display: flex;
+    justify-content: space-between;
     border-radius: 5px;
     @include border;
-    padding: 8px 14px;
-    span {
-      font-size: 16px;
+    .text {
+      padding: 16px 0 16px 14px;
+      display: flex;
+      flex-grow: 1;
+      span {
+        font-size: 18px;
+        color: var(--gray);
+        letter-spacing: 1px;
+      }
     }
-    svg {
-      margin-left: 7px;
-      font-size: 16px;
-      color: var(--black-soft);
+    .icon {
+      padding: 5px 3px 5px 0;
+      svg {
+        padding: 11px;
+        margin-left: 7px;
+        font-size: 18px;
+        color: var(--gray);
+      }
     }
   }
 }
 
 .options {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  padding: 25px 10px;
-  @include border;
-  border-radius: 10px;
-
+  @include options-style;
   .time-min-max {
-    .time-min-max-title {
-      text-align: center;
-      margin-bottom: 10px;
-    }
     input[type="time"] {
       margin-left: 10px;
       border-radius: 5px;
       @include border;
       padding: 6px 15px;
-    }
-  }
-}
-
-.interval {
-  width: 100%;
-  .ratio-title {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  .content {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px 20px;
-    .ratio-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      .ratio {
-        width: 20px;
-        height: 20px;
-        @include flex;
-        border-radius: 100%;
-        @include border;
-        .circle {
-          width: 12px;
-          height: 12px;
-          border-radius: 100%;
-          transform: scale(0);
-          transition: 300ms all;
-        }
-      }
-      label {
-        cursor: pointer;
-      }
-      &.active {
-        label {
-          color: var(--pink);
-        }
-        .circle {
-          background-color: var(--pink);
-          transform: scale(1);
-        }
-      }
     }
   }
 }
