@@ -7,20 +7,6 @@
 .picker {
   width: 400px;
 
-  &-title {
-    width: auto;
-    display: flex;
-    gap: 3px;
-    align-items: flex-end;
-    margin-bottom: 7px;
-    h2 {
-      font-size: 15px;
-    }
-    p {
-      font-size: 13px;
-    }
-  }
-
   &-content {
     display: flex;
     justify-content: space-between;
@@ -45,6 +31,32 @@
         color: var(--gray);
       }
     }
+  }
+}
+.time-add {
+  @include flex;
+  flex-direction: column;
+
+  button {
+    padding: 7px 15px;
+    font-size: 13px;
+    background-color: var(--pink);
+    color: var(--white);
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+}
+
+.times {
+  padding: 15px;
+  background-color: var(--gray-softest);
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  gap: 10px 5px;
+  flex-wrap: wrap;
+  button {
+    font-size: 14px;
   }
 }
 

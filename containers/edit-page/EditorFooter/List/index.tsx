@@ -21,16 +21,16 @@ export default function List({
   isOpenAllList: boolean
 }) {
   const { lang } = useParams()
-  const { addSection, setActive, active, stage } = useEditorStore()
+  const { addSection, setActive, active } = useEditorStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, type: EditorFooterListActions) => {
     switch (type) {
       case "createSection":
-        addSection({ payload: value as SectionListTypes, stage })
+        addSection({ payload: value as SectionListTypes })
         break
       case "imageSelector":
-        setActive({ key: "modal", payload: { type: value } })
+        setActive({ key: "modal", payload: { type: `${value}-image` } })
         setActive({ key: "tooltip", payload: { type: null } })
         break
       case "colorSelector":

@@ -1,7 +1,8 @@
 "use client"
 
-import Input from "@/components/Input"
-import OptionRatio from "@/components/OptionRatio"
+import FormTitle from "@/components/FormTitle"
+import OptionRatio from "@/components/Options/OptionRatio"
+import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/inputHelper"
@@ -28,11 +29,15 @@ function FormInput({ section }: { section: SectionType }) {
   const [min, max] = [section.options.min, section.options.max]
   const phoneNumberCountry = section.options.phoneNumberCountry
   const design = section.design
-
-  const onChangeInput = (e: any) => {
+  const targetInputGlobalMax = design === "text" ? 50 : design === "textarea" ? 500 : 9999999
+  const activeSection = () => {
     if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
+  }
+
+  const onChangeInput = (e: any) => {
+    activeSection()
     if (design === "number") {
       if (parseInt(e.target.value) < min) {
         return setValue({ payload: min })
@@ -49,16 +54,12 @@ function FormInput({ section }: { section: SectionType }) {
   }
 
   const onChangePhoneInput = (value: any) => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
+    activeSection()
     setValue({ payload: value })
   }
 
   const onChangeMinMax = (type: "min" | "max", e: any) => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
+    activeSection()
     if (parseInt(e.target.value) < parseInt(e.target.min)) {
       return setOptions({ payload: parseInt(e.target.min), key: type })
     }
@@ -69,23 +70,28 @@ function FormInput({ section }: { section: SectionType }) {
   }
 
   useEffect(() => {
-    setValue({ payload: "" })
-  }, [section.design])
-  useEffect(() => {
-    if (phoneNumberCountry !== "all") {
-      setValue({ payload: phoneNumberCountry })
-    } else {
-      setValue({ payload: "" })
+    if (section.design === "country") {
+      if (phoneNumberCountry !== "all") {
+        setValue({ payload: phoneNumberCountry })
+      } else {
+        setValue({ payload: "" })
+      }
     }
-  }, [phoneNumberCountry])
+  }, [phoneNumberCountry, section.design])
+
+  useEffect(() => {
+    setValue({ payload: "" })
+  }, [section.design, min, max])
+
+  useEffect(() => {
+    setOptions({ payload: 0, key: "min" })
+    setOptions({ payload: 50, key: "max" })
+  }, [section.design])
 
   return (
     <div className={cx(style.layout)}>
       <div className={cx(style["input-wrapper"])}>
-        <label className={cx(style["input-title"])}>
-          <h2>{section.data.title}</h2>
-          <p>{section.data.description}</p>
-        </label>
+        <FormTitle section={section} />
         {design !== "country" && (
           <div className={cx(style["input-content"])}>
             {design === "text" && (
@@ -135,24 +141,8 @@ function FormInput({ section }: { section: SectionType }) {
         )}
       </div>
       <div className={cx(style.options)}>
-        <div className={cx(style["edit-inputs"])}>
-          <h4>타이틀 수정</h4>
-          <Input
-            className={cx(style.title)}
-            inputType="title"
-            isOptional={false}
-            value={section.data.title}
-            dataKey="title"
-          />
-          <Input
-            className={cx(style.description)}
-            inputType="description"
-            isOptional={true}
-            value={section.data.description}
-            dataKey="description"
-          />
-        </div>
-        {design !== "country" && (
+        <OptionTitleInputs section={section} />
+        {design !== "country" && design !== "email" && (
           <div>
             <h4>최대 글자수 조정</h4>
             <div className={cx(style["minMax-wrapper"])}>
@@ -162,6 +152,7 @@ function FormInput({ section }: { section: SectionType }) {
                 onKeyUp={enforceMinMax}
                 type="number"
                 min={0}
+                max={section.options.max - 1}
                 value={section.options.min}
                 onChange={(e) => onChangeMinMax("min", e)}
               />
@@ -172,7 +163,7 @@ function FormInput({ section }: { section: SectionType }) {
                 onKeyUp={enforceMinMax}
                 type="number"
                 min={1}
-                max={9999999}
+                max={targetInputGlobalMax}
                 value={section.options.max}
                 onChange={(e) => onChangeMinMax("max", e)}
               />

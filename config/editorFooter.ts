@@ -74,10 +74,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   ],
   empty: [],
   time: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
-  select: [
-    { value: "design", icon: faPaintRoller, actionType: "submenu" },
-    { value: "animation", icon: faFilm, actionType: "submenu" },
-  ],
+  select: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   input: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   calender: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
 }
@@ -140,20 +137,14 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   thumbnail: {},
   time: {
     design: [
-      { value: "grid", icon: faCheck, actionType: "cta" },
-      { value: "modal", icon: faCheck, actionType: "cta" },
+      { value: "basic", icon: faCheck, actionType: "cta" },
+      { value: "select", icon: faCheck, actionType: "cta" },
     ],
   },
   select: {
     design: [
       { value: "basic", icon: faCheck, actionType: "cta" },
-      { value: "circle", icon: faCheck, actionType: "cta" },
-      { value: "thumbnail", icon: faCheck, actionType: "cta" },
-    ],
-    animation: [
-      { value: "none", icon: faCheck, actionType: "cta" },
-      { value: "fadeIn", icon: faCheck, actionType: "cta" },
-      { value: "flip", icon: faCheck, actionType: "cta" },
+      { value: "grid", icon: faCheck, actionType: "cta" },
     ],
   },
   calender: {

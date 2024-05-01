@@ -19,12 +19,9 @@ const Search = memo(({}: {}) => {
 
 const List = ({ section, list, index }: { section: SectionType; list: SectionListType; index: number }) => {
   const { setList, selectedSection, setSelectedSection } = useEditorStore()
-  const onClickTitle = (e: any) => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
 
-    setList({ key: "isActive", index: index, payload: e.target.closest(`input`) ? true : !list.isActive })
+  const onClickTitle = (e: any) => {
+    setList({ key: "isActive", index, payload: e.target.closest(`input`) ? true : !list.isActive })
   }
 
   return (

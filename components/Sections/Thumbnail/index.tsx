@@ -40,7 +40,7 @@ export default function Thumbnail({ section }: { section: SectionType }) {
   )
 
   const onClickThumbnailUpload = () => {
-    setActive({ key: "modal", payload: { type: "thumbnail" } })
+    setActive({ key: "modal", payload: { type: "thumbnail-image" } })
   }
 
   return (

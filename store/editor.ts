@@ -58,11 +58,13 @@ type Actions = {
     }
   }) => void
 
-  addSection: ({ payload, stage }: { payload: SectionListTypes; stage: EditStage }) => void
+  addSection: ({ payload }: { payload: SectionListTypes }) => void
   addList: ({ type, obj }: { type: string; obj?: { [key: string]: any } }) => void
+  addCollection: ({ payload }: { payload: any }) => void
 
   deleteSection: (id: string) => void
   deleteList: ({ targetIndex }: { targetIndex: number }) => void
+  deleteCollection: ({ targetIndex }: { targetIndex: number }) => void
 
   moveSection: ({ from, to }: { from: number; to: number }) => void
   copySection: (payload: { payload: SectionType }) => void
@@ -209,12 +211,13 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         origin.isEditStart = true
       }),
+
     // ADD
-    addSection: ({ payload, stage }) =>
+    addSection: ({ payload }) =>
       set((origin) => {
-        const target = createNewSection(payload, origin.initSections.length)
-        origin[getKey(origin)].push(target)
-        origin.selectedSection = target
+        const newSection = createNewSection(payload, origin[getKey(origin)].length)
+        origin[getKey(origin)].push(newSection)
+        origin.selectedSection = newSection
         origin.isEditStart = true
       }),
     addList: ({ type, obj }) =>
@@ -224,6 +227,15 @@ export const useEditorStore = create<EditStates & Actions>()(
           const newList = createNewSectionList(type, target.list.length, obj)
           target.list.push(newList)
           origin.selectedSection.list.push(newList)
+        }
+        origin.isEditStart = true
+      }),
+    addCollection: ({ payload }) =>
+      set((origin) => {
+        if (origin.selectedSection) {
+          const target = getTarget(origin)
+          target.collection.push(payload)
+          origin.selectedSection.collection.push(payload)
         }
         origin.isEditStart = true
       }),
@@ -245,6 +257,16 @@ export const useEditorStore = create<EditStates & Actions>()(
         origin[key] = origin[key].filter((v) => v.id !== payload)
         origin.selectedSection = null
         origin[key] = origin[key].map((v, i) => ({ ...v, index: i }))
+        origin.isEditStart = true
+      }),
+
+    deleteCollection: ({ targetIndex }) =>
+      set((origin) => {
+        if (origin.selectedSection) {
+          const target = getTarget(origin)
+          target.collection = target.collection.filter((_, i) => i !== targetIndex)
+          origin.selectedSection.collection = target.collection
+        }
         origin.isEditStart = true
       }),
 

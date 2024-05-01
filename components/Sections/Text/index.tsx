@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ContentBlock, DraftHandleValue, Editor, EditorState, RichUtils } from "draft-js"
-import { memo, useEffect, useRef } from "react"
+import { memo, useCallback } from "react"
 
 import Toolbar from "./Toolbar"
 
@@ -14,31 +14,30 @@ const cx = classNames.bind(style)
 
 const Text = ({ section, textColor, listIndex }: { section: SectionType; textColor?: string; listIndex?: number }) => {
   const { selectedSection, setText, setList, setSelectedSection } = useEditorStore()
-  const editor = useRef(null)
+
   const editorState = typeof listIndex === "number" ? section.list[listIndex].text : section.text
-  const setTextByType = (editorState: any) => {
-    if (typeof listIndex === "number") {
-      setList({ index: listIndex, key: "text", payload: editorState })
-    } else {
-      setText({ payload: editorState })
-    }
-  }
-  const onChangeEditor = (editorState: any) => {
+
+  const getCurSection = () => {
     if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
+  }
+  const setTextByType = useCallback(
+    (editorState: any) => {
+      getCurSection()
+      if (typeof listIndex === "number") {
+        setList({ index: listIndex, key: "text", payload: editorState })
+      } else {
+        setText({ payload: editorState })
+      }
+    },
+    [listIndex]
+  )
+
+  const onChangeEditor = useCallback((editorState: any) => {
+    getCurSection()
     setTextByType(editorState)
-  }
-
-  useEffect(() => {
-    focusEditor()
   }, [])
-
-  const focusEditor = () => {
-    if (editor?.current) {
-      ;(editor.current as any).focus()
-    }
-  }
 
   const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
     const newState = RichUtils.handleKeyCommand(editorState, command)
@@ -69,11 +68,10 @@ const Text = ({ section, textColor, listIndex }: { section: SectionType; textCol
   }
 
   return (
-    <div className={cx(style.editor)} onClick={focusEditor}>
-      <Toolbar textColor={textColor} editorState={editorState} listIndex={listIndex} />
+    <div className={cx(style.editor)}>
+      <Toolbar section={section} textColor={textColor} editorState={editorState} listIndex={listIndex} />
       <div style={{ color: textColor ?? colors.blackSoft }} className={cx(style.container)}>
         <Editor
-          ref={editor}
           handleKeyCommand={handleKeyCommand}
           editorState={editorState}
           customStyleMap={editorStyleMap}

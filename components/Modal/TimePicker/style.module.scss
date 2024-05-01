@@ -1,23 +1,9 @@
 @import "@/styles/variables.scss";
 
-.overlay {
-  @include full($position: fixed);
-  @include flex;
-  background-color: rgba(0, 0, 0, 0.15);
-  @include z-index(overlay);
-}
-
 .time {
   width: 200px;
-  height: 320px;
   padding: 10px;
-  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background-color: var(--white);
 
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
   ul {
     width: 100%;
     height: 300px;
@@ -47,10 +33,62 @@
       }
     }
   }
-  .seconds {
-    &.disabled {
-      button {
-        color: var(--gray);
+
+  .any-time {
+    margin-top: 10px;
+    width: 100%;
+    button {
+      width: 100%;
+      @include flex;
+      padding: 10px 0;
+      height: auto;
+      font-size: 14px;
+      color: var(--black-soft);
+      border-radius: 5px;
+      @include action {
+        background-color: var(--green);
+        color: var(--white);
+      }
+    }
+  }
+
+  .basic-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+
+    .hours {
+      &.disabled {
+        button {
+          color: var(--gray);
+        }
+      }
+    }
+    .seconds {
+      &.disabled {
+        button {
+          color: var(--gray);
+        }
+      }
+    }
+  }
+
+  &.select {
+    .select-time-list {
+      height: auto;
+      max-height: 300px;
+      padding: 0;
+      overflow: scroll;
+      li {
+        button {
+          padding: 14px 0;
+        }
+        @include action {
+          background-color: var(--green);
+          button {
+            color: var(--white);
+          }
+        }
       }
     }
   }

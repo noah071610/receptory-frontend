@@ -83,10 +83,10 @@ function Contact({ section }: { section: SectionType }) {
                   <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
                 </div>
                 <div className={cx(style.right)}>
-                  <h4>{t(`${v.type}`)}</h4>
+                  <h4>{t(`${v.type}Link`)}</h4>
                   <input
                     type={v.type === "email" ? "email" : undefined}
-                    placeholder={t(v.type)}
+                    placeholder={t(`${v.type}Placeholder`)}
                     className={cx(style.input)}
                     onBlurCapture={() => onBlurInput(i)}
                     onChange={(e) => onChangeListInput(e, i)}

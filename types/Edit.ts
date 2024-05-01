@@ -45,6 +45,7 @@ export type DesignTypes =
   | "text"
   | "email"
   | "textarea"
+  | "select"
   | AlignTypes
 export type AnimationTypes = "none" | "fadeUp" | "flip" | "fadeIn" | "bounce" | "scaleUp"
 export type TitleSelectTypes = "title" | "description" | "label"

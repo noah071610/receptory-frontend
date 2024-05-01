@@ -3,6 +3,8 @@ import { SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
 import { EditorState } from "draft-js"
 import getId from "./getId"
 
+const getNewEmptyEditor = () => EditorState.createEmpty()
+
 const sectionMap: { [key: string]: any } = {
   calender: () => {
     return {
@@ -30,7 +32,7 @@ const sectionMap: { [key: string]: any } = {
       design: "text",
       options: {
         min: 0,
-        max: 10,
+        max: 50,
         phoneNumberCountry: "all",
       },
     }
@@ -62,19 +64,29 @@ const sectionMap: { [key: string]: any } = {
   },
   time: () => {
     return {
-      design: "grid",
+      collection: [],
       options: {
-        isEveryTime: true,
-        startTime: "00:00",
-        endTime: "23:59",
+        startHour: "00",
+        endHour: "00",
         interval: 1,
-        time: "00:00",
+        addAnytime: false,
+      },
+      data: {
+        time: null,
+        title: "타이틀 입력",
+        description: "설명 입력",
       },
     }
   },
   select: () => {
+    const target = createNewSectionList("select", 0, { data: { title: "리스트 타이틀 todo:" } })
     return {
-      list: [createNewSectionList("select", 0, { data: { title: "리스트 타이틀 todo:" } })],
+      value: null,
+      list: [target],
+      data: {
+        title: "타이틀 입력",
+        description: "설명 입력",
+      },
     }
   },
   thumbnail: () => {
@@ -105,7 +117,7 @@ export const createNewSectionList = (subType: string, index: number, obj?: any):
     options: {},
     design: "basic",
     src: "",
-    text: EditorState.createEmpty(),
+    text: getNewEmptyEditor(),
     ...obj,
   }
 }
@@ -126,7 +138,7 @@ export const createNewSection = (type: SectionListTypes, index: number): Section
     options: {},
     design: "basic",
     src: "",
-    text: EditorState.createEmpty(),
+    text: getNewEmptyEditor(),
     ...setProperties,
   }
 }

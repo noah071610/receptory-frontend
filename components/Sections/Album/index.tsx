@@ -7,6 +7,7 @@ import { getImageUrl } from "@/config"
 import { colors } from "@/config/colors"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
+import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
 import { memo, useMemo } from "react"
@@ -64,6 +65,7 @@ const ImageComponent = ({
 
 function Album({ section }: { section: SectionType }) {
   const handleClick = () => {}
+  const { t } = useTranslation()
 
   const galleryImages = useMemo(
     () =>
@@ -75,26 +77,36 @@ function Album({ section }: { section: SectionType }) {
 
   return (
     <div className={cx(style["layout"])}>
-      <div className={cx(style.album)}>
-        {section.design === "basic" ? (
-          <Gallery
-            thumbnailImageComponent={(props) => AlbumImageComponent(props, section)}
-            images={galleryImages as any}
-            onClick={handleClick}
-            enableImageSelection={false}
-          />
-        ) : (
-          <div
-            style={{ gridTemplateColumns: `repeat(${section.design === "gridOne" ? 1 : 2},1fr)` }}
-            className={cx(style.grid)}
-          >
-            {galleryImages.map((v, i) => (
-              <ImageComponent key={`album_${section.id}_${i}`} index={i} photo={v} section={section} />
-            ))}
-          </div>
-        )}
-      </div>
-      <AddBtn section={section} type="album" />
+      {galleryImages.length > 0 ? (
+        <div className={cx(style.album)}>
+          {section.design === "basic" ? (
+            <Gallery
+              thumbnailImageComponent={(props) => AlbumImageComponent(props, section)}
+              images={galleryImages as any}
+              onClick={handleClick}
+              enableImageSelection={false}
+            />
+          ) : (
+            <div
+              style={{ gridTemplateColumns: `repeat(${section.design === "gridOne" ? 1 : 2},1fr)` }}
+              className={cx(style.grid)}
+            >
+              {galleryImages.map((v, i) => (
+                <ImageComponent key={`album_${section.id}_${i}`} index={i} photo={v} section={section} />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          style={{ background: getImageUrl({ isCenter: true, url: "/images/noImage.png" }) }}
+          className={cx(style.noImage)}
+        >
+          <span>{t("noImage")}</span>
+        </div>
+      )}
+
+      <AddBtn section={section} type="album-image" />
       {/* <Lightbox slides={slides} open={index >= 0} index={index} close={() => setIndex(-1)} /> */}
     </div>
   )

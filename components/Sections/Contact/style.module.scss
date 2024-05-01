@@ -77,11 +77,14 @@
       font-weight: 400;
       font-size: 15px;
       text-align: start;
-      margin-bottom: 2px;
+      margin-bottom: 5px;
     }
     .input {
-      width: 100%;
-      font-size: 13px;
+      @include input-style;
+      @include description-style($isSmall: true);
+      padding: 4px;
+      background-color: white;
+      border-radius: 0;
     }
     /* Chrome, Safari, Edge, Opera */
     input::-webkit-outer-spin-button,

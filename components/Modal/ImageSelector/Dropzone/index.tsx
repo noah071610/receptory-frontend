@@ -17,18 +17,15 @@ function Dropzone({
   className,
   selectedImages,
   setSelectedImages,
+  isMultiple,
 }: {
   className?: string
   selectedImages: ImageUpload[]
   setSelectedImages: Dispatch<SetStateAction<ImageUpload[]>>
+  isMultiple: boolean
 }) {
   const { t } = useTranslation()
   const { selectedSection, active } = useEditorStore()
-  const isMultiple =
-    active.modal.type !== "thumbnail" &&
-    active.modal.type !== "background" &&
-    active.modal.type !== "callout" &&
-    active.modal.type !== "select"
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {

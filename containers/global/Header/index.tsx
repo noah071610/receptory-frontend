@@ -19,9 +19,10 @@ const headers = [
 ]
 
 export default function Header() {
-  const { stage, setStage } = useEditorStore()
+  const { stage, setStage, setSelectedSection } = useEditorStore()
 
   const onClickStage = (v: EditStage) => {
+    setSelectedSection({ payload: null })
     setStage(v)
   }
 

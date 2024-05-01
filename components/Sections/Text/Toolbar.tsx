@@ -2,8 +2,10 @@
 import { colors } from "@/config/colors"
 import { tools } from "@/config/edit"
 import { useEditorStore } from "@/store/editor"
+import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
 import { RichUtils } from "draft-js"
+import { useCallback } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
@@ -11,13 +13,18 @@ const Toolbar = ({
   editorState,
   textColor,
   listIndex,
+  section,
 }: {
   editorState: any
   textColor?: string
   listIndex?: number
+  section: SectionType
 }) => {
-  const { setList, setText } = useEditorStore()
+  const { setList, setText, selectedSection, setSelectedSection } = useEditorStore()
   const applyStyle = (e: any, style: any, method: any) => {
+    if (selectedSection?.id !== section.id) {
+      setSelectedSection({ payload: section })
+    }
     e.preventDefault()
     if (method === "block") {
       if (typeof listIndex === "number") {
@@ -37,16 +44,19 @@ const Toolbar = ({
     //   : setEditorState(RichUtils.toggleInlineStyle(editorState, style))
   }
 
-  const isActive = (style: any, method: any) => {
-    if (method === "block") {
-      const selection = editorState.getSelection()
-      const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType()
-      return blockType === style
-    } else {
-      const currentStyle = editorState.getCurrentInlineStyle()
-      return currentStyle.has(style)
-    }
-  }
+  const isActive = useCallback(
+    (style: any, method: any) => {
+      if (method === "block") {
+        const selection = editorState.getSelection()
+        const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType()
+        return blockType === style
+      } else {
+        const currentStyle = editorState.getCurrentInlineStyle()
+        return currentStyle.has(style)
+      }
+    },
+    [editorState]
+  )
 
   return (
     <div className={cx(style["toolbar-grid"])}>

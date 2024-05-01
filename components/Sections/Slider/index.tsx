@@ -5,6 +5,7 @@ import ImageDelete from "@/components/ImageDelete"
 import Input from "@/components/Input"
 import Textarea from "@/components/Textarea"
 import { getImageUrl } from "@/config"
+import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/getAnimation"
 import classNames from "classNames"
@@ -110,14 +111,22 @@ const ThumbnailSlider = ({ section }: { section: SectionType }) => {
 }
 
 function Slider({ section }: { section: SectionType }) {
+  const { t } = useTranslation()
   return (
     <div className={cx(style["layout"])}>
-      {section.list.length > 0 && (
+      {section.list.length > 0 ? (
         <div className={cx(style["slider-layout"])}>
           {section.design !== "thumbnail" ? <BasicSlider section={section} /> : <ThumbnailSlider section={section} />}
         </div>
+      ) : (
+        <div
+          style={{ background: getImageUrl({ isCenter: true, url: "/images/noImage.png" }) }}
+          className={cx(style.noImage)}
+        >
+          <span>{t("noImage")}</span>
+        </div>
       )}
-      <AddBtn section={section} type="slider" />
+      <AddBtn section={section} type="slider-image" />
     </div>
   )
 }

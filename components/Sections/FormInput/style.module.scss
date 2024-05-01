@@ -5,19 +5,6 @@
   .input-wrapper {
     width: 400px;
   }
-  .input-title {
-    width: auto;
-    display: flex;
-    gap: 3px;
-    align-items: flex-end;
-    margin-bottom: 7px;
-    h2 {
-      font-size: 15px;
-    }
-    p {
-      font-size: 13px;
-    }
-  }
   .input-content {
     display: flex;
     justify-content: space-between;
@@ -35,19 +22,6 @@
       display: flex;
       flex-grow: 1;
       line-height: 1.4;
-    }
-  }
-  .edit-inputs {
-    input {
-      width: 400px;
-      @include input-style;
-    }
-    .title {
-      font-size: 15px;
-      margin-bottom: 5px;
-    }
-    .description {
-      font-size: 13px;
     }
   }
 }

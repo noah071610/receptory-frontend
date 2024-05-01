@@ -1,7 +1,7 @@
 "use client"
 
 import Input from "@/components/Input"
-import OptionBar from "@/components/OptionBar"
+import OptionBar from "@/components/Options/OptionBar"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { DatePickerStateProvider } from "@rehookify/datepicker"

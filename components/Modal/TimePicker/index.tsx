@@ -2,155 +2,166 @@
 
 import classNames from "classNames"
 
+import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { getAnimation } from "@/utils/getAnimation"
 import { useMemo, useState } from "react"
+import ModalLayout from ".."
 import style from "./style.module.scss"
 
 const cx = classNames.bind(style)
 
-const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"))
+const meridiemArr = ["12", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"]
 
-function generateSecondSlots({
-  interval,
-  startTime = [0, 0],
-  endTime = [23, 59],
-  selectedHour,
-}: {
-  interval: number
-  startTime?: number[]
-  endTime?: number[]
-  selectedHour: number | null
-}): string[] {
+function generateSecondSlots({ interval }: { interval: number }): string[] {
   const min = 0
   const max = 60
   const timeSlots: string[] = []
 
-  switch (true) {
-    case selectedHour === startTime[0]: {
-      for (let minute = min; minute < max; minute += interval) {
-        if (minute < startTime[1]) continue
-        timeSlots.push(minute.toString().padStart(2, "0"))
-      }
-      return timeSlots
-    }
-    case selectedHour === endTime[0]: {
-      for (let minute = min; minute <= endTime[1]; minute += interval) {
-        timeSlots.push(minute.toString().padStart(2, "0"))
-      }
-      return timeSlots
-    }
+  for (let minute = min; minute < max; minute += interval) {
+    timeSlots.push(minute.toString().padStart(2, "0"))
+  }
+  return timeSlots
+}
 
-    default: {
-      for (let minute = min; minute < max; minute += interval) {
-        timeSlots.push(minute.toString().padStart(2, "0"))
-      }
-      return timeSlots
+function generateHourSlots({ startHour = 0, endHour = 0 }: { startHour?: number; endHour?: number }): {
+  [key: string]: string[]
+} {
+  console.log(startHour, endHour)
+
+  if (startHour === 0 && endHour === 0) {
+    return {
+      amArr: meridiemArr,
+      pmArr: meridiemArr,
     }
   }
-}
 
-function generateHourSlots({
-  startTime = [0, 0],
-  endTime = [23, 59],
-  interval,
-}: {
-  startTime?: number[]
-  endTime?: number[]
-  interval: number
-}): { [key: string]: string[] } {
-  const intervalArr = interval === 15 ? [0, 15, 30, 45] : interval === 30 ? [0, 30] : interval === 60 ? [0] : [99999]
+  // const isDeleteFirst = intervalArr.filter((int) => startHour[1] <= int).length <= 0
 
-  const isDeleteFirst = intervalArr.filter((int) => startTime[1] <= int).length <= 0
+  const amArr = []
+  const pmArr = []
+  for (let hour = startHour; hour <= endHour; hour++) {
+    if (hour > 11) {
+      if (hour === 12) {
+        pmArr.push("12")
+      } else {
+        pmArr.push((hour % 12).toString().padStart(2, "0"))
+      }
+    } else {
+      if (hour === 0) {
+        amArr.push("12")
+      } else {
+        amArr.push(hour.toString().padStart(2, "0"))
+      }
+    }
+  }
 
-  return hours.slice(startTime[0] + (isDeleteFirst ? 1 : 0), endTime[0] + 1).reduce(
-    (acc, cur) => {
-      const num = parseInt(cur)
-      const key = num > 12 ? "pmArr" : "amArr"
-      const newCur = num - (num > 12 ? 12 : 0)
-      acc[key] = acc[key] ? [...acc[key], newCur.toString().padStart(2, "0")] : [newCur.toString().padStart(2, "0")]
-      return acc
-    },
-    {} as { [key: string]: string[] }
-  )
-}
-
-function getNumberFromTime(str: string) {
-  return str.split(":").map((v) => parseInt(v))
+  return { amArr, pmArr }
 }
 
 export const TimePicker = () => {
-  const { setOptions, setActive, selectedSection } = useEditorStore()
+  const { t } = useTranslation()
+  const { setData, setActive, selectedSection } = useEditorStore()
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const interval = selectedSection?.options.interval
-  const [_startTime, _endTime] = useMemo(
-    () => [
-      getNumberFromTime(selectedSection?.options.startTime ?? "00:00"),
-      getNumberFromTime(selectedSection?.options.endTime ?? "23:59"),
-    ],
-    [selectedSection?.options.startTime, selectedSection?.options.endTime]
-  )
+  const [startHour, endHour] = useMemo(() => {
+    const s = parseInt(selectedSection?.options.startHour ?? "00")
+    const e = parseInt(selectedSection?.options.endHour ?? "00")
 
-  const [startTime, endTime] = useMemo(() => {
-    if (parseInt(`${_startTime[0]}${_startTime[1]}`) > parseInt(`${_endTime[0]}${_endTime[1]}`)) {
-      return [_endTime, _startTime]
+    if (e > s) {
+      return [s, e]
     } else {
-      return [_startTime, _endTime]
+      return [e, s]
     }
-  }, [_startTime, _endTime])
+  }, [selectedSection?.options.startHour, selectedSection?.options.endHour])
 
-  const onClickTime = (type: "hour" | "minute" | "meridiem", value: string) => {
-    if (type === "hour") {
-      setSelectedHour(value)
-    } else if (type === "meridiem") {
-      setSelectedMeridiem(value)
-    } else {
-      setOptions({ payload: `${selectedHour}:${value} ${selectedMeridiem?.toUpperCase()}`, key: "time" })
-      setActive({ key: "all", payload: null })
+  const onClickTime = (type: "hour" | "minute" | "meridiem" | "any" | "select", value: string) => {
+    switch (type) {
+      case "meridiem":
+        setSelectedMeridiem(value)
+        return
+      case "hour":
+        setSelectedHour(value)
+        return
+      case "minute":
+        setData({ payload: `${selectedHour}:${value} ${selectedMeridiem?.toUpperCase()}`, key: "time" })
+        break
+      case "select":
+        setData({ payload: value, key: "time" })
+        break
+      case "any":
+        setData({ payload: "anytime", key: "time" })
+        break
+
+      default:
+        alert("에러 발생") //todo:
+        break
     }
+    setActive({ key: "all", payload: { type: null } })
   }
 
-  const { amArr, pmArr } = generateHourSlots({ startTime, endTime, interval })
+  const { amArr, pmArr } = generateHourSlots({ startHour, endHour })
 
   return (
-    <div className={cx(style.overlay)}>
-      <div id="editor" style={getAnimation("fadeUp", 0, 600)} className={cx(style.time)}>
-        <ul className={cx(style["meridiem"])}>
-          {amArr?.length > 0 && (
-            <li className={cx({ [style.selected]: "am" === selectedMeridiem })}>
-              <button onClick={() => onClickTime("meridiem", "am")}>AM</button>
-            </li>
-          )}
-          {pmArr?.length > 0 && (
-            <li className={cx({ [style.selected]: "pm" === selectedMeridiem })}>
-              <button onClick={() => onClickTime("meridiem", "pm")}>PM</button>
-            </li>
-          )}
-        </ul>
-        <ul className={cx(style.hours)}>
-          {(selectedMeridiem === "pm" ? pmArr : amArr)?.map((v) => (
-            <li className={cx({ [style.selected]: v === selectedHour })} key={`hours-${v}`}>
-              <button onClick={() => onClickTime("hour", v)}>{v}</button>
-            </li>
-          ))}
-        </ul>
-        <ul className={cx(style.seconds, { [style.disabled]: !selectedHour })}>
-          {generateSecondSlots({
-            interval,
-            startTime,
-            endTime,
-            selectedHour: parseInt(selectedHour ?? "00"),
-          }).map((v) => (
-            <li key={`second-${v}`}>
-              <button disabled={!selectedHour} onClick={() => onClickTime("minute", v)}>
-                {v}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    selectedSection && (
+      <ModalLayout modalStyle={cx(style.time, { [style.select]: selectedSection.design === "select" })}>
+        {selectedSection.design === "basic" && (
+          <>
+            {" "}
+            <div className={cx(style["basic-main"])}>
+              <ul className={cx(style["meridiem"])}>
+                {amArr?.length > 0 && (
+                  <li className={cx({ [style.selected]: "am" === selectedMeridiem })}>
+                    <button onClick={() => onClickTime("meridiem", "am")}>AM</button>
+                  </li>
+                )}
+                {pmArr?.length > 0 && (
+                  <li className={cx({ [style.selected]: "pm" === selectedMeridiem })}>
+                    <button onClick={() => onClickTime("meridiem", "pm")}>PM</button>
+                  </li>
+                )}
+              </ul>
+              <ul className={cx(style.hours, { [style.disabled]: !selectedMeridiem })}>
+                {(!selectedMeridiem ? meridiemArr : selectedMeridiem === "pm" ? pmArr : amArr)?.map((v) => (
+                  <li className={cx({ [style.selected]: v === selectedHour })} key={`hours-${v}`}>
+                    <button disabled={!selectedMeridiem} onClick={() => onClickTime("hour", v)}>
+                      {v}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <ul className={cx(style.seconds, { [style.disabled]: !selectedHour })}>
+                {generateSecondSlots({
+                  interval,
+                }).map((v) => (
+                  <li key={`second-${v}`}>
+                    <button disabled={!selectedHour} onClick={() => onClickTime("minute", v)}>
+                      {v}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {selectedSection.options.addAnytime && selectedSection.design === "basic" && (
+              <div className={cx(style["any-time"])}>
+                <button onClick={() => onClickTime("any", "anytime")}>
+                  <span>{t("아무때나")}</span>
+                </button>
+              </div>
+            )}
+          </>
+        )}
+        {selectedSection.design === "select" && (
+          <ul className={cx(style["select-time-list"])}>
+            {selectedSection.collection.map((v, i) => (
+              <li key={`modal_${v}_${i}`}>
+                <button onClick={() => onClickTime("select", v)}>{v}</button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </ModalLayout>
+    )
   )
 }
 

@@ -1,6 +1,7 @@
 "use client"
 
 import ImageSelector from "@/components/Modal/ImageSelector"
+import SelectList from "@/components/Modal/SelectList"
 import TimePicker from "@/components/Modal/TimePicker"
 import SectionLayout from "@/components/Sections"
 import Empty from "@/components/Sections/Empty"
@@ -42,7 +43,7 @@ const Calender = dynamic(() => import("@/components/Sections/Calender"), {
 const Time = dynamic(() => import("@/components/Sections/Time"), {
   ssr: true,
 })
-const Select = dynamic(() => import("@/components/Sections/Select"), {
+const Select = dynamic(() => import("@/components/Sections/SelectList"), {
   ssr: true,
 })
 const FormInput = dynamic(() => import("@/components/Sections/FormInput"), {
@@ -98,7 +99,8 @@ const handleBeforeUnload = async ({ initSections }: any, event?: any) => {
 }
 
 const EditPage = () => {
-  const { initSections, isEditStart, stage, formSections, moveSection, active, loadSections } = useEditorStore()
+  const { initSections, isEditStart, stage, formSections, moveSection, active, loadSections, selectedSection } =
+    useEditorStore()
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result
@@ -171,11 +173,9 @@ const EditPage = () => {
           )}
         </Droppable>
       </DragDropContext>
-      {(activeModal === "slider" ||
-        activeModal === "album" ||
-        activeModal === "select" ||
-        activeModal === "callout") && <ImageSelector />}
+      {activeModal?.includes("image") && <ImageSelector />}
       {activeModal?.includes("time") && <TimePicker />}
+      {activeModal === "select-list" && <SelectList />}
     </>
   )
 }

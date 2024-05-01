@@ -215,6 +215,22 @@ textarea {
   border: none !important;
 }
 
+// todo:
+.react-select__value-container {
+  padding: 16px 14px !important;
+}
+.react-select__control--is-focused {
+  border-color: transparent !important;
+}
+.react-select__input-container {
+  padding: 0 !important;
+}
+.react-select__indicators {
+  .react-select__indicator-separator {
+    display: none;
+  }
+}
+
 :root {
   body {
     color: var(--black);

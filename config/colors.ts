@@ -20,41 +20,41 @@ export const backgroundColors = [
 export const borderColors = backgroundColors.map((v) => v.replace("0.2)", "1)"))
 
 export const colors = {
-  white: "#ffffff",
-  textWhite: "#ffffff",
-  black: "black",
+  white: "rgba(255,255,255,1)",
+  textWhite: "rgba(255,255,255,1)",
+  black: "rgba(0,0,0,1)",
 
-  pinkSoft: "#FFB0B0B3",
-  pink: "#FF8A8ADF",
-  pinkHard: "#E56A6AE6",
+  pinkSoft: "rgba(255,176,176,0.7)",
+  pink: "rgba(255,138,138,1)",
+  pinkHard: "rgba(229,106,106,0.9)",
 
-  graySoftest: "#E1E1E124",
-  graySoft: "#EBEBEB73",
-  gray: "#A1A1A199",
-  grayHard: "#9E9E9E",
+  graySoftest: "rgba(225,225,225,0.15)",
+  graySoft: "rgba(235,235,235,0.45)",
+  gray: "rgba(161,161,161,0.6)",
+  grayHard: "rgba(158,158,158,1)",
 
-  border: "#D6D6DAB3",
+  border: "rgba(214,214,218,0.7)",
 
-  purple: "#D9ABFFDE",
-  purpleHard: "#AA44FE",
+  purple: "rgba(217,171,255,0.87)",
+  purpleHard: "rgba(170,68,254,1)",
 
-  orange: "#FFB67EDE",
-  orangeHover: "#FF9422E6",
+  orange: "rgba(255,182,126,0.87)",
+  orangeHover: "rgba(255,148,34,0.87)",
 
-  blackSoft: "#434348",
+  blackSoft: "rgba(67,67,72,0.6)",
 
-  bgColor: "#F9F9F9CC",
-  shadowColor: "#00000014",
+  bgColor: "rgba(249,249,249,0.8)",
+  shadowColor: "rgba(0,0,0,0.08)",
 
-  red: "#FF524FB3",
+  red: "rgba(255,82,79,0.7)",
 
-  inputColor: "#EAEAEAAA",
-  radialBg: "radial-gradient(circle, #FFFFFF 70%, #FFF1F4 100%)",
-  blackTransparent: "#0000001A",
-  overlay: "#0000004D",
+  inputColor: "rgba(234,234,234,0.67)",
+  radialBg: "radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,241,244,1) 100%)",
+  blackTransparent: "rgba(0,0,0,0.10)",
+  overlay: "rgba(0,0,0,0.30)",
 
-  green: "#63CE63E6",
-  greenHard: "#51FF51E6",
+  green: "rgba(99,206,99,0.90)",
+  greenHard: "rgba(81,255,81,0.90)",
 }
 
 export const defaultColors = {

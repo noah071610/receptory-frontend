@@ -26,6 +26,7 @@ export default function SectionLayout({
       setSelectedSection({ payload: null })
     } else {
       if (e.target.closest(".copy")) return
+      if (e.target.closest(".add")) return
       setSelectedSection({ payload: section })
     }
     setActive({ payload: { type: null }, key: "tooltip" })
