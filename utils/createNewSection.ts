@@ -16,6 +16,14 @@ const sectionMap: { [key: string]: any } = {
       },
     }
   },
+  slider: () => {
+    return {
+      style: {
+        backgroundColor: colors.white,
+        color: colors.border,
+      },
+    }
+  },
   contact: () => {
     const target = {
       list: ["call", "email", "line", "twitter", "facebook", "kakaoTalk"].map((v, i) => createNewSectionList(v, i)),
@@ -38,13 +46,17 @@ const sectionMap: { [key: string]: any } = {
     }
   },
   title: () => {
+    const list = ["title", "description", "label"]
+      .map((v, i) => createNewSectionList(v, i))
+      .map((v) => ({ ...v, isActive: true }))
+
+    list[2].style.color = "rgba(158,0,255,0.3)"
+
     return {
       style: {
         textAlign: "left",
       },
-      list: ["title", "description", "label"]
-        .map((v, i) => createNewSectionList(v, i))
-        .map((v) => ({ ...v, isActive: true })),
+      list,
     }
   },
   callout: () => {
@@ -52,15 +64,24 @@ const sectionMap: { [key: string]: any } = {
       style: {
         backgroundColor: colors.graySoft,
       },
+      text: getNewEmptyEditor(),
     }
   },
   album: () => {
     return {
-      mode: "basic",
+      design: "basic",
+      style: {
+        backgroundSize: "cover",
+      },
     }
   },
   qna: () => {
-    return { list: [{ ...createNewSectionList("qna", 0), isActive: true }] }
+    return {
+      style: {
+        color: colors.pink,
+      },
+      list: [{ ...createNewSectionList("qna", 0), isActive: true, text: getNewEmptyEditor() }],
+    }
   },
   time: () => {
     return {
@@ -91,19 +112,30 @@ const sectionMap: { [key: string]: any } = {
   },
   thumbnail: () => {
     const list = ["title", "description", "cta"].map((v, i) => createNewSectionList(v, i))
-
-    list[2].style.backgroundColor = colors.pinkSoft
+    list[0].value = "타이틀 입력"
+    list[1].value = "설명 입력"
+    list[2].value = "텍스트 입력"
+    list[2].style.backgroundColor = "rgba(158,0,255,0.3)"
 
     return {
+      design: "card",
       style: {
-        backgroundColor: colors.white,
+        backgroundColor: "rgba(255,176,176,0.4)",
       },
       list,
+    }
+  },
+  text: () => {
+    return {
+      text: getNewEmptyEditor(),
     }
   },
 }
 
 export const createNewSectionList = (subType: string, index: number, obj?: any): SectionListType => {
+  if (subType === "qna") {
+    obj = { isActive: true, text: getNewEmptyEditor() }
+  }
   return {
     id: getId(),
     index,
@@ -117,7 +149,7 @@ export const createNewSectionList = (subType: string, index: number, obj?: any):
     options: {},
     design: "basic",
     src: "",
-    text: getNewEmptyEditor(),
+    text: "",
     ...obj,
   }
 }
@@ -138,7 +170,7 @@ export const createNewSection = (type: SectionListTypes, index: number): Section
     options: {},
     design: "basic",
     src: "",
-    text: getNewEmptyEditor(),
+    text: "",
     ...setProperties,
   }
 }

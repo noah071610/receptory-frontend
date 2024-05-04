@@ -26,7 +26,7 @@ const GoogleMapExplain = ({ isOpen }: { isOpen: boolean }) => {
   )
 }
 
-function Map({ section }: { section: SectionType }) {
+function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation()
 
@@ -61,22 +61,31 @@ function Map({ section }: { section: SectionType }) {
       ) : (
         <div className={cx(style.empty)}></div>
       )}
-      <div className={cx(style["input-wrapper"])}>
-        <h3 className={cx(style["input-title"])}>{t("임베드 코드 입력")}</h3>
-        <Input className={cx(style.input)} inputType="map" isOptional={false} value={section.value} />
-        <div
-          onClick={() => {
-            setIsOpen((b) => !b)
-          }}
-          className={cx(style["explain-title"], { [style.isOpen]: isOpen })}
-        >
-          <h3>{t("임베드 코드 삽입 방법")}</h3>
-          <div className={cx(style.icon)}>
-            <FontAwesomeIcon icon={faChevronCircleDown} />
+      {!isDisplayMode && (
+        <div className={cx(style["input-wrapper"])}>
+          <h3 className={cx(style["input-title"])}>{t("임베드 코드 입력")}</h3>
+          <Input
+            section={section}
+            className={cx(style.input)}
+            inputType="<iframe src= ..."
+            maxLength={99999}
+            isOptional={false}
+            value={section.value}
+          />
+          <div
+            onClick={() => {
+              setIsOpen((b) => !b)
+            }}
+            className={cx(style["explain-title"], { [style.isOpen]: isOpen })}
+          >
+            <h3>{t("임베드 코드 삽입 방법")}</h3>
+            <div className={cx(style.icon)}>
+              <FontAwesomeIcon icon={faChevronCircleDown} />
+            </div>
           </div>
+          <GoogleMapExplain isOpen={isOpen} />
         </div>
-        <GoogleMapExplain isOpen={isOpen} />
-      </div>
+      )}
     </div>
   )
 }

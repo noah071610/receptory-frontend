@@ -15,10 +15,12 @@ export default function SectionLayout({
   children,
   section,
   draggableProvided,
+  noPadding,
 }: {
   children: ReactNode
   section: SectionType
   draggableProvided?: DraggableProvided
+  noPadding?: boolean
 }) {
   const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditorStore()
   const onClickSection = (e: any) => {
@@ -29,6 +31,8 @@ export default function SectionLayout({
       if (e.target.closest(".add")) return
       setSelectedSection({ payload: section })
     }
+
+    // modal은 건드리지 말 것
     setActive({ payload: { type: null }, key: "tooltip" })
     setActive({ payload: { type: null }, key: "submenu" })
   }
@@ -38,13 +42,13 @@ export default function SectionLayout({
   const onClickCopy = () => {
     copySection({ payload: section })
   }
-
   return (
     <section
       {...draggableProvided?.draggableProps}
       ref={draggableProvided?.innerRef}
       onClick={onClickSection}
       id="editor"
+      style={{ ...draggableProvided?.draggableProps.style, padding: noPadding ? "0px" : undefined }}
       className={cx(style.section, { [style.active]: selectedSection?.id === section.id })}
     >
       {children}

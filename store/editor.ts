@@ -22,6 +22,12 @@ export interface EditStates {
   stage: EditStage
   selectedSection: SectionType | null
   active: ActiveTypes
+  revert: {
+    sectionKey: "initSections" | "formSections"
+    payload: SectionType
+    snapshot: string[]
+  }[]
+  revertIndex: number
 }
 
 type Actions = {
@@ -69,6 +75,9 @@ type Actions = {
   moveSection: ({ from, to }: { from: number; to: number }) => void
   copySection: (payload: { payload: SectionType }) => void
   loadSections: (payload: { initSections: SectionType[] }) => void
+
+  setRevert: (revertType: "do" | "undo") => void
+  saveSectionHistory: ({ payload }: { payload: SectionType }) => void
 }
 
 const getTarget = (origin: any): SectionType => {
@@ -78,6 +87,12 @@ const getKey = (origin: any): "initSections" | "formSections" => {
   return origin.stage === "init" ? "initSections" : "formSections"
 }
 
+const saveSectionHistory = ({ origin, payload }: { origin: any; payload: SectionType }) => {
+  const sectionKey = getKey(origin)
+  origin.revert.push({ sectionKey, payload, snapshot: origin[sectionKey].map((v: any) => v.id) })
+  origin.revertIndex = origin.revert.length - 1
+}
+
 export const useEditorStore = create<EditStates & Actions>()(
   immer((set) => ({
     // STATE
@@ -85,7 +100,7 @@ export const useEditorStore = create<EditStates & Actions>()(
     initSections: [createNewSection("thumbnail", 0)],
     formSections: [createNewSection("calender", 0)],
     selectedSection: null,
-    stage: "form",
+    stage: "init",
     active: {
       modal: {
         type: null,
@@ -100,10 +115,54 @@ export const useEditorStore = create<EditStates & Actions>()(
         payload: null,
       },
     },
+    revert: [],
+    revertIndex: -1,
 
     // SET
+    saveSectionHistory: ({ payload }) =>
+      set((origin) => {
+        saveSectionHistory({ origin, payload })
+      }),
+    setRevert: (revertType: "do" | "undo") =>
+      set((origin) => {
+        const doIndex = revertType === "do" ? 1 : -1
+        const targetRevert = origin.revert[origin.revertIndex + doIndex]
+        if (!targetRevert) return
+        const { payload, sectionKey, snapshot } = targetRevert
+
+        let target = null
+
+        const arr = []
+        for (let i = 0; i < snapshot.length; i++) {
+          const target = origin[sectionKey].find((v) => v.id === snapshot[i])
+          if (target) {
+            arr.push(target)
+          } else {
+            arr.push(payload)
+          }
+        }
+        origin[sectionKey] = arr
+
+        origin[sectionKey] = origin[sectionKey].map((v) => {
+          if (v.id === payload.id) {
+            target = payload
+            return target
+          } else {
+            return v
+          }
+        })
+
+        if (revertType === "undo") {
+          origin.revertIndex--
+        } else {
+          origin.revertIndex++
+        }
+      }),
     setSelectedSection: ({ payload }) =>
       set((origin) => {
+        if (origin.revert.length <= 0 && payload) {
+          saveSectionHistory({ origin, payload })
+        }
         origin.selectedSection = payload
       }),
     setStage: (stage) =>
@@ -134,6 +193,7 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.src = payload
           origin.selectedSection.src = payload
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),
@@ -143,6 +203,7 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.design = payload
           origin.selectedSection.design = payload
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),
@@ -162,6 +223,7 @@ export const useEditorStore = create<EditStates & Actions>()(
 
           target.options[key] = payload
           origin.selectedSection.options[key] = payload
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),
@@ -176,6 +238,14 @@ export const useEditorStore = create<EditStates & Actions>()(
           } else {
             target.list[index][key] = payload as never
             origin.selectedSection.list[index][key] = payload as never
+            switch (key) {
+              case "style":
+                saveSectionHistory({ origin, payload: target })
+                break
+
+              default:
+                break
+            }
           }
         }
       }),
@@ -185,6 +255,7 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.style[key] = payload
           origin.selectedSection.style[key] = payload
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),
@@ -215,8 +286,15 @@ export const useEditorStore = create<EditStates & Actions>()(
     // ADD
     addSection: ({ payload }) =>
       set((origin) => {
-        const newSection = createNewSection(payload, origin[getKey(origin)].length)
-        origin[getKey(origin)].push(newSection)
+        const sections = origin[getKey(origin)]
+        const newSection = createNewSection(payload, sections.length)
+        if (origin.revert.length <= 0) {
+          saveSectionHistory({ origin, payload: newSection })
+        }
+        sections.push(newSection)
+        if (newSection.type !== "slider" && newSection.type !== "album") {
+          saveSectionHistory({ origin, payload: newSection })
+        }
         origin.selectedSection = newSection
         origin.isEditStart = true
       }),
@@ -234,6 +312,7 @@ export const useEditorStore = create<EditStates & Actions>()(
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
+
           target.collection.push(payload)
           origin.selectedSection.collection.push(payload)
         }
@@ -254,9 +333,17 @@ export const useEditorStore = create<EditStates & Actions>()(
     deleteSection: (payload) =>
       set((origin) => {
         const key = getKey(origin)
+        const deleteSection = origin[key].find((v) => v.id === payload)
+        if (!deleteSection) return
+
+        if (origin.revert.length <= 0) {
+          saveSectionHistory({ origin, payload: deleteSection })
+        }
         origin[key] = origin[key].filter((v) => v.id !== payload)
         origin.selectedSection = null
         origin[key] = origin[key].map((v, i) => ({ ...v, index: i }))
+
+        saveSectionHistory({ origin, payload: deleteSection })
         origin.isEditStart = true
       }),
 
@@ -276,20 +363,33 @@ export const useEditorStore = create<EditStates & Actions>()(
         const copy = cloneDeep({ ...payload, id: getId() })
         const key = getKey(origin)
 
+        if (origin.revert.length <= 0) {
+          saveSectionHistory({ origin, payload: copy })
+        }
+
         origin[key].splice(payload.index + 1, 0, copy)
         origin[key] = origin[key].map((v, i) => ({ ...v, index: i }))
 
         origin.selectedSection = origin[key].find((v) => v.id === copy.id) ?? null
+
+        saveSectionHistory({ origin, payload: copy })
         origin.isEditStart = true
       }),
 
     moveSection: ({ from, to }) =>
       set((origin) => {
-        const key = getKey(origin)
-        const _target = cloneDeep(origin[origin.stage === "init" ? "initSections" : "formSections"][from])
-        origin[key].splice(from, 1)
-        origin[key].splice(to, 0, _target)
-        origin[key] = origin[key].map((v, i) => ({ ...v, index: i }))
+        const sections = origin[getKey(origin)]
+        const _target = sections[from]
+
+        if (origin.revert.length <= 0) {
+          saveSectionHistory({ origin, payload: _target })
+        }
+
+        sections.splice(from, 1)
+        sections.splice(to, 0, _target)
+        origin[getKey(origin)] = sections.map((v, i) => ({ ...v, index: i }))
+
+        saveSectionHistory({ origin, payload: _target })
         origin.isEditStart = true
       }),
 

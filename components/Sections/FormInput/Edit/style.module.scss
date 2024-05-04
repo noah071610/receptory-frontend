@@ -1,0 +1,44 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+  .input-wrapper {
+    width: 400px;
+  }
+  .input-content {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    @include border;
+    .input {
+      padding: 16px 14px;
+      display: flex;
+      font-size: 15px;
+      flex-grow: 1;
+    }
+    .textarea {
+      padding: 16px 14px;
+      font-size: 15px;
+      display: flex;
+      flex-grow: 1;
+      line-height: 1.4;
+    }
+  }
+}
+
+.options {
+  @include options-style;
+
+  .minMax-wrapper {
+    display: flex;
+    input {
+      width: 100px;
+      border-radius: 5px;
+      @include border;
+      padding: 6px 15px;
+    }
+    span {
+      margin: 0 10px;
+    }
+  }
+}

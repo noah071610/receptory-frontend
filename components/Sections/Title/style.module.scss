@@ -1,20 +1,44 @@
 @import "@/styles/variables.scss";
 
 .layout {
+  &.isDisplay {
+    padding: 0 10px;
+  }
+
   input,
   textarea {
     @include input-style;
   }
-  .label-input {
+  .label-input,
+  .label {
     @include label-style;
   }
+  .title,
   .title-input {
     margin-top: 5px;
     @include title-style;
   }
+  .description,
   .description-input {
     margin-top: 5px;
     @include description-style;
+  }
+
+  .description {
+    white-space: pre-line;
+    word-break: break-all;
+  }
+  .label {
+    width: auto;
+    border: 1px solid var(--purple);
+    margin-bottom: 2px;
+    padding: 3px 5px;
+    font-size: 11px;
+    border-radius: 2px;
+  }
+  .labe-input {
+    font-size: 11px;
+    margin-bottom: 2px;
   }
 }
 

@@ -1,17 +1,43 @@
 @import "@/styles/variables.scss";
 
-.album {
-  margin-bottom: 15px;
-}
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px;
+
+  gap: 5px;
+}
+
+.display {
+  padding: 0 10px;
+}
+
+.photo-wrapper {
   .photo {
     width: 100%;
-    border-radius: 5px;
     position: relative;
     @include flex;
+    background-color: var(--pink-soft);
+    img {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+    }
+    .background {
+      @include full;
+      filter: blur(2px) grayscale(30%);
+    }
+  }
+  input {
+    margin-top: 3px;
+    @include input-style;
+  }
+  .title {
+    @include description-style;
+    padding: 4px;
+    font-size: 13px;
+    white-space: pre-line;
+    word-break: break-all;
   }
 }
 

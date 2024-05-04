@@ -5,12 +5,13 @@ import {
   faAlignJustify,
   faAlignLeft,
   faAlignRight,
-  faArrowDown19,
+  faArrowDown,
   faBrush,
   faCheck,
   faClock,
   faCommentAlt,
   faEnvelope,
+  faExpand,
   faFilm,
   faFont,
   faGlobe,
@@ -27,6 +28,7 @@ import {
   faPhone,
   faPhotoFilm,
   faRectangleXmark,
+  faSquareCheck,
 } from "@fortawesome/free-solid-svg-icons"
 
 const initSectionList: EditorFooterList[] = [
@@ -39,6 +41,7 @@ const initSectionList: EditorFooterList[] = [
   { value: "contact", icon: faPhone, actionType: "createSection" },
   { value: "map", icon: faMap, actionType: "createSection" },
   { value: "qna", icon: faCommentAlt, actionType: "createSection" },
+  { value: "checkList", icon: faSquareCheck, actionType: "createSection" },
 ]
 const formSectionList: EditorFooterList[] = [
   { value: "text", icon: faFont, actionType: "createSection" },
@@ -49,30 +52,37 @@ const formSectionList: EditorFooterList[] = [
 
 const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   thumbnail: [
+    { value: "design", icon: faPalette, actionType: "submenu" },
     { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" },
     { value: "ctaBackgroundColor", icon: faBrush, actionType: "colorSelector" },
     { value: "background", icon: faImage, actionType: "imageSelector" },
   ],
-  album: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
-  callout: [{ value: "backgroundColor", icon: faPalette, actionType: "colorSelector" }],
-
-  contact: [
+  album: [
     { value: "design", icon: faPaintRoller, actionType: "submenu" },
-    { value: "animation", icon: faFilm, actionType: "submenu" },
+    { value: "imageSize", icon: faImage, actionType: "submenu" },
   ],
+  callout: [{ value: "color", icon: faPalette, actionType: "colorSelector" }],
+
+  contact: [{ value: "animation", icon: faFilm, actionType: "submenu" }],
   map: [],
-  qna: [],
+  qna: [{ value: "color", icon: faBrush, actionType: "colorSelector" }],
   slider: [
     { value: "design", icon: faPaintRoller, actionType: "submenu" },
     { value: "animation", icon: faFilm, actionType: "submenu" },
+    { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" },
+    { value: "color", icon: faBrush, actionType: "colorSelector" },
   ],
   text: [],
   title: [
     { value: "textAlign", icon: faAlignJustify, actionType: "submenu" },
-    { value: "color", icon: faPalette, actionType: "colorSelector" },
+    { value: "labelColor", icon: faBrush, actionType: "colorSelector" },
     { value: "select", icon: faHandPointer, actionType: "submenu" },
   ],
   empty: [],
+  checkList: [
+    { value: "design", icon: faPaintRoller, actionType: "submenu" },
+    { value: "color", icon: faPaintRoller, actionType: "colorSelector" },
+  ],
   time: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   select: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   input: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
@@ -82,10 +92,6 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
 // ####### SUBMENU
 const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterList[] }> = {
   contact: {
-    design: [
-      { value: "basic", icon: faCheck, actionType: "cta" },
-      { value: "card", icon: faCheck, actionType: "cta" },
-    ],
     animation: [
       { value: "none", icon: faCheck, actionType: "cta" },
       { value: "fadeIn", icon: faCheck, actionType: "cta" },
@@ -116,6 +122,10 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "fadeIn", icon: faCheck, actionType: "cta" },
       { value: "scaleUp", icon: faCheck, actionType: "cta" },
     ],
+    imageSize: [
+      { value: "cover", icon: faCheck, actionType: "cta" },
+      { value: "contain", icon: faCheck, actionType: "cta" },
+    ],
   },
   callout: {},
   map: {},
@@ -123,6 +133,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   slider: {
     design: [
       { value: "basic", icon: faCheck, actionType: "cta" },
+      { value: "card", icon: faCheck, actionType: "cta" },
       { value: "circle", icon: faCheck, actionType: "cta" },
       { value: "thumbnail", icon: faCheck, actionType: "cta" },
     ],
@@ -134,7 +145,15 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   },
   text: {},
   empty: {},
-  thumbnail: {},
+  thumbnail: {
+    design: [
+      { value: "card", icon: faIdCard, actionType: "cta" },
+      { value: "full", icon: faExpand, actionType: "cta" },
+    ],
+  },
+  checkList: {
+    design: [{ value: "basic", icon: faCheck, actionType: "cta" }],
+  },
   time: {
     design: [
       { value: "basic", icon: faCheck, actionType: "cta" },
@@ -156,7 +175,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   input: {
     design: [
       { value: "text", icon: faCheck, actionType: "cta" },
-      { value: "number", icon: faArrowDown19, actionType: "cta" },
+      { value: "number", icon: faArrowDown, actionType: "cta" },
       { value: "country", icon: faGlobe, actionType: "cta" },
       { value: "email", icon: faEnvelope, actionType: "cta" },
       { value: "textarea", icon: faCommentAlt, actionType: "cta" },

@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { AnimationTypes, DesignTypes, EditorFooterList } from "@/types/Edit"
+import { AnimationTypes, DesignTypes, EditorFooterList, StyleSelectTypes } from "@/types/Edit"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
 import { useParams } from "next/navigation"
@@ -32,6 +32,9 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
       case "select":
         setList({ index: i, key: "isActive", payload: !selectedSection.list[i].isActive })
         break
+      case "imageSize":
+        setStyle({ key: "backgroundSize", payload: value as StyleSelectTypes })
+        break
 
       default:
         break
@@ -60,6 +63,8 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
                 return selectedSection?.design === list.value
               case "select":
                 return selectedSection?.list[i].isActive
+              case "imageSize":
+                return selectedSection?.style.backgroundSize === list.value
 
               default:
                 return false

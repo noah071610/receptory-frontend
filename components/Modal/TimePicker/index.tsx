@@ -26,8 +26,6 @@ function generateSecondSlots({ interval }: { interval: number }): string[] {
 function generateHourSlots({ startHour = 0, endHour = 0 }: { startHour?: number; endHour?: number }): {
   [key: string]: string[]
 } {
-  console.log(startHour, endHour)
-
   if (startHour === 0 && endHour === 0) {
     return {
       amArr: meridiemArr,

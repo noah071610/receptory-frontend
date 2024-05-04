@@ -1,84 +1,113 @@
 // @ts-ignore
-import { ContentBlock, DraftHandleValue, Editor, EditorState, RichUtils } from "draft-js"
-import { memo, useCallback } from "react"
+import { memo } from "react"
 
-import Toolbar from "./Toolbar"
-
-import { colors } from "@/config/colors"
-import { editorStyleMap } from "@/config/edit"
-import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
+import getId from "@/utils/getId"
 import classNames from "classNames"
+import dynamic from "next/dynamic"
 import style from "./style.module.scss"
+
 const cx = classNames.bind(style)
 
-const Text = ({ section, textColor, listIndex }: { section: SectionType; textColor?: string; listIndex?: number }) => {
-  const { selectedSection, setText, setList, setSelectedSection } = useEditorStore()
+const TextEditor = dynamic(() => import("./TextEditor"), {
+  ssr: true,
+})
 
-  const editorState = typeof listIndex === "number" ? section.list[listIndex].text : section.text
+const getHtmlArr = (blocks: any[]): any[] => {
+  const arr: any[] = []
+  let ulArr: any[] = []
+  let olArr: any[] = []
 
-  const getCurSection = () => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
+  blocks.forEach((block) => {
+    const map: { [key: string]: any } = {
+      centerAlign: (
+        <p key={block.key} style={{ textAlign: "center" }}>
+          {block.text}
+        </p>
+      ),
+      leftAlign: (
+        <p key={block.key} style={{ textAlign: "left" }}>
+          {block.text}
+        </p>
+      ),
+      rightAlign: (
+        <p key={block.key} style={{ textAlign: "right" }}>
+          {block.text}
+        </p>
+      ),
+      blockQuote: (
+        <blockquote className={style.superFancyBlockquote} key={block.key}>
+          {block.text}
+        </blockquote>
+      ),
+      "header-one": <h1 key={block.key}>{block.text}</h1>,
+      "header-two": <h2 key={block.key}>{block.text}</h2>,
+      "header-three": <h3 key={block.key}>{block.text}</h3>,
     }
-  }
-  const setTextByType = useCallback(
-    (editorState: any) => {
-      getCurSection()
-      if (typeof listIndex === "number") {
-        setList({ index: listIndex, key: "text", payload: editorState })
-      } else {
-        setText({ payload: editorState })
-      }
-    },
-    [listIndex]
-  )
-
-  const onChangeEditor = useCallback((editorState: any) => {
-    getCurSection()
-    setTextByType(editorState)
-  }, [])
-
-  const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
-    const newState = RichUtils.handleKeyCommand(editorState, command)
-    if (newState) {
-      setTextByType(newState)
-      return "handled"
+    if (block.type === "unordered-list-item" || block.type === "ordered-list-item") {
+      return (block.type === "unordered-list-item" ? ulArr : olArr).push({ text: block.text, id: block.key })
     }
-    return "not-handled"
-  }
-
-  // FOR BLOCK LEVEL STYLES(Returns CSS Class From Text.css)
-  const myBlockStyleFn = (block: ContentBlock): any => {
-    const type = block.getType()
-    switch (type) {
-      case "blockQuote":
-        return style["superFancyBlockquote"]
-      case "leftAlign":
-        return style["leftAlign"]
-      case "rightAlign":
-        return style["rightAlign"]
-      case "centerAlign":
-        return style["centerAlign"]
-      case "justifyAlign":
-        return style["justifyAlign"]
-      default:
-        break
+    if (ulArr.length > 0) {
+      arr.push(
+        <ul key={getId()}>
+          {ulArr.map(({ text, id }) => (
+            <li key={id}>{text}</li>
+          ))}
+        </ul>
+      )
+      ulArr = []
     }
+    if (olArr.length > 0) {
+      arr.push(
+        <ol key={getId()}>
+          {olArr.map(({ text, id }) => (
+            <li key={id}>{text}</li>
+          ))}
+        </ol>
+      )
+      olArr = []
+    }
+    arr.push(map[block.type as string] ?? <p key={block.key ?? getId()}>{block.text}</p>)
+  })
+
+  if (ulArr.length > 0) {
+    arr.push(
+      <ul key={getId()}>
+        {ulArr.map(({ text, id }) => (
+          <li key={id}>{text}</li>
+        ))}
+      </ul>
+    )
+    ulArr = []
+  }
+  if (olArr.length > 0) {
+    arr.push(
+      <ol key={getId()}>
+        {olArr.map(({ text, id }) => (
+          <li key={id}>{text}</li>
+        ))}
+      </ol>
+    )
+    olArr = []
   }
 
+  return arr
+}
+
+const Text = ({
+  section,
+  textColor,
+  listIndex,
+  isDisplayMode,
+}: {
+  section: SectionType
+  textColor?: string
+  listIndex?: number
+  isDisplayMode?: boolean
+}) => {
   return (
-    <div className={cx(style.editor)}>
-      <Toolbar section={section} textColor={textColor} editorState={editorState} listIndex={listIndex} />
-      <div style={{ color: textColor ?? colors.blackSoft }} className={cx(style.container)}>
-        <Editor
-          handleKeyCommand={handleKeyCommand}
-          editorState={editorState}
-          customStyleMap={editorStyleMap}
-          blockStyleFn={myBlockStyleFn}
-          onChange={onChangeEditor}
-        />
-      </div>
+    <div className={cx(style.layout)}>
+      <TextEditor section={section} isDisplayMode={isDisplayMode} listIndex={listIndex} textColor={textColor} />
     </div>
   )
 }

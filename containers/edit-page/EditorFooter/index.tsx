@@ -37,6 +37,8 @@ export default function EditorFooter() {
     setActive({ key: "submenu", payload: { type: null } })
   }
 
+  const activeColorSelector = active.tooltip.type?.toLowerCase()?.includes("color")
+
   useEffect(() => {
     if (selectedSection && isOpenAllList) setIsOpenAllList(false)
   }, [isOpenAllList, selectedSection])
@@ -68,9 +70,7 @@ export default function EditorFooter() {
         <div className={cx(style["preview-ghost"])}></div>
       </div>
 
-      {(active.tooltip.type === "backgroundColor" ||
-        active.tooltip.type === "color" ||
-        active.tooltip.type === "ctaBackgroundColor") && <ColorPicker colorKey={active.tooltip.type} />}
+      {active.tooltip.type && activeColorSelector && <ColorPicker colorKey={active.tooltip.type as any} />}
     </div>
   )
 }

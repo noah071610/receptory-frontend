@@ -2,59 +2,75 @@
 
 import Input from "@/components/Input"
 import Textarea from "@/components/Textarea"
+import { changeOpacity } from "@/config/colors"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
-import { memo } from "react"
+import { memo, useMemo } from "react"
 import style from "./style.module.scss"
 
 const cx = classNames.bind(style)
 
-function Title({ section }: { section: SectionType }) {
-  const label = section.list[2].value
-  const title = section.list[0].value
-  const description = section.list[1].value
+function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+  const { revert } = useEditorStore()
+  const [title, description, label] = section.list
+  const textAlign = section.style.textAlign
+
+  const { color } = label.style
+  const backgroundColor = useMemo(() => changeOpacity(color ?? "rgba(255,255,255,1)", 0.1), [color])
+  const labelStyle = useMemo(
+    () => ({
+      textAlign,
+      border: `1px solid ${color}`,
+      backgroundColor,
+    }),
+    [backgroundColor, color, textAlign]
+  )
+
   return (
     <div className={cx(style["layout"])}>
-      {section.list[2].isActive && (
+      {label.isActive && (
         <div
           style={{
-            justifyContent:
-              section.style.textAlign === "left"
-                ? "flex-start"
-                : section.style.textAlign === "right"
-                  ? "flex-end"
-                  : "center",
+            justifyContent: textAlign === "left" ? "flex-start" : textAlign === "right" ? "flex-end" : "center",
           }}
           className={cx(style["label-wrapper"])}
         >
           <Input
-            className={cx(style["label-input"])}
+            section={section}
+            className={cx(isDisplayMode ? style.label : style["label-input"])}
             inputType="label"
+            displayMode={isDisplayMode && "span"}
             isOptional={true}
+            maxLength={20}
             listIndex={2}
-            value={label}
-            style={section.style}
+            value={label.value}
+            style={labelStyle}
           />
         </div>
       )}
-      {section.list[0].isActive && (
+      {title.isActive && (
         <Input
-          value={title}
-          style={section.style}
+          section={section}
+          value={title.value}
           listIndex={0}
-          className={cx(style["title-input"])}
+          displayMode={isDisplayMode && "h1"}
+          className={cx(isDisplayMode ? style.title : style["title-input"])}
           inputType="title"
           isOptional={true}
+          style={{ textAlign }}
         />
       )}
-      {section.list[1].isActive && (
+      {description.isActive && (
         <Textarea
-          value={description}
-          style={section.style}
+          section={section}
+          value={description.value}
           listIndex={1}
-          className={cx(style["description-input"])}
+          displayMode={isDisplayMode && "p"}
+          className={cx(isDisplayMode ? style.description : style["description-input"])}
           inputType="description"
           isOptional={true}
+          style={{ textAlign }}
         />
       )}
     </div>

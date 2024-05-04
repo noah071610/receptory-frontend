@@ -215,22 +215,6 @@ textarea {
   border: none !important;
 }
 
-// todo:
-.react-select__value-container {
-  padding: 16px 14px !important;
-}
-.react-select__control--is-focused {
-  border-color: transparent !important;
-}
-.react-select__input-container {
-  padding: 0 !important;
-}
-.react-select__indicators {
-  .react-select__indicator-separator {
-    display: none;
-  }
-}
-
 :root {
   body {
     color: var(--black);
@@ -270,7 +254,7 @@ textarea {
   --black-transparent: rgba(0, 0, 0, 0.1);
   --overlay: rgba(0, 0, 0, 0.3);
 
-  --green: rgba(99, 206, 99, 0.9);
+  --green: rgba(126, 239, 126, 0.7);
   --green-soft: rgba(131, 218, 131, 0.3);
   --green-hard: rgba(81, 255, 81, 0.9);
   --green-hover: #085f00;

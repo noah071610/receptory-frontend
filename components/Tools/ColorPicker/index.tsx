@@ -4,7 +4,7 @@ import { RgbaColorPicker } from "react-colorful"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import classNames from "classNames"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
@@ -26,35 +26,45 @@ function rgbaStringToObject(rgbaString: string) {
   return obj
 }
 
-export default function ColorPicker({ colorKey }: { colorKey: "backgroundColor" | "color" | "ctaBackgroundColor" }) {
+export default function ColorPicker({
+  colorKey,
+}: {
+  colorKey: "backgroundColor" | "color" | "ctaBackgroundColor" | "labelColor"
+}) {
   const { t } = useTranslation()
   const { setStyle, selectedSection, setList } = useEditorStore()
-  const listIndex = colorKey === "ctaBackgroundColor" ? 2 : 0
+  const listIndex = colorKey === "ctaBackgroundColor" || colorKey === "labelColor" ? 2 : 0
 
-  const rgbaStr =
-    colorKey === "ctaBackgroundColor"
-      ? selectedSection?.list[listIndex].style.backgroundColor
-      : selectedSection?.style[colorKey]
-  const [color, setColor] = useState(rgbaStr ? rgbaStringToObject(rgbaStr) : { r: 0, g: 0, b: 0, a: 1 })
+  const targetColor = useMemo(() => {
+    switch (colorKey) {
+      case "ctaBackgroundColor":
+        return selectedSection?.list[listIndex].style.backgroundColor
+      case "labelColor":
+        return selectedSection?.list[listIndex].style.color
+      default:
+        return selectedSection?.style[colorKey]
+    }
+  }, [colorKey, listIndex, selectedSection])
+
+  const [color, setColor] = useState(targetColor ? rgbaStringToObject(targetColor) : { r: 0, g: 0, b: 0, a: 1 })
 
   const selectColor = () => {
     if (selectedSection) {
       const rgbaColor = `rgba(${color.r},${color.g},${color.b},${color.a})`
-      if (colorKey === "ctaBackgroundColor") {
-        setList({ index: listIndex, key: "style", payload: { backgroundColor: rgbaColor } })
-      } else {
-        setStyle({ key: colorKey, payload: rgbaColor })
+      switch (colorKey) {
+        case "ctaBackgroundColor":
+          return setList({ index: listIndex, key: "style", payload: { backgroundColor: rgbaColor } })
+        case "labelColor":
+          return setList({ index: listIndex, key: "style", payload: { color: rgbaColor } })
+        default:
+          return setStyle({ key: colorKey, payload: rgbaColor })
       }
     }
   }
 
   useEffect(() => {
-    const rgbaStr =
-      colorKey === "ctaBackgroundColor"
-        ? selectedSection?.list[listIndex].style.backgroundColor
-        : selectedSection?.style[colorKey]
-    setColor(rgbaStr ? rgbaStringToObject(rgbaStr) : { r: 0, g: 0, b: 0, a: 1 })
-  }, [colorKey, selectedSection])
+    setColor(targetColor ? rgbaStringToObject(targetColor) : { r: 0, g: 0, b: 0, a: 1 })
+  }, [targetColor, selectedSection])
 
   return (
     selectedSection && (

@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 // FOR INLINE STYLES
 export const editorStyleMap = {
   HIGHLIGHT: {
-    backgroundColor: "#F7A5F7",
+    backgroundColor: "rgba(254, 225, 39, 0.5)",
   },
   SUPERSCRIPT: {
     verticalAlign: "super",

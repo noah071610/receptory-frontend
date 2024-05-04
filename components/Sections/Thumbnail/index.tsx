@@ -9,6 +9,7 @@ import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import getContrastTextColor from "@/utils/getContrastTextColor"
+import hasString from "@/utils/hasString"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
@@ -17,26 +18,24 @@ import { useMemo } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-export default function Thumbnail({ section }: { section: SectionType }) {
+export default function Thumbnail({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
-
-  const { setActive } = useEditorStore()
   const { t } = useTranslation(lang, ["new-post-page"])
 
-  const title = section.list[0]
+  const { setActive } = useEditorStore()
 
-  const description = section.list[1]
-
-  const cta = section.list[2]
+  const [title, description, cta] = section.list
   const ctaStyle = section.list[2].style
+  const design = section.design
+  const { background, backgroundColor } = section.style
 
   const ctaTextColor = useMemo(
     () => getContrastTextColor(ctaStyle.backgroundColor ?? colors.blackSoft),
     [ctaStyle.backgroundColor]
   )
   const textColor = useMemo(
-    () => getContrastTextColor(section.style.backgroundColor ?? colors.white),
-    [section.style.backgroundColor]
+    () => (design === "card" ? colors.black : getContrastTextColor(backgroundColor ?? colors.white)),
+    [backgroundColor, design]
   )
 
   const onClickThumbnailUpload = () => {
@@ -46,34 +45,46 @@ export default function Thumbnail({ section }: { section: SectionType }) {
   return (
     <div
       style={{
-        background: section.style.background
-          ? getImageUrl({ isCenter: true, url: section.style.background ?? "" })
-          : `linear-gradient(180deg, ${section.style.backgroundColor} 87%, rgba(0,0,0,0) 100%)`,
+        background:
+          design === "card"
+            ? colors.white
+            : background
+              ? getImageUrl({ isCenter: true, url: background ?? "" })
+              : `linear-gradient(180deg, ${backgroundColor} 87%, rgba(0,0,0,0) 100%)`,
       }}
-      className={cx(style.wrapper)}
+      className={cx(style.wrapper, style[design])}
     >
-      {section.style.background && <ImageDelete section={section} srcKey={"background"} />}
-      <div className={cx(style.main)}>
-        <div
-          style={{ background: getImageUrl({ isCenter: true, url: section.src ?? "" }) }}
-          className={cx(style.thumbnail)}
+      {background && !isDisplayMode && <ImageDelete section={section} srcKey={"background"} />}
+      <div className={cx(style.main, style[design])}>
+        <picture
+          className={cx(style.thumbnail, style[design], {
+            [style.isDisplayMode]: isDisplayMode,
+            [style["noImage-displayMode"]]: !hasString(section.src) && isDisplayMode,
+          })}
         >
-          {section.src && <ImageDelete section={section} srcKey={"thumbnail"} />}
-          <button onClick={onClickThumbnailUpload} className={cx(style["drop-zone"])}>
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
-        </div>
-        <Textarea
-          className={cx(style["title-input"])}
+          {hasString(section.src) && <img src={section.src} alt="image" />}
+          {section.src && !isDisplayMode && <ImageDelete section={section} srcKey={"thumbnail"} />}
+          {!isDisplayMode && (
+            <button className={cx(style["drop-zone"])} onClick={onClickThumbnailUpload}>
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          )}
+        </picture>
+        <Input
+          section={section}
+          className={cx(style.title, isDisplayMode ? "" : style["title-input"])}
           inputType="title"
+          displayMode={isDisplayMode && "h1"}
           isOptional={true}
           listIndex={0}
           style={{ color: textColor }}
           value={title.value}
         />
         <Textarea
-          className={cx(style["description-input"])}
+          section={section}
+          className={cx(style.description, isDisplayMode ? "" : style["description-input"])}
           inputType="description"
+          displayMode={isDisplayMode && "p"}
           isOptional={true}
           listIndex={1}
           style={{ color: textColor }}
@@ -81,10 +92,37 @@ export default function Thumbnail({ section }: { section: SectionType }) {
         />
         <div className={cx(style["cta-wrapper"])}>
           <button style={{ backgroundColor: ctaStyle.backgroundColor }} className={cx(style.cta)}>
-            <Input inputType="cta" listIndex={2} isOptional={false} style={{ color: ctaTextColor }} value={cta.value} />
+            <Input
+              section={section}
+              displayMode={isDisplayMode && "span"}
+              inputType="cta"
+              listIndex={2}
+              isOptional={false}
+              style={{ color: ctaTextColor }}
+              value={cta.value}
+            />
           </button>
         </div>
       </div>
+
+      {design === "full" && (
+        <div className={cx(style.arrow)}>
+          <a href="#">
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
+        </div>
+      )}
+
+      {design === "card" && (
+        <div
+          style={{
+            background: background ? getImageUrl({ isCenter: true, url: background ?? "" }) : backgroundColor,
+          }}
+          className={cx(style.background)}
+        />
+      )}
     </div>
   )
 }

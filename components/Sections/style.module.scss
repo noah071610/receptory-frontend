@@ -6,6 +6,12 @@
   position: relative;
   background-color: var(--white);
   border: 2px dashed transparent;
+
+  &.display {
+    border: none;
+    padding: 10px;
+  }
+
   &.active {
     @include z-index(edit-content);
     border-color: var(--pink-soft);

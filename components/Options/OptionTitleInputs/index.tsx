@@ -8,7 +8,7 @@ import { memo } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-function OptionTitleInputs({ section }: { section: SectionType }) {
+function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
 
   return (

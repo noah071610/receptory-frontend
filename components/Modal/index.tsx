@@ -10,7 +10,6 @@ const cx = classNames.bind(style)
 export default function ModalLayout({ children, modalStyle }: { children: ReactNode; modalStyle?: string }) {
   useEffect(() => {
     const body: HTMLBodyElement | null = document.querySelector("body")
-    console.log(body)
 
     if (body) {
       disableBodyScroll(body)

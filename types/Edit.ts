@@ -16,16 +16,20 @@ export type SectionListTypes =
   | "time"
   | "select"
   | "input"
+  | "checkList"
 
 export type TargetSectionListTypes =
   | "backgroundColor"
   | "ctaBackgroundColor"
+  | "activeColor"
   | "color"
   | "background"
   | "design"
   | "animation"
   | "textAlign"
   | "select"
+  | "labelColor"
+  | "imageSize"
 
 export type AlignTypes = "left" | "center" | "right"
 export type DesignTypes =
@@ -46,9 +50,11 @@ export type DesignTypes =
   | "email"
   | "textarea"
   | "select"
+  | "full"
   | AlignTypes
 export type AnimationTypes = "none" | "fadeUp" | "flip" | "fadeIn" | "bounce" | "scaleUp"
 export type TitleSelectTypes = "title" | "description" | "label"
+export type StyleSelectTypes = "cover" | "contain"
 
 export type EditorFooterListTypes =
   | SectionListTypes
@@ -57,6 +63,7 @@ export type EditorFooterListTypes =
   | AnimationTypes
   | AlignTypes
   | TitleSelectTypes
+  | StyleSelectTypes
 
 export type EditStage = "init" | "form" | "rending"
 
@@ -89,6 +96,8 @@ export interface StyleProperties {
   height?: number
   textAlign?: AlignTypes
   animation?: AnimationTypes
+  borderColor?: string
+  backgroundSize?: "cover" | "contain"
 }
 
 interface _SectionType {
@@ -123,4 +132,11 @@ export interface EditorFooterList {
 
 export interface ImageUpload extends File {
   preview?: string
+}
+
+export interface GalleryImageType {
+  width?: number
+  height?: number
+  src: string
+  value: any
 }

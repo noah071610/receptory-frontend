@@ -17,7 +17,7 @@ function AddBtn({ type, section }: { type: string; section: SectionType }) {
       setSelectedSection({ payload: section })
     }
     if (type === "qna") {
-      addList({ type: "qna", obj: { isActive: true } })
+      addList({ type: "qna" })
     } else if (type === "select") {
       addList({ type: "select" })
     } else {

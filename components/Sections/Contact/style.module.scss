@@ -2,7 +2,6 @@
 
 .contact {
   .main {
-    margin-bottom: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -46,6 +45,7 @@
 }
 
 .providers {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   ul {

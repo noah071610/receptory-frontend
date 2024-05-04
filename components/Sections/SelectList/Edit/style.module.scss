@@ -1,0 +1,59 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+
+  .list-select-btn {
+    width: 400px;
+    padding: 16px 14px;
+    border-radius: 5px;
+    @include border;
+    text-align: left;
+  }
+}
+
+.options {
+  @include options-style;
+  .list-edit {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0;
+      .image {
+        cursor: pointer;
+        width: 100px;
+        height: 80px;
+        border-radius: 5px;
+        @include flex;
+        svg {
+          color: var(--gray);
+        }
+      }
+      h3 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      p {
+        font-size: 13px;
+      }
+    }
+  }
+  .title {
+    @include title-style($isSmall: true);
+    @include input-style;
+
+    margin-bottom: 5px;
+  }
+  .description {
+    @include description-style($isSmall: true);
+
+    @include input-style;
+  }
+}
