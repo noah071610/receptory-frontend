@@ -59,6 +59,11 @@ const sectionMap: { [key: string]: any } = {
       list,
     }
   },
+  checkList: () => {
+    return {
+      list: [createNewSectionList("checkList", 0, { design: "check" })],
+    }
+  },
   callout: () => {
     return {
       style: {

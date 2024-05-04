@@ -9,6 +9,7 @@ const cx = classNames.bind(style)
 
 function IconBtn({
   className,
+  disabled = false,
   iconClassName,
   size,
   icon,
@@ -19,6 +20,7 @@ function IconBtn({
   size: number
   icon: IconDefinition
   onclick?: any
+  disabled?: boolean
 }) {
   const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore()
 
@@ -28,6 +30,7 @@ function IconBtn({
         onClick={onclick}
         style={{ width: `${size}px`, height: `${size}px` }}
         className={cx(iconClassName, style.icon)}
+        disabled={disabled}
       >
         <FontAwesomeIcon icon={icon} />
       </button>

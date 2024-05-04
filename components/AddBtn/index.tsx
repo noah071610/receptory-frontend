@@ -16,12 +16,16 @@ function AddBtn({ type, section }: { type: string; section: SectionType }) {
     if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
-    if (type === "qna") {
-      addList({ type: "qna" })
-    } else if (type === "select") {
-      addList({ type: "select" })
-    } else {
-      setActive({ payload: { type, payload: "add" }, key: "modal" })
+    switch (type) {
+      case "qna":
+      case "select":
+        return addList({ type })
+      case "checkList":
+        return addList({ type, valueArrForNewList: [{ design: "check" }] })
+
+      default:
+        setActive({ payload: { type, payload: "add" }, key: "modal" })
+        break
     }
   }
 

@@ -64,8 +64,8 @@ type Actions = {
     }
   }) => void
 
-  addSection: ({ payload }: { payload: SectionListTypes }) => void
-  addList: ({ type, obj }: { type: string; obj?: { [key: string]: any } }) => void
+  addSection: ({ type, payload }: { type: SectionListTypes; payload?: SectionType }) => void
+  addList: ({ type, valueArrForNewList }: { type: string; valueArrForNewList?: { [key: string]: any }[] }) => void
   addCollection: ({ payload }: { payload: any }) => void
 
   deleteSection: (id: string) => void
@@ -89,8 +89,18 @@ const getKey = (origin: any): "initSections" | "formSections" => {
 
 const saveSectionHistory = ({ origin, payload }: { origin: any; payload: SectionType }) => {
   const sectionKey = getKey(origin)
+  if (origin.revertIndex > -1) {
+    // 뒤로가기 하고 다시 시작 하면 뒤에껀 지워버림 (안쓰겠다는 의미로 간주)
+    origin.revert = origin.revert.slice(0, origin.revertIndex + 1)
+  }
+
   origin.revert.push({ sectionKey, payload, snapshot: origin[sectionKey].map((v: any) => v.id) })
-  origin.revertIndex = origin.revert.length - 1
+  if (origin.revert.length >= 20) {
+    // 20개 넘게 뒤로가기 할거면 인간적으로 저장 버튼을 눌러라.. 라는 취지
+    origin.revert.shift()
+  } else {
+    origin.revertIndex = origin.revert.length - 1
+  }
 }
 
 export const useEditorStore = create<EditStates & Actions>()(
@@ -121,6 +131,7 @@ export const useEditorStore = create<EditStates & Actions>()(
     // SET
     saveSectionHistory: ({ payload }) =>
       set((origin) => {
+        // 컴포넌트에서 호출할때, 기본적으로 store에서 처리함
         saveSectionHistory({ origin, payload })
       }),
     setRevert: (revertType: "do" | "undo") =>
@@ -132,6 +143,7 @@ export const useEditorStore = create<EditStates & Actions>()(
 
         let target = null
 
+        // sections의 스냅샷 처리
         const arr = []
         for (let i = 0; i < snapshot.length; i++) {
           const target = origin[sectionKey].find((v) => v.id === snapshot[i])
@@ -143,6 +155,7 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         origin[sectionKey] = arr
 
+        // 스냅샷을 찍은 섹션을 덮어씌움 (virtual dom 이니까 재렌더링 안됨요)
         origin[sectionKey] = origin[sectionKey].map((v) => {
           if (v.id === payload.id) {
             target = payload
@@ -242,6 +255,9 @@ export const useEditorStore = create<EditStates & Actions>()(
               case "style":
                 saveSectionHistory({ origin, payload: target })
                 break
+              case "isActive":
+                saveSectionHistory({ origin, payload: target })
+                break
 
               default:
                 break
@@ -284,29 +300,30 @@ export const useEditorStore = create<EditStates & Actions>()(
       }),
 
     // ADD
-    addSection: ({ payload }) =>
+    addSection: ({ type, payload }) =>
       set((origin) => {
         const sections = origin[getKey(origin)]
-        const newSection = createNewSection(payload, sections.length)
+        const newSection = payload ?? createNewSection(type, sections.length)
         if (origin.revert.length <= 0) {
           saveSectionHistory({ origin, payload: newSection })
         }
         sections.push(newSection)
-        if (newSection.type !== "slider" && newSection.type !== "album") {
-          saveSectionHistory({ origin, payload: newSection })
-        }
+        saveSectionHistory({ origin, payload: newSection })
         origin.selectedSection = newSection
         origin.isEditStart = true
       }),
-    addList: ({ type, obj }) =>
+    addList: ({ type, valueArrForNewList }) =>
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
-          const newList = createNewSectionList(type, target.list.length, obj)
-          target.list.push(newList)
-          origin.selectedSection.list.push(newList)
+          ;(valueArrForNewList ?? [{}]).forEach((v) => {
+            const newList = createNewSectionList(type, target.list.length, v)
+            target.list.push(newList)
+          })
+          origin.selectedSection.list = target.list
+          saveSectionHistory({ origin, payload: target })
+          origin.isEditStart = true
         }
-        origin.isEditStart = true
       }),
     addCollection: ({ payload }) =>
       set((origin) => {
@@ -315,6 +332,7 @@ export const useEditorStore = create<EditStates & Actions>()(
 
           target.collection.push(payload)
           origin.selectedSection.collection.push(payload)
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),
@@ -326,6 +344,7 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.list = target.list.filter((_, i) => i !== targetIndex).map((v, i) => ({ ...v, index: i }))
           origin.selectedSection.list = target.list
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),
@@ -353,6 +372,7 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.collection = target.collection.filter((_, i) => i !== targetIndex)
           origin.selectedSection.collection = target.collection
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),

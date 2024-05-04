@@ -40,8 +40,6 @@ export default function Header() {
   const onClickRevert = (type: "do" | "undo") => {
     setRevert(type)
   }
-  console.log(revert)
-  console.log(revertIndex)
 
   return (
     <>
@@ -60,8 +58,20 @@ export default function Header() {
           ))}
         </div>
         <div className={cx(style.right)}>
-          <IconBtn onclick={() => onClickRevert("undo")} size={35} icon={faRotateLeft} />
-          <IconBtn onclick={() => onClickRevert("do")} size={35} icon={faRotateRight} />
+          <IconBtn
+            disabled={revert.length <= 1 || revertIndex <= 0}
+            onclick={() => onClickRevert("undo")}
+            size={35}
+            iconClassName={style.rollback}
+            icon={faRotateLeft}
+          />
+          <IconBtn
+            disabled={revert.length - 1 === revertIndex}
+            onclick={() => onClickRevert("do")}
+            size={35}
+            iconClassName={style.rollback}
+            icon={faRotateRight}
+          />
           {isSaving ? (
             <IconBtn iconClassName={style.saving} size={35} icon={faCheck} />
           ) : (

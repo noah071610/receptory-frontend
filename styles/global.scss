@@ -235,8 +235,8 @@ textarea {
 
   --border: rgba(214, 214, 214, 0.7);
 
-  --purple: rgba(217, 171, 255, 0.875);
-  --purple-hard: rgba(190, 111, 255, 0.9);
+  --purple: rgba(194, 120, 254, 0.875);
+  --purple-soft: rgba(224, 186, 255, 0.7);
   --purple-hard: rgba(170, 68, 254, 0.9);
 
   --orange: rgba(255, 182, 126, 0.875);
@@ -247,17 +247,22 @@ textarea {
   --bg-color: rgba(249, 249, 249, 0.8);
   --shadow-color: rgba(0, 0, 0, 0.08);
 
-  --red: rgba(255, 82, 79, 0.8);
+  --red: rgba(255, 74, 71, 0.85);
+  --red-soft: rgba(253, 172, 171, 0.6); // todo:
 
   --input-color: rgba(234, 234, 234, 0.4);
   --radial-bg: radial-gradient(circle, rgba(255, 255, 255, 1) 70%, rgba(255, 241, 244, 1) 100%);
   --black-transparent: rgba(0, 0, 0, 0.1);
   --overlay: rgba(0, 0, 0, 0.3);
 
-  --green: rgba(126, 239, 126, 0.7);
+  --green: rgba(78, 192, 78, 0.8);
   --green-soft: rgba(131, 218, 131, 0.3);
   --green-hard: rgba(81, 255, 81, 0.9);
   --green-hover: #085f00;
+
+  --blue-soft: rgba(143, 182, 254, 0.6);
+  --blue-hard: rgba(53, 91, 255, 0.9);
+  --blue: rgba(46, 58, 255, 0.9); //todo:
 
   --candidate-height: 94px;
   --nav-width: 100px;

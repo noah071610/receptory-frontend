@@ -1,46 +1,87 @@
 "use client"
 
-import { getImageUrl } from "@/config"
-import { changeOpacity } from "@/config/colors"
+import AddBtn from "@/components/AddBtn"
+import Input from "@/components/Input"
 import { useEditorStore } from "@/store/editor"
-import { SectionType } from "@/types/Edit"
-import hasString from "@/utils/hasString"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { SectionListType, SectionType } from "@/types/Edit"
+import { faPenFancy, faSquareCheck, faSquareXmark, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
-import { memo, useMemo } from "react"
-import Text from "../Text"
+import { memo } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
-function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { setActive } = useEditorStore()
-  const { color } = section.style
+function List({
+  section,
+  list,
+  index,
+  isDisplayMode,
+}: {
+  section: SectionType
+  list: SectionListType
+  index: number
+  isDisplayMode?: boolean
+}) {
+  const { setList } = useEditorStore()
+  const [design, animation] = [list.design, section.style.animation]
+  const getDesign = (str: string) => {
+    switch (str) {
+      case "check":
+        return "uncheck"
+      case "uncheck":
+        return "underline"
+      case "underline":
+        return "caution"
+      case "caution":
+        return "check"
+      default:
+        return "check"
+    }
+  }
 
-  const backgroundColor = useMemo(() => changeOpacity(color ?? "rgba(255,255,255,1)", 0.1), [color])
-
-  // const textColor = useMemo(() => getContrastTextColor(backgroundColor ?? colors.black), [backgroundColor])
-
-  const onClickAddImage = () => {
-    setActive({ key: "modal", payload: { type: "callout-image" } })
+  const onClickChangeDesign = () => {
+    setList({
+      index,
+      key: "design",
+      payload: getDesign(design),
+    })
   }
 
   return (
-    <div className={cx(style["layout"])}>
-      <div style={{ backgroundColor, borderColor: color }} className={cx(style.callout)}>
-        <div className={cx(style["image-container"])}>
-          <button
-            style={{ background: getImageUrl({ isCenter: true, url: section.src ?? "" }) }}
-            onClick={onClickAddImage}
-            className={cx({ [style["has-image"]]: hasString(section.src) })}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
-        </div>
-        <div className={cx(style.main)}>
-          <Text section={section} />
-        </div>
+    <li className={cx(style["list-wrapper"], style[design])}>
+      <div onClick={onClickChangeDesign} className={cx(style.icon)}>
+        {design === "check" && <FontAwesomeIcon icon={faSquareCheck} />}
+        {design === "uncheck" && <FontAwesomeIcon icon={faSquareXmark} />}
+        {design === "underline" && <FontAwesomeIcon icon={faPenFancy} />}
+        {design === "caution" && <FontAwesomeIcon icon={faTriangleExclamation} />}
       </div>
+      <div className={cx(style.content)}>
+        <Input
+          inputType="text"
+          isOptional={false}
+          listIndex={index}
+          section={section}
+          value={list.value}
+          displayMode={isDisplayMode && "span"}
+          maxLength={25}
+          className={isDisplayMode ? style.text : ""}
+        />
+      </div>
+    </li>
+  )
+}
+
+function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+  const { setActive } = useEditorStore()
+
+  return (
+    <div className={cx(style["layout"])}>
+      <ul className={cx(style["check-list"])}>
+        {section.list.map((v, i) => (
+          <List isDisplayMode={isDisplayMode} index={i} key={v.id} list={v} section={section} />
+        ))}
+      </ul>
+      {!isDisplayMode && <AddBtn section={section} type="checkList" />}
     </div>
   )
 }

@@ -70,6 +70,17 @@
   gap: 10px;
 }
 
+.rollback {
+  &:disabled {
+    svg {
+      color: var(--gray-soft);
+    }
+    @include action {
+      background-color: transparent;
+    }
+  }
+}
+
 .ghost {
   height: calc(50px);
 }

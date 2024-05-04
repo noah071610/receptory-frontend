@@ -3,11 +3,12 @@
 import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { ImageUpload, SectionListTypes } from "@/types/Edit"
+import { ImageUpload, SectionListType, SectionListTypes } from "@/types/Edit"
+import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FreeMode } from "swiper/modules"
 import { SwiperSlide } from "swiper/react"
 import ModalLayout from ".."
@@ -17,9 +18,10 @@ const cx = classNames.bind(style)
 
 export default function ImageSelector() {
   const [selectedImages, setSelectedImages] = useState<ImageUpload[]>([])
+  const [listForRending, setListForRending] = useState<SectionListType[]>([])
 
   const { t } = useTranslation()
-  const { active, setActive, addSection, setStyle, addList, setSrc, setList, stage } = useEditorStore()
+  const { active, setActive, addSection, setStyle, initSections, setSrc, setList, addList } = useEditorStore()
 
   const targetType = active.modal.type
 
@@ -71,11 +73,8 @@ export default function ImageSelector() {
     // 다중 이미지 업로드
     if (targetType === "album-image" || targetType === "slider-image") {
       const type = targetType.replace("-image", "")
-      if (active.modal.payload !== "add") {
-        addSection({ payload: type as SectionListTypes })
-      }
 
-      await Promise.all(
+      await Promise.allSettled(
         selectedImages.map(async ({ preview, ...file }, index) => {
           const formData = new FormData()
           formData.append("image", file)
@@ -83,10 +82,23 @@ export default function ImageSelector() {
           const img = new Image()
 
           img.addEventListener("load", () => {
-            addList({
-              type,
-              obj: { src: preview ?? "", style: { width: img.naturalWidth ?? 0, height: img.naturalHeight ?? 0 } },
-            })
+            setListForRending((arr) => [
+              ...arr,
+              createNewSectionList(type, index, {
+                src: preview ?? "",
+                style: { width: img.naturalWidth ?? 0, height: img.naturalHeight ?? 0 },
+              }),
+            ])
+          })
+
+          img.addEventListener("error", () => {
+            setListForRending((arr) => [
+              ...arr,
+              createNewSectionList(type, index, {
+                src: "",
+                style: { width: 0, height: 0 },
+              }),
+            ])
           })
 
           img.src = preview ?? ""
@@ -97,10 +109,31 @@ export default function ImageSelector() {
           // todo:  일단 보류
         })
       )
+      return
     }
-
     setActive({ payload: { type: null, payload: null }, key: "modal" })
   }
+
+  useEffect(() => {
+    if (!listForRending.length || !selectedImages.length) return
+
+    if (targetType && listForRending.length >= selectedImages.length) {
+      const type = targetType.replace("-image", "")
+      const filteredImageList = listForRending.filter((v) => !!v.src)
+      if (active.modal.payload === "add") {
+        addList({ type: type as SectionListTypes, valueArrForNewList: filteredImageList })
+      } else {
+        const newSection = createNewSection(type as SectionListTypes, initSections.length)
+        newSection.list = [...filteredImageList]
+        addSection({
+          type: type as SectionListTypes,
+          payload: newSection,
+        })
+      }
+      setListForRending([])
+      setActive({ payload: { type: null, payload: null }, key: "modal" })
+    }
+  }, [listForRending.length, selectedImages.length, targetType, initSections.length])
 
   return (
     <ModalLayout modalStyle={style.content}>

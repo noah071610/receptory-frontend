@@ -27,7 +27,7 @@ export default function List({
   const onClickList = (value: string, type: EditorFooterListActions) => {
     switch (type) {
       case "createSection":
-        addSection({ payload: value as SectionListTypes })
+        addSection({ type: value as SectionListTypes })
         break
       case "imageSelector":
         setActive({ key: "modal", payload: { type: `${value}-image` } })

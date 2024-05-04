@@ -51,6 +51,10 @@ export type DesignTypes =
   | "textarea"
   | "select"
   | "full"
+  | "check"
+  | "uncheck"
+  | "underline"
+  | "caution"
   | AlignTypes
 export type AnimationTypes = "none" | "fadeUp" | "flip" | "fadeIn" | "bounce" | "scaleUp"
 export type TitleSelectTypes = "title" | "description" | "label"
