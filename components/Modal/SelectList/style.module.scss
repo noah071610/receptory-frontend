@@ -1,7 +1,7 @@
 @import "@/styles/variables.scss";
 
 .content {
-  padding: 5px;
+  padding: 15px;
 
   .list-options {
     padding: 4px;
@@ -14,16 +14,17 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px;
     cursor: pointer;
+    padding: 10px;
     .image {
-      cursor: pointer;
-      width: 100px;
-      height: 80px;
-      border-radius: 5px;
-      @include flex;
-      svg {
-        color: var(--gray);
+      width: 90px;
+      height: 70px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        object-fit: cover;
       }
     }
     h3 {
@@ -40,11 +41,8 @@
     }
   }
 
-  .select-none {
-    margin-top: 10px;
-    @include flex;
-    padding: 12px 0;
-    font-size: 14px;
-    background-color: var(--gray-soft);
+  .btn-wrapper {
+    @include form-btn-style;
+    margin-top: 5px;
   }
 }

@@ -112,6 +112,31 @@
   }
 }
 
+@mixin form-btn-style {
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+  @include flex;
+  button {
+    width: 100%;
+    max-width: 200px;
+    padding: 15px 0;
+    border-radius: 40px;
+    @include flex;
+    background-color: var(--gray-soft);
+    &.selected {
+      background-color: var(--green);
+      color: var(--white);
+    }
+
+    @include action {
+      background-color: var(--green);
+      color: var(--white);
+    }
+  }
+}
+
 $z-index-map: (
   edit-overlay: 100,
   edit-content: 150,

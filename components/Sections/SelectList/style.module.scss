@@ -27,12 +27,18 @@
       padding: 0;
       .image {
         cursor: pointer;
-        width: 100px;
+        width: 110px;
         height: 80px;
         border-radius: 5px;
         @include flex;
+        border: 1px dashed var(--border);
         svg {
           color: var(--gray);
+        }
+        @include action {
+          svg {
+            color: var(--pink);
+          }
         }
       }
       h3 {

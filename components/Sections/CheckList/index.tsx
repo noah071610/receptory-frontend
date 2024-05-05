@@ -4,6 +4,7 @@ import AddBtn from "@/components/AddBtn"
 import Input from "@/components/Input"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
+import { getAnimation } from "@/utils/getAnimation"
 import { faPenFancy, faSquareCheck, faSquareXmark, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
@@ -40,11 +41,13 @@ function List({
   }
 
   const onClickChangeDesign = () => {
-    setList({
-      index,
-      key: "design",
-      payload: getDesign(design),
-    })
+    setTimeout(() => {
+      setList({
+        index,
+        key: "design",
+        payload: getDesign(design),
+      })
+    }, 0)
   }
 
   return (
@@ -55,7 +58,13 @@ function List({
         {design === "underline" && <FontAwesomeIcon icon={faPenFancy} />}
         {design === "caution" && <FontAwesomeIcon icon={faTriangleExclamation} />}
       </div>
-      <div className={cx(style.content)}>
+      <div
+        style={getAnimation({
+          type: animation,
+          delay: index * 180,
+        })}
+        className={cx(style.content)}
+      >
         <Input
           inputType="text"
           isOptional={false}

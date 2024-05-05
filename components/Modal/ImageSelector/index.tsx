@@ -8,6 +8,7 @@ import { createNewSection, createNewSectionList } from "@/utils/createNewSection
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { FreeMode } from "swiper/modules"
 import { SwiperSlide } from "swiper/react"
@@ -17,6 +18,8 @@ import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 export default function ImageSelector() {
+  const { replace } = useRouter()
+  const pathname = usePathname()
   const [selectedImages, setSelectedImages] = useState<ImageUpload[]>([])
   const [listForRending, setListForRending] = useState<SectionListType[]>([])
 
@@ -129,6 +132,7 @@ export default function ImageSelector() {
           type: type as SectionListTypes,
           payload: newSection,
         })
+        replace(`${pathname}#${newSection.id}`)
       }
       setListForRending([])
       setActive({ payload: { type: null, payload: null }, key: "modal" })

@@ -18,7 +18,10 @@
 }
 
 .date-picker-layout {
-  .content-wrapper {
+  width: 95%;
+  padding: 15px;
+  .btn-wrapper {
+    @include form-btn-style;
   }
 }
 
@@ -28,7 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 10px;
     margin-bottom: 5px;
     p {
       text-align: center;
@@ -47,7 +50,7 @@
   .main {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+    gap: 5px 0;
     button {
       padding: 10px 0;
       &:hover {
@@ -56,20 +59,24 @@
       }
       &:disabled {
         color: var(--gray) !important;
+        background-color: var(--white) !important;
+        opacity: 1 !important;
         &:hover {
           background-color: var(--white) !important;
           color: var(--gray) !important;
         }
       }
-      &.selected {
-        background-color: var(--green);
-        color: var(--white);
-      }
     }
   }
 }
 
+.selected {
+  background-color: var(--green);
+  color: var(--white);
+}
+
 .in-range {
+  opacity: 0.5;
   background-color: var(--green);
   color: var(--white) !important;
 }

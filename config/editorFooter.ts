@@ -79,11 +79,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "select", icon: faHandPointer, actionType: "submenu" },
   ],
   empty: [],
-  checkList: [
-    { value: "design", icon: faPaintRoller, actionType: "submenu" },
-    { value: "color", icon: faPaintRoller, actionType: "colorSelector" },
-    { value: "animation", icon: faFilm, actionType: "submenu" },
-  ],
+  checkList: [{ value: "animation", icon: faFilm, actionType: "submenu" }],
   time: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   select: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   input: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
@@ -153,12 +149,10 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
     ],
   },
   checkList: {
-    design: [{ value: "basic", icon: faCheck, actionType: "cta" }],
     animation: [
       { value: "none", icon: faCheck, actionType: "cta" },
       { value: "fadeIn", icon: faCheck, actionType: "cta" },
-      { value: "fadeUp", icon: faCheck, actionType: "cta" },
-      { value: "flip", icon: faCheck, actionType: "cta" },
+      { value: "fadeInRight", icon: faCheck, actionType: "cta" },
     ],
   },
   time: {

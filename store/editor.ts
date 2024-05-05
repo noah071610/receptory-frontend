@@ -64,7 +64,7 @@ type Actions = {
     }
   }) => void
 
-  addSection: ({ type, payload }: { type: SectionListTypes; payload?: SectionType }) => void
+  addSection: ({ type, payload, newId }: { type: SectionListTypes; payload?: SectionType; newId?: string }) => void
   addList: ({ type, valueArrForNewList }: { type: string; valueArrForNewList?: { [key: string]: any }[] }) => void
   addCollection: ({ payload }: { payload: any }) => void
 
@@ -73,7 +73,7 @@ type Actions = {
   deleteCollection: ({ targetIndex }: { targetIndex: number }) => void
 
   moveSection: ({ from, to }: { from: number; to: number }) => void
-  copySection: (payload: { payload: SectionType }) => void
+  copySection: (payload: { payload: SectionType; newId?: string }) => void
   loadSections: (payload: { initSections: SectionType[] }) => void
 
   setRevert: (revertType: "do" | "undo") => void
@@ -136,6 +136,9 @@ export const useEditorStore = create<EditStates & Actions>()(
       }),
     setRevert: (revertType: "do" | "undo") =>
       set((origin) => {
+        origin.active.modal = { type: null, payload: undefined }
+        origin.active.submenu = { type: null, payload: undefined }
+        origin.active.tooltip = { type: null, payload: undefined }
         const doIndex = revertType === "do" ? 1 : -1
         const targetRevert = origin.revert[origin.revertIndex + doIndex]
         if (!targetRevert) return
@@ -258,6 +261,9 @@ export const useEditorStore = create<EditStates & Actions>()(
               case "isActive":
                 saveSectionHistory({ origin, payload: target })
                 break
+              case "design":
+                saveSectionHistory({ origin, payload: target })
+                break
 
               default:
                 break
@@ -300,10 +306,10 @@ export const useEditorStore = create<EditStates & Actions>()(
       }),
 
     // ADD
-    addSection: ({ type, payload }) =>
+    addSection: ({ type, payload, newId }) =>
       set((origin) => {
         const sections = origin[getKey(origin)]
-        const newSection = payload ?? createNewSection(type, sections.length)
+        const newSection = payload ?? createNewSection(type, sections.length, newId)
         if (origin.revert.length <= 0) {
           saveSectionHistory({ origin, payload: newSection })
         }
@@ -378,9 +384,9 @@ export const useEditorStore = create<EditStates & Actions>()(
       }),
 
     // ETC
-    copySection: ({ payload }) =>
+    copySection: ({ payload, newId }) =>
       set((origin) => {
-        const copy = cloneDeep({ ...payload, id: getId() })
+        const copy = cloneDeep({ ...payload, id: newId ?? getId() })
         const key = getKey(origin)
 
         if (origin.revert.length <= 0) {

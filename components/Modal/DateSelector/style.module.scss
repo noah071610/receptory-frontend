@@ -1,0 +1,55 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.content {
+  width: 95%;
+  padding: 15px;
+  ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    max-height: 500px;
+    overflow: scroll;
+    li {
+      button {
+        padding: 15px 10px;
+        width: 100%;
+        background-color: var(--gray-soft);
+        border-radius: 4px;
+        @include action {
+          background-color: var(--green);
+          color: var(--white);
+        }
+      }
+    }
+  }
+}
+
+.btn-wrapper {
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+  @include flex;
+  button {
+    width: 100%;
+    max-width: 200px;
+    padding: 15px 0;
+    border-radius: 40px;
+    @include flex;
+    background-color: var(--gray-soft);
+    &.selected {
+      background-color: var(--green);
+      color: var(--white);
+    }
+
+    @include action {
+      background-color: var(--green);
+      color: var(--white);
+    }
+  }
+}

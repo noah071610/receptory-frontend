@@ -33,7 +33,7 @@ const BasicSlider = ({
         <SwiperSlide className={cx(style.slide, style[section.design])} key={`card_${section.id}_${i}`}>
           <div
             style={{
-              ...getAnimation(section.style.animation, i * 150),
+              ...getAnimation({ type: section.style.animation, delay: i * 150 }),
               border: section.design !== "basic" ? `1px solid ${color}` : "none",
             }}
             className={cx(style.card, { [style.cardStyle]: section.design === "card" })}
@@ -132,7 +132,7 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
             <div
               style={{
                 background: getImageUrl({ isCenter: true, url: v.src }),
-                ...getAnimation(section.style.animation, i * 150),
+                ...getAnimation({ type: section.style.animation, delay: i * 150 }),
               }}
               className={cx(style["photo"])}
             />

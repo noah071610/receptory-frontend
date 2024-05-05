@@ -35,21 +35,7 @@
   }
 
   .any-time {
-    margin-top: 10px;
-    width: 100%;
-    button {
-      width: 100%;
-      @include flex;
-      padding: 10px 0;
-      height: auto;
-      font-size: 14px;
-      color: var(--black-soft);
-      border-radius: 5px;
-      @include action {
-        background-color: var(--green);
-        color: var(--white);
-      }
-    }
+    @include form-btn-style;
   }
 
   .basic-main {

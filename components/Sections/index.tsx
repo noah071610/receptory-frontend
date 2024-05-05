@@ -4,10 +4,12 @@ import { ReactNode } from "react"
 
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
+import getId from "@/utils/getId"
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { DraggableProvided } from "@hello-pangea/dnd"
 import classNames from "classNames"
+import { useRouter } from "next/navigation"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
@@ -16,12 +18,15 @@ export default function SectionLayout({
   section,
   draggableProvided,
   noPadding,
+  pathname,
 }: {
   children: ReactNode
   section: SectionType
   draggableProvided?: DraggableProvided
   noPadding?: boolean
+  pathname: string
 }) {
+  const { replace } = useRouter()
   const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditorStore()
   const onClickSection = (e: any) => {
     if (e.target.closest(".delete")) {
@@ -40,21 +45,25 @@ export default function SectionLayout({
     deleteSection(section.id)
   }
   const onClickCopy = () => {
-    copySection({ payload: section })
+    const newId = getId()
+    copySection({ payload: section, newId })
+
+    replace(`${pathname}#${newId}`)
   }
   return (
     <section
       {...draggableProvided?.draggableProps}
       ref={draggableProvided?.innerRef}
       onClick={onClickSection}
-      id="editor"
+      data-editor={true}
       style={{ ...draggableProvided?.draggableProps.style, padding: noPadding ? "0px" : undefined }}
-      className={cx(style.section, { [style.active]: selectedSection?.id === section.id })}
+      className={cx(style.section, "editor", { [style.active]: selectedSection?.id === section.id })}
     >
+      <div className={cx(style.observer)} id={section.id}></div>
       {children}
 
       {section.type !== "thumbnail" && section.type !== "calender" && (
-        <div id="editor" className={cx(style.tools, { [style.active]: selectedSection?.id === section.id })}>
+        <div className={cx("editor", style.tools, { [style.active]: selectedSection?.id === section.id })}>
           <button onClick={onClickCopy} className={cx(style.copy, "copy")}>
             <FontAwesomeIcon icon={faCopy} />
           </button>

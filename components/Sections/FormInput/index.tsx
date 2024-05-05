@@ -133,44 +133,46 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
           />
         )}
       </div>
-      <div className={cx(style.options)}>
-        <OptionTitleInputs section={section} />
-        {design !== "country" && design !== "email" && (
-          <div>
-            <h4>최대 글자수 조정</h4>
-            <div className={cx(style["minMax-wrapper"])}>
-              <input
-                className={cx(style.minMax)}
-                onKeyDown={onlyNumberFilter}
-                onKeyUp={enforceMinMax}
-                type="number"
-                min={0}
-                max={section.options.max - 1}
-                value={section.options.min}
-                onChange={(e) => onChangeMinMax("min", e)}
-              />
-              <span>{" ~ "}</span>
-              <input
-                className={cx(style.minMax)}
-                onKeyDown={onlyNumberFilter}
-                onKeyUp={enforceMinMax}
-                type="number"
-                min={1}
-                max={targetInputGlobalMax}
-                value={section.options.max}
-                onChange={(e) => onChangeMinMax("max", e)}
-              />
+      {!isDisplayMode && (
+        <div className={cx(style.options)}>
+          <OptionTitleInputs section={section} />
+          {design !== "country" && design !== "email" && (
+            <div>
+              <h4>최대 글자수 조정</h4>
+              <div className={cx(style["minMax-wrapper"])}>
+                <input
+                  className={cx(style.minMax)}
+                  onKeyDown={onlyNumberFilter}
+                  onKeyUp={enforceMinMax}
+                  type="number"
+                  min={0}
+                  max={section.options.max - 1}
+                  value={section.options.min}
+                  onChange={(e) => onChangeMinMax("min", e)}
+                />
+                <span>{" ~ "}</span>
+                <input
+                  className={cx(style.minMax)}
+                  onKeyDown={onlyNumberFilter}
+                  onKeyUp={enforceMinMax}
+                  type="number"
+                  min={1}
+                  max={targetInputGlobalMax}
+                  value={section.options.max}
+                  onChange={(e) => onChangeMinMax("max", e)}
+                />
+              </div>
             </div>
-          </div>
-        )}
-        {design === "country" && (
-          <OptionRatio
-            optionsArr={["all", "+82", "+81", "+66", "+1"]}
-            section={section}
-            targetKey="phoneNumberCountry"
-          />
-        )}
-      </div>
+          )}
+          {design === "country" && (
+            <OptionRatio
+              optionsArr={["all", "+82", "+81", "+66", "+1"]}
+              section={section}
+              targetKey="phoneNumberCountry"
+            />
+          )}
+        </div>
+      )}
     </div>
   )
 }

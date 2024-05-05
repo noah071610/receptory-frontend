@@ -1,5 +1,7 @@
 "use client"
 
+import DatePicker from "@/components/Modal/DatePicker"
+import DateSelector from "@/components/Modal/DateSelector"
 import ImageSelector from "@/components/Modal/ImageSelector"
 import SelectList from "@/components/Modal/SelectList"
 import TimePicker from "@/components/Modal/TimePicker"
@@ -14,6 +16,7 @@ import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea
 import classNames from "classNames"
 import { convertToRaw } from "draft-js"
 import dynamic from "next/dynamic"
+import { usePathname } from "next/navigation"
 import { useEffect, useMemo } from "react"
 const cx = classNames.bind(style)
 
@@ -104,6 +107,7 @@ const handleBeforeUnload = async ({ initSections }: any, event?: any) => {
 }
 
 const EditPage = () => {
+  const pathname = usePathname()
   const { initSections, isEditStart, stage, formSections, moveSection, active, loadSections, selectedSection } =
     useEditorStore()
 
@@ -146,7 +150,7 @@ const EditPage = () => {
   return (
     <>
       {sections?.length > 0 && (
-        <SectionLayout noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
+        <SectionLayout pathname={pathname} noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
           {stage === "init" ? (
             <Thumbnail section={sections[0]} />
           ) : stage === "form" ? (
@@ -165,6 +169,7 @@ const EditPage = () => {
                   {(draggableProvided) => {
                     return (
                       <SectionLayout
+                        pathname={pathname}
                         noPadding={v.type === "slider"}
                         draggableProvided={draggableProvided}
                         section={v}
@@ -183,6 +188,8 @@ const EditPage = () => {
       </DragDropContext>
       {activeModal?.includes("image") && <ImageSelector />}
       {activeModal?.includes("time") && <TimePicker />}
+      {activeModal === "calender" && <DatePicker />}
+      {activeModal === "calender-select" && <DateSelector />}
       {activeModal === "select-list" && <SelectList />}
     </>
   )

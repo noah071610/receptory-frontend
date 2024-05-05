@@ -44,7 +44,7 @@ export default function EditorFooter() {
   }, [isOpenAllList, selectedSection])
 
   return (
-    <div id="editor" className={cx(style.footer, { [style.isOpenAllList]: isOpenAllList })}>
+    <div className={cx("editor", style.footer, { [style.isOpenAllList]: isOpenAllList })}>
       {/* MAIN LIST (SECTIONS + SECTION) */}
       <div className={cx(style["main-wrapper"])}>
         <div className={cx(style.main)}>

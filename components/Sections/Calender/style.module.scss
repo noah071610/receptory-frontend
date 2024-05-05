@@ -2,17 +2,31 @@
 
 .layout {
   width: 100%;
+  .date-select-btn {
+    width: 400px;
+    padding: 16px 14px;
+    border-radius: 5px;
+    @include border;
+    text-align: left;
+  }
 }
 
 .options {
   @include options-style;
+
+  .title {
+    @include title-style($isSmall: true);
+    @include input-style;
+
+    margin-bottom: 5px;
+  }
+  .description {
+    @include description-style($isSmall: true);
+
+    @include input-style;
+  }
+
   .date {
-    &.isAlways {
-      span,
-      input {
-        color: var(--gray);
-      }
-    }
     .date-title {
       text-align: center;
       margin-bottom: 10px;

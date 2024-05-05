@@ -2,11 +2,11 @@
 
 import classNames from "classNames"
 
-import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType } from "@/types/Edit"
 import hasString from "@/utils/hasString"
+import Image from "next/image"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
@@ -30,21 +30,25 @@ export const SelectList = () => {
           {selectList.map((v) => (
             <li onClick={() => onChangeSelect(v)} key={v.id}>
               {v.src && (
-                <div
-                  style={{ background: getImageUrl({ isCenter: true, url: v.src }) }}
-                  className={cx(style.image)}
-                ></div>
+                <picture className={cx(style.image)}>
+                  <Image width={100} height={80} src={v.src} alt="image" />
+                </picture>
               )}
-              <div className={cx(style.content)}>
+              <div className={cx(style["list-content"])}>
                 {hasString(v.data.title) && <h3>{v.data.title}</h3>}
                 {hasString(v.data.description) && <p>{v.data.description}</p>}
               </div>
             </li>
           ))}
-          <li onClick={() => onChangeSelect(null)} className={cx(style["select-none"])}>
+          {/* <li className={cx(style["select-none"])}>
             <span>{t("선택 없음")}</span>
-          </li>
+          </li> */}
         </ul>
+        <div className={cx(style["btn-wrapper"])}>
+          <button onClick={() => onChangeSelect(null)}>
+            <span>{t("선택 없음")}</span>
+          </button>
+        </div>
       </ModalLayout>
     )
   )

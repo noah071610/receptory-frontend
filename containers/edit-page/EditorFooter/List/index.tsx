@@ -3,9 +3,10 @@
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
+import getId from "@/utils/getId"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
-import { useParams } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
@@ -20,6 +21,8 @@ export default function List({
   isSectionList: boolean
   isOpenAllList: boolean
 }) {
+  const { replace } = useRouter()
+  const pathname = usePathname()
   const { lang } = useParams()
   const { addSection, setActive, active } = useEditorStore()
   const { t } = useTranslation()
@@ -27,7 +30,9 @@ export default function List({
   const onClickList = (value: string, type: EditorFooterListActions) => {
     switch (type) {
       case "createSection":
-        addSection({ type: value as SectionListTypes })
+        const newId = getId()
+        addSection({ type: value as SectionListTypes, newId })
+        replace(`${pathname}#${newId}`)
         break
       case "imageSelector":
         setActive({ key: "modal", payload: { type: `${value}-image` } })

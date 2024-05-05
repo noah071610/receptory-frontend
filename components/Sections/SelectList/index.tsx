@@ -5,7 +5,6 @@ import FormTitle from "@/components/FormTitle"
 import Input from "@/components/Input"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { getImageUrl } from "@/config"
-import { colors } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
@@ -32,7 +31,7 @@ const ListEdit = ({
     <li key={`edit-${list.id}`}>
       <div
         onClick={() => onClickAddImage(listIndex)}
-        style={{ background: list.src ? getImageUrl({ isCenter: true, url: list.src }) : colors.graySoft }}
+        style={{ background: list.src ? getImageUrl({ isCenter: true, url: list.src }) : "none" }}
         className={cx(style.image)}
       >
         <FontAwesomeIcon icon={faPlus} />
@@ -63,24 +62,20 @@ const ListEdit = ({
 
 function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
-  const { setActive, setSelectedSection, selectedSection } = useEditorStore()
+  const { setActive } = useEditorStore()
   const selectedList = section.value
   const selectList = section.list
 
-  const getSelectedSection = () => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
-  }
-
   const toggleSelect = () => {
-    getSelectedSection()
-    setActive({ key: "modal", payload: { type: "select-list" } })
+    setTimeout(() => {
+      setActive({ key: "modal", payload: { type: "select-list" } })
+    }, 0)
   }
 
   const onClickAddImage = (i: number) => {
-    getSelectedSection()
-    setActive({ key: "modal", payload: { type: "select-image", payload: i } })
+    setTimeout(() => {
+      setActive({ key: "modal", payload: { type: "select-image", payload: i } })
+    }, 0)
   }
 
   return (
@@ -89,24 +84,26 @@ function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMod
       <button onClick={toggleSelect} className={cx(style["list-select-btn"])}>
         {selectedList ? selectedList.data.title : t("리스트 선택")}
       </button>
-      <div className={cx(style.options)}>
-        <OptionTitleInputs section={section} />
-        <div>
-          <h4>리스트 수정</h4>
-          <ul className={cx(style["list-edit"])}>
-            {selectList.map((list, i) => (
-              <ListEdit
-                section={section}
-                onClickAddImage={onClickAddImage}
-                key={`${list.id}-edit`}
-                list={list}
-                listIndex={i}
-              />
-            ))}
-          </ul>
-          <AddBtn section={section} type="select" />
+      {!isDisplayMode && (
+        <div className={cx(style.options)}>
+          <OptionTitleInputs section={section} />
+          <div>
+            <h4>리스트 수정</h4>
+            <ul className={cx(style["list-edit"])}>
+              {selectList.map((list, i) => (
+                <ListEdit
+                  section={section}
+                  onClickAddImage={onClickAddImage}
+                  key={`${list.id}-edit`}
+                  list={list}
+                  listIndex={i}
+                />
+              ))}
+            </ul>
+            <AddBtn section={section} type="select" />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

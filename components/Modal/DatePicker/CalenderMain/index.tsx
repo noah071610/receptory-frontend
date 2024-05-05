@@ -1,8 +1,10 @@
 "use client"
 
 import classNames from "classNames"
-import { FC, ReactNode } from "react"
+import { FC, ReactNode, useEffect } from "react"
 
+import { useTranslation } from "@/i18n/client"
+import { useEditorStore } from "@/store/editor"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -58,19 +60,32 @@ const CalenderComponent: FC<CalendarProps> = ({ prevButton, nextButton, calendar
   )
 }
 
-function DatePicker({ startDate }: { startDate: Date }) {
+function CalenderMain({
+  isSpecificDatePicker,
+  selectedDates,
+}: {
+  isSpecificDatePicker?: boolean
+  selectedDates?: Date[]
+}) {
+  const { t } = useTranslation()
+  const { selectedSection, setValue, setActive } = useEditorStore()
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
+  const { options } = selectedSection ?? {}
+  const { startDate } = options ?? {}
 
-  // useEffect(() => {
-  //   setOffset(startDate)
-  // }, [startDate])
+  const onClickSubmit = () => {
+    if (selectedDates && selectedDates.length <= 0) return
+    setValue({ payload: selectedDates })
+    setActive({ key: "modal", payload: { type: null } })
+  }
+
+  useEffect(() => {
+    if (!isSpecificDatePicker) setOffset(startDate)
+  }, [startDate, isSpecificDatePicker])
 
   return (
     <div className={cx(style["date-picker-layout"])}>
-      {/* <h1>
-        {start ? start : "..."}&nbsp; - &nbsp;{end ? end : "..."}
-      </h1> */}
       <div className={cx(style["content-wrapper"])}>
         <CalenderComponent
           prevButton={
@@ -86,8 +101,15 @@ function DatePicker({ startDate }: { startDate: Date }) {
           calendar={calendars[0]}
         />
       </div>
+      {!isSpecificDatePicker && (
+        <div className={cx(style["btn-wrapper"])}>
+          <button onClick={onClickSubmit}>
+            <span>{t("pickDate")}</span>
+          </button>
+        </div>
+      )}
     </div>
   )
 }
 
-export default DatePicker
+export default CalenderMain

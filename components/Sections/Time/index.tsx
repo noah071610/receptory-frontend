@@ -79,40 +79,42 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
         </div>
       </button>
 
-      <div className={cx(style.options)}>
-        <OptionTitleInputs section={section} />
-        {section.design === "select" ? (
-          <>
-            <div className={cx(style["time-add"])}>
-              <h4>{t("timeAddTitle")}</h4>
-              <input onChange={onChangeTimeForAdd} value={timeForAdd} type="time" />
-              <button onClick={onClickAddTime}>{t("timeAdd")}</button>
-            </div>
-            <ul className={cx(style.times)}>
-              {section.collection.map((v, i) => (
-                <li key={`${v}_${i}`}>
-                  <button onClick={() => onClickDeleteSelectTime(i)}>{v}</button>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <>
-            {["startHour", "endHour"].map((v) => (
-              <div key={`time-min-max-${v}`} className={cx(style["time-min-max"])}>
-                <h4 className={cx(style["time-min-max-title"])}>{v}</h4>
-                <input
-                  onChange={(e) => onChangeTime(e, v)}
-                  value={`${v === "startHour" ? startHour : endHour}:00`}
-                  type="time"
-                />
+      {!isDisplayMode && (
+        <div className={cx(style.options)}>
+          <OptionTitleInputs section={section} />
+          {section.design === "select" ? (
+            <>
+              <div className={cx(style["time-add"])}>
+                <h4>{t("timeAddTitle")}</h4>
+                <input onChange={onChangeTimeForAdd} value={timeForAdd} type="time" />
+                <button onClick={onClickAddTime}>{t("timeAdd")}</button>
               </div>
-            ))}
-            <OptionBar section={section} value="addAnytime" />
-            <OptionRatio optionsArr={[1, 15, 30, 60]} section={section} targetKey="interval" />
-          </>
-        )}
-      </div>
+              <ul className={cx(style.times)}>
+                {section.collection.map((v, i) => (
+                  <li key={`${v}_${i}`}>
+                    <button onClick={() => onClickDeleteSelectTime(i)}>{v}</button>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <>
+              {["startHour", "endHour"].map((v) => (
+                <div key={`time-min-max-${v}`} className={cx(style["time-min-max"])}>
+                  <h4 className={cx(style["time-min-max-title"])}>{v}</h4>
+                  <input
+                    onChange={(e) => onChangeTime(e, v)}
+                    value={`${v === "startHour" ? startHour : endHour}:00`}
+                    type="time"
+                  />
+                </div>
+              ))}
+              <OptionBar section={section} value="addAnytime" />
+              <OptionRatio optionsArr={[1, 15, 30, 60]} section={section} targetKey="interval" />
+            </>
+          )}
+        </div>
+      )}
     </div>
   )
 }

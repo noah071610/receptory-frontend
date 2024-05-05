@@ -4,15 +4,23 @@ import { EditorState } from "draft-js"
 import getId from "./getId"
 
 const getNewEmptyEditor = () => EditorState.createEmpty()
+const getNewDate = () => new Date()
 
 const sectionMap: { [key: string]: any } = {
   calender: () => {
     return {
-      design: "single",
+      value: [],
       options: {
         isAlways: true,
+        interval: "all",
         startDate: new Date(),
         endDate: undefined,
+        selectRange: "single",
+        selectedSpecificDates: [],
+      },
+      data: {
+        title: "타이틀 입력",
+        description: "설명 입력",
       },
     }
   },
@@ -123,6 +131,7 @@ const sectionMap: { [key: string]: any } = {
     list[2].style.backgroundColor = "rgba(158,0,255,0.3)"
 
     return {
+      id: "thumbnail",
       design: "card",
       style: {
         backgroundColor: "rgba(255,176,176,0.4)",
@@ -159,11 +168,11 @@ export const createNewSectionList = (subType: string, index: number, obj?: any):
   }
 }
 
-export const createNewSection = (type: SectionListTypes, index: number): SectionType => {
+export const createNewSection = (type: SectionListTypes, index: number, newId?: string): SectionType => {
   const setProperties = sectionMap[type] ? sectionMap[type]() : {}
 
   return {
-    id: getId(),
+    id: newId ?? getId(),
     index,
     type,
     value: "",

@@ -92,7 +92,7 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
               case "call":
                 return (
                   <a
-                    style={getAnimation(section.style.animation, i * 130)}
+                    style={getAnimation({ type: section.style.animation, delay: i * 130 })}
                     href={`tel:${v.value}`}
                     key={`btn_${v.type}`}
                   >
@@ -102,7 +102,7 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
               default:
                 return (
                   <button
-                    style={getAnimation(section.style.animation, i * 130)}
+                    style={getAnimation({ type: section.style.animation, delay: i * 130 })}
                     // onClick={() => v.onClick(v.value)} todo:
                     key={`btn_${v.type}`}
                   >

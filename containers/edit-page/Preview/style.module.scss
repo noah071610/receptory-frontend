@@ -22,12 +22,12 @@
   border-radius: 20px;
   border: 14px solid var(--black);
   background-color: var(--white);
-  overflow: hidden;
   position: relative;
 }
 
 .content {
   @include full;
   width: 100%;
-  padding-bottom: 100px;
+  overflow: scroll;
+  padding-bottom: 300px;
 }
