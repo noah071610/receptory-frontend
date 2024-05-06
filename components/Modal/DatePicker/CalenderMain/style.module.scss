@@ -18,10 +18,15 @@
 }
 
 .date-picker-layout {
-  width: 95%;
+  width: 100%;
   padding: 15px;
   .btn-wrapper {
     @include form-btn-style;
+    flex-direction: column;
+    gap: 10px;
+  }
+  &.isOptionCalender {
+    padding: 0;
   }
 }
 

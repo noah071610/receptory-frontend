@@ -1,11 +1,12 @@
 "use client"
 
-import FormTitle from "@/components/FormTitle"
+import FormUserInput from "@/components/FormUserInput"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/inputHelper"
+import { faEnvelope, faGlobe, faListOl, faPencil } from "@fortawesome/free-solid-svg-icons"
 import classNames from "classNames"
 import { useParams } from "next/navigation"
 import { memo, useEffect } from "react"
@@ -81,57 +82,76 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
     setOptions({ payload: 50, key: "max" })
   }, [section.design])
 
+  const inputMap: { [key: string]: any } = {
+    text: {
+      icon: faPencil,
+      comp: <input className={cx(style["input"])} type="text" value={section.value} onChange={onChangeInput} />,
+    },
+    number: {
+      icon: faListOl,
+      comp: (
+        <input
+          className={cx(style["input"])}
+          type="number"
+          onKeyDown={onlyNumberFilter}
+          value={section.value}
+          onChange={onChangeInput}
+        />
+      ),
+    },
+    email: {
+      icon: faEnvelope,
+      comp: (
+        <input
+          type="email"
+          autoComplete="email"
+          name="email"
+          id="email"
+          required
+          className={cx(style["input"])}
+          value={section.value}
+          onChange={onChangeInput}
+        />
+      ),
+    },
+    textarea: {
+      icon: faPencil,
+      comp: (
+        <TextareaAutosize
+          className={cx(style["textarea"])}
+          value={section.value}
+          maxRows={5}
+          maxLength={max}
+          onChange={onChangeInput}
+        />
+      ),
+    },
+    country: {
+      icon: faGlobe,
+      comp: (
+        <PhoneInput
+          className={cx(style.country)}
+          value={section.value}
+          defaultCountry={lang === "ko" ? "kr" : (lang as string)}
+          hideDropdown={phoneNumberCountry !== "all"}
+          forceDialCode={phoneNumberCountry !== "all"}
+          onChange={(phone: any) => onChangePhoneInput(phone)}
+        />
+      ),
+    },
+  }
+
   return (
     <div className={cx(style.layout)}>
       <div className={cx(style["input-wrapper"])}>
-        <FormTitle section={section} />
-        {design !== "country" && (
-          <div className={cx(style["input-content"])}>
-            {design === "text" && (
-              <input className={cx(style["input"])} type="text" value={section.value} onChange={onChangeInput} />
-            )}
-            {design === "number" && (
-              <input
-                className={cx(style["input"])}
-                type="number"
-                onKeyDown={onlyNumberFilter}
-                value={section.value}
-                onChange={onChangeInput}
-              />
-            )}
-            {design === "email" && (
-              <input
-                type="email"
-                autoComplete="email"
-                name="email"
-                id="email"
-                required
-                className={cx(style["input"])}
-                value={section.value}
-                onChange={onChangeInput}
-              />
-            )}
-            {design === "textarea" && (
-              <TextareaAutosize
-                className={cx(style["textarea"])}
-                value={section.value}
-                maxRows={5}
-                maxLength={max}
-                onChange={onChangeInput}
-              />
-            )}
-          </div>
-        )}
-        {design === "country" && (
-          <PhoneInput
-            className={cx(style.country)}
-            value={section.value}
-            defaultCountry={lang === "ko" ? "kr" : (lang as string)}
-            hideDropdown={phoneNumberCountry !== "all"}
-            forceDialCode={phoneNumberCountry !== "all"}
-            onChange={(phone) => onChangePhoneInput(phone)}
-          />
-        )}
+        <FormUserInput
+          icon={inputMap[design ?? "text"].icon}
+          title={section.data.title}
+          description={section.data.description}
+          inputStyle={design}
+        >
+          {inputMap[design ?? "text"].comp}
+        </FormUserInput>
       </div>
       {!isDisplayMode && (
         <div className={cx(style.options)}>

@@ -4,7 +4,7 @@ import ImageDelete from "@/components/ImageDelete"
 import Input from "@/components/Input"
 import Textarea from "@/components/Textarea"
 import { getImageUrl } from "@/config"
-import { colors } from "@/config/colors"
+import { changeOpacity, colors } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
@@ -37,6 +37,10 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
     () => (design === "card" ? colors.black : getContrastTextColor(backgroundColor ?? colors.white)),
     [backgroundColor, design]
   )
+  const borderColor = useMemo(
+    () => (design === "card" ? changeOpacity(ctaStyle.backgroundColor ?? colors.border) : colors.border),
+    [ctaStyle.backgroundColor, design]
+  )
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -55,12 +59,13 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
       className={cx(style.wrapper, style[design])}
     >
       {background && !isDisplayMode && <ImageDelete section={section} srcKey={"background"} />}
-      <div className={cx(style.main, style[design])}>
+      <div style={{ borderColor }} className={cx(style.main, style[design])}>
         <picture
           className={cx(style.thumbnail, style[design], {
             [style.isDisplayMode]: isDisplayMode,
             [style["noImage-displayMode"]]: !hasString(section.src) && isDisplayMode,
           })}
+          style={{ borderColor }}
         >
           {hasString(section.src) && <img src={section.src} alt="image" />}
           {section.src && !isDisplayMode && <ImageDelete section={section} srcKey={"thumbnail"} />}

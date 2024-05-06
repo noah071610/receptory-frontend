@@ -1,14 +1,14 @@
 "use client"
 
 import AddBtn from "@/components/AddBtn"
-import FormTitle from "@/components/FormTitle"
+import FormUserInput from "@/components/FormUserInput"
 import Input from "@/components/Input"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import classNames from "classNames"
 import { memo } from "react"
@@ -80,10 +80,14 @@ function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMod
 
   return (
     <div className={cx(style.layout)}>
-      <FormTitle section={section} />
-      <button onClick={toggleSelect} className={cx(style["list-select-btn"])}>
-        {selectedList ? selectedList.data.title : t("리스트 선택")}
-      </button>
+      <FormUserInput
+        icon={faList}
+        onClick={toggleSelect}
+        title={section.data.title}
+        description={section.data.description}
+      >
+        <span> {selectedList ? selectedList.data.title : t("리스트 선택")}</span>
+      </FormUserInput>
       {!isDisplayMode && (
         <div className={cx(style.options)}>
           <OptionTitleInputs section={section} />

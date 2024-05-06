@@ -6,7 +6,6 @@
   height: calc(100svh - 50px - 50px - 32px);
   max-height: calc(100svh - 50px - 50px - 32px);
   min-height: 600px;
-  position: relative;
   overflow: hidden;
   @include flex;
   flex-direction: column;
@@ -22,7 +21,8 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 200px;
+      height: 150px;
+      border-bottom-left-radius: 60px;
     }
   }
 }
@@ -30,6 +30,7 @@
 .main {
   width: 100%;
   max-width: 300px;
+  border: 1px solid transparent;
 
   .title-input,
   .description-input {
@@ -54,13 +55,16 @@
     word-break: break-all;
   }
 
+  &.full {
+    border: none;
+  }
   &.card {
     width: calc(100% - 60px);
     max-width: 350px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-top: 125px;
+    margin-top: 80px;
     z-index: 10;
     background-color: var(--white);
     padding: 20px;
@@ -96,6 +100,7 @@
     width: 100px;
     height: 100px;
     border-radius: 100%;
+    border: 2px solid transparent;
   }
 }
 

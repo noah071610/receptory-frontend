@@ -4,34 +4,6 @@
   width: 100%;
 }
 
-.picker {
-  width: 400px;
-
-  &-content {
-    display: flex;
-    justify-content: space-between;
-    border-radius: 5px;
-    @include border;
-    .text {
-      padding: 16px 0 16px 14px;
-      display: flex;
-      flex-grow: 1;
-      span {
-        font-size: 18px;
-        letter-spacing: 1px;
-      }
-    }
-    .icon {
-      padding: 5px 3px 5px 0;
-      svg {
-        padding: 11px;
-        margin-left: 7px;
-        font-size: 18px;
-        color: var(--gray);
-      }
-    }
-  }
-}
 .time-add {
   @include flex;
   flex-direction: column;

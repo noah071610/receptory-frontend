@@ -67,6 +67,7 @@ type Actions = {
   addSection: ({ type, payload, newId }: { type: SectionListTypes; payload?: SectionType; newId?: string }) => void
   addList: ({ type, valueArrForNewList }: { type: string; valueArrForNewList?: { [key: string]: any }[] }) => void
   addCollection: ({ payload }: { payload: any }) => void
+  setCollection: ({ payload }: { payload: any }) => void
 
   deleteSection: (id: string) => void
   deleteList: ({ targetIndex }: { targetIndex: number }) => void
@@ -301,6 +302,17 @@ export const useEditorStore = create<EditStates & Actions>()(
         } else {
           const target = { payload: null, ...payload }
           origin.active[key] = target
+        }
+        origin.isEditStart = true
+      }),
+    setCollection: ({ payload }) =>
+      set((origin) => {
+        if (origin.selectedSection) {
+          const target = getTarget(origin)
+
+          target.collection = payload
+          origin.selectedSection.collection = payload
+          saveSectionHistory({ origin, payload: target })
         }
         origin.isEditStart = true
       }),

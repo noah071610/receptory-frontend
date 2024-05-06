@@ -9,9 +9,15 @@ const getNewDate = () => new Date()
 const sectionMap: { [key: string]: any } = {
   calender: () => {
     return {
-      value: [],
+      value: {
+        selectedStartDate: undefined,
+        selectedEndDate: undefined,
+      },
+      collection: [],
       options: {
         isAlways: true,
+        specificDate: false,
+        addAnyDate: false,
         interval: "all",
         startDate: new Date(),
         endDate: undefined,
@@ -100,10 +106,14 @@ const sectionMap: { [key: string]: any } = {
     return {
       collection: [],
       options: {
+        isAlways: true,
+        specificTime: false,
+        addAnytime: false,
+        interval: 1,
         startHour: "00",
         endHour: "00",
-        interval: 1,
-        addAnytime: false,
+        selectRange: "single",
+        selectedSpecificTimes: [],
       },
       data: {
         time: null,

@@ -61,17 +61,23 @@ export const TimePicker = () => {
   const { setData, setActive, selectedSection } = useEditorStore()
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
-  const interval = selectedSection?.options.interval
+  const {
+    specificTime,
+    interval,
+    startHour: _startHour,
+    endHour: _endHour,
+    addAnytime,
+  } = selectedSection?.options ?? {}
   const [startHour, endHour] = useMemo(() => {
-    const s = parseInt(selectedSection?.options.startHour ?? "00")
-    const e = parseInt(selectedSection?.options.endHour ?? "00")
+    const s = parseInt(_startHour ?? "00")
+    const e = parseInt(_endHour ?? "00")
 
     if (e > s) {
       return [s, e]
     } else {
       return [e, s]
     }
-  }, [selectedSection?.options.startHour, selectedSection?.options.endHour])
+  }, [_startHour, _endHour])
 
   const onClickTime = (type: "hour" | "minute" | "meridiem" | "any" | "select", value: string) => {
     switch (type) {
@@ -102,10 +108,9 @@ export const TimePicker = () => {
 
   return (
     selectedSection && (
-      <ModalLayout modalStyle={cx(style.time, { [style.select]: selectedSection.design === "select" })}>
-        {selectedSection.design === "basic" && (
+      <ModalLayout modalStyle={cx(style.time, { [style.select]: specificTime })}>
+        {!specificTime && (
           <>
-            {" "}
             <div className={cx(style["basic-main"])}>
               <ul className={cx(style["meridiem"])}>
                 {amArr?.length > 0 && (
@@ -140,16 +145,9 @@ export const TimePicker = () => {
                 ))}
               </ul>
             </div>
-            {selectedSection.options.addAnytime && selectedSection.design === "basic" && (
-              <div className={cx(style["any-time"])}>
-                <button onClick={() => onClickTime("any", "anytime")}>
-                  <span>{t("아무때나")}</span>
-                </button>
-              </div>
-            )}
           </>
         )}
-        {selectedSection.design === "select" && (
+        {specificTime && (
           <ul className={cx(style["select-time-list"])}>
             {selectedSection.collection.map((v, i) => (
               <li key={`modal_${v}_${i}`}>
@@ -157,6 +155,13 @@ export const TimePicker = () => {
               </li>
             ))}
           </ul>
+        )}
+        {addAnytime && (
+          <div className={cx(style["any-time"])}>
+            <button onClick={() => onClickTime("any", "anytime")}>
+              <span>{t("아무때나")}</span>
+            </button>
+          </div>
         )}
       </ModalLayout>
     )

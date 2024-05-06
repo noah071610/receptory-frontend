@@ -60,32 +60,40 @@ const CalenderComponent: FC<CalendarProps> = ({ prevButton, nextButton, calendar
   )
 }
 
-function CalenderMain({
-  isSpecificDatePicker,
-  selectedDates,
-}: {
-  isSpecificDatePicker?: boolean
-  selectedDates?: Date[]
-}) {
+function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: boolean; selectedDates?: Date[] }) {
   const { t } = useTranslation()
   const { selectedSection, setValue, setActive } = useEditorStore()
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
   const { options } = selectedSection ?? {}
-  const { startDate } = options ?? {}
+  const { startDate, addAnyDate } = options ?? {}
 
   const onClickSubmit = () => {
-    if (selectedDates && selectedDates.length <= 0) return
-    setValue({ payload: selectedDates })
+    if (!selectedDates || selectedDates.length <= 0) return
+    setValue({
+      payload: {
+        selectedStartDate: selectedDates[0],
+        selectedEndDate: selectedDates[1],
+      },
+    })
+    setActive({ key: "modal", payload: { type: null } })
+  }
+  const onClickAnyDate = () => {
+    setValue({
+      payload: {
+        selectedStartDate: "anyDate",
+        selectedEndDate: undefined,
+      },
+    })
     setActive({ key: "modal", payload: { type: null } })
   }
 
   useEffect(() => {
-    if (!isSpecificDatePicker) setOffset(startDate)
-  }, [startDate, isSpecificDatePicker])
+    if (!isOptionCalender) setOffset(startDate)
+  }, [startDate, isOptionCalender])
 
   return (
-    <div className={cx(style["date-picker-layout"])}>
+    <div className={cx(style["date-picker-layout"], { [style.isOptionCalender]: isOptionCalender })}>
       <div className={cx(style["content-wrapper"])}>
         <CalenderComponent
           prevButton={
@@ -101,11 +109,16 @@ function CalenderMain({
           calendar={calendars[0]}
         />
       </div>
-      {!isSpecificDatePicker && (
+      {!isOptionCalender && (
         <div className={cx(style["btn-wrapper"])}>
           <button onClick={onClickSubmit}>
             <span>{t("pickDate")}</span>
           </button>
+          {addAnyDate && (
+            <button onClick={onClickAnyDate}>
+              <span>{t("pickAnyDate")}</span>
+            </button>
+          )}
         </div>
       )}
     </div>

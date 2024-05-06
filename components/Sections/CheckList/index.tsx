@@ -51,20 +51,20 @@ function List({
   }
 
   return (
-    <li className={cx(style["list-wrapper"], style[design])}>
+    <li
+      style={getAnimation({
+        type: animation,
+        delay: isDisplayMode ? index * 180 : 0,
+      })}
+      className={cx(style["list-wrapper"], style[design])}
+    >
       <div onClick={onClickChangeDesign} className={cx(style.icon)}>
         {design === "check" && <FontAwesomeIcon icon={faSquareCheck} />}
         {design === "uncheck" && <FontAwesomeIcon icon={faSquareXmark} />}
         {design === "underline" && <FontAwesomeIcon icon={faPenFancy} />}
         {design === "caution" && <FontAwesomeIcon icon={faTriangleExclamation} />}
       </div>
-      <div
-        style={getAnimation({
-          type: animation,
-          delay: index * 180,
-        })}
-        className={cx(style.content)}
-      >
+      <div className={cx(style.content)}>
         <Input
           inputType="text"
           isOptional={false}

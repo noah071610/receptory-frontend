@@ -5,7 +5,7 @@ import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
 import { faCheck, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-solid-svg-icons"
 import classNames from "classNames"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
@@ -25,6 +25,23 @@ export default function Header() {
   const { stage, setStage, setSelectedSection, selectedSection, setRevert, revert, revertIndex } = useEditorStore()
   const [isSaving, setIsSaving] = useState(false)
 
+  const [prevScrollPos, setPrevScrollPos] = useState(0)
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.scrollY
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 100)
+      setPrevScrollPos(currentScrollPos)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [prevScrollPos, visible])
+
   const onClickStage = (v: EditStage) => {
     setSelectedSection({ payload: null })
     setStage(v)
@@ -43,7 +60,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={cx(style.header)}>
+      <header className={cx(style.header, { [style.visible]: visible })}>
         <div></div>
         <div className={cx(style.inner)}>
           {headers.map((v) => (

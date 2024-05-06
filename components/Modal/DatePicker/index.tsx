@@ -3,37 +3,34 @@
 import { useEditorStore } from "@/store/editor"
 
 import { DPDayInteger, DatePickerStateProvider } from "@rehookify/datepicker"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import ModalLayout from ".."
 import CalenderMain from "./CalenderMain"
 
 export const DatePicker = () => {
-  const { selectedSection, setOptions } = useEditorStore()
+  const { selectedSection } = useEditorStore()
+  const { startDate, endDate, interval, specificDate, selectRange } = selectedSection?.options ?? {}
+  const specificDateCollection = selectedSection?.collection ?? []
 
-  const { options } = selectedSection ?? {}
-  const { startDate, endDate, isAlways, interval, selectRange, selectedSpecificDates } = options ?? {}
+  const startDateForSpecific = useMemo(() => {
+    if (specificDateCollection?.length < 1) return []
+    return specificDateCollection.toSorted((a, b) => {
+      if (a.specificStartDate > b.specificStartDate) return -1
+      if (a.specificStartDate < b.specificStartDate) return 1
+      return 0
+    })[0].specificStartDate
+  }, [specificDateCollection])
+  const endDateForSpecific = useMemo(() => {
+    if (specificDateCollection?.length < 1) return []
+    return specificDateCollection.toSorted((a, b) => {
+      if (a.specificEndDate > b.specificEndDate) return 1
+      if (a.specificEndDate < b.specificEndDate) return -1
+      return 0
+    })[0].specificEndDate
+  }, [specificDateCollection])
 
   const [selectedDates, onDatesChange] = useState<Date[]>([])
   const [offsetDate, onOffsetChange] = useState<Date>(startDate)
-
-  const [startDateForSpecific, endDateForSpecific] = [
-    selectedSpecificDates[0],
-    selectedSpecificDates[selectedSpecificDates.length - 1],
-  ]
-
-  useEffect(() => {
-    onDatesChange([])
-    onOffsetChange(interval === "specificDate" ? startDateForSpecific : startDate)
-  }, [selectRange, startDate, endDate, selectedSpecificDates, interval])
-
-  useEffect(() => {
-    if (isAlways) {
-      onDatesChange([])
-      onOffsetChange(new Date())
-      setOptions({ payload: new Date(), key: "startDate" })
-      setOptions({ payload: undefined, key: "endDate" })
-    }
-  }, [isAlways])
 
   const excludeDays: DPDayInteger[] | undefined = useMemo(() => {
     switch (interval) {
@@ -59,8 +56,8 @@ export const DatePicker = () => {
             onOffsetChange,
             dates: {
               mode: selectRange,
-              minDate: interval === "specificDate" ? startDateForSpecific : startDate,
-              maxDate: interval === "specificDate" ? endDateForSpecific : endDate,
+              minDate: specificDate ? startDateForSpecific : startDate,
+              maxDate: specificDate ? endDateForSpecific : endDate,
               toggle: selectRange !== "range",
             },
             exclude: {
