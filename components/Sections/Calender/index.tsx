@@ -37,6 +37,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
   const onChangeSpecificDate = (d: Date[]) => {
     setTimeout(() => {
       if (selectRange === "single") {
+        // 싱글이면 걍 추가 EASY
         addCollection({
           payload: {
             specificStartDate: d[0],
@@ -45,6 +46,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
         })
       } else {
         if (d.length > 1) {
+          // 길이가 하나 이상? 즉 range가 끝나는 시점임. 콜렉션 추가
           addCollection({
             payload: {
               specificStartDate: d[0],
@@ -53,6 +55,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
           })
           setTempDateForSpecificDate([])
         } else {
+          // 아직 range를 선택중이니 저장해주고 기다리자...!
           setTempDateForSpecificDate(d)
         }
       }
@@ -97,6 +100,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
         {selectedEndDate && <span>{" ~ "}</span>}
         {selectedEndDate && <span>{setDate(selectedEndDate)}</span>}
       </FormUserInput>
+
       {!isDisplayMode && (
         <div className={cx(style.options)}>
           <OptionTitleInputs section={section} />

@@ -73,7 +73,7 @@ function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: 
     setValue({
       payload: {
         selectedStartDate: selectedDates[0],
-        selectedEndDate: selectedDates[1],
+        selectedEndDate: selectedDates[1], // undefined 도 가능
       },
     })
     setActive({ key: "modal", payload: { type: null } })

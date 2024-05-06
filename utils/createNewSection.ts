@@ -30,6 +30,29 @@ const sectionMap: { [key: string]: any } = {
       },
     }
   },
+  time: () => {
+    return {
+      value: {
+        selectedStartTime: undefined,
+        selectedEndTime: undefined,
+      },
+      collection: [],
+      options: {
+        isAlways: true,
+        specificTime: false,
+        addAnytime: false,
+        interval: 1,
+        startHour: "00",
+        endHour: "00",
+        selectRange: "single",
+        selectedSpecificTimes: [],
+      },
+      data: {
+        title: "타이틀 입력",
+        description: "설명 입력",
+      },
+    }
+  },
   slider: () => {
     return {
       style: {
@@ -100,26 +123,6 @@ const sectionMap: { [key: string]: any } = {
         color: colors.pink,
       },
       list: [{ ...createNewSectionList("qna", 0), isActive: true, text: getNewEmptyEditor() }],
-    }
-  },
-  time: () => {
-    return {
-      collection: [],
-      options: {
-        isAlways: true,
-        specificTime: false,
-        addAnytime: false,
-        interval: 1,
-        startHour: "00",
-        endHour: "00",
-        selectRange: "single",
-        selectedSpecificTimes: [],
-      },
-      data: {
-        time: null,
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
     }
   },
   select: () => {

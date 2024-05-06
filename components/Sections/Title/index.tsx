@@ -3,7 +3,6 @@
 import Input from "@/components/Input"
 import Textarea from "@/components/Textarea"
 import { changeOpacity } from "@/config/colors"
-import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import classNames from "classNames"
 import { memo, useMemo } from "react"
@@ -12,7 +11,6 @@ import style from "./style.module.scss"
 const cx = classNames.bind(style)
 
 function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { revert } = useEditorStore()
   const [title, description, label] = section.list
   const textAlign = section.style.textAlign
 

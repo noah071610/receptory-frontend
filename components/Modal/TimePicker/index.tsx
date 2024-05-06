@@ -58,14 +58,17 @@ function generateHourSlots({ startHour = 0, endHour = 0 }: { startHour?: number;
 
 export const TimePicker = () => {
   const { t } = useTranslation()
-  const { setData, setActive, selectedSection } = useEditorStore()
+  const { setData, setActive, selectedSection, setValue } = useEditorStore()
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
+  const [startTime, setStartTime] = useState<null | string>(null)
+  const [step, setStep] = useState("startTime")
   const {
-    specificTime,
-    interval,
     startHour: _startHour,
     endHour: _endHour,
+    interval,
+    specificTime,
+    selectRange,
     addAnytime,
   } = selectedSection?.options ?? {}
   const [startHour, endHour] = useMemo(() => {
@@ -79,39 +82,78 @@ export const TimePicker = () => {
     }
   }, [_startHour, _endHour])
 
-  const onClickTime = (type: "hour" | "minute" | "meridiem" | "any" | "select", value: string) => {
+  const onClickTime = (type: "hour" | "minute" | "meridiem" | "any" | "select", value: any) => {
     switch (type) {
       case "meridiem":
         setSelectedMeridiem(value)
-        return
+        break
       case "hour":
         setSelectedHour(value)
-        return
-      case "minute":
-        setData({ payload: `${selectedHour}:${value} ${selectedMeridiem?.toUpperCase()}`, key: "time" })
         break
-      case "select":
-        setData({ payload: value, key: "time" })
+      case "minute":
+        // 여기의 value는 minute 입니다아
+        if (step === "endTime") {
+          // 이거는 selectRange가 range여야만 도달할 수 있는 곳임!!
+          setValue({
+            payload: {
+              selectedStarTime: startTime, // 저장 값 넣기
+              selectedEnTime: `${selectedHour}:${value} ${selectedMeridiem?.toUpperCase()}`,
+            },
+          })
+          setActive({ key: "all", payload: { type: null } })
+        }
+        if (selectRange === "single") {
+          // 하나의 시간만 선택함으로 분단위 까지 선택하면 모달 종료
+          setValue({
+            payload: {
+              selectedStarTime: `${selectedHour}:${value} ${selectedMeridiem?.toUpperCase()}`,
+              selectedEnTime: undefined,
+            },
+          })
+          setActive({ key: "all", payload: { type: null } })
+        } else {
+          setStartTime(`${selectedHour}:${value} ${selectedMeridiem?.toUpperCase()}`)
+          setStep("endTime")
+        }
+        break
+      case "select": // 리스트에 추가한 특정 시간을 선택
+        // 이 로직은 따로 빼는게 좋지만... 그냥 사용하기로 했다 ㅠㅠ 귀찮아
+        // 덕분에 value가 any가 되어버림요
+        setValue({
+          payload: {
+            selectedStarTime: value.specificStartTime,
+            selectedEnTime: value.specificEndTime, // undefined 도 가능
+          },
+        })
+        setActive({ key: "all", payload: { type: null } })
         break
       case "any":
-        setData({ payload: "anytime", key: "time" })
+        setValue({
+          payload: {
+            selectedStartDate: "anytime",
+            selectedEndDate: undefined,
+          },
+        })
+        setActive({ key: "all", payload: { type: null } })
         break
 
       default:
         alert("에러 발생") //todo:
         break
     }
-    setActive({ key: "all", payload: { type: null } })
   }
 
   const { amArr, pmArr } = generateHourSlots({ startHour, endHour })
+  const seconds = generateSecondSlots({
+    interval,
+  })
 
   return (
     selectedSection && (
-      <ModalLayout modalStyle={cx(style.time, { [style.select]: specificTime })}>
+      <ModalLayout modalStyle={cx(style.time)}>
         {!specificTime && (
           <>
-            <div className={cx(style["basic-main"])}>
+            <div className={cx(style["basic-time-list"])}>
               <ul className={cx(style["meridiem"])}>
                 {amArr?.length > 0 && (
                   <li className={cx({ [style.selected]: "am" === selectedMeridiem })}>
@@ -134,9 +176,7 @@ export const TimePicker = () => {
                 ))}
               </ul>
               <ul className={cx(style.seconds, { [style.disabled]: !selectedHour })}>
-                {generateSecondSlots({
-                  interval,
-                }).map((v) => (
+                {seconds.map((v) => (
                   <li key={`second-${v}`}>
                     <button disabled={!selectedHour} onClick={() => onClickTime("minute", v)}>
                       {v}
@@ -149,20 +189,29 @@ export const TimePicker = () => {
         )}
         {specificTime && (
           <ul className={cx(style["select-time-list"])}>
-            {selectedSection.collection.map((v, i) => (
-              <li key={`modal_${v}_${i}`}>
-                <button onClick={() => onClickTime("select", v)}>{v}</button>
+            {selectedSection.collection.map(({ specificStartTime, specificEndTime }, i) => (
+              <li key={`time_${i}`}>
+                <button onClick={() => onClickTime("select", { specificStartTime, specificEndTime })}>
+                  <span>{specificStartTime}</span>
+                  {specificEndTime && <span>{" ~ "}</span>}
+                  {specificEndTime && <span>{specificEndTime}</span>}
+                </button>
               </li>
             ))}
           </ul>
         )}
-        {addAnytime && (
-          <div className={cx(style["any-time"])}>
+        <div className={cx(style["result-wrapper"])}>
+          {startTime && (
+            <div className={cx(style.selected)}>
+              <span>{startTime}</span>
+            </div>
+          )}
+          {addAnytime && (
             <button onClick={() => onClickTime("any", "anytime")}>
               <span>{t("아무때나")}</span>
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </ModalLayout>
     )
   )

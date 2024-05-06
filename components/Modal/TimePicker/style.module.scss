@@ -4,6 +4,7 @@
   width: 200px;
   padding: 10px;
 
+  // select든 basic이든 일괄 적용을 위해 ul은 여기에
   ul {
     width: 100%;
     height: 300px;
@@ -33,49 +34,50 @@
       }
     }
   }
+}
 
-  .any-time {
-    @include form-btn-style;
-  }
+.basic-time-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
 
-  .basic-main {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-
-    .hours {
-      &.disabled {
-        button {
-          color: var(--gray);
-        }
-      }
-    }
-    .seconds {
-      &.disabled {
-        button {
-          color: var(--gray);
-        }
+  .hours {
+    &.disabled {
+      button {
+        color: var(--gray);
       }
     }
   }
-
-  &.select {
-    .select-time-list {
-      height: auto;
-      max-height: 300px;
-      padding: 0;
-      overflow: scroll;
-      li {
-        button {
-          padding: 14px 0;
-        }
-        @include action {
-          background-color: var(--green);
-          button {
-            color: var(--white);
-          }
-        }
+  .seconds {
+    &.disabled {
+      button {
+        color: var(--gray);
       }
     }
+  }
+}
+
+.select-time-list {
+  height: auto;
+  max-height: 300px;
+  padding: 0;
+  overflow: scroll;
+  li {
+    button {
+      padding: 14px 0;
+    }
+    @include action {
+      background-color: var(--green);
+      button {
+        color: var(--white);
+      }
+    }
+  }
+}
+
+.result-wrapper {
+  @include form-btn-style;
+
+  .selected {
   }
 }
