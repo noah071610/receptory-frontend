@@ -163,8 +163,9 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   },
   select: {
     design: [
-      { value: "basic", icon: faCheck, actionType: "cta" },
-      { value: "grid", icon: faCheck, actionType: "cta" },
+      { value: "imageWithText", icon: faCheck, actionType: "cta" },
+      { value: "thumbnail", icon: faCheck, actionType: "cta" },
+      { value: "text", icon: faCheck, actionType: "cta" },
     ],
   },
   calender: {

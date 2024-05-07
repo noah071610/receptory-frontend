@@ -66,7 +66,8 @@ function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: 
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
   const { options } = selectedSection ?? {}
-  const { startDate, addAnyDate } = options ?? {}
+  const { startDate, addAnyDate, selectRange } = options ?? {}
+  const inactiveBtn = !selectedDates || selectedDates.length <= (selectRange === "range" ? 1 : 0)
 
   const onClickSubmit = () => {
     if (!selectedDates || selectedDates.length <= 0) return
@@ -110,16 +111,18 @@ function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: 
         />
       </div>
       {!isOptionCalender && (
-        <div className={cx(style["btn-wrapper"])}>
-          <button onClick={onClickSubmit}>
-            <span>{t("pickDate")}</span>
-          </button>
-          {addAnyDate && (
-            <button onClick={onClickAnyDate}>
-              <span>{t("pickAnyDate")}</span>
+        <>
+          <div className={cx(style["btn-wrapper"])}>
+            <button className={cx(style.pickDate)} disabled={inactiveBtn} onClick={onClickSubmit}>
+              <span>{t("pickDate")}</span>
             </button>
-          )}
-        </div>
+            {addAnyDate && (
+              <button className={cx(style.anyDate)} onClick={onClickAnyDate}>
+                <span>{t("pickAnyDate")}</span>
+              </button>
+            )}
+          </div>
+        </>
       )}
     </div>
   )

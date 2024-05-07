@@ -252,10 +252,9 @@ textarea {
   --black-transparent: rgba(0, 0, 0, 0.1);
   --overlay: rgba(0, 0, 0, 0.3);
 
-  --green: rgba(78, 192, 78, 0.8);
   --green-soft: rgba(131, 218, 131, 0.3);
-  --green-hard: rgba(81, 255, 81, 0.9);
-  --green-hover: #085f00;
+  --green: rgba(78, 192, 78, 0.8);
+  --green-hard: rgba(95, 173, 95, 0.9);
 
   --blue-soft: rgba(143, 182, 254, 0.6);
   --blue-hard: rgba(53, 91, 255, 0.9);
@@ -307,14 +306,30 @@ body.dark {
   --black-transparent: rgba(255, 255, 255, 0.3);
   --overlay: rgba(0, 0, 0, 0.5);
 
-  --green: rgba(105, 246, 105, 0.8);
-  --green-hard: rgba(81, 255, 81, 0.9);
+  --green: rgba(92, 214, 92, 0.8);
+  --green-hard: rgba(37, 92, 37, 0.9);
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
     transform: translate3d(0, 30%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeUpBig {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 200%, 0);
+  }
+
+  30% {
+    opacity: 0;
   }
 
   to {

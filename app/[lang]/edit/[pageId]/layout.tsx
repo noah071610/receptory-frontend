@@ -6,6 +6,7 @@ import EditorFooter from "@/containers/edit-page/EditorFooter"
 import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
 import style from "@/containers/edit-page/style.module.scss"
+import Header from "@/containers/global/Header"
 import classNames from "classNames"
 const cx = classNames.bind(style)
 
@@ -20,14 +21,17 @@ export async function generateMetadata({ params: { lang } }: LangParams) {
 
 export default async function EditPageLayout({ children, params: { lang } }: Readonly<LayoutLangParams>) {
   return (
-    <PageLayout>
-      <div className={cx(style.main)}>
-        <div className={cx(style.editor)}>
-          {children}
-          <EditorFooter />
+    <>
+      <Header />
+      <PageLayout>
+        <div className={cx(style.main)}>
+          <div className={cx(style.editor)}>
+            {children}
+            <EditorFooter />
+          </div>
+          <Preview />
         </div>
-        <Preview />
-      </div>
-    </PageLayout>
+      </PageLayout>
+    </>
   )
 }

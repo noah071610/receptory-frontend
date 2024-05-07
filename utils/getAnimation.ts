@@ -22,6 +22,10 @@ export const getAnimation = ({
       temp = `${type} ${speed ?? 600}ms ${delay}ms forwards`
       opacity = 0
       break
+    case "fadeUpBig":
+      temp = `${type} ${speed ?? 600}ms ${delay}ms forwards`
+      opacity = 0
+      break
     case "fadeUp":
       temp = `${type} ${speed ?? 1000}ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
       opacity = 0

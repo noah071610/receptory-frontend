@@ -3,6 +3,7 @@
 import AddBtn from "@/components/AddBtn"
 import FormUserInput from "@/components/FormUserInput"
 import Input from "@/components/Input"
+import OptionBar from "@/components/Options/OptionBar"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
@@ -91,7 +92,8 @@ function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMod
       {!isDisplayMode && (
         <div className={cx(style.options)}>
           <OptionTitleInputs section={section} />
-          <div>
+          <OptionBar value="addSelectNone" section={section} />
+          <div className={cx(style["list-edit-wrapper"])}>
             <h4>리스트 수정</h4>
             <ul className={cx(style["list-edit"])}>
               {selectList.map((list, i) => (

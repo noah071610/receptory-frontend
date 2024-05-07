@@ -1,5 +1,4 @@
-import Header from "@/containers/global/Header"
-import ReactQueryProvider from "@/containers/global/ReactQueryProvider"
+import Init from "@/containers/global/Init"
 import "@/styles/global.scss"
 import { Langs } from "@/types/Main"
 import { config } from "@fortawesome/fontawesome-svg-core"
@@ -64,11 +63,10 @@ export default async function RootLayout({
         {/* <meta name="keywords" content="퀴즈, 게임, 투표, 픽, 월드컵, 이상형 월드컵" /> todo */}
       </head>
       <body suppressHydrationWarning={true}>
-        <ReactQueryProvider>
-          <Header />
+        <Init>
           <main>{children}</main>
           <ToastContainer />
-        </ReactQueryProvider>
+        </Init>
       </body>
     </html>
   )

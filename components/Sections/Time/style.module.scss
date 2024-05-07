@@ -9,6 +9,12 @@
   flex-direction: column;
 }
 
+.time-submit {
+  border-radius: 20px;
+  background-color: var(--pink);
+  color: var(--white);
+  padding: 12px 30px;
+}
 .times {
   padding: 15px;
   background-color: var(--gray-softest);

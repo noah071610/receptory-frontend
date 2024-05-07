@@ -46,15 +46,20 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
   }
 
+  const mainBackground =
+    design === "card"
+      ? // 카드 타입
+        colors.white
+      : background
+        ? // 풀 타입 배경 화면
+          getImageUrl({ isCenter: true, url: background ?? "" })
+        : // 풀 타입 백그라운드 컬러
+          `linear-gradient(180deg, ${backgroundColor} 87%, rgba(0,0,0,0) 100%)`
+
   return (
     <div
       style={{
-        background:
-          design === "card"
-            ? colors.white
-            : background
-              ? getImageUrl({ isCenter: true, url: background ?? "" })
-              : `linear-gradient(180deg, ${backgroundColor} 87%, rgba(0,0,0,0) 100%)`,
+        background: mainBackground,
       }}
       className={cx(style.wrapper, style[design])}
     >
@@ -65,7 +70,6 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
             [style.isDisplayMode]: isDisplayMode,
             [style["noImage-displayMode"]]: !hasString(section.src) && isDisplayMode,
           })}
-          style={{ borderColor }}
         >
           {hasString(section.src) && <img src={section.src} alt="image" />}
           {section.src && !isDisplayMode && <ImageDelete section={section} srcKey={"thumbnail"} />}

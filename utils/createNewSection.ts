@@ -129,7 +129,11 @@ const sectionMap: { [key: string]: any } = {
     const target = createNewSectionList("select", 0, { data: { title: "리스트 타이틀 todo:" } })
     return {
       value: null,
+      design: "imageWithText",
       list: [target],
+      options: {
+        addSelectNone: false,
+      },
       data: {
         title: "타이틀 입력",
         description: "설명 입력",
@@ -141,13 +145,13 @@ const sectionMap: { [key: string]: any } = {
     list[0].value = "타이틀 입력"
     list[1].value = "설명 입력"
     list[2].value = "텍스트 입력"
-    list[2].style.backgroundColor = "rgba(158,0,255,0.3)"
+    list[2].style.backgroundColor = "rgba(158,0,255,0.4)"
 
     return {
       id: "thumbnail",
       design: "card",
       style: {
-        backgroundColor: "rgba(255,176,176,0.4)",
+        backgroundColor: "rgba(255,176,176,0.25)",
       },
       list,
     }

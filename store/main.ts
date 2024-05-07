@@ -1,32 +1,24 @@
-// import { create } from "zustand"
+import { UserType } from "@/types/Main"
 
-// interface States {
-//   modalStatus: ModalStatus
-//   error: {
-//     type: ErrorTypes | null
-//     text?: string
-//   }
-// }
+import { create } from "zustand"
+import { immer } from "zustand/middleware/immer"
 
-// type Actions = {
-//   setModal: (state: States["modalStatus"]) => void
-//   setError: ({ type, text }: { type: ErrorTypes; text?: string }) => void
-// }
+export interface EditStates {
+  user: UserType | null
+}
 
-// export const useMainStore = create<States & Actions>()((set) => ({
-//   modalStatus: "none",
-//   error: {
-//     type: null,
-//     text: "",
-//   },
-//   windowSize: null,
-//   setModal: (state) => set(() => ({ modalStatus: state })),
-//   setError: ({ type, text }) =>
-//     set(() => {
-//       if (type === "clear") {
-//         return { error: { type: null, text: "" } }
-//       } else {
-//         return { error: { type, text } }
-//       }
-//     }),
-// }))
+type Actions = {
+  setUser: ({ user }: { user: UserType | null }) => void
+}
+
+export const useMainStore = create<EditStates & Actions>()(
+  immer((set) => ({
+    user: null,
+
+    // SET
+    setUser: ({ user }) =>
+      set((origin) => {
+        origin.user = user
+      }),
+  }))
+)

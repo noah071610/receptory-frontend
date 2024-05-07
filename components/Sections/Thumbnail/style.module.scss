@@ -81,6 +81,8 @@
   margin-bottom: 10px;
   @include flex;
   flex-direction: column;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.5);
 
   border: 1px dashed var(--border);
   img {
@@ -91,9 +93,6 @@
 
   &.isDisplayMode {
     border: none;
-  }
-  &.noImage-displayMode {
-    display: none;
   }
 
   &.card {
@@ -109,7 +108,7 @@
   @include flex;
 
   svg {
-    color: var(--input-color);
+    color: var(--gray);
     font-size: 40px;
   }
 

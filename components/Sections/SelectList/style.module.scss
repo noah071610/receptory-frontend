@@ -6,8 +6,12 @@
 
 .options {
   @include options-style;
+
   .list-edit {
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 500px;
+    overflow: scroll;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -31,6 +35,10 @@
           svg {
             color: var(--pink);
           }
+        }
+
+        @include mobile {
+          height: 70px;
         }
       }
       h3 {

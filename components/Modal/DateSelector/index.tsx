@@ -1,5 +1,6 @@
 "use client"
 
+import NumberRange from "@/components/NumberRange"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import setDate from "@/utils/setDate"
@@ -40,9 +41,7 @@ export const DateSelector = () => {
         {specificDates.map(({ specificStartDate, specificEndDate }, i: number) => (
           <li key={`date_${i}`}>
             <button onClick={() => onClickDate({ specificStartDate, specificEndDate })}>
-              <span>{setDate(specificStartDate)}</span>
-              {specificEndDate && <span>{" ~ "}</span>}
-              {specificEndDate && <span>{setDate(specificEndDate)}</span>}
+              <NumberRange start={specificStartDate} end={specificEndDate} formatter={setDate} />
             </button>
           </li>
         ))}
@@ -50,7 +49,7 @@ export const DateSelector = () => {
 
       {addAnyDate && (
         <div className={cx(style["btn-wrapper"])}>
-          <button onClick={onClickAnyDate}>
+          <button className={cx(style.anyDate)} onClick={onClickAnyDate}>
             <span>{t("pickAnyDate")}</span>
           </button>
         </div>

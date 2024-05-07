@@ -4,10 +4,9 @@
   width: 200px;
   padding: 10px;
 
-  // select든 basic이든 일괄 적용을 위해 ul은 여기에
   ul {
     width: 100%;
-    height: 300px;
+    max-height: 250px;
     padding-bottom: 30px;
     overflow: scroll;
     &::-webkit-scrollbar {
@@ -18,21 +17,6 @@
     }
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE 10+ */
-
-    li {
-      width: 100%;
-      button {
-        width: 100%;
-        @include flex;
-        padding: 10px 0;
-      }
-      &.selected {
-        background-color: var(--green);
-        button {
-          color: var(--white);
-        }
-      }
-    }
   }
 }
 
@@ -40,6 +24,22 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
+
+  li {
+    width: 100%;
+    button {
+      width: 100%;
+      font-size: 16px;
+      @include flex;
+      padding: 10px 0;
+    }
+    &.selected {
+      background-color: var(--green);
+      button {
+        color: var(--white);
+      }
+    }
+  }
 
   .hours {
     &.disabled {
@@ -59,16 +59,22 @@
 
 .select-time-list {
   height: auto;
-  max-height: 300px;
+  max-height: 250px;
   padding: 0;
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   li {
+    width: 100%;
     button {
-      padding: 14px 0;
-    }
-    @include action {
-      background-color: var(--green);
-      button {
+      width: 100%;
+      padding: 20px 0;
+      background-color: var(--gray-soft);
+      border-radius: 4px;
+      font-size: 15px;
+      @include action {
+        background-color: var(--green);
         color: var(--white);
       }
     }
@@ -76,8 +82,16 @@
 }
 
 .result-wrapper {
-  @include form-btn-style;
+  @include form-btn-layout-style;
 
   .selected {
+    width: 100%;
+    @include flex;
+    font-size: 15px;
+    padding: 0 0 10px 0;
+  }
+  .anytime {
+    @include form-sub-btn-style;
+    padding: 0 0 10px 0;
   }
 }

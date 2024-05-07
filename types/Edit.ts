@@ -55,8 +55,18 @@ export type DesignTypes =
   | "uncheck"
   | "underline"
   | "caution"
+  | "imageWithText"
   | AlignTypes
-export type AnimationTypes = "none" | "fadeUp" | "flip" | "fadeIn" | "bounce" | "scaleUp" | "fadeInRight" | "heartBeat"
+export type AnimationTypes =
+  | "none"
+  | "fadeUp"
+  | "flip"
+  | "fadeIn"
+  | "bounce"
+  | "scaleUp"
+  | "fadeInRight"
+  | "heartBeat"
+  | "fadeUpBig"
 export type TitleSelectTypes = "title" | "description" | "label"
 export type StyleSelectTypes = "cover" | "contain"
 

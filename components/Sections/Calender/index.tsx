@@ -2,6 +2,7 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import CalenderMain from "@/components/Modal/DatePicker/CalenderMain"
+import NumberRange from "@/components/NumberRange"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
@@ -152,9 +153,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
                 {section.collection.map(({ specificStartDate, specificEndDate }, i) => (
                   <li key={`specific_date_${i}`}>
                     <button onClick={() => onClickDeleteSelectDate(i)}>
-                      <span>{setDate(specificStartDate)}</span>
-                      {specificEndDate && <span>{" ~ "}</span>}
-                      {specificEndDate && <span>{setDate(specificEndDate)}</span>}
+                      <NumberRange start={specificStartDate} end={specificEndDate} formatter={setDate} />
                     </button>
                   </li>
                 ))}

@@ -1,6 +1,7 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
+import NumberRange from "@/components/NumberRange"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
@@ -170,9 +171,7 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
                 {section.collection.map(({ specificStartTime, specificEndTime }, i) => (
                   <li key={`specific_time_${i}`}>
                     <button onClick={() => onClickDeleteSelectTime(i)}>
-                      <span>{specificStartTime}</span>
-                      {!!specificEndTime && <span>{" ~ "}</span>}
-                      {!!specificEndTime && <span>{specificEndTime}</span>}
+                      <NumberRange start={specificStartTime} end={specificEndTime} />
                     </button>
                   </li>
                 ))}

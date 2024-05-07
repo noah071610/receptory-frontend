@@ -21,9 +21,13 @@
   width: 100%;
   padding: 15px;
   .btn-wrapper {
-    @include form-btn-style;
-    flex-direction: column;
-    gap: 10px;
+    @include form-btn-layout-style;
+    .pickDate {
+      @include form-btn-style;
+    }
+    .anyDate {
+      @include form-sub-btn-style;
+    }
   }
   &.isOptionCalender {
     padding: 0;
