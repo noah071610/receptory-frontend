@@ -1,0 +1,108 @@
+@import "@/styles/variables.scss";
+
+.wrapper {
+  width: 100%;
+  position: relative;
+  height: 100svh;
+  max-height: 800px;
+  overflow: hidden;
+  @include flex;
+  flex-direction: column;
+  &.isDisplayMode {
+    height: 600px;
+    min-height: 600px;
+    max-height: 600px;
+  }
+}
+
+.main {
+  width: 100%;
+  max-width: 300px;
+
+  .title-input,
+  .description-input {
+    @include input-style;
+  }
+
+  h1,
+  .title-input {
+    @include title-style;
+    text-align: center;
+  }
+
+  .description-input,
+  p {
+    margin-top: 7px;
+    @include description-style;
+    text-align: center;
+  }
+
+  h1 {
+    word-wrap: break-word;
+  }
+  p {
+    white-space: pre-line;
+    word-break: break-all;
+  }
+}
+
+.thumbnail {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+  @include flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.5);
+
+  border: 1px dashed var(--border);
+
+  &.isDisplayMode {
+    display: none;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.drop-zone {
+  @include full;
+  @include flex;
+
+  svg {
+    color: var(--gray);
+    font-size: 40px;
+  }
+
+  @include action {
+    svg {
+      color: var(--pink-soft);
+    }
+    &::before {
+      border-color: var(--pink-soft);
+    }
+  }
+}
+
+.cta-wrapper {
+  width: 100%;
+  @include flex;
+  margin-top: 20px;
+  .cta {
+    width: 220px;
+    border-radius: 100px;
+    background-color: white;
+    padding: 15px 20px;
+    input,
+    span {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+  }
+}

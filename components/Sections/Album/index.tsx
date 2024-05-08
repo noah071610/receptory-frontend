@@ -10,11 +10,11 @@ import { useProgressiveImage } from "@/hooks/useProgressiveImage"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo, useCallback, useMemo } from "react"
 import { Gallery, Image, ImageExtended, ThumbnailImageProps } from "react-grid-gallery"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 const AlbumImageComponent = ({
   props,
@@ -32,7 +32,7 @@ const AlbumImageComponent = ({
 
   return (
     <div>
-      {!isDisplayMode && <ImageDelete section={section} srcKey="list" listIndex={props.index} />}
+      {!isDisplayMode && <ImageDelete srcKey="list" listIndex={props.index} />}
       <img
         {...(props.imageProps as any)}
         key={`album_${props.index}`}
@@ -59,22 +59,22 @@ const ImageComponent = ({
   const status = useProgressiveImage(photo.src, isIntersecting)
 
   return (
-    <div className={cx(style["photo-wrapper"])}>
+    <div className={cx("photo-wrapper")}>
       <picture
         ref={ref}
         style={{
           height: section.design === "gridOne" ? "150px" : "200px",
         }}
-        className={cx(style.photo)}
+        className={cx("photo")}
       >
-        <div style={{ background: getImageUrl({ isCenter: true, url: photo.src }) }} className={cx(style.background)} />
-        <img style={{ objectFit: section.style.backgroundSize }} src={photo.src} alt={photo.src} />
+        <div style={{ background: getImageUrl({ isCenter: true, url: photo.src }) }} className={cx("background")} />
+        <img src={photo.src} alt={photo.src} />
         {status === "loading" && <Loading />}
-        {!isDisplayMode && <ImageDelete section={section} srcKey="list" listIndex={index} />}
+        {!isDisplayMode && <ImageDelete srcKey="list" listIndex={index} />}
       </picture>
       <Input
         section={section}
-        className={cx(style.title)}
+        className={cx("title")}
         inputType="album"
         displayMode={isDisplayMode && "p"}
         isOptional={true}
@@ -105,9 +105,9 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
   )
 
   return (
-    <div className={cx(style["layout"])}>
+    <div className={cx("layout")}>
       {galleryImages.length > 0 ? (
-        <div className={cx(style.album)}>
+        <div className={cx("album")}>
           {section.design === "basic" ? (
             <Gallery
               thumbnailImageComponent={(props) => comp(props)}
@@ -119,7 +119,7 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           ) : (
             <div
               style={{ gridTemplateColumns: `repeat(${section.design === "gridOne" ? 1 : 2},1fr)` }}
-              className={cx(style.grid, style[section.design])}
+              className={cx("grid", section.design)}
             >
               {galleryImages.map((v, i) => (
                 <ImageComponent
@@ -136,7 +136,7 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
       ) : (
         <div
           style={{ background: getImageUrl({ isCenter: true, url: "/images/noImage.png" }) }}
-          className={cx(style.noImage)}
+          className={cx("noImage")}
         >
           <span>{t("noImage")}</span>
         </div>

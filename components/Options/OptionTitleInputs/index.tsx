@@ -3,26 +3,20 @@
 import Input from "@/components/Input"
 import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
 
   return (
-    <div className={cx(style["edit-inputs"])}>
+    <div className={cx("edit-inputs")}>
       <h4>{t("타이틀 수정")}</h4>
+      <Input className={cx("title")} inputType="title" isOptional={false} value={section.data.title} dataKey="title" />
       <Input
-        className={cx(style.title)}
-        inputType="title"
-        isOptional={false}
-        value={section.data.title}
-        dataKey="title"
-      />
-      <Input
-        className={cx(style.description)}
+        className={cx("description")}
         inputType="description"
         isOptional={true}
         value={section.data.description}

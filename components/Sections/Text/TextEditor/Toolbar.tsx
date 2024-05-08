@@ -3,11 +3,11 @@ import { colors } from "@/config/colors"
 import { tools } from "@/config/edit"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { RichUtils } from "draft-js"
 import { useCallback } from "react"
 import style from "../style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 const Toolbar = ({
   editorState,
@@ -59,7 +59,7 @@ const Toolbar = ({
   )
 
   return (
-    <div className={cx(style["toolbar-grid"])}>
+    <div className={cx("toolbar-grid")}>
       {tools.map((item, idx) => (
         <button
           style={{

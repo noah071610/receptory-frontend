@@ -3,10 +3,10 @@
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function OptionRatio({
   targetKey,
@@ -32,19 +32,19 @@ function OptionRatio({
   }
 
   return (
-    <div className={cx(style.layout)}>
+    <div className={cx("layout")}>
       <h4>{t(targetKey)}</h4>
-      <div className={cx(style.content)}>
+      <div className={cx("content")}>
         {optionsArr.map((v) => (
           <div
             key={`options-${section.id}-${v}`}
             onClick={() => onClickRatio(v)}
-            className={cx(style["ratio-wrapper"], { [style.active]: target === v })}
+            className={cx("ratio-wrapper", { active: target === v })}
           >
-            <div className={cx(style.ratio)}>
-              <div className={cx(style.circle)}></div>
+            <div className={cx("ratio")}>
+              <div className={cx("circle")}></div>
             </div>
-            <div className={cx(style.label)}>
+            <div className={cx("label")}>
               <label>{t(`${v}`)}</label>
             </div>
           </div>

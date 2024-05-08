@@ -7,10 +7,10 @@ import { SectionListType, SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/getAnimation"
 import { faPenFancy, faSquareCheck, faSquareXmark, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function List({
   section,
@@ -56,15 +56,15 @@ function List({
         type: animation,
         delay: isDisplayMode ? index * 180 : 0,
       })}
-      className={cx(style["list-wrapper"], style[design])}
+      className={cx("list-wrapper", design)}
     >
-      <div onClick={onClickChangeDesign} className={cx(style.icon)}>
+      <div onClick={onClickChangeDesign} className={cx("icon")}>
         {design === "check" && <FontAwesomeIcon icon={faSquareCheck} />}
         {design === "uncheck" && <FontAwesomeIcon icon={faSquareXmark} />}
         {design === "underline" && <FontAwesomeIcon icon={faPenFancy} />}
         {design === "caution" && <FontAwesomeIcon icon={faTriangleExclamation} />}
       </div>
-      <div className={cx(style.content)}>
+      <div className={cx("content")}>
         <Input
           inputType="text"
           isOptional={false}
@@ -84,8 +84,8 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
   const { setActive } = useEditorStore()
 
   return (
-    <div className={cx(style["layout"])}>
-      <ul className={cx(style["check-list"])}>
+    <div className={cx("layout")}>
+      <ul className={cx("check-list")}>
         {section.list.map((v, i) => (
           <List isDisplayMode={isDisplayMode} index={i} key={v.id} list={v} section={section} />
         ))}

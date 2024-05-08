@@ -1,20 +1,21 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
-import { memo, useCallback, useRef, useState } from "react"
+import cs from "classNames/bind"
+import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { Swiper, SwiperProps, SwiperRef } from "swiper/react"
 import { Swiper as SwiperType } from "swiper/types"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 interface Props extends SwiperProps {
   prevArrowClassName?: string
   nextArrowClassName?: string
   perSlideView?: number
+  isSingle?: boolean
 }
 
 export const SwiperNavigation = memo(
-  ({ children, prevArrowClassName, nextArrowClassName, perSlideView, ...swiperProps }: Props) => {
+  ({ children, prevArrowClassName, nextArrowClassName, perSlideView, isSingle, ...swiperProps }: Props) => {
     const [disable, setDisable] = useState({ prev: true, next: false })
     const sliderRef = useRef(null)
 
@@ -42,19 +43,27 @@ export const SwiperNavigation = memo(
       setDisable({ prev: false, next: false })
     }
 
+    useEffect(() => {
+      if (isSingle) {
+        setDisable({ prev: true, next: true })
+      } else {
+        setDisable({ prev: true, next: false })
+      }
+    }, [isSingle])
+
     return (
       <Swiper {...swiperProps} onSlideChange={onSlideChange} ref={sliderRef}>
         {children}
         <button
           disabled={disable.prev}
-          className={cx(prevArrowClassName ?? style.prev, { [style.disable]: disable.prev })}
+          className={cx(prevArrowClassName ?? style.prev, { disable: disable.prev })}
           onClick={handlePrev}
         >
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
         <button
           disabled={disable.next}
-          className={cx(nextArrowClassName ?? style.next, { [style.disable]: disable.next })}
+          className={cx(nextArrowClassName ?? style.next, { disable: disable.next })}
           onClick={handleNext}
         >
           <FontAwesomeIcon icon={faChevronRight} />

@@ -2,10 +2,10 @@
 
 import { getAnimation } from "@/utils/getAnimation"
 import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { ReactNode, useEffect } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function ModalLayout({ children, modalStyle }: { children: ReactNode; modalStyle?: string }) {
   useEffect(() => {
@@ -20,10 +20,10 @@ export default function ModalLayout({ children, modalStyle }: { children: ReactN
   }, [])
 
   return (
-    <div className={cx(style["overlay"])}>
+    <div className={cx("overlay")}>
       <div
         style={getAnimation({ type: "fadeUp", delay: 0, speed: 600 })}
-        className={cx(style.modal, "editor", modalStyle ?? "")}
+        className={cx("modal", "editor", modalStyle ?? "")}
       >
         {children}
       </div>

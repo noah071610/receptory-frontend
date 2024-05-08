@@ -7,11 +7,11 @@ import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { faChevronDown, faQ } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo, useMemo } from "react"
 import Text from "../Text"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 const Search = memo(({}: {}) => {
   return <></>
@@ -40,16 +40,16 @@ const List = ({
   }
 
   return (
-    <li className={cx(style.list, { [style.isOpen]: isActive })}>
+    <li className={cx("list", { isOpen: isActive })}>
       <div
         style={{
           backgroundColor: isActive ? titleBackgroundColor : undefined,
           borderColor: isActive ? color : colors.border,
         }}
         onClick={onClickTitle}
-        className={cx(style["title-wrapper"])}
+        className={cx("title-wrapper")}
       >
-        <div style={{ color: isActive ? color : colors.black }} className={cx(style.icon, style.q)}>
+        <div style={{ color: isActive ? color : colors.black }} className={cx("icon", "q")}>
           <FontAwesomeIcon icon={faQ} />
           <span>{"."}</span>
         </div>
@@ -62,13 +62,13 @@ const List = ({
           dataKey="title"
           displayMode={isDisplayMode && "h2"}
           value={list.data.title}
-          className={cx(isDisplayMode ? style.title : style["title-input"])}
+          className={cx(isDisplayMode ? style.title : "title-input")}
         />
-        <div style={{ color: isActive ? color : colors.black }} className={cx(style.icon, style.arrow)}>
+        <div style={{ color: isActive ? color : colors.black }} className={cx("icon", "arrow")}>
           <FontAwesomeIcon icon={faChevronDown} />
         </div>
       </div>
-      <div className={cx(style["content-layout"])}>
+      <div className={cx("content-layout")}>
         <Text isDisplayMode={isDisplayMode} listIndex={index} section={section} />
       </div>
     </li>
@@ -77,9 +77,9 @@ const List = ({
 
 export default function QnA({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   return (
-    <div className={cx(style.qna)}>
+    <div className={cx("qna")}>
       <Search />
-      <ul className={cx(style["qna-list"])}>
+      <ul className={cx("qna-list")}>
         {section.list.map((v, i) => (
           <List isDisplayMode={isDisplayMode} index={i} key={v.id} list={v} section={section} />
         ))}

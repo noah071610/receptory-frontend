@@ -8,9 +8,9 @@ import { colors } from "@/config/colors"
 import { editorStyleMap } from "@/config/edit"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import style from "../style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 const TextEditor = ({
   section,
@@ -59,15 +59,15 @@ const TextEditor = ({
     const type = block.getType()
     switch (type) {
       case "blockQuote":
-        return style["superFancyBlockquote"]
+        return "superFancyBlockquote"
       case "leftAlign":
-        return style["leftAlign"]
+        return "leftAlign"
       case "rightAlign":
-        return style["rightAlign"]
+        return "rightAlign"
       case "centerAlign":
-        return style["centerAlign"]
+        return "centerAlign"
       case "justifyAlign":
-        return style["justifyAlign"]
+        return "justifyAlign"
       default:
         break
     }
@@ -93,7 +93,7 @@ const TextEditor = ({
       {!isDisplayMode && (
         <Toolbar section={section} textColor={textColor} editorState={editorState} listIndex={listIndex} />
       )}
-      <div style={{ color: textColor ?? colors.black }} className={cx(style.container, style["text-global-style"])}>
+      <div style={{ color: textColor ?? colors.black }} className={cx("container", "text-global-style")}>
         <Editor
           ref={editorRef}
           handleKeyCommand={handleKeyCommand}

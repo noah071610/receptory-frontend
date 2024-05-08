@@ -1,8 +1,8 @@
 "use client"
 
-import classNames from "classNames"
+import cs from "classNames/bind"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function NumberRange({
   start,
@@ -14,11 +14,11 @@ function NumberRange({
   formatter?: (value: any) => string | number
 }) {
   return (
-    <div className={cx(style.range)}>
+    <div className={cx("range")}>
       <span>{formatter ? formatter(start) : start}</span>
       {end && (
         <>
-          <span className={cx(style.divide)}>{"~"}</span>
+          <span className={cx("divide")}>{"~"}</span>
           <span>{formatter ? formatter(end) : end}</span>
         </>
       )}

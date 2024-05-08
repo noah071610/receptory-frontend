@@ -29,7 +29,6 @@ export type TargetSectionListTypes =
   | "textAlign"
   | "select"
   | "labelColor"
-  | "imageSize"
 
 export type AlignTypes = "left" | "center" | "right"
 export type DesignTypes =
@@ -144,8 +143,10 @@ export interface EditorFooterList {
   parent?: SectionListTypes
 }
 
-export interface ImageUpload extends File {
-  preview?: string
+export interface ImageUpload {
+  uploadType: "file" | "url"
+  payload: string | null
+  file?: File
 }
 
 export interface GalleryImageType {

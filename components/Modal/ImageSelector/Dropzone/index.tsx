@@ -1,31 +1,28 @@
 "use client"
 
-import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload } from "@/types/Edit"
 import { faImages } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
 import { Dispatch, SetStateAction, memo, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 function Dropzone({
   className,
-  selectedImages,
   setSelectedImages,
   isMultiple,
 }: {
   className?: string
-  selectedImages: ImageUpload[]
   setSelectedImages: Dispatch<SetStateAction<ImageUpload[]>>
   isMultiple: boolean
 }) {
   const { t } = useTranslation()
-  const { selectedSection, active } = useEditorStore()
+  const { selectedSection } = useEditorStore()
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -41,7 +38,7 @@ function Dropzone({
           reader.readAsDataURL(file)
 
           reader.onloadend = async () => {
-            const target = { ...file, preview: reader.result }
+            const target: ImageUpload = { file, payload: reader.result as string, uploadType: "file" }
             setSelectedImages((prev) => (isMultiple ? [...prev, target] : [target]))
           }
         }
@@ -60,20 +57,10 @@ function Dropzone({
   })
 
   return (
-    <div
-      style={{
-        background:
-          selectedImages.length === 1 ? getImageUrl({ url: selectedImages[0].preview ?? "", isCenter: true }) : "none",
-      }}
-      className={cx(style.thumbnail)}
-    >
-      <div className={cx(className ?? style["drop-zone"])} {...getRootProps()}>
+    <div className={cx("thumbnail")}>
+      <div className={cx(className ?? "drop-zone")} {...getRootProps()}>
         <input {...getInputProps()} />
-        <div
-          className={cx(style.icon, {
-            [style.selectedOne]: selectedImages.length === 1,
-          })}
-        >
+        <div className={cx("icon")}>
           <FontAwesomeIcon icon={faImages} />
           <label>{t("imageDragAndDrop")}</label>
         </div>

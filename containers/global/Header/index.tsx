@@ -3,11 +3,14 @@
 import IconBtn from "@/components/IconBtn"
 import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
+import { Langs } from "@/types/Main"
+import saveContentFromEditor from "@/utils/saveContentFromEditor"
 import { faCheck, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-solid-svg-icons"
-import classNames from "classNames"
+import cs from "classNames/bind"
+import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 const headers = [
   {
@@ -22,7 +25,19 @@ const headers = [
 ]
 
 export default function Header() {
-  const { stage, setStage, setSelectedSection, selectedSection, setRevert, revert, revertIndex } = useEditorStore()
+  const { lang, pageId } = useParams()
+  const {
+    stage,
+    setStage,
+    setSelectedSection,
+    initSections,
+    formSections,
+    currentUsedImages,
+    currentUsedColors,
+    setRevert,
+    revert,
+    revertIndex,
+  } = useEditorStore()
   const [isSaving, setIsSaving] = useState(false)
 
   const [prevScrollPos, setPrevScrollPos] = useState(0)
@@ -47,11 +62,18 @@ export default function Header() {
     setStage(v)
   }
 
-  const onClickSave = () => {
-    setIsSaving(true)
-    setTimeout(() => {
-      setIsSaving(false)
-    }, 3000)
+  const onClickSave = async () => {
+    if (!isSaving) {
+      await saveContentFromEditor({
+        content: { stage, initSections, formSections, currentUsedImages, currentUsedColors },
+        pageId,
+        lang: lang as Langs,
+      })
+      setIsSaving(true)
+      setTimeout(() => {
+        setIsSaving(false)
+      }, 3000)
+    }
   }
 
   const onClickRevert = (type: "do" | "undo") => {
@@ -60,21 +82,18 @@ export default function Header() {
 
   return (
     <>
-      <header className={cx(style.header, { [style.visible]: visible })}>
+      <header className={cx("header", { visible: visible })}>
         <div></div>
-        <div className={cx(style.inner)}>
+        <div className={cx("inner")}>
           {headers.map((v) => (
-            <div key={`header_${v.value}`} className={cx(style.list)}>
-              <button
-                onClick={() => onClickStage(v.value as EditStage)}
-                className={cx({ [style.active]: v.value === stage })}
-              >
+            <div key={`header_${v.value}`} className={cx("list")}>
+              <button onClick={() => onClickStage(v.value as EditStage)} className={cx({ active: v.value === stage })}>
                 <span>{v.value}</span>
               </button>
             </div>
           ))}
         </div>
-        <div className={cx(style.right)}>
+        <div className={cx("right")}>
           <IconBtn
             disabled={revert.length <= 1 || revertIndex <= 0}
             onclick={() => onClickRevert("undo")}
@@ -97,10 +116,10 @@ export default function Header() {
         </div>
         <div
           style={{ width: stage === "init" ? "33%" : stage === "form" ? "66%" : "95%" }}
-          className={cx(style.progress)}
+          className={cx("progress")}
         ></div>
       </header>
-      <div className={cx(style.ghost)} />
+      <div className={cx("ghost")} />
     </>
   )
 }

@@ -10,6 +10,11 @@
   @include border;
   border-radius: 12px;
 
+  .picker {
+    width: 100%;
+    min-width: 230px;
+  }
+
   .pick {
     margin-top: 5px;
     padding: 10px 0;
@@ -18,5 +23,18 @@
     background-color: var(--pink);
     color: var(--white);
     font-size: 14px;
+  }
+
+  .curColors {
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+    gap: 3px;
+    button {
+      @include border;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+    }
   }
 }

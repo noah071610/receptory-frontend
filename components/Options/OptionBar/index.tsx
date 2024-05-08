@@ -3,10 +3,10 @@
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function OptionBar({ value, section }: { value: string; section: SectionType }) {
   const { selectedSection, setSelectedSection, setOptions } = useEditorStore()
@@ -22,11 +22,11 @@ function OptionBar({ value, section }: { value: string; section: SectionType }) 
   }
 
   return (
-    <div className={cx(style["layout"])}>
-      <button onClick={onClickSlider} className={cx(style.content, { [style.active]: !!isActive })}>
+    <div className={cx("layout")}>
+      <button onClick={onClickSlider} className={cx("content", { active: !!isActive })}>
         <h4>{t(value)}</h4>
-        <div className={cx(style.bar)}>
-          <div className={cx(style.circle)}></div>
+        <div className={cx("bar")}>
+          <div className={cx("circle")}></div>
         </div>
       </button>
     </div>

@@ -1,43 +1,44 @@
 "use client"
 
 import { useEditorStore } from "@/store/editor"
-import { SectionType } from "@/types/Edit"
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function ImageDelete({
-  section,
   srcKey,
   listIndex,
+  deleteEvent,
 }: {
-  section: SectionType
-  srcKey: "list" | "background" | "thumbnail"
+  srcKey: "list" | "background" | "thumbnail" | "imageModal"
   listIndex?: number
+  deleteEvent?: (listIndex: number) => void
 }) {
-  const { selectedSection, setSelectedSection, setSrc, setStyle, deleteList } = useEditorStore()
+  const { setSrc, setStyle, deleteList } = useEditorStore()
   const onClickDelete = () => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
-    if (typeof listIndex === "number") {
-      if (srcKey === "list") {
-        return deleteList({ targetIndex: listIndex })
+    setTimeout(() => {
+      if (typeof listIndex === "number") {
+        if (srcKey === "list") {
+          return deleteList({ targetIndex: listIndex })
+        }
+        if (srcKey === "imageModal") {
+          return deleteEvent && deleteEvent(listIndex)
+        }
       }
-    }
-    if (srcKey === "background") {
-      return setStyle({ key: srcKey, payload: undefined })
-    }
+      if (srcKey === "background") {
+        return setStyle({ key: srcKey, payload: undefined })
+      }
 
-    if (srcKey === "thumbnail") {
-      return setSrc({ payload: "" })
-    }
+      if (srcKey === "thumbnail") {
+        return setSrc({ payload: "" })
+      }
+    }, 0)
   }
   return (
-    <div className={cx(style["image-delete"])}>
+    <div className={cx("image-delete")}>
       <button onClick={onClickDelete}>
         <FontAwesomeIcon icon={faClose} />
       </button>

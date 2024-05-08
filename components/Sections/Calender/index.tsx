@@ -12,11 +12,11 @@ import { SectionType } from "@/types/Edit"
 import setDate from "@/utils/setDate"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
-import classNames from "classNames"
 import { memo, useEffect, useState } from "react"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
@@ -87,7 +87,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
   }, [isAlways])
 
   return (
-    <div className={cx(style["layout"])}>
+    <div className={cx("layout")}>
       <FormUserInput
         icon={faCalendar}
         onClick={onClickOpenModal}
@@ -103,7 +103,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
       </FormUserInput>
 
       {!isDisplayMode && (
-        <div className={cx(style.options)}>
+        <div className={cx("options")}>
           <OptionTitleInputs section={section} />
           <OptionBar section={section} value="specificDate" />
           <OptionBar section={section} value="addAnyDate" />
@@ -112,7 +112,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
             <>
               <OptionBar section={section} value="isAlways" />
               {!isAlways && (
-                <div className={cx(style["option-date-picker"])}>
+                <div className={cx("option-date-picker")}>
                   <h4>{t("selectMinMaxDate")}</h4>
                   <DatePickerStateProvider
                     config={{
@@ -133,7 +133,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
           )}
           {specificDate && (
             <>
-              <div className={cx(style["option-date-picker"])}>
+              <div className={cx("option-date-picker")}>
                 <h4>{t("selectDate")}</h4>
                 <DatePickerStateProvider
                   config={{
@@ -149,7 +149,7 @@ function Calender({ section, isDisplayMode }: { section: SectionType; isDisplayM
                   <CalenderMain isOptionCalender={true} />
                 </DatePickerStateProvider>
               </div>
-              <ul className={cx(style.dates)}>
+              <ul className={cx("dates")}>
                 {section.collection.map(({ specificStartDate, specificEndDate }, i) => (
                   <li key={`specific_date_${i}`}>
                     <button onClick={() => onClickDeleteSelectDate(i)}>

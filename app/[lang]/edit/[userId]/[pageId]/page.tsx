@@ -1,5 +1,8 @@
 "use client"
 
+import { getSave } from "@/actions/save"
+import { getUser } from "@/actions/user"
+import Loading from "@/components/Loading"
 import DatePicker from "@/components/Modal/DatePicker"
 import DateSelector from "@/components/Modal/DateSelector"
 import ImageSelector from "@/components/Modal/ImageSelector"
@@ -9,16 +12,22 @@ import Calender from "@/components/Sections/Calender"
 import Empty from "@/components/Sections/Empty"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import SectionLayout from "@/components/Sections/index"
+import { queryKey } from "@/config"
 import style from "@/containers/edit-page/style.module.scss"
 import { useEditorStore } from "@/store/editor"
 import { SectionListTypes, SectionType } from "@/types/Edit"
+import { Langs } from "@/types/Main"
+import { SaveType } from "@/types/Page"
+import { UserType } from "@/types/User"
+import saveContentFromEditor from "@/utils/saveContentFromEditor"
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd"
-import classNames from "classNames"
-import { convertToRaw } from "draft-js"
+import { useQuery } from "@tanstack/react-query"
+import cs from "classNames/bind"
+import { isNaN } from "lodash"
 import dynamic from "next/dynamic"
-import { usePathname } from "next/navigation"
-import { useEffect, useMemo } from "react"
-const cx = classNames.bind(style)
+import { useParams, usePathname, useRouter } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
+const cx = cs.bind(style)
 
 const Callout = dynamic(() => import("@/components/Sections/Callout/index"), {
   ssr: true,
@@ -75,41 +84,61 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   checkList: (section, isDisplayMode = false) => <CheckList section={section} isDisplayMode={isDisplayMode} />,
 }
 
-const handleBeforeUnload = async ({ initSections }: any, event?: any) => {
-  if (process.env.NODE_ENV === "development") {
-    localStorage.setItem(
-      "save",
-      JSON.stringify({
-        initSections: initSections.map((v: SectionType) => {
-          switch (v.type) {
-            case "callout":
-              return { ...v, text: JSON.stringify(convertToRaw(v.text.getCurrentContent())) }
-            case "text":
-              return { ...v, text: JSON.stringify(convertToRaw(v.text.getCurrentContent())) }
-            case "qna":
-              return {
-                ...v,
-                list: v.list.map((k) => ({ ...k, text: JSON.stringify(convertToRaw(k.text.getCurrentContent())) })),
-              }
-
-            default:
-              return v
-          }
-        }),
-      })
-    )
-  } else {
-    // await savePost(data)
-  }
-  if (event) {
-    event.returnValue = "Are you sure you want to leave?"
-  }
-}
-
 const EditPage = () => {
+  const [isLoading, setIsLoading] = useState(true)
   const pathname = usePathname()
-  const { initSections, isEditStart, stage, formSections, moveSection, active, loadSections, selectedSection } =
+  const { lang } = useParams()
+  const { push, back } = useRouter()
+  const { userId, pageId } = useParams()
+  const queryUserId = parseInt(userId as string)
+  const { data: user, isFetched: isFetchedUserQuery } = useQuery<UserType>({
+    queryKey: queryKey.user,
+    queryFn: getUser,
+  })
+  const { data: save, isError: isErrorGetSave } = useQuery<SaveType>({
+    queryKey: queryKey.save.edit,
+    queryFn: () => getSave(pageId as string),
+    enabled: user?.userId === queryUserId && !!pageId && typeof pageId === "string",
+  })
+
+  useEffect(() => {
+    if (isFetchedUserQuery) {
+      // 로그인 요청을 이미 보냄. 이제부터 판별 시작
+
+      // 로그인 안했네?
+      if (!user) return push("/login")
+
+      // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
+      if (user?.userId !== queryUserId) {
+        alert("잘못된 접근입니다.")
+        return back()
+      }
+    }
+  }, [user, userId, isFetchedUserQuery])
+
+  useEffect(() => {
+    if (isErrorGetSave) {
+      alert("데이터를 찾지 못했습니다.")
+      return back()
+    }
+  }, [isErrorGetSave])
+
+  useEffect(() => {
+    // 잘못된 url 접근 차단
+    if (typeof userId !== "string") return back()
+    if (isNaN(queryUserId)) return back()
+    if (typeof pageId !== "string") return back()
+  }, [userId, pageId, queryUserId])
+
+  const { initSections, stage, formSections, moveSection, active, loadSections, currentUsedImages, currentUsedColors } =
     useEditorStore()
+
+  const sections = useMemo(
+    () => (stage === "init" ? initSections : stage === "form" ? formSections : []),
+    [initSections, formSections, stage]
+  )
+
+  const activeModal = active.modal.type
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result
@@ -120,35 +149,41 @@ const EditPage = () => {
   }
 
   useEffect(() => {
-    if (!isEditStart) return
-    // const handleBeforeUnloadCallback = (e: any) => {
-    //   handleBeforeUnload({ initSections }, e)
-    // }
-    // window.addEventListener("beforeunload", handleBeforeUnloadCallback)
+    const handleBeforeUnloadCallback = async (e: any) => {
+      await saveContentFromEditor({
+        content: { stage, initSections, formSections, currentUsedImages, currentUsedColors },
+        pageId,
+        lang: lang as Langs,
+        event: e,
+      })
+    }
+    window.addEventListener("beforeunload", handleBeforeUnloadCallback)
 
-    // return () => {
-    //   window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
-    // }
-  }, [initSections, isEditStart])
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
+    }
+  }, [initSections, formSections, currentUsedImages, currentUsedColors, lang, stage])
 
   useEffect(() => {
-    const _save = localStorage.getItem("save")
+    !(async function () {
+      if (save) {
+        // 완전 처음
 
-    if (_save) {
-      const save = JSON.parse(_save ?? "{}")
-      // loadSections(save)
-    }
-  }, [])
+        if (save.content?.initSections && save.content?.initSections?.length <= 0) return setIsLoading(false)
 
-  const sections = useMemo(
-    () => (stage === "init" ? initSections : stage === "form" ? formSections : []),
-    [initSections, formSections, stage]
-  )
+        // 아니면 로드 어짜피 store에서도 reducer들이 걸러줌
+        loadSections(save.content)
 
-  const activeModal = active.modal.type
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1000)
+      }
+    })()
+  }, [save])
 
   return (
     <>
+      <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
       {sections?.length > 0 && (
         <SectionLayout pathname={pathname} noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
           {stage === "init" ? (

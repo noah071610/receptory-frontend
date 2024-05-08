@@ -7,8 +7,8 @@ import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
 import style from "@/containers/edit-page/style.module.scss"
 import Header from "@/containers/global/Header"
-import classNames from "classNames"
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 export async function generateMetadata({ params: { lang } }: LangParams) {
   if (languages.indexOf(lang) < 0) lang = fallbackLng
@@ -24,8 +24,8 @@ export default async function EditPageLayout({ children, params: { lang } }: Rea
     <>
       <Header />
       <PageLayout>
-        <div className={cx(style.main)}>
-          <div className={cx(style.editor)}>
+        <div className={cx("main")}>
+          <div className={cx("editor")}>
             {children}
             <EditorFooter />
           </div>

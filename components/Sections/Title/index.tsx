@@ -4,11 +4,11 @@ import Input from "@/components/Input"
 import Textarea from "@/components/Textarea"
 import { changeOpacity } from "@/config/colors"
 import { SectionType } from "@/types/Edit"
-import classNames from "classNames"
 import { memo, useMemo } from "react"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const [title, description, label] = section.list
@@ -26,17 +26,17 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
   )
 
   return (
-    <div className={cx(style["layout"])}>
+    <div className={cx("layout")}>
       {label.isActive && (
         <div
           style={{
             justifyContent: textAlign === "left" ? "flex-start" : textAlign === "right" ? "flex-end" : "center",
           }}
-          className={cx(style["label-wrapper"])}
+          className={cx("label-wrapper")}
         >
           <Input
             section={section}
-            className={cx(isDisplayMode ? style.label : style["label-input"])}
+            className={cx(isDisplayMode ? style.label : "label-input")}
             inputType="label"
             displayMode={isDisplayMode && "span"}
             isOptional={true}
@@ -53,7 +53,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           value={title.value}
           listIndex={0}
           displayMode={isDisplayMode && "h1"}
-          className={cx(isDisplayMode ? style.title : style["title-input"])}
+          className={cx(isDisplayMode ? style.title : "title-input")}
           inputType="title"
           isOptional={true}
           style={{ textAlign }}
@@ -65,7 +65,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           value={description.value}
           listIndex={1}
           displayMode={isDisplayMode && "p"}
-          className={cx(isDisplayMode ? style.description : style["description-input"])}
+          className={cx(isDisplayMode ? style.description : "description-input")}
           inputType="description"
           isOptional={true}
           style={{ textAlign }}

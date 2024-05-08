@@ -1,13 +1,12 @@
 "use client"
 
+import ImageDelete from "@/components/ImageDelete"
 import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload, SectionListType, SectionListTypes } from "@/types/Edit"
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
-import { faClose } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { FreeMode } from "swiper/modules"
@@ -15,86 +14,89 @@ import { SwiperSlide } from "swiper/react"
 import ModalLayout from ".."
 import Dropzone from "./Dropzone"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function ImageSelector() {
   const { replace } = useRouter()
   const pathname = usePathname()
-  const [selectedImages, setSelectedImages] = useState<ImageUpload[]>([])
+  const [selectedImages, setSelectedImages] = useState<Array<ImageUpload>>([])
   const [listForRending, setListForRending] = useState<SectionListType[]>([])
 
   const { t } = useTranslation()
-  const { active, setActive, addSection, setStyle, initSections, setSrc, setList, addList } = useEditorStore()
+  const {
+    active,
+    setActive,
+    addSection,
+    setStyle,
+    initSections,
+    setSrc,
+    setList,
+    addList,
+    addUsed,
+    currentUsedImages,
+  } = useEditorStore()
+  const [currentUsedImagesArr, setCurrentUsedImagesArr] = useState(
+    currentUsedImages?.map((v) => ({ src: v, isAdd: false })) ?? []
+  )
 
-  const targetType = active.modal.type
+  console.log(currentUsedImagesArr)
 
-  const onClickImage = (i: number) => {
-    setSelectedImages((prev) => prev.filter((_, j) => i !== j))
-  }
+  const type = active.modal.type?.replace("-image", "")
 
-  const isMultiple = targetType === "album-image" || targetType === "slider-image"
+  const isMultiple = type === "album" || type === "slider"
 
   const onClickUpload = async () => {
-    // 단수 이미지 업로드, not multiple
-    if (
-      targetType === "thumbnail-image" ||
-      targetType === "callout-image" ||
-      targetType === "select-image" ||
-      targetType === "background-image"
-    ) {
-      const formData = new FormData()
-      const { preview, ...file } = selectedImages[0]
-      formData.append("image", file)
+    if (!type) return
 
-      const img = new Image()
+    await Promise.allSettled(
+      selectedImages.map(async (imageUpload, index) => {
+        const { payload, uploadType, file } = imageUpload
+        if (!payload) return
 
-      img.addEventListener("load", () => {
-        if (targetType === "thumbnail-image" || targetType === "callout-image") {
-          setSrc({
-            payload: preview ?? "",
-          })
+        const formData = new FormData()
+        const urlArr = []
+
+        if (uploadType === "file") {
+          if (file) formData.append("image", file)
+        } else {
+          urlArr.push(payload)
         }
 
-        if (targetType === "select-image") {
-          setList({
-            index: active.modal.payload,
-            key: "src",
-            payload: preview ?? "",
-          })
-        }
-        if (targetType === "background-image") {
-          setStyle({
-            key: "background",
-            payload: preview ?? "",
-          })
-        }
-      })
+        const img = new Image()
 
-      img.src = preview ?? ""
-    }
+        img.addEventListener("load", () => {
+          addUsed({ type: "currentUsedImages", payload })
+          if (type === "thumbnail" || type === "callout") {
+            return setSrc({
+              payload,
+            })
+          }
 
-    // 다중 이미지 업로드
-    if (targetType === "album-image" || targetType === "slider-image") {
-      const type = targetType.replace("-image", "")
+          if (type === "select") {
+            return setList({
+              index: active.modal.payload,
+              key: "src",
+              payload,
+            })
+          }
+          if (type === "background") {
+            return setStyle({
+              key: "background",
+              payload,
+            })
+          }
 
-      await Promise.allSettled(
-        selectedImages.map(async ({ preview, ...file }, index) => {
-          const formData = new FormData()
-          formData.append("image", file)
+          setListForRending((arr) => [
+            ...arr,
+            createNewSectionList(type, index, {
+              src: payload,
+              style: { width: img.naturalWidth ?? 0, height: img.naturalHeight ?? 0 },
+            }),
+          ])
+        })
 
-          const img = new Image()
-
-          img.addEventListener("load", () => {
-            setListForRending((arr) => [
-              ...arr,
-              createNewSectionList(type, index, {
-                src: preview ?? "",
-                style: { width: img.naturalWidth ?? 0, height: img.naturalHeight ?? 0 },
-              }),
-            ])
-          })
-
-          img.addEventListener("error", () => {
+        img.addEventListener("error", () => {
+          if (isMultiple) {
             setListForRending((arr) => [
               ...arr,
               createNewSectionList(type, index, {
@@ -102,26 +104,55 @@ export default function ImageSelector() {
                 style: { width: 0, height: 0 },
               }),
             ])
-          })
-
-          img.src = preview ?? ""
-
-          // const { msg, data: imageSrc } = await uploadImage(formData)
-          // if (msg === "ok") {
-          // }
-          // todo:  일단 보류
+          }
         })
-      )
-      return
+
+        img.src = payload
+
+        // const { msg, data: imageSrc } = await uploadImage(formData)
+        // if (msg === "ok") {
+        // }
+        // todo:  일단 보류
+      })
+    )
+    if (!isMultiple) setActive({ payload: { type: null, payload: null }, key: "modal" })
+  }
+
+  const onClickCurImage = (src: string, i: number, isAdd: boolean) => {
+    if (isAdd) {
+      // 셀렉 이미지를 지운다. 멀티플이든 동일
+      setSelectedImages((prev) => prev.filter(({ payload }) => payload !== src))
+    } else {
+      if (isMultiple) {
+        // 멀티플이면 추가
+        setSelectedImages((prev) => [{ payload: src, uploadType: "url" }, ...prev])
+      } else {
+        // 단수 선택이면? 그냥 대체
+        setSelectedImages([{ payload: src, uploadType: "url" }])
+      }
     }
-    setActive({ payload: { type: null, payload: null }, key: "modal" })
+
+    if (isMultiple) {
+      // 멀티플이면 토글형식으로 타겟 isAdd 만 바꿔주자
+      setCurrentUsedImagesArr((prev) => {
+        return prev.map((v, j) => (i === j ? { ...v, isAdd: !v.isAdd } : v))
+      })
+    } else {
+      // 단수 선택이면 한녀석만 토글하고 나머지는 다 false로 해주자
+      setCurrentUsedImagesArr((prev) => {
+        return prev.map((v, j) => ({ ...v, isAdd: i === j ? !v.isAdd : false }))
+      })
+    }
+  }
+
+  const deleteSelectedImage = (i: number) => {
+    setSelectedImages((prev) => prev.filter((_, j) => j !== i))
   }
 
   useEffect(() => {
     if (!listForRending.length || !selectedImages.length) return
 
-    if (targetType && listForRending.length >= selectedImages.length) {
-      const type = targetType.replace("-image", "")
+    if (type && listForRending.length >= selectedImages.length) {
       const filteredImageList = listForRending.filter((v) => !!v.src)
       if (active.modal.payload === "add") {
         addList({ type: type as SectionListTypes, valueArrForNewList: filteredImageList })
@@ -132,35 +163,58 @@ export default function ImageSelector() {
           type: type as SectionListTypes,
           payload: newSection,
         })
-        replace(`${pathname}#${newSection.id}`)
       }
       setListForRending([])
       setActive({ payload: { type: null, payload: null }, key: "modal" })
     }
-  }, [listForRending.length, selectedImages.length, targetType, initSections.length])
+  }, [listForRending.length, selectedImages.length, type, initSections.length])
 
   return (
     <ModalLayout modalStyle={style.content}>
-      <Dropzone isMultiple={isMultiple} selectedImages={selectedImages} setSelectedImages={setSelectedImages} />
-      {selectedImages.length > 1 && (
+      {selectedImages.length > 0 ? (
+        <SwiperNavigation
+          perSlideView={1}
+          isSingle={selectedImages.length <= 1}
+          className={cx("preview-slider")}
+          slidesPerView={1}
+          prevArrowClassName={style.prev}
+          nextArrowClassName={style.next}
+        >
+          {selectedImages.map(({ payload }, i) => {
+            return (
+              <SwiperSlide className={cx("slide")} key={`thumb_main_${i}`}>
+                <div className={cx("preview-image")}>
+                  <ImageDelete deleteEvent={deleteSelectedImage} srcKey="imageModal" listIndex={i} />
+                  <img src={payload ?? ""} alt={`preview_${i}`} />
+                </div>
+              </SwiperSlide>
+            )
+          })}
+        </SwiperNavigation>
+      ) : (
+        <Dropzone isMultiple={isMultiple} setSelectedImages={setSelectedImages} />
+      )}
+      {currentUsedImagesArr.length > 0 && (
         <>
-          <h2>{t("imagePreview")}</h2>
+          <h2>{t("currentUsedImages")}</h2>
           <SwiperNavigation
             perSlideView={4}
-            className={cx(style.slider)}
+            className={cx("slider")}
             spaceBetween={5}
             slidesPerView={"auto"}
             modules={[FreeMode]}
             prevArrowClassName={style.prev}
             nextArrowClassName={style.next}
           >
-            {selectedImages.map(({ preview }, i) => {
+            {currentUsedImagesArr.map(({ src, isAdd }, i) => {
               return (
-                <SwiperSlide className={cx(style["slide"])} key={`thumb_main_${i}`}>
-                  <div className={cx(style.photo)}>
-                    <FontAwesomeIcon onClick={() => onClickImage(i)} icon={faClose} />
-                    <img src={preview ?? ""} alt={`preview_${i}`} />
-                  </div>
+                <SwiperSlide className={cx("curImage-slide")} key={`thumb_main_${i}`}>
+                  <button
+                    onClick={() => onClickCurImage(src, i, isAdd)}
+                    className={cx("curImage-slide-btn", { isAdd: isAdd })}
+                  >
+                    <img src={src ?? ""} alt={`curImage_${i}`} />
+                  </button>
                 </SwiperSlide>
               )
             })}
@@ -168,7 +222,7 @@ export default function ImageSelector() {
         </>
       )}
       {selectedImages.length > 0 && (
-        <button onClick={onClickUpload} className={cx(style.upload)}>
+        <button onClick={onClickUpload} className={cx("upload")}>
           <span>{t("total {{number}} pic upload", { number: selectedImages.length })}</span>
         </button>
       )}

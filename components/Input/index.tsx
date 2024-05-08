@@ -24,7 +24,7 @@ function Input({
   isOptional: boolean
   listIndex?: number
   maxLength?: number
-  dataKey?: "title" | "description"
+  dataKey?: string
   value: string
   style?: StyleProperties
   displayMode?: boolean | "h1" | "p" | "h2" | "span"

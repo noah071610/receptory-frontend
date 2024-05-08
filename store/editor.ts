@@ -7,10 +7,12 @@ import {
   SectionType,
   StyleProperties,
 } from "@/types/Edit"
+import { SaveContentType } from "@/types/Page"
 
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import getId from "@/utils/getId"
-import { EditorState, convertFromRaw } from "draft-js"
+import { convertStringToEditorState } from "@/utils/textEditor"
+import { EditorState } from "draft-js"
 import { cloneDeep } from "lodash"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
@@ -28,6 +30,8 @@ export interface EditStates {
     snapshot: string[]
   }[]
   revertIndex: number
+  currentUsedImages: string[]
+  currentUsedColors: string[]
 }
 
 type Actions = {
@@ -36,8 +40,6 @@ type Actions = {
   setSrc: ({ payload }: { payload: string }) => void
   setStyle: ({ key, payload }: { key: keyof StyleProperties; payload: any }) => void
   setDesign: ({ payload }: { payload: DesignTypes }) => void
-  // setDescription: ({ payload }: { payload: string }) => void
-  // setLabel: ({ payload }: { payload: string }) => void
   setList: ({
     index,
     payload,
@@ -63,11 +65,12 @@ type Actions = {
       payload?: any
     }
   }) => void
+  setCollection: ({ payload }: { payload: any }) => void
 
   addSection: ({ type, payload, newId }: { type: SectionListTypes; payload?: SectionType; newId?: string }) => void
   addList: ({ type, valueArrForNewList }: { type: string; valueArrForNewList?: { [key: string]: any }[] }) => void
   addCollection: ({ payload }: { payload: any }) => void
-  setCollection: ({ payload }: { payload: any }) => void
+  addUsed: ({ type, payload }: { type: "currentUsedColors" | "currentUsedImages"; payload: string }) => void
 
   deleteSection: (id: string) => void
   deleteList: ({ targetIndex }: { targetIndex: number }) => void
@@ -75,7 +78,7 @@ type Actions = {
 
   moveSection: ({ from, to }: { from: number; to: number }) => void
   copySection: (payload: { payload: SectionType; newId?: string }) => void
-  loadSections: (payload: { initSections: SectionType[] }) => void
+  loadSections: (payload: SaveContentType) => void
 
   setRevert: (revertType: "do" | "undo") => void
   saveSectionHistory: ({ payload }: { payload: SectionType }) => void
@@ -109,7 +112,7 @@ export const useEditorStore = create<EditStates & Actions>()(
     // STATE
     isEditStart: false,
     initSections: [createNewSection("thumbnail", 0)],
-    formSections: [createNewSection("calender", 0)],
+    formSections: [],
     selectedSection: null,
     stage: "init",
     active: {
@@ -128,6 +131,8 @@ export const useEditorStore = create<EditStates & Actions>()(
     },
     revert: [],
     revertIndex: -1,
+    currentUsedImages: [],
+    currentUsedColors: [],
 
     // SET
     saveSectionHistory: ({ payload }) =>
@@ -256,6 +261,7 @@ export const useEditorStore = create<EditStates & Actions>()(
             target.list[index][key] = payload as never
             origin.selectedSection.list[index][key] = payload as never
             switch (key) {
+              // 불필요한 히스토리 등록을 방지하기 위해 특정 값만 히스토리 저장
               case "style":
                 saveSectionHistory({ origin, payload: target })
                 break
@@ -354,6 +360,22 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         origin.isEditStart = true
       }),
+    addUsed: ({ type, payload }) =>
+      set((origin) => {
+        const existIndex = origin[type].findIndex((v) => v === payload)
+        if (existIndex >= 0) {
+          // 있으면 갱신
+          origin[type].splice(existIndex, 1)
+        } else {
+          // 없으면 배열이 10개 넘는지 확인
+          if (origin[type].length >= 10) {
+            origin[type].pop()
+          }
+        }
+        origin[type] = [payload, ...origin[type]]
+
+        origin.isEditStart = true
+      }),
 
     // DELETE
     deleteList: ({ targetIndex }) =>
@@ -433,30 +455,39 @@ export const useEditorStore = create<EditStates & Actions>()(
 
     loadSections: (payload) =>
       set((origin) => {
-        origin.initSections = payload.initSections.map((v) => {
-          switch (v.type) {
-            case "callout":
-              return {
-                ...v,
-                text: EditorState.createWithContent(convertFromRaw(JSON.parse(v.text as any))) as EditorState,
-              }
-            case "text":
-              return {
-                ...v,
-                text: EditorState.createWithContent(convertFromRaw(JSON.parse(v.text as any))) as EditorState,
-              }
-            case "qna":
-              return {
-                ...v,
-                list: v.list.map((k) => ({
-                  ...k,
-                  text: EditorState.createWithContent(convertFromRaw(JSON.parse(k.text as any))) as EditorState,
-                })),
-              }
-            default:
-              return v
-          }
-        })
+        if (payload.currentUsedColors) {
+          origin.currentUsedColors = payload.currentUsedColors
+        }
+        if (payload.currentUsedImages) {
+          origin.currentUsedImages = payload.currentUsedImages
+        }
+        if (payload.stage) {
+          origin.stage = payload.stage
+        }
+        if (payload.initSections?.length > 0) {
+          origin.initSections = payload.initSections.map((v) => {
+            switch (v.type) {
+              case "callout":
+              case "qna":
+              case "text":
+                return convertStringToEditorState(v)
+              default:
+                return v
+            }
+          })
+        }
+        if (payload.formSections?.length > 0) {
+          origin.formSections = payload.formSections.map((v) => {
+            switch (v.type) {
+              case "callout":
+              case "qna":
+              case "text":
+                return convertStringToEditorState(v)
+              default:
+                return v
+            }
+          })
+        }
       }),
   }))
 )

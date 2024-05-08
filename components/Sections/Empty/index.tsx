@@ -1,9 +1,9 @@
 "use client"
 
-import classNames from "classNames"
+import cs from "classNames/bind"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function Empty({ isDisplay }: { isDisplay?: boolean }) {
-  return <div className={cx(style.empty, { [style.isDisplay]: isDisplay })}></div>
+  return <div className={cx("empty", { isDisplay: isDisplay })}></div>
 }

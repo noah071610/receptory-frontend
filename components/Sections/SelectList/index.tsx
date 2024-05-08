@@ -11,11 +11,11 @@ import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
 import { memo } from "react"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 const ListEdit = ({
   list,
@@ -33,14 +33,14 @@ const ListEdit = ({
       <div
         onClick={() => onClickAddImage(listIndex)}
         style={{ background: list.src ? getImageUrl({ isCenter: true, url: list.src }) : "none" }}
-        className={cx(style.image)}
+        className={cx("image")}
       >
         <FontAwesomeIcon icon={faPlus} />
       </div>
-      <div className={cx(style.content)}>
+      <div className={cx("content")}>
         <Input
           section={section}
-          className={cx(style.title)}
+          className={cx("title")}
           inputType="title"
           isOptional={false}
           value={list.data.title}
@@ -49,7 +49,7 @@ const ListEdit = ({
         />
         <Input
           section={section}
-          className={cx(style.description)}
+          className={cx("description")}
           inputType="description"
           isOptional={true}
           value={list.data.description}
@@ -80,7 +80,7 @@ function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMod
   }
 
   return (
-    <div className={cx(style.layout)}>
+    <div className={cx("layout")}>
       <FormUserInput
         icon={faList}
         onClick={toggleSelect}
@@ -90,12 +90,12 @@ function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMod
         <span> {selectedList ? selectedList.data.title : t("리스트 선택")}</span>
       </FormUserInput>
       {!isDisplayMode && (
-        <div className={cx(style.options)}>
+        <div className={cx("options")}>
           <OptionTitleInputs section={section} />
           <OptionBar value="addSelectNone" section={section} />
-          <div className={cx(style["list-edit-wrapper"])}>
+          <div className={cx("list-edit-wrapper")}>
             <h4>리스트 수정</h4>
-            <ul className={cx(style["list-edit"])}>
+            <ul className={cx("list-edit")}>
               {selectList.map((list, i) => (
                 <ListEdit
                   section={section}

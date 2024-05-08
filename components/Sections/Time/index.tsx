@@ -9,11 +9,11 @@ import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
-import classNames from "classNames"
 import { memo, useEffect, useState } from "react"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 const convertStrToTimeSet = (str: string) => {
   const [hour, minute] = str.split(":").map(Number)
@@ -111,7 +111,7 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
   }, [isAlways])
 
   return (
-    <div className={cx(style["layout"])}>
+    <div className={cx("layout")}>
       <FormUserInput
         icon={faClock}
         onClick={onClickOpenModal}
@@ -125,7 +125,7 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
       </FormUserInput>
 
       {!isDisplayMode && (
-        <div className={cx(style.options)}>
+        <div className={cx("options")}>
           <OptionTitleInputs section={section} />
           <OptionBar section={section} value="specificTime" />
           <OptionBar section={section} value="addAnytime" />
@@ -135,7 +135,7 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
               <OptionBar section={section} value="isAlways" />
               {!isAlways &&
                 ["startHour", "endHour"].map((v) => (
-                  <div key={`time-min-max-${v}`} className={cx(style["time-min-max"])}>
+                  <div key={`time-min-max-${v}`} className={cx("time-min-max")}>
                     <h4>{v}</h4>
                     <input
                       onChange={(e) => onChangeMinMaxHour(e, v)}
@@ -163,11 +163,11 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
                 </div>
               )}
               <div>
-                <button onClick={onSubmitSpecificTime} className={cx(style["time-submit"])}>
+                <button onClick={onSubmitSpecificTime} className={cx("time-submit")}>
                   {t("addTime")}
                 </button>
               </div>
-              <ul className={cx(style.times)}>
+              <ul className={cx("times")}>
                 {section.collection.map(({ specificStartTime, specificEndTime }, i) => (
                   <li key={`specific_time_${i}`}>
                     <button onClick={() => onClickDeleteSelectTime(i)}>

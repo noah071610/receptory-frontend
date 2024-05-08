@@ -112,6 +112,27 @@
   }
 }
 
+@mixin swiper-arrow-style {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: rgba(20, 20, 20, 0.2);
+  z-index: 10;
+  &:disabled {
+    display: none;
+  }
+  svg {
+    font-size: 14px;
+    color: var(--white);
+  }
+  @include action {
+    background-color: rgba(20, 20, 20, 0.5);
+  }
+}
+
 @mixin form-btn-layout-style {
   width: 100%;
   margin-top: 20px;
@@ -167,8 +188,9 @@
 
 $z-index-map: (
   edit-overlay: 100,
-  edit-content: 150,
-  edit-footer: 150,
+  edit-content: 140,
+  edit-footer: 140,
+  loading-cover: 150,
   header: 160,
   overlay-aside: 180,
   aside: 200,

@@ -2,10 +2,10 @@
 
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { ReactNode, memo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function FormUserInput({
   title,
@@ -24,16 +24,16 @@ function FormUserInput({
   inputStyle?: string
 }) {
   return (
-    <div className={cx(style["input-wrapper"])}>
-      <label className={cx(style["title"])}>
+    <div className={cx("input-wrapper")}>
+      <label className={cx("title")}>
         <h2>{title}</h2>
         <p>{description}</p>
       </label>
-      <div onClick={onClick} className={cx(style["input"])}>
-        <div className={cx(style["content"])}>
-          {inputStyle ? children : <div className={cx(style.text)}>{children}</div>}
+      <div onClick={onClick} className={cx("input")}>
+        <div className={cx("content")}>
+          {inputStyle ? children : <div className={cx("text")}>{children}</div>}
           {inputStyle !== "textarea" && (
-            <button className={cx(style.icon)}>
+            <button className={cx("icon")}>
               <FontAwesomeIcon icon={icon} />
             </button>
           )}

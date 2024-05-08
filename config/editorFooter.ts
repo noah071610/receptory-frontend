@@ -57,10 +57,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "ctaBackgroundColor", icon: faBrush, actionType: "colorSelector" },
     { value: "background", icon: faImage, actionType: "imageSelector" },
   ],
-  album: [
-    { value: "design", icon: faPaintRoller, actionType: "submenu" },
-    { value: "imageSize", icon: faImage, actionType: "submenu" },
-  ],
+  album: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   callout: [{ value: "color", icon: faPalette, actionType: "colorSelector" }],
 
   contact: [{ value: "animation", icon: faFilm, actionType: "submenu" }],
@@ -118,10 +115,6 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "none", icon: faCheck, actionType: "cta" },
       { value: "fadeIn", icon: faCheck, actionType: "cta" },
       { value: "scaleUp", icon: faCheck, actionType: "cta" },
-    ],
-    imageSize: [
-      { value: "cover", icon: faCheck, actionType: "cta" },
-      { value: "contain", icon: faCheck, actionType: "cta" },
     ],
   },
   callout: {},

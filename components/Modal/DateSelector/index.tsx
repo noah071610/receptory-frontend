@@ -4,11 +4,11 @@ import NumberRange from "@/components/NumberRange"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import setDate from "@/utils/setDate"
-import classNames from "classNames"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 export const DateSelector = () => {
   const { t } = useTranslation()
@@ -48,8 +48,8 @@ export const DateSelector = () => {
       </ul>
 
       {addAnyDate && (
-        <div className={cx(style["btn-wrapper"])}>
-          <button className={cx(style.anyDate)} onClick={onClickAnyDate}>
+        <div className={cx("btn-wrapper")}>
+          <button className={cx("anyDate")} onClick={onClickAnyDate}>
             <span>{t("pickAnyDate")}</span>
           </button>
         </div>

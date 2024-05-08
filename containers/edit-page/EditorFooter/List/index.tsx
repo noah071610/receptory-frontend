@@ -5,12 +5,12 @@ import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
 import getId from "@/utils/getId"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function List({
   list,
@@ -53,16 +53,16 @@ export default function List({
   }
 
   return (
-    <div className={cx(style.list)}>
+    <div className={cx("list")}>
       {isOpenAllList ? (
         list.map((list, i) => {
           return (
-            <div className={cx(style.li)} key={`list_${i}`}>
+            <div className={cx("li")} key={`list_${i}`}>
               <button
                 onClick={() => onClickList(list.value, list.actionType)}
-                className={cx(style.btn, { [style.active]: active.submenu.type === list.value })}
+                className={cx("btn", { active: active.submenu.type === list.value })}
               >
-                <div className={cx(style.icon)}>
+                <div className={cx("icon")}>
                   <FontAwesomeIcon icon={list.icon} />
                 </div>
                 <span>{t(list.value)}</span>
@@ -71,21 +71,15 @@ export default function List({
           )
         })
       ) : (
-        <Swiper
-          spaceBetween={10}
-          slidesPerView={"auto"}
-          freeMode={true}
-          modules={[FreeMode]}
-          className={cx(style.slider)}
-        >
+        <Swiper spaceBetween={10} slidesPerView={"auto"} freeMode={true} modules={[FreeMode]} className={cx("slider")}>
           {list.map((list, i) => {
             return (
-              <SwiperSlide className={cx(style.slide)} key={`list_${i}`}>
+              <SwiperSlide className={cx("slide")} key={`list_${i}`}>
                 <button
                   onClick={() => onClickList(list.value, list.actionType)}
-                  className={cx(style.btn, { [style.active]: active.submenu.type === list.value })}
+                  className={cx("btn", { active: active.submenu.type === list.value })}
                 >
-                  <div className={cx(style.icon)}>
+                  <div className={cx("icon")}>
                     <FontAwesomeIcon icon={list.icon} />
                   </div>
                   <span>{t(list.value)}</span>

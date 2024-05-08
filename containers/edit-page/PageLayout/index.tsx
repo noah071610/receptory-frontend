@@ -1,10 +1,10 @@
 "use client"
 
 import { useEditorStore } from "@/store/editor"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { ReactNode } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function PageLayout({ children }: { children: ReactNode }) {
   const { setActive, setSelectedSection } = useEditorStore()
@@ -15,7 +15,7 @@ export default function PageLayout({ children }: { children: ReactNode }) {
     }
   }
   return (
-    <div className={cx(style.page)} onClick={onClickPage}>
+    <div className={cx("page")} onClick={onClickPage}>
       {children}
     </div>
   )

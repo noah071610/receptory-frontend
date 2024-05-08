@@ -6,12 +6,12 @@ import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/getAnimation"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import { memo, useMemo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 const Providers = ({ section }: { section: SectionType }) => {
   const { t } = useTranslation()
@@ -42,30 +42,27 @@ const Providers = ({ section }: { section: SectionType }) => {
     return saveSectionHistory({ payload: section })
   }
   return (
-    <div className={cx(style.providers)}>
+    <div className={cx("providers")}>
       <ul>
         {section.list.map((v, i) => (
           <li key={`provider_${i}`}>
-            <div className={cx(style.list)}>
-              <div className={cx(style.left)}>
+            <div className={cx("list")}>
+              <div className={cx("left")}>
                 <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
               </div>
-              <div className={cx(style.right)}>
+              <div className={cx("right")}>
                 <h4>{t(`${v.type}Link`)}</h4>
                 <input
                   type={v.type === "email" ? "email" : undefined}
                   placeholder={t(`${v.type}Placeholder`)}
-                  className={cx(style.input)}
+                  className={cx("input")}
                   onBlurCapture={() => onBlurInput(i)}
                   onChange={(e) => onChangeListInput(e, i)}
                   value={v.value ?? ""}
                 />
               </div>
-              <div className={cx(style.end)}>
-                <button
-                  onClick={() => onClickAddContact(i)}
-                  className={cx(style.checkbox, { [style.active]: v.isActive })}
-                >
+              <div className={cx("end")}>
+                <button onClick={() => onClickAddContact(i)} className={cx("checkbox", { active: v.isActive })}>
                   <FontAwesomeIcon icon={faCheck} />
                 </button>
               </div>
@@ -84,9 +81,9 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
   const btnList = useMemo(() => section.list.filter((v) => v.isActive), [section.list])
 
   return (
-    <div className={cx(style["contact"])}>
-      <div className={cx(style.main)}>
-        <div className={cx(style["btn-list"])}>
+    <div className={cx("contact")}>
+      <div className={cx("main")}>
+        <div className={cx("btn-list")}>
           {btnList.map((v, i) => {
             switch (v.type) {
               case "call":

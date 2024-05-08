@@ -1,6 +1,5 @@
 "use client"
 
-import classNames from "classNames"
 import { FC, ReactNode, useEffect } from "react"
 
 import { useTranslation } from "@/i18n/client"
@@ -15,7 +14,8 @@ import {
 } from "@rehookify/datepicker"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 interface CalendarProps {
   prevButton?: ReactNode
@@ -29,24 +29,24 @@ const CalenderComponent: FC<CalendarProps> = ({ prevButton, nextButton, calendar
   const { days, month } = calendar
 
   return (
-    <div className={cx(style["date-picker"])}>
-      <div className={cx(style.header)}>
+    <div className={cx("date-picker")}>
+      <div className={cx("header")}>
         {prevButton || <div />}
         <p>{month}</p>
         {nextButton || <div />}
       </div>
-      <div className={cx(style.week)}>
+      <div className={cx("week")}>
         {weekDays.map((d, i) => (
           <p key={`weeks-${i}`}>{d}</p>
         ))}
       </div>
-      <div className={cx(style.main)}>
+      <div className={cx("main")}>
         {days.map((d) => {
           return (
             <button
-              className={cx(style[d.range], {
-                [style.active]: d.active,
-                [style.selected]: d.selected,
+              className={cx(d.range, {
+                active: d.active,
+                selected: d.selected,
               })}
               key={d.$date.toString()}
               {...dayButton(d)}
@@ -94,16 +94,16 @@ function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: 
   }, [startDate, isOptionCalender])
 
   return (
-    <div className={cx(style["date-picker-layout"], { [style.isOptionCalender]: isOptionCalender })}>
-      <div className={cx(style["content-wrapper"])}>
+    <div className={cx("date-picker-layout", { isOptionCalender: isOptionCalender })}>
+      <div className={cx("content-wrapper")}>
         <CalenderComponent
           prevButton={
-            <button className={cx(style.prev)} {...subtractOffset({ months: 1 })}>
+            <button className={cx("prev")} {...subtractOffset({ months: 1 })}>
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
           }
           nextButton={
-            <button className={cx(style.next)} {...addOffset({ months: 1 })}>
+            <button className={cx("next")} {...addOffset({ months: 1 })}>
               <FontAwesomeIcon icon={faChevronRight} />
             </button>
           }
@@ -112,12 +112,12 @@ function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: 
       </div>
       {!isOptionCalender && (
         <>
-          <div className={cx(style["btn-wrapper"])}>
-            <button className={cx(style.pickDate)} disabled={inactiveBtn} onClick={onClickSubmit}>
+          <div className={cx("btn-wrapper")}>
+            <button className={cx("pickDate")} disabled={inactiveBtn} onClick={onClickSubmit}>
               <span>{t("pickDate")}</span>
             </button>
             {addAnyDate && (
-              <button className={cx(style.anyDate)} onClick={onClickAnyDate}>
+              <button className={cx("anyDate")} onClick={onClickAnyDate}>
                 <span>{t("pickAnyDate")}</span>
               </button>
             )}

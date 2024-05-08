@@ -1,8 +1,8 @@
 "use client"
 
 import style from "@/containers/edit-page/style.module.scss"
-import classNames from "classNames"
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 const LoginPage = () => {
   return <></>

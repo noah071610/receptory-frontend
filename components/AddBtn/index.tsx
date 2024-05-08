@@ -4,10 +4,10 @@ import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 function AddBtn({ type, section }: { type: string; section: SectionType }) {
   const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore()
@@ -30,8 +30,8 @@ function AddBtn({ type, section }: { type: string; section: SectionType }) {
   }
 
   return (
-    <div className={cx(style["btn-wrapper"])}>
-      <button onClick={onClickAddList} className={cx(style.add, "add")}>
+    <div className={cx("btn-wrapper")}>
+      <button onClick={onClickAddList} className={cx("add", "add")}>
         <FontAwesomeIcon icon={faPlus} />
       </button>
     </div>

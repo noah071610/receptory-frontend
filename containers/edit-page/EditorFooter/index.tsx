@@ -5,13 +5,13 @@ import { getEditorFooterList, getSubmenuList } from "@/config/editorFooter"
 import { useEditorStore } from "@/store/editor"
 import { faChevronUp, faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { default as List } from "./List"
 import SubList from "./SubList"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function EditorFooter() {
   const { selectedSection, setActive, active, setSelectedSection, stage } = useEditorStore()
@@ -44,30 +44,30 @@ export default function EditorFooter() {
   }, [isOpenAllList, selectedSection])
 
   return (
-    <div className={cx("editor", style.footer, { [style.isOpenAllList]: isOpenAllList })}>
+    <div className={cx("editor", "footer", { isOpenAllList })}>
       {/* MAIN LIST (SECTIONS + SECTION) */}
-      <div className={cx(style["main-wrapper"])}>
-        <div className={cx(style.main)}>
+      <div className={cx("main-wrapper")}>
+        <div className={cx("main")}>
           <List isOpenAllList={isOpenAllList} isSectionList={selectedSection !== null} list={targetList} />
 
           <button
             onClick={() => onClickFooterBtn(selectedSection ? "close" : "toggle")}
-            className={cx(style["footer-btn"], { [style.active]: isOpenAllList })}
+            className={cx("footer-btn", { active: isOpenAllList })}
           >
-            <div className={cx(style.icon)}>
+            <div className={cx("icon")}>
               <FontAwesomeIcon icon={selectedSection ? faClose : faChevronUp} />
             </div>
           </button>
         </div>
-        <div className={cx(style["preview-ghost"])}></div>
+        <div className={cx("preview-ghost")}></div>
       </div>
 
       {/* SUB LIST (SECTIONS LIST DETAIL) */}
-      <div className={cx(style["sub-wrapper"], { [style.active]: isOpenedSubmenu })}>
-        <div className={cx(style.sub)}>
+      <div className={cx("sub-wrapper", { active: isOpenedSubmenu })}>
+        <div className={cx("sub")}>
           <SubList list={submenuList} />
         </div>
-        <div className={cx(style["preview-ghost"])}></div>
+        <div className={cx("preview-ghost")}></div>
       </div>
 
       {active.tooltip.type && activeColorSelector && <ColorPicker colorKey={active.tooltip.type as any} />}

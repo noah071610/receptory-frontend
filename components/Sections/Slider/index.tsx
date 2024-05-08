@@ -9,12 +9,12 @@ import { changeOpacity } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/getAnimation"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { memo, useMemo, useState } from "react"
 import { FreeMode, Navigation, Thumbs } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 const BasicSlider = ({
   section,
@@ -28,28 +28,28 @@ const BasicSlider = ({
   backgroundColor: string
 }) => {
   return (
-    <Swiper spaceBetween={7} freeMode={true} slidesPerView={"auto"} modules={[FreeMode]} className={cx(style.slider)}>
+    <Swiper spaceBetween={7} freeMode={true} slidesPerView={"auto"} modules={[FreeMode]} className={cx("slider")}>
       {section.list.map((v, i) => (
-        <SwiperSlide className={cx(style.slide, style[section.design])} key={`card_${section.id}_${i}`}>
+        <SwiperSlide className={cx("slide", section.design)} key={`card_${section.id}_${i}`}>
           <div
             style={{
               ...getAnimation({ type: section.style.animation, delay: i * 150 }),
               border: section.design !== "basic" ? `1px solid ${color}` : "none",
             }}
-            className={cx(style.card, { [style.cardStyle]: section.design === "card" })}
+            className={cx("card", { cardStyle: section.design === "card" })}
           >
-            {!isDisplayMode && <ImageDelete section={section} srcKey="list" listIndex={i} />}
-            <div className={cx(style["card-image"])}>
-              {/* <div style={{ background: getImageUrl({ isCenter: true, url: v.src }) }} className={cx(style["image"])} /> */}
-              <picture className={cx(style.image)}>
+            {!isDisplayMode && <ImageDelete srcKey="list" listIndex={i} />}
+            <div className={cx("card-image")}>
+              {/* <div style={{ background: getImageUrl({ isCenter: true, url: v.src }) }} className={cx("image")} /> */}
+              <picture className={cx("image")}>
                 <img src={v.src} alt="image" />
               </picture>
             </div>
-            <div className={cx(style.content)}>
+            <div className={cx("content")}>
               <Input
                 section={section}
                 isOptional={true}
-                className={cx(isDisplayMode ? style.title : style["title-input"])}
+                className={cx(isDisplayMode ? style.title : "title-input")}
                 listIndex={i}
                 dataKey="title"
                 inputType="title"
@@ -58,7 +58,7 @@ const BasicSlider = ({
               />
               <Textarea
                 section={section}
-                className={cx(isDisplayMode ? style.description : style["description-input"])}
+                className={cx(isDisplayMode ? style.description : "description-input")}
                 listIndex={i}
                 dataKey="description"
                 inputType="description"
@@ -78,27 +78,27 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
   return (
     <>
       <Swiper
-        className={cx(style["thumb-slider"])}
+        className={cx("thumb-slider")}
         spaceBetween={10}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[FreeMode, Navigation, Thumbs]}
       >
         {section.list.map((v, i) => (
-          <SwiperSlide className={cx(style["thumb-slide"])} key={`thumb_main_${i}`}>
-            <div className={cx(style.thumb)}>
+          <SwiperSlide className={cx("thumb-slide")} key={`thumb_main_${i}`}>
+            <div className={cx("thumb")}>
               <div
                 style={{
                   background: getImageUrl({ isCenter: true, url: v.src }),
                 }}
-                className={cx(style.photo)}
+                className={cx("photo")}
               >
-                {!isDisplayMode && <ImageDelete section={section} srcKey="list" listIndex={i} />}
+                {!isDisplayMode && <ImageDelete srcKey="list" listIndex={i} />}
               </div>
               <Input
                 section={section}
                 isOptional={true}
                 dataKey={"title"}
-                className={cx(isDisplayMode ? style.title : style["title-input"])}
+                className={cx(isDisplayMode ? style.title : "title-input")}
                 listIndex={i}
                 displayMode={isDisplayMode && "h2"}
                 inputType="title"
@@ -107,7 +107,7 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
               <Textarea
                 section={section}
                 listIndex={i}
-                className={cx(isDisplayMode ? style.description : style["description-input"])}
+                className={cx(isDisplayMode ? style.description : "description-input")}
                 dataKey={"description"}
                 displayMode={isDisplayMode && "p"}
                 inputType="description"
@@ -125,16 +125,16 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
-        className={cx(style["thumb-list"])}
+        className={cx("thumb-list")}
       >
         {section.list.map((v, i) => (
-          <SwiperSlide className={cx(style["thumb-list-slide"])} key={`thumb_list_${i}`}>
+          <SwiperSlide className={cx("thumb-list-slide")} key={`thumb_list_${i}`}>
             <div
               style={{
                 background: getImageUrl({ isCenter: true, url: v.src }),
                 ...getAnimation({ type: section.style.animation, delay: i * 150 }),
               }}
-              className={cx(style["photo"])}
+              className={cx("photo")}
             />
           </SwiperSlide>
         ))}
@@ -148,9 +148,9 @@ function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMod
 
   const backgroundColor = useMemo(() => changeOpacity(section.style.color ?? "rgba(0,0,0,0)"), [section.style.color])
   return (
-    <div className={cx(style["layout"], { [style.isDisplayMode]: isDisplayMode })}>
+    <div className={cx("layout", { isDisplayMode: isDisplayMode })}>
       {section.list.length > 0 ? (
-        <div style={{ background: section.style.backgroundColor }} className={cx(style["slider-layout"])}>
+        <div style={{ background: section.style.backgroundColor }} className={cx("slider-layout")}>
           {section.design !== "thumbnail" ? (
             <BasicSlider
               backgroundColor={backgroundColor}
@@ -167,7 +167,7 @@ function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMod
       ) : (
         <div
           style={{ background: getImageUrl({ isCenter: true, url: "/images/noImage.png" }) }}
-          className={cx(style.noImage)}
+          className={cx("noImage")}
         >
           <span>{t("noImage")}</span>
         </div>

@@ -2,11 +2,11 @@
 
 import SectionLayout from "@/components/Sections/display"
 import { useEditorStore } from "@/store/editor"
-import { sectionMap } from "@App/[lang]/edit/[pageId]/page"
-import classNames from "classNames"
+import { sectionMap } from "@App/[lang]/edit/[userId]/[pageId]/page"
+import cs from "classNames/bind"
 import { useMemo } from "react"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function Preview() {
   const { initSections, formSections, stage, selectedSection } = useEditorStore()
@@ -17,9 +17,9 @@ export default function Preview() {
   )
 
   return (
-    <div className={cx(style.preview)}>
-      <div className={cx(style.phone)}>
-        <div className={cx(style.content)}>
+    <div className={cx("preview")}>
+      <div className={cx("phone")}>
+        <div className={cx("content")}>
           {sections.map((v) => (
             <SectionLayout id={v.id} noPadding={v.type === "thumbnail" || v.type === "slider"} key={`${v.id}`}>
               {sectionMap[v.type](v, true)}

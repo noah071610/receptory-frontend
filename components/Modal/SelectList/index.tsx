@@ -1,7 +1,5 @@
 "use client"
 
-import classNames from "classNames"
-
 import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
@@ -11,7 +9,8 @@ import Image from "next/image"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 export const SelectList = () => {
   const { t } = useTranslation()
@@ -30,27 +29,27 @@ export const SelectList = () => {
     selectList.length > 0 && (
       <ModalLayout modalStyle={style.content}>
         {design !== "thumbnail" && (
-          <ul className={cx(style["list-wrapper"], style["basic-list-wrapper"])}>
+          <ul className={cx("list-wrapper", "basic-list-wrapper")}>
             {selectList.map((v, i) => (
-              <li className={cx(style["list"])} onClick={() => onChangeSelect(v)} key={v.id}>
+              <li className={cx("list")} onClick={() => onChangeSelect(v)} key={v.id}>
                 {design === "imageWithText" &&
                   (v.src ? (
-                    <picture className={cx(style.image)}>
+                    <picture className={cx("image")}>
                       <Image width={100} height={80} src={v.src} alt="image" />
                     </picture>
                   ) : (
-                    <div className={cx(style["list-number"])}>
-                      <div className={cx(style.number)}>
+                    <div className={cx("list-number")}>
+                      <div className={cx("number")}>
                         <span>{i + 1}</span>
                       </div>
                     </div>
                   ))}
                 {design === "text" && (
-                  <div className={cx(style.number)}>
+                  <div className={cx("number")}>
                     <span>{i + 1}</span>
                   </div>
                 )}
-                <div className={cx(style["list-content"])}>
+                <div className={cx("list-content")}>
                   {hasString(v.data.title) && <h3>{v.data.title}</h3>}
                   {hasString(v.data.description) && <p>{v.data.description}</p>}
                 </div>
@@ -59,16 +58,16 @@ export const SelectList = () => {
           </ul>
         )}
         {design === "thumbnail" && (
-          <ul className={cx(style["list-wrapper"], style["thumb-list-wrapper"])}>
+          <ul className={cx("list-wrapper", "thumb-list-wrapper")}>
             {selectList.map((v) => (
               <li onClick={() => onChangeSelect(v)} key={`thumb-list-${v.id}`}>
                 <div
                   style={{
                     background: getImageUrl({ isCenter: true, url: hasString(v.src) ? v.src : "/images/noImage.png" }),
                   }}
-                  className={cx(style["list-content"])}
+                  className={cx("list-content")}
                 >
-                  <div className={cx(style.text)}>
+                  <div className={cx("text")}>
                     {
                       <>
                         {hasString(v.data.title) && <h3>{v.data.title}</h3>}
@@ -82,7 +81,7 @@ export const SelectList = () => {
           </ul>
         )}
         {addSelectNone && (
-          <div className={cx(style["btn-wrapper"])}>
+          <div className={cx("btn-wrapper")}>
             <button onClick={() => onChangeSelect(null)}>
               <span>{t("선택 없음")}</span>
             </button>

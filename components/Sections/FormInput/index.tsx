@@ -7,7 +7,6 @@ import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/inputHelper"
 import { faEnvelope, faGlobe, faListOl, faPencil } from "@fortawesome/free-solid-svg-icons"
-import classNames from "classNames"
 import { useParams } from "next/navigation"
 import { memo, useEffect } from "react"
 import { PhoneInput } from "react-international-phone"
@@ -15,7 +14,8 @@ import "react-international-phone/style.css"
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
@@ -85,13 +85,13 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
   const inputMap: { [key: string]: any } = {
     text: {
       icon: faPencil,
-      comp: <input className={cx(style["input"])} type="text" value={section.value} onChange={onChangeInput} />,
+      comp: <input className={cx("input")} type="text" value={section.value} onChange={onChangeInput} />,
     },
     number: {
       icon: faListOl,
       comp: (
         <input
-          className={cx(style["input"])}
+          className={cx("input")}
           type="number"
           onKeyDown={onlyNumberFilter}
           value={section.value}
@@ -108,7 +108,7 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
           name="email"
           id="email"
           required
-          className={cx(style["input"])}
+          className={cx("input")}
           value={section.value}
           onChange={onChangeInput}
         />
@@ -118,7 +118,7 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
       icon: faPencil,
       comp: (
         <TextareaAutosize
-          className={cx(style["textarea"])}
+          className={cx("textarea")}
           value={section.value}
           maxRows={5}
           maxLength={max}
@@ -130,7 +130,7 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
       icon: faGlobe,
       comp: (
         <PhoneInput
-          className={cx(style.country)}
+          className={cx("country")}
           value={section.value}
           defaultCountry={lang === "ko" ? "kr" : (lang as string)}
           hideDropdown={phoneNumberCountry !== "all"}
@@ -142,8 +142,8 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
   }
 
   return (
-    <div className={cx(style.layout)}>
-      <div className={cx(style["input-wrapper"])}>
+    <div className={cx("layout")}>
+      <div className={cx("input-wrapper")}>
         <FormUserInput
           icon={inputMap[design ?? "text"].icon}
           title={section.data.title}
@@ -154,14 +154,14 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
         </FormUserInput>
       </div>
       {!isDisplayMode && (
-        <div className={cx(style.options)}>
+        <div className={cx("options")}>
           <OptionTitleInputs section={section} />
           {design !== "country" && design !== "email" && (
             <div>
               <h4>최대 글자수 조정</h4>
-              <div className={cx(style["minMax-wrapper"])}>
+              <div className={cx("minMax-wrapper")}>
                 <input
-                  className={cx(style.minMax)}
+                  className={cx("minMax")}
                   onKeyDown={onlyNumberFilter}
                   onKeyUp={enforceMinMax}
                   type="number"
@@ -172,7 +172,7 @@ function FormInput({ section, isDisplayMode }: { section: SectionType; isDisplay
                 />
                 <span>{" ~ "}</span>
                 <input
-                  className={cx(style.minMax)}
+                  className={cx("minMax")}
                   onKeyDown={onlyNumberFilter}
                   onKeyUp={enforceMinMax}
                   type="number"

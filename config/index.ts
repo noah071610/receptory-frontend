@@ -34,6 +34,10 @@ export const getImageUrl = ({ isCenter, url }: { url: string; isCenter?: boolean
 
 export const queryKey = {
   user: ["user"],
+  save: {
+    edit: ["save", "edit"],
+    list: ["save", "list"],
+  },
 }
 
 export const noImageUrl = "/images/post/no-image.png"

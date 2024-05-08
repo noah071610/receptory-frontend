@@ -1,4 +1,4 @@
-import { UserType } from "@/types/Main"
+import { UserType } from "@/types/User"
 
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"

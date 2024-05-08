@@ -3,9 +3,9 @@
 import { ReactNode, useEffect, useRef, useState } from "react"
 
 import { useEditorStore } from "@/store/editor"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import style from "./style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function SectionLayout({
   children,
@@ -27,12 +27,8 @@ export default function SectionLayout({
   }, [selectedSection, observerRef?.current])
 
   return (
-    <section
-      ref={observerRef}
-      style={{ padding: noPadding ? "0px" : undefined }}
-      className={cx(style.section, style.display)}
-    >
-      <div className={cx(style.observer)}></div>
+    <section ref={observerRef} style={{ padding: noPadding ? "0px" : undefined }} className={cx("section", "display")}>
+      <div className={cx("observer")}></div>
       {children}
     </section>
   )

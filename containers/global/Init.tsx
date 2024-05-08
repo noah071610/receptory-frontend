@@ -1,33 +1,44 @@
 "use client"
-import { getUser, refreshUser } from "@/actions/user"
-import { useMainStore } from "@/store/main"
-import { PropsWithChildren, useEffect } from "react"
+import { refreshUser } from "@/actions/user"
+import { _url } from "@/config"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { PropsWithChildren, useEffect, useState } from "react"
+import { CookiesProvider } from "react-cookie"
+
+const STALE_TIME = 1000 * 60 * 60 // 60 minutes
+
+export const queryClientConfig = {
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: STALE_TIME,
+      baseURL: _url.server,
+      retry: 0,
+      retryDelay: 1000,
+    },
+  },
+}
 
 const Init: React.FC<PropsWithChildren> = ({ children }) => {
-  const { setUser } = useMainStore()
+  const [queryClientStore] = useState(() => new QueryClient(queryClientConfig))
   useEffect(() => {
     const fetchData = async () => {
-      const user = await refreshUser()
-
-      if (user) {
-        const { user: _user } = await getUser()
-
-        if (_user) {
-          setUser({ user: _user })
-        } else {
-          // refresh 토큰의ㅣ 유저로 대체, 이쪽으로 오면 에러이기 때문에 고쳐야함
-          if (user) setUser({ user })
-        }
-      } else {
-        // refresh 토큰의ㅣ 유저로 대체, 이쪽으로 오면 에러이기 때문에 고쳐야함
-        if (user) setUser({ user })
-      }
+      await refreshUser()
+      // if (user) {
+      //   await queryClient.setQueryData(queryKey.user, user)
+      // }
     }
-
     fetchData()
   }, [])
 
-  return <>{children}</>
+  return (
+    <CookiesProvider>
+      <QueryClientProvider client={queryClientStore}>
+        {children}
+        {/* <ReactQueryDevtools /> */}
+      </QueryClientProvider>
+    </CookiesProvider>
+  )
 }
 
 export default Init

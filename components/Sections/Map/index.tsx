@@ -6,16 +6,16 @@ import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/hasString"
 import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
 import { memo, useMemo, useState } from "react"
 import style from "./style.module.scss"
 
-const cx = classNames.bind(style)
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 const GoogleMapExplain = ({ isOpen }: { isOpen: boolean }) => {
   const { t } = useTranslation()
   return (
-    <div className={cx(style.explain, { [style.isOpen]: isOpen })}>
+    <div className={cx("explain", { isOpen: isOpen })}>
       <img src="" alt="explain-1" />
       <span>{t("1. 구글맵에서 위치를 찾아주세요.")}</span>
       <img src="" alt="explain-2" />
@@ -49,24 +49,24 @@ function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?:
   }, [section.value])
 
   return (
-    <div className={cx(style["map"])}>
+    <div className={cx("map")}>
       {mapCode ? (
         <iframe
-          className={cx(style.iframe)}
+          className={cx("iframe")}
           src={mapCode}
           allowFullScreen={true}
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       ) : (
-        <div className={cx(style.empty)}></div>
+        <div className={cx("empty")}></div>
       )}
       {!isDisplayMode && (
-        <div className={cx(style["input-wrapper"])}>
-          <h3 className={cx(style["input-title"])}>{t("임베드 코드 입력")}</h3>
+        <div className={cx("input-wrapper")}>
+          <h3 className={cx("input-title")}>{t("임베드 코드 입력")}</h3>
           <Input
             section={section}
-            className={cx(style.input)}
+            className={cx("input")}
             inputType="<iframe src= ..."
             maxLength={99999}
             isOptional={false}
@@ -76,10 +76,10 @@ function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?:
             onClick={() => {
               setIsOpen((b) => !b)
             }}
-            className={cx(style["explain-title"], { [style.isOpen]: isOpen })}
+            className={cx("explain-title", { isOpen: isOpen })}
           >
             <h3>{t("임베드 코드 삽입 방법")}</h3>
-            <div className={cx(style.icon)}>
+            <div className={cx("icon")}>
               <FontAwesomeIcon icon={faChevronCircleDown} />
             </div>
           </div>

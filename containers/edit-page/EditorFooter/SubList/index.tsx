@@ -2,14 +2,14 @@
 
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { AnimationTypes, DesignTypes, EditorFooterList, StyleSelectTypes } from "@/types/Edit"
+import { AnimationTypes, DesignTypes, EditorFooterList } from "@/types/Edit"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import classNames from "classNames"
+import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
-const cx = classNames.bind(style)
+const cx = cs.bind(style)
 
 export default function SubList({ list }: { list: EditorFooterList[] }) {
   const { lang } = useParams()
@@ -32,9 +32,6 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
       case "select":
         setList({ index: i, key: "isActive", payload: !selectedSection.list[i].isActive })
         break
-      case "imageSize":
-        setStyle({ key: "backgroundSize", payload: value as StyleSelectTypes })
-        break
 
       default:
         break
@@ -42,14 +39,8 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
   }
 
   return (
-    <div className={cx(style.list)}>
-      <Swiper
-        spaceBetween={14}
-        slidesPerView={"auto"}
-        freeMode={true}
-        modules={[FreeMode]}
-        className={cx(style.slider)}
-      >
+    <div className={cx("list")}>
+      <Swiper spaceBetween={14} slidesPerView={"auto"} freeMode={true} modules={[FreeMode]} className={cx("slider")}>
         {list.map((list, i) => {
           const isActive = () => {
             switch (submenuType) {
@@ -63,8 +54,6 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
                 return selectedSection?.design === list.value
               case "select":
                 return selectedSection?.list[i].isActive
-              case "imageSize":
-                return selectedSection?.style.backgroundSize === list.value
 
               default:
                 return false
@@ -72,12 +61,9 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
           }
 
           return (
-            <SwiperSlide className={cx(style.slide)} key={`subMenuList_${list.value}`}>
-              <button
-                onClick={() => onClickList(list.value, i)}
-                className={cx(style.btn, { [style.active]: isActive() })}
-              >
-                <div className={cx(style.icon)}>
+            <SwiperSlide className={cx("slide")} key={`subMenuList_${list.value}`}>
+              <button onClick={() => onClickList(list.value, i)} className={cx("btn", { active: isActive() })}>
+                <div className={cx("icon")}>
                   <FontAwesomeIcon icon={list.icon} />
                 </div>
                 <span>{t(list.value)}</span>

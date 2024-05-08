@@ -1,5 +1,22 @@
 @import "@/styles/variables.scss";
 
+@keyframes hide-cover {
+  from {
+    display: block;
+    opacity: 1;
+  }
+
+  99% {
+    display: block;
+    @include z-index(loading-cover);
+  }
+  to {
+    display: none;
+    z-index: -1;
+    opacity: 0;
+  }
+}
+
 .main {
   display: grid;
   grid-template-columns: var(--editor-width) var(--preview-width);
@@ -14,5 +31,16 @@
     position: relative;
     padding-bottom: 100px;
     margin-bottom: 50px;
+  }
+}
+
+.loading-cover {
+  display: block;
+  @include full($position: fixed);
+  @include z-index(loading-cover);
+  background-color: var(--white);
+  @include flex;
+  &.success {
+    animation: hide-cover 500ms forwards;
   }
 }
