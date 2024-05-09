@@ -5,22 +5,21 @@ import {
   faAlignJustify,
   faAlignLeft,
   faAlignRight,
-  faArrowDown,
   faBrush,
+  faCalendar,
   faCheck,
   faClock,
   faCommentAlt,
   faEnvelope,
-  faExpand,
   faFilm,
   faFont,
-  faGlobe,
   faHandPointer,
   faHeading,
   faIdCard,
   faImage,
   faImages,
   faList,
+  faListOl,
   faMap,
   faPaintRoller,
   faPalette,
@@ -44,21 +43,31 @@ const initSectionList: EditorFooterList[] = [
   { value: "checkList", icon: faSquareCheck, actionType: "createSection" },
 ]
 const formSectionList: EditorFooterList[] = [
-  { value: "text", icon: faFont, actionType: "createSection" },
+  { value: "calender", icon: faCalendar, actionType: "createSection" },
   { value: "time", icon: faClock, actionType: "createSection" },
   { value: "select", icon: faList, actionType: "createSection" },
-  { value: "input", icon: faPencil, actionType: "createSection" },
+  { value: "textInput", icon: faPencil, actionType: "createSection" },
+  { value: "numberInput", icon: faListOl, actionType: "createSection" },
+  { value: "phone", icon: faPhone, actionType: "createSection" },
+  { value: "email", icon: faEnvelope, actionType: "createSection" },
+  { value: "text", icon: faFont, actionType: "createSection" },
+  { value: "title", icon: faFont, actionType: "createSection" },
+  { value: "callout", icon: faIdCard, actionType: "createSection" },
+  { value: "checkList", icon: faSquareCheck, actionType: "createSection" },
 ]
 
 const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   thumbnail: [
-    { value: "design", icon: faPalette, actionType: "submenu" },
+    { value: "design", icon: faPaintRoller, actionType: "submenu" },
     { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" },
     { value: "ctaBackgroundColor", icon: faBrush, actionType: "colorSelector" },
     { value: "background", icon: faImage, actionType: "imageSelector" },
   ],
   album: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
-  callout: [{ value: "color", icon: faPalette, actionType: "colorSelector" }],
+  callout: [
+    { value: "design", icon: faPaintRoller, actionType: "submenu" },
+    { value: "color", icon: faPalette, actionType: "colorSelector" },
+  ],
 
   contact: [{ value: "animation", icon: faFilm, actionType: "submenu" }],
   map: [],
@@ -79,7 +88,10 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   checkList: [{ value: "animation", icon: faFilm, actionType: "submenu" }],
   time: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   select: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
-  input: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
+  textInput: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
+  numberInput: [],
+  email: [],
+  phone: [],
   calender: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
 }
 
@@ -117,7 +129,13 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "scaleUp", icon: faCheck, actionType: "cta" },
     ],
   },
-  callout: {},
+  callout: {
+    design: [
+      { value: "basic", icon: faCheck, actionType: "cta" },
+      { value: "card", icon: faCheck, actionType: "cta" },
+      { value: "none", icon: faCheck, actionType: "cta" },
+    ],
+  },
   map: {},
   qna: {},
   slider: {
@@ -137,9 +155,10 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   empty: {},
   thumbnail: {
     design: [
-      { value: "card", icon: faIdCard, actionType: "cta" },
-      { value: "full", icon: faExpand, actionType: "cta" },
-      { value: "simple", icon: faExpand, actionType: "cta" },
+      { value: "card", icon: faCheck, actionType: "cta" },
+      { value: "full", icon: faCheck, actionType: "cta" },
+      { value: "simple", icon: faCheck, actionType: "cta" },
+      { value: "background", icon: faCheck, actionType: "cta" },
     ],
   },
   checkList: {
@@ -168,15 +187,15 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "multiple", icon: faCheck, actionType: "cta" },
     ],
   },
-  input: {
+  textInput: {
     design: [
       { value: "text", icon: faCheck, actionType: "cta" },
-      { value: "number", icon: faArrowDown, actionType: "cta" },
-      { value: "country", icon: faGlobe, actionType: "cta" },
-      { value: "email", icon: faEnvelope, actionType: "cta" },
       { value: "textarea", icon: faCommentAlt, actionType: "cta" },
     ],
   },
+  email: {},
+  numberInput: {},
+  phone: {},
 }
 // ####### SUBMENU
 
@@ -184,10 +203,17 @@ export const getEditorFooterList = (selectedSection: SectionType | null, stage: 
   if (selectedSection === null) return stage === "init" ? initSectionList : stage === "form" ? formSectionList : []
   return footerListMap[selectedSection.type].map((v) => ({ ...v, parent: selectedSection.type }))
 }
-export const getSubmenuList = (currentSubmenu: string | null, selectedSection: SectionType | null) => {
+export const getSubmenuList = (
+  currentSubmenu: string | null,
+  selectedSection: SectionType | null,
+  stage: EditStage
+) => {
   if (selectedSection === null || currentSubmenu === null) return []
 
-  const target = footerSubmenuMap[selectedSection.type][currentSubmenu]
+  let target = footerSubmenuMap[selectedSection.type][currentSubmenu]
+  if (selectedSection.type === "thumbnail" && stage === "form" && currentSubmenu === "design") {
+    target = target.filter(({ value }) => value !== "full")
+  }
 
   return target ? target.map((v) => ({ ...v, parent: selectedSection.type })) : []
 }

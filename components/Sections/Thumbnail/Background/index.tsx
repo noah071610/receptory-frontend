@@ -3,6 +3,7 @@
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { getImageUrl } from "@/config"
+import { colors } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
@@ -14,7 +15,7 @@ import { useParams } from "next/navigation"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-export default function Full({
+export default function Background({
   section,
   textColor,
   ctaTextColor,
@@ -37,24 +38,21 @@ export default function Full({
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
   }
 
-  const mainBackground = background
-    ? // 풀 타입 배경 화면
-      getImageUrl({ isCenter: true, url: background ?? "" })
-    : // 풀 타입 백그라운드 컬러
-      `linear-gradient(180deg, ${backgroundColor} 87%, rgba(0,0,0,0) 100%)`
-
   return (
-    <div
-      style={{
-        background: mainBackground,
-      }}
-      className={cx("wrapper", { isDisplayMode })}
-    >
+    <div className={cx("wrapper")}>
+      <div
+        style={{
+          background: background ? getImageUrl({ isCenter: true, url: background ?? "" }) : backgroundColor,
+          filter: background ? "brightness(60%)" : "none",
+        }}
+        className={cx("background")}
+      ></div>
       {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
-      <div className={cx("main")}>
+
+      <div className={cx("content")}>
         {!isDisplayMode && (
           <div style={{ background: getImageUrl({ isCenter: true, url: section.src }) }} className={cx("thumbnail")}>
-            {hasString(section.src) && <DeleteBtn srcKey={"thumbnail"} />}
+            {hasString(section.src) && !isDisplayMode && <DeleteBtn isSmall={true} srcKey={"thumbnail"} />}
             <button className={cx("drop-zone")} onClick={onClickThumbnailUpload}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
@@ -67,23 +65,23 @@ export default function Full({
         )}
         <Input
           type="input"
-          className={cx(!isDisplayMode && "title-input")}
           inputType="title"
+          className={cx(!isDisplayMode && "title-input")}
           displayMode={isDisplayMode && "h1"}
           isOptional={true}
-          dataKey="title"
-          style={{ color: textColor }}
+          dataKey={"title"}
           value={title}
+          style={{ color: hasString(background) ? colors.white : textColor }}
         />
         <Input
           type="textarea"
-          className={cx(!isDisplayMode && "description-input")}
           inputType="description"
+          className={cx(!isDisplayMode && "description-input")}
           displayMode={isDisplayMode && "p"}
           isOptional={true}
-          dataKey="description"
-          style={{ color: textColor }}
+          dataKey={"description"}
           value={description}
+          style={{ color: hasString(background) ? colors.white : textColor }}
         />
         {!isForm && (
           <div className={cx("cta-wrapper")}>
@@ -92,7 +90,7 @@ export default function Full({
                 type="input"
                 displayMode={isDisplayMode && "span"}
                 inputType="cta"
-                dataKey="cta"
+                dataKey={"cta"}
                 isOptional={false}
                 style={{ color: ctaTextColor }}
                 value={cta}

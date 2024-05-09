@@ -1,7 +1,7 @@
 "use client"
 
 import AddBtn from "@/components/AddBtn"
-import ImageDelete from "@/components/ImageDelete"
+import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { getImageUrl } from "@/config"
 import { changeOpacity } from "@/config/colors"
@@ -37,7 +37,7 @@ const BasicSlider = ({
             }}
             className={cx("card", { cardStyle: section.design === "card" })}
           >
-            {!isDisplayMode && <ImageDelete srcKey="list" listIndex={i} />}
+            {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={i} />}
             <div className={cx("card-image")}>
               {/* <div style={{ background: getImageUrl({ isCenter: true, url: v.src }) }} className={cx("image")} /> */}
               <picture className={cx("image")}>
@@ -91,7 +91,7 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
                 }}
                 className={cx("photo")}
               >
-                {!isDisplayMode && <ImageDelete srcKey="list" listIndex={i} />}
+                {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={i} />}
               </div>
               <Input
                 type="input"

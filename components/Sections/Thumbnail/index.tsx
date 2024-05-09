@@ -6,6 +6,7 @@ import getContrastTextColor from "@/utils/getContrastTextColor"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useMemo } from "react"
+import Background from "./Background"
 import Card from "./Card"
 import Full from "./Full"
 import Simple from "./Simple"
@@ -42,6 +43,9 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
         <Full ctaTextColor={ctaTextColor} section={section} textColor={textColor} isDisplayMode={isDisplayMode} />
       )}
       {design === "simple" && <Simple ctaTextColor={ctaTextColor} section={section} isDisplayMode={isDisplayMode} />}
+      {design === "background" && (
+        <Background textColor={textColor} ctaTextColor={ctaTextColor} section={section} isDisplayMode={isDisplayMode} />
+      )}
     </div>
   )
 }

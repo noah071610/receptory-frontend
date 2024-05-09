@@ -1,6 +1,6 @@
 "use client"
 
-import ImageDelete from "@/components/ImageDelete"
+import DeleteBtn from "@/components/DeleteBtn"
 import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
@@ -157,7 +157,7 @@ export default function ImageSelector() {
       if (active.modal.payload === "add") {
         addList({ type: type as SectionListTypes, valueArrForNewList: filteredImageList })
       } else {
-        const newSection = createNewSection(type as SectionListTypes, initSections.length)
+        const newSection = createNewSection({ type: type as SectionListTypes, index: initSections.length })
         newSection.list = [...filteredImageList]
         addSection({
           type: type as SectionListTypes,
@@ -184,7 +184,7 @@ export default function ImageSelector() {
             return (
               <SwiperSlide className={cx("slide")} key={`thumb_main_${i}`}>
                 <div className={cx("preview-image")}>
-                  <ImageDelete deleteEvent={deleteSelectedImage} srcKey="imageModal" listIndex={i} />
+                  <DeleteBtn deleteEvent={deleteSelectedImage} srcKey="imageModal" listIndex={i} />
                   <img src={payload ?? ""} alt={`preview_${i}`} />
                 </div>
               </SwiperSlide>

@@ -21,4 +21,20 @@
       background-color: var(--pink);
     }
   }
+  &.small {
+    button {
+      padding: 5px;
+      svg {
+        width: 15px;
+        height: 15px;
+        font-size: 13px;
+      }
+    }
+  }
+
+  &.delete-list {
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+  }
 }

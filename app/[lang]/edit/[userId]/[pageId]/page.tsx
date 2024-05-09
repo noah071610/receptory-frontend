@@ -8,7 +8,6 @@ import DateSelector from "@/components/Modal/DateSelector"
 import ImageSelector from "@/components/Modal/ImageSelector"
 import SelectList from "@/components/Modal/SelectList"
 import TimePicker from "@/components/Modal/TimePicker"
-import Calender from "@/components/Sections/Calender"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
@@ -129,13 +128,7 @@ const EditPage = () => {
       <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
       {sections?.length > 0 && (
         <SectionLayout pathname={pathname} noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
-          {stage === "init" ? (
-            <Thumbnail section={sections[0]} />
-          ) : stage === "form" ? (
-            <Calender section={sections[0]} />
-          ) : (
-            <></>
-          )}
+          <Thumbnail section={sections[0]} />
         </SectionLayout>
       )}
       <DragDropContext onDragEnd={onDragEnd}>

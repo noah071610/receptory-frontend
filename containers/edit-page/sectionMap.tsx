@@ -36,7 +36,16 @@ const Time = dynamic(() => import("@/components/Sections/Time/index"), {
 const Select = dynamic(() => import("@/components/Sections/SelectList/index"), {
   ssr: true,
 })
-const FormInput = dynamic(() => import("@/components/Sections/FormInput/index"), {
+const TextInput = dynamic(() => import("@/components/Sections/FormInput/Text/index"), {
+  ssr: true,
+})
+const NumberInput = dynamic(() => import("@/components/Sections/FormInput/Number/index"), {
+  ssr: true,
+})
+const Phone = dynamic(() => import("@/components/Sections/FormInput/Phone/index"), {
+  ssr: true,
+})
+const Email = dynamic(() => import("@/components/Sections/FormInput/Email/index"), {
   ssr: true,
 })
 const CheckList = dynamic(() => import("@/components/Sections/CheckList/index"), {
@@ -54,7 +63,10 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   qna: (section, isDisplayMode = false) => <QnA section={section} isDisplayMode={isDisplayMode} />,
   calender: (section, isDisplayMode = false) => <Calender section={section} isDisplayMode={isDisplayMode} />,
   thumbnail: (section, isDisplayMode = false) => <Thumbnail section={section} isDisplayMode={isDisplayMode} />,
-  input: (section, isDisplayMode = false) => <FormInput section={section} isDisplayMode={isDisplayMode} />,
+  textInput: (section, isDisplayMode = false) => <TextInput section={section} isDisplayMode={isDisplayMode} />,
+  numberInput: (section, isDisplayMode = false) => <NumberInput section={section} isDisplayMode={isDisplayMode} />,
+  phone: (section, isDisplayMode = false) => <Phone section={section} isDisplayMode={isDisplayMode} />,
+  email: (section, isDisplayMode = false) => <Email section={section} isDisplayMode={isDisplayMode} />,
   time: (section, isDisplayMode = false) => <Time section={section} isDisplayMode={isDisplayMode} />,
   select: (section, isDisplayMode = false) => <Select section={section} isDisplayMode={isDisplayMode} />,
   empty: () => <Empty />,

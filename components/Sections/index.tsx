@@ -62,7 +62,7 @@ export default function SectionLayout({
       <div className={cx("observer")} id={section.id}></div>
       {children}
 
-      {section.type !== "thumbnail" && section.type !== "calender" && (
+      {section.type !== "thumbnail" && (
         <div className={cx("editor", "tools", { active: selectedSection?.id === section.id })}>
           <button onClick={onClickCopy} className={cx("copy", "copy")}>
             {/* todo */}

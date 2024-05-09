@@ -1,7 +1,7 @@
 "use client"
 
 import AddBtn from "@/components/AddBtn"
-import ImageDelete from "@/components/ImageDelete"
+import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import Loading from "@/components/Loading"
 import { getImageUrl } from "@/config"
@@ -32,7 +32,7 @@ const AlbumImageComponent = ({
 
   return (
     <div>
-      {!isDisplayMode && <ImageDelete srcKey="list" listIndex={props.index} />}
+      {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={props.index} />}
       <img
         {...(props.imageProps as any)}
         key={`album_${props.index}`}
@@ -70,7 +70,7 @@ const ImageComponent = ({
         <div style={{ background: getImageUrl({ isCenter: true, url: photo.src }) }} className={cx("background")} />
         <img src={photo.src} alt={photo.src} />
         {status === "loading" && <Loading />}
-        {!isDisplayMode && <ImageDelete srcKey="list" listIndex={index} />}
+        {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={index} />}
       </picture>
       <Input
         type="input"

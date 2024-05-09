@@ -1,5 +1,6 @@
 "use client"
 
+import DeleteBtn from "@/components/DeleteBtn"
 import { changeOpacity } from "@/config/colors"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
@@ -16,6 +17,7 @@ const cx = cs.bind(style)
 function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { setActive } = useEditorStore()
   const { color } = section.style
+  const design = section.design
 
   const backgroundColor = useMemo(() => changeOpacity(color ?? "rgba(255,255,255,1)", 0.1), [color])
 
@@ -27,9 +29,18 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
 
   return (
     <div className={cx("layout")}>
-      <div style={{ backgroundColor, borderColor: color }} className={cx("callout")}>
-        {(!isDisplayMode || (isDisplayMode && hasString(section.src))) && (
-          <div className={cx("image-container")}>
+      <div
+        style={{ backgroundColor, borderColor: design === "card" ? "transparent" : color }}
+        className={cx("callout", design)}
+      >
+        {design !== "none" && (!isDisplayMode || (isDisplayMode && hasString(section.src))) && (
+          <div
+            style={
+              design === "card" ? { backgroundColor: changeOpacity(backgroundColor, 0.3), borderColor: color } : {}
+            }
+            className={cx("image-container")}
+          >
+            {section.src && !isDisplayMode && <DeleteBtn isSmall={true} srcKey="callout" />}
             <picture onClick={onClickAddImage} className={cx("image")}>
               {section.src && <Image width={50} height={50} src={section.src} alt="image" />}
               {!isDisplayMode && (

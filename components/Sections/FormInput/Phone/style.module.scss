@@ -1,0 +1,9 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.options {
+  @include options-style;
+}

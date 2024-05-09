@@ -111,8 +111,8 @@ export const useEditorStore = create<EditStates & Actions>()(
   immer((set) => ({
     // STATE
     isEditStart: false,
-    initSections: [createNewSection("thumbnail", 0)],
-    formSections: [],
+    initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple" })],
+    formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background" })],
     selectedSection: null,
     stage: "init",
     active: {
@@ -327,7 +327,7 @@ export const useEditorStore = create<EditStates & Actions>()(
     addSection: ({ type, payload, newId }) =>
       set((origin) => {
         const sections = origin[getKey(origin)]
-        const newSection = payload ?? createNewSection(type, sections.length, newId)
+        const newSection = payload ?? createNewSection({ type, index: sections.length, newId })
         if (origin.revert.length <= 0) {
           saveSectionHistory({ origin, payload: newSection })
         }

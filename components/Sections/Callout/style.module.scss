@@ -1,25 +1,25 @@
 @import "@/styles/variables.scss";
 
-.display {
-  padding: 0 10px;
-}
-
 .callout {
   width: 100%;
   background-color: var(--gray-softest);
   @include border;
   border-radius: 5px;
-  padding: 5px;
+  padding: 10px 5px;
   display: flex;
+  position: relative;
+
   .image-container {
     width: 60px;
     height: 60px;
     padding: 5px;
+    position: relative;
+
     @include flex;
     .image {
-      border-radius: 100%;
       width: 50px;
       height: 50px;
+
       @include flex;
       position: relative;
       border-radius: 100%;
@@ -52,5 +52,30 @@
   .main {
     width: 100%;
     padding: 5px;
+  }
+
+  &.card {
+    margin-top: 20px;
+    .image-container {
+      position: absolute;
+      top: -25px;
+      left: 15px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      &::before {
+        content: "";
+        @include full;
+        background-color: var(--white);
+        opacity: 0.9;
+      }
+    }
+    .image {
+      width: 40px;
+      height: 40px;
+    }
+    .main {
+      padding-top: 35px;
+    }
   }
 }

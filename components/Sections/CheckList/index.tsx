@@ -1,6 +1,7 @@
 "use client"
 
 import AddBtn from "@/components/AddBtn"
+import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
@@ -72,17 +73,16 @@ function List({
           type="input"
           value={list.value}
           displayMode={isDisplayMode && "span"}
-          maxLength={25}
+          maxLength={35}
           className={isDisplayMode ? style.text : ""}
         />
+        {!isDisplayMode && <DeleteBtn isSmall={true} listIndex={index} srcKey="checklist" isDeleteList={true} />}
       </div>
     </li>
   )
 }
 
 function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { setActive } = useEditorStore()
-
   return (
     <div className={cx("layout")}>
       <ul className={cx("check-list")}>

@@ -1,6 +1,6 @@
 "use client"
 
-import ImageDelete from "@/components/ImageDelete"
+import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { getImageUrl } from "@/config"
 import { colors } from "@/config/colors"
@@ -29,7 +29,8 @@ export default function Simple({
   const { title, description, cta } = section.data
   const { color, background, backgroundColor } = section.style
 
-  const { setActive } = useEditorStore()
+  const { setActive, stage } = useEditorStore()
+  const isForm = stage === "form"
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -43,7 +44,7 @@ export default function Simple({
         }}
         className={cx("background")}
       >
-        {background && !isDisplayMode && <ImageDelete srcKey={"background"} />}
+        {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
       </div>
 
       <div className={cx("main")}>
@@ -54,7 +55,7 @@ export default function Simple({
             }}
             className={cx("thumbnail", { isDisplayMode })}
           >
-            {hasString(section.src) && !isDisplayMode && <ImageDelete srcKey={"thumbnail"} />}
+            {hasString(section.src) && !isDisplayMode && <DeleteBtn srcKey={"thumbnail"} />}
             {!isDisplayMode && (
               <button className={cx("drop-zone")} onClick={onClickThumbnailUpload}>
                 <FontAwesomeIcon icon={faPlus} />
@@ -81,19 +82,21 @@ export default function Simple({
             dataKey={"description"}
             value={description}
           />
-          <div className={cx("cta-wrapper")}>
-            <button style={{ backgroundColor: color }} className={cx("cta")}>
-              <Input
-                type="input"
-                displayMode={isDisplayMode && "span"}
-                inputType="cta"
-                dataKey={"cta"}
-                isOptional={false}
-                style={{ color: ctaTextColor }}
-                value={cta}
-              />
-            </button>
-          </div>
+          {!isForm && (
+            <div className={cx("cta-wrapper")}>
+              <button style={{ backgroundColor: color }} className={cx("cta")}>
+                <Input
+                  type="input"
+                  displayMode={isDisplayMode && "span"}
+                  inputType="cta"
+                  dataKey={"cta"}
+                  isOptional={false}
+                  style={{ color: ctaTextColor }}
+                  value={cta}
+                />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

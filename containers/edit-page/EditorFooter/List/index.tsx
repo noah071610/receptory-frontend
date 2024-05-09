@@ -1,5 +1,6 @@
 "use client"
 
+import { toastError } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
@@ -24,13 +25,19 @@ export default function List({
   const { replace } = useRouter()
   const pathname = usePathname()
   const { lang } = useParams()
-  const { addSection, setActive, active } = useEditorStore()
+  const { addSection, formSections, setActive, active } = useEditorStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, type: EditorFooterListActions) => {
     switch (type) {
       case "createSection":
         const newId = getId()
+        if (value === "calender" && formSections.find(({ type }) => type === "calender")) {
+          return toastError("onlyOneSection")
+        }
+        if (value === "time" && formSections.find(({ type }) => type === "time")) {
+          return toastError("onlyOneSection")
+        }
         addSection({ type: value as SectionListTypes, newId })
         replace(`${pathname}#${newId}`)
         break

@@ -21,7 +21,7 @@ export default function EditorFooter() {
     return getEditorFooterList(selectedSection, stage)
   }, [selectedSection, stage])
   const submenuList = useMemo(() => {
-    return getSubmenuList(active.submenu.type, selectedSection)
+    return getSubmenuList(active.submenu.type, selectedSection, stage)
   }, [selectedSection, active.submenu.type])
 
   const isOpenedSubmenu = useMemo(() => {

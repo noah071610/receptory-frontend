@@ -68,7 +68,36 @@ const sectionMap: { [key: string]: any } = {
     target.list[0].isActive = true
     return target
   },
-  input: () => {
+  email: () => {
+    return {
+      data: {
+        title: "타이틀 입력",
+        description: "설명 입력",
+      },
+    }
+  },
+  phone: () => {
+    return {
+      data: {
+        title: "타이틀 입력",
+        description: "설명 입력",
+      },
+      options: { phoneNumberCountry: "all" },
+    }
+  },
+  numberInput: () => {
+    return {
+      data: {
+        title: "타이틀 입력",
+        description: "설명 입력",
+      },
+      options: {
+        min: 0,
+        max: 9999999,
+      },
+    }
+  },
+  textInput: () => {
     return {
       data: {
         title: "타이틀 입력",
@@ -78,7 +107,6 @@ const sectionMap: { [key: string]: any } = {
       options: {
         min: 0,
         max: 50,
-        phoneNumberCountry: "all",
       },
     }
   },
@@ -137,10 +165,10 @@ const sectionMap: { [key: string]: any } = {
       },
     }
   },
-  thumbnail: () => {
+  thumbnail: (designInit?: string) => {
     return {
       id: "thumbnail",
-      design: "card",
+      design: designInit ?? "simple",
       data: {
         title: "타이틀 입력",
         description: "설명 입력",
@@ -183,8 +211,18 @@ export const createNewSectionList = (subType: string, index: number, obj?: any):
   }
 }
 
-export const createNewSection = (type: SectionListTypes, index: number, newId?: string): SectionType => {
-  const setProperties = sectionMap[type] ? sectionMap[type]() : {}
+export const createNewSection = ({
+  type,
+  index,
+  newId,
+  designInit,
+}: {
+  type: SectionListTypes
+  index: number
+  newId?: string
+  designInit?: string
+}): SectionType => {
+  const setProperties = sectionMap[type] ? sectionMap[type](designInit) : {}
 
   return {
     id: newId ?? getId(),

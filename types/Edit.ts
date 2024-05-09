@@ -15,7 +15,10 @@ export type SectionListTypes =
   | "calender"
   | "time"
   | "select"
-  | "input"
+  | "textInput"
+  | "numberInput"
+  | "phone"
+  | "email"
   | "checkList"
 
 export type TargetSectionListTypes =
@@ -56,6 +59,8 @@ export type DesignTypes =
   | "caution"
   | "imageWithText"
   | "simple"
+  | "background"
+  | "none"
   | AlignTypes
 export type AnimationTypes =
   | "none"
