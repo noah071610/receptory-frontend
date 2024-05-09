@@ -5,7 +5,7 @@ import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/inputHelper"
-import { faListOl } from "@fortawesome/free-solid-svg-icons"
+import { fa1 } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo, useEffect } from "react"
 import "react-international-phone/style.css"
@@ -55,7 +55,7 @@ function Number({ section, isDisplayMode }: { section: SectionType; isDisplayMod
     <div className={cx("layout")}>
       <div className={cx("input-wrapper")}>
         <FormUserInput
-          icon={faListOl}
+          icon={fa1}
           title={section.data.title}
           description={section.data.description}
           inputStyle={"number"}

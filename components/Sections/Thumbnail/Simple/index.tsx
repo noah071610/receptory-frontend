@@ -8,22 +8,14 @@ import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/hasString"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-export default function Simple({
-  section,
-  ctaTextColor,
-  isDisplayMode,
-}: {
-  ctaTextColor: string
-  section: SectionType
-  isDisplayMode?: boolean
-}) {
+export default function Simple({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
   const { title, description, cta } = section.data
@@ -84,16 +76,17 @@ export default function Simple({
           />
           {!isForm && (
             <div className={cx("cta-wrapper")}>
-              <button style={{ backgroundColor: color }} className={cx("cta")}>
+              <button className={cx("cta")}>
                 <Input
                   type="input"
                   displayMode={isDisplayMode && "span"}
                   inputType="cta"
                   dataKey={"cta"}
                   isOptional={false}
-                  style={{ color: ctaTextColor }}
+                  style={{ color }}
                   value={cta}
                 />
+                {isDisplayMode && <FontAwesomeIcon style={{ color }} icon={faChevronRight} />}
               </button>
             </div>
           )}

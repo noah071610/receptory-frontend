@@ -11,6 +11,7 @@ import TimePicker from "@/components/Modal/TimePicker"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
+import Rending from "@/containers/edit-page/Rending"
 import { sectionMap } from "@/containers/edit-page/sectionMap"
 import style from "@/containers/edit-page/style.module.scss"
 import { useEditorStore } from "@/store/editor"
@@ -126,37 +127,40 @@ const EditPage = () => {
   return (
     <>
       <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
-      {sections?.length > 0 && (
+      {sections?.length > 0 && stage !== "rending" && (
         <SectionLayout pathname={pathname} noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
           <Thumbnail section={sections[0]} />
         </SectionLayout>
       )}
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(droppableProvided) => (
-            <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
-              {sections.slice(1).map((v, i) => (
-                <Draggable index={i + 1} key={v.id} draggableId={v.id}>
-                  {(draggableProvided) => {
-                    return (
-                      <SectionLayout
-                        pathname={pathname}
-                        noPadding={v.type === "slider"}
-                        draggableProvided={draggableProvided}
-                        section={v}
-                        key={`${v.id}`}
-                      >
-                        {sectionMap[v.type](v)}
-                      </SectionLayout>
-                    )
-                  }}
-                </Draggable>
-              ))}
-              {droppableProvided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {stage !== "rending" && (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(droppableProvided) => (
+              <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
+                {sections.slice(1).map((v, i) => (
+                  <Draggable index={i + 1} key={v.id} draggableId={v.id}>
+                    {(draggableProvided) => {
+                      return (
+                        <SectionLayout
+                          pathname={pathname}
+                          noPadding={v.type === "slider"}
+                          draggableProvided={draggableProvided}
+                          section={v}
+                          key={`${v.id}`}
+                        >
+                          {sectionMap[v.type](v)}
+                        </SectionLayout>
+                      )
+                    }}
+                  </Draggable>
+                ))}
+                {droppableProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+      {stage === "rending" && <Rending />}
       {activeModal?.includes("image") && <ImageSelector />}
       {activeModal?.includes("time") && <TimePicker />}
       {activeModal === "calender" && <DatePicker />}

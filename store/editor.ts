@@ -7,7 +7,8 @@ import {
   SectionType,
   StyleProperties,
 } from "@/types/Edit"
-import { SaveContentType } from "@/types/Page"
+import { Langs } from "@/types/Main"
+import { PageFormatType, SaveContentType } from "@/types/Page"
 
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import getId from "@/utils/getId"
@@ -16,6 +17,13 @@ import { EditorState } from "draft-js"
 import { cloneDeep } from "lodash"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
+
+interface EditErrorType {
+  text: string
+  sectionIndex: EditStage
+  type: SectionListTypes
+  level: number
+}
 
 export interface EditStates {
   isEditStart: boolean
@@ -32,6 +40,16 @@ export interface EditStates {
   revertIndex: number
   currentUsedImages: string[]
   currentUsedColors: string[]
+  pageOptions: {
+    format: PageFormatType
+    lang: Langs
+    customLink: string
+  }
+  error: {
+    init: { [id: string]: EditErrorType }
+    form: { [id: string]: EditErrorType }
+    rending: { [id: string]: EditErrorType }
+  }
 }
 
 type Actions = {
@@ -82,6 +100,7 @@ type Actions = {
 
   setRevert: (revertType: "do" | "undo") => void
   saveSectionHistory: ({ payload }: { payload: SectionType }) => void
+  setPageOptions: ({ type, payload }: { type: "format" | "lang" | "customLink"; payload: any }) => void
 }
 
 const getTarget = (origin: any): SectionType => {
@@ -133,6 +152,16 @@ export const useEditorStore = create<EditStates & Actions>()(
     revertIndex: -1,
     currentUsedImages: [],
     currentUsedColors: [],
+    pageOptions: {
+      format: "inactive",
+      lang: "ko",
+      customLink: "",
+    },
+    error: {
+      init: {},
+      form: {},
+      rending: {},
+    },
 
     // SET
     saveSectionHistory: ({ payload }) =>
@@ -320,6 +349,11 @@ export const useEditorStore = create<EditStates & Actions>()(
           origin.selectedSection.collection = payload
           saveSectionHistory({ origin, payload: target })
         }
+        origin.isEditStart = true
+      }),
+    setPageOptions: ({ type, payload }) =>
+      set((origin) => {
+        origin.pageOptions[type] = payload as never
         origin.isEditStart = true
       }),
 

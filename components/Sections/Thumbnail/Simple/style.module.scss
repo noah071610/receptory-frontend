@@ -96,15 +96,22 @@
   display: flex;
   justify-content: flex-start;
   .cta {
-    padding: 7px 11px;
-    border-radius: 3px;
     display: flex;
-    justify-content: flex-start;
+    align-items: center;
+
     input,
     span {
       width: auto;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.1;
+      font-weight: 700;
+    }
+    input {
+      @include input-style;
+    }
+    svg {
+      font-size: 15px;
+      margin-left: 5px;
     }
   }
 }

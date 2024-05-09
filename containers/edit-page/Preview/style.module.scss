@@ -23,6 +23,16 @@
   border: 14px solid var(--black);
   background-color: var(--white);
   position: relative;
+
+  .submit {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    button {
+      @include form-btn-style;
+    }
+  }
 }
 
 .content {

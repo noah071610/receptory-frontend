@@ -42,7 +42,7 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
       {design === "full" && (
         <Full ctaTextColor={ctaTextColor} section={section} textColor={textColor} isDisplayMode={isDisplayMode} />
       )}
-      {design === "simple" && <Simple ctaTextColor={ctaTextColor} section={section} isDisplayMode={isDisplayMode} />}
+      {design === "simple" && <Simple section={section} isDisplayMode={isDisplayMode} />}
       {design === "background" && (
         <Background textColor={textColor} ctaTextColor={ctaTextColor} section={section} isDisplayMode={isDisplayMode} />
       )}

@@ -9,7 +9,7 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function Preview() {
-  const { initSections, formSections, stage, selectedSection } = useEditorStore()
+  const { initSections, formSections, stage } = useEditorStore()
 
   const sections = useMemo(
     () => (stage === "init" ? initSections : stage === "form" ? formSections : []),
@@ -25,6 +25,11 @@ export default function Preview() {
               {sectionMap[v.type](v, true)}
             </SectionLayout>
           ))}
+          {stage === "form" && (
+            <div className={cx("submit")}>
+              <button>{"제출하기"}</button>
+            </div>
+          )}
         </div>
       </div>
     </div>

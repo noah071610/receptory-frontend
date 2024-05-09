@@ -115,7 +115,7 @@ const sectionMap: { [key: string]: any } = {
       .map((v, i) => createNewSectionList(v, i))
       .map((v) => ({ ...v, isActive: true }))
 
-    list[2].style.color = "rgba(158,0,255,0.3)"
+    list[2].style.color = colors.purpleHard
 
     return {
       style: {
@@ -172,11 +172,11 @@ const sectionMap: { [key: string]: any } = {
       data: {
         title: "타이틀 입력",
         description: "설명 입력",
-        cta: "텍스트 입력",
+        cta: "폼으로 이동",
       },
       style: {
         src: "",
-        color: "rgba(158,0,255,0.4)",
+        color: "rgba(130, 42, 202, 0.6)",
         background: "",
         backgroundColor: "rgba(255,176,176,0.25)",
       },
