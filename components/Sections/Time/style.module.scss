@@ -1,0 +1,43 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.time-add {
+  @include flex;
+  flex-direction: column;
+}
+
+.time-submit {
+  border-radius: 20px;
+  background-color: var(--pink);
+  color: var(--white);
+  padding: 12px 30px;
+}
+.times {
+  padding: 15px;
+  background-color: var(--gray-softest);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  gap: 10px 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+  button {
+    font-size: 14px;
+    padding: 8px 15px;
+    border: 1px solid var(--pink);
+    background-color: var(--white);
+    border-radius: 5px;
+  }
+}
+
+.options {
+  @include options-style;
+  input[type="time"] {
+    border-radius: 5px;
+    @include border;
+    padding: 8px 18px;
+  }
+}

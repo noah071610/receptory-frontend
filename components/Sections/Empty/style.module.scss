@@ -1,0 +1,9 @@
+@import "@/styles/variables.scss";
+
+.empty {
+  height: 20px;
+  &.isDisplay {
+    height: 16px;
+    padding: 6px;
+  }
+}

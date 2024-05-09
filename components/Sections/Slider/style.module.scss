@@ -1,0 +1,205 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  padding-bottom: 16px;
+  &.isDisplayMode {
+    padding-bottom: 0;
+  }
+}
+
+.slider-layout {
+  input,
+  textarea {
+    @include input-style($isSmall: true);
+  }
+}
+
+.slider {
+  padding: 30px 10px;
+}
+
+.slide {
+  width: 210px;
+
+  &.circle {
+    width: 150px;
+
+    input,
+    textarea,
+    .title,
+    .description {
+      text-align: center;
+    }
+    .card {
+      width: 100%;
+      padding: 20px 10px;
+      background-color: var(--white);
+      border-radius: 10px;
+      border: 1px solid var(--pink-soft);
+      box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+      min-height: 190px;
+
+      .card-image {
+        margin-bottom: 10px;
+        overflow: visible;
+        @include flex;
+        height: 100%;
+        .image {
+          img {
+            width: 80px;
+            height: 80px;
+            border-radius: 100%;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+      .content {
+        padding: 0;
+        .title-input,
+        .title {
+          @include small-text-style;
+        }
+        .description-input,
+        .description {
+          @include small-text-style($moreSmall: true);
+        }
+      }
+    }
+  }
+
+  &.card {
+    .card {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+      .card-image {
+        border-radius: 0;
+        border-bottom-left-radius: 30px;
+        position: relative;
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: calc(100% + 30px);
+        }
+      }
+      .content {
+        padding: 10px 20px 30px 10px;
+        min-height: 90px;
+        border-top-right-radius: 30px;
+        position: relative;
+        z-index: 10;
+        background-color: var(--white);
+      }
+    }
+  }
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  width: 210px;
+
+  .card-image {
+    width: 100%;
+    height: 140px;
+    border-radius: 3px;
+    .image {
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  .content {
+    padding: 5px 2px;
+    .title-input,
+    .title {
+      @include title-style($isSmall: true);
+      font-weight: 600;
+    }
+    .description-input,
+    .description {
+      margin-top: 3px;
+      @include description-style($isSmall: true);
+    }
+
+    //
+    .title,
+    .description {
+      padding: 0;
+    }
+
+    .title {
+      word-break: break-all;
+    }
+    .description {
+      white-space: pre-line;
+      word-break: break-all;
+    }
+  }
+}
+
+.thumb {
+  margin-bottom: 15px;
+  .photo {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  input,
+  .title {
+    @include title-style();
+  }
+  textarea,
+  .description {
+    margin-top: 5px;
+    @include description-style();
+  }
+
+  .title {
+    word-break: break-all;
+  }
+  .description {
+    white-space: pre-line;
+    word-break: break-all;
+    margin-top: 0;
+  }
+}
+
+.thumb-slider {
+  padding: 20px 10px 0 10px;
+}
+.thumb-list {
+  height: 70px;
+  padding: 0 10px 20px 10px;
+  .thumb-list-slide {
+    height: 100%;
+    opacity: 0.5 !important;
+    .photo {
+      border-radius: 5px;
+      height: 100%;
+      width: 100%;
+    }
+  }
+  :global {
+    .swiper-slide-thumb-active {
+      opacity: 1 !important;
+    }
+  }
+}
+
+.noImage {
+  width: 100%;
+  height: 200px;
+  @include flex;
+  span {
+    color: var(--gray);
+    font-size: 20px;
+  }
+}

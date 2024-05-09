@@ -1,0 +1,110 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.check-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.list-wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 7px;
+  padding: 3px 5px;
+  border-radius: 10px;
+  // background-color: var(--white);
+  .icon {
+    cursor: pointer;
+    @include flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: var(--gray-soft);
+    svg {
+      font-size: 18px;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  position: relative;
+  input {
+    @include input-style;
+    padding: 5px;
+  }
+  input,
+  .text {
+    @include description-style;
+  }
+  .text {
+    width: auto;
+  }
+}
+
+// list style -> list-wrapper
+.list-wrapper.check {
+  .icon {
+    background-color: var(--green-soft);
+    svg {
+      color: var(--green);
+    }
+  }
+}
+.list-wrapper.uncheck {
+  .icon {
+    background-color: var(--red-soft);
+    svg {
+      color: var(--red);
+    }
+  }
+  input,
+  span {
+    font-weight: 700;
+  }
+}
+.list-wrapper.underline {
+  .icon {
+    background-color: rgba(128, 0, 128, 0.8);
+    svg {
+      color: #f0f0f0;
+      font-size: 16px;
+    }
+  }
+  span {
+    font-style: italic;
+  }
+}
+.list-wrapper.caution {
+  .icon {
+    background-color: var(--black-soft);
+    svg {
+      color: #ffd700;
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+  }
+  span {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 10;
+      bottom: 0px;
+      left: 0;
+      height: 6px;
+      width: 100%;
+      background-color: rgb(255, 215, 0, 0.2);
+    }
+  }
+}

@@ -1,0 +1,44 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+  .content {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 20px;
+    .ratio-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      .ratio {
+        width: 20px;
+        height: 20px;
+        @include flex;
+        border-radius: 100%;
+        @include border;
+        .circle {
+          width: 12px;
+          height: 12px;
+          border-radius: 100%;
+          transform: scale(0);
+          transition: 300ms all;
+        }
+      }
+      label {
+        cursor: pointer;
+      }
+      &.active {
+        label {
+          color: var(--pink);
+        }
+        .circle {
+          background-color: var(--pink);
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}

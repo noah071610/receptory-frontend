@@ -1,0 +1,44 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  &.isDisplay {
+    padding: 0 10px;
+  }
+
+  input,
+  textarea {
+    @include input-style;
+  }
+  .label-input,
+  .label {
+    @include label-style;
+  }
+  .title,
+  .title-input {
+    @include title-style;
+  }
+  .description,
+  .description-input {
+    margin-top: 1px;
+    @include description-style;
+  }
+
+  .description {
+    white-space: pre-line;
+    word-break: break-all;
+  }
+  .label,
+  .label-input {
+    font-size: 13px;
+    margin-bottom: 13px;
+    font-weight: 600;
+  }
+  .label {
+    width: auto;
+  }
+}
+
+.label-wrapper {
+  width: 100%;
+  display: flex;
+}

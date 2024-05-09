@@ -1,0 +1,19 @@
+@import "@/styles/variables.scss";
+
+.edit-inputs {
+  width: 100%;
+  @include flex;
+  flex-direction: column;
+  input {
+    width: 100%;
+    max-width: 300px;
+    @include input-style;
+  }
+  .title {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  .description {
+    font-size: 13px;
+  }
+}

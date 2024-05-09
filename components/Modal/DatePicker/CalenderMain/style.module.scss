@@ -1,0 +1,97 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.title {
+  @include input-style;
+  @include title-style;
+  margin-bottom: 10px;
+}
+
+.options {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.date-picker-layout {
+  width: 100%;
+  padding: 15px;
+  .btn-wrapper {
+    @include form-btn-layout-style;
+    .pickDate {
+      @include form-btn-style;
+    }
+    .anyDate {
+      @include form-sub-btn-style;
+    }
+  }
+  &.isOptionCalender {
+    padding: 0;
+  }
+}
+
+.date-picker {
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    p {
+      text-align: center;
+    }
+  }
+  .week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 5px;
+    align-items: center;
+    padding: 10px 0;
+    p {
+      @include flex;
+    }
+  }
+  .main {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px 0;
+    button {
+      padding: 10px 0;
+      &:hover {
+        background-color: var(--green);
+        color: var(--white);
+      }
+      &:disabled {
+        color: var(--gray) !important;
+        background-color: var(--white) !important;
+        opacity: 1 !important;
+        &:hover {
+          background-color: var(--white) !important;
+          color: var(--gray) !important;
+        }
+      }
+    }
+  }
+}
+
+.selected {
+  background-color: var(--green);
+  color: var(--white);
+}
+
+.in-range {
+  opacity: 0.5;
+  background-color: var(--green);
+  color: var(--white) !important;
+}
+
+.will-be-in-range {
+  opacity: 0.5;
+  background-color: var(--green);
+  color: var(--white);
+}

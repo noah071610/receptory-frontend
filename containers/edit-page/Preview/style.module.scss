@@ -1,0 +1,33 @@
+@import "@/styles/variables.scss";
+
+.preview {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + 550px / 2), calc(-50%));
+  width: 450px;
+  height: 100svh;
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  background-color: var(--white);
+  @include medium {
+    display: none;
+  }
+  @include flex;
+}
+
+.phone {
+  width: 370px;
+  height: 620px;
+  border-radius: 20px;
+  border: 14px solid var(--black);
+  background-color: var(--white);
+  position: relative;
+}
+
+.content {
+  @include full;
+  width: 100%;
+  overflow: scroll;
+  padding-bottom: 300px;
+}

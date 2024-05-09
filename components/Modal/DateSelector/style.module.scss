@@ -1,0 +1,40 @@
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.content {
+  width: 95%;
+  padding: 15px;
+  ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    max-height: 500px;
+    overflow: scroll;
+    li {
+      button {
+        padding: 15px 10px;
+        font-size: 15px;
+        width: 100%;
+        height: 100%;
+        background-color: var(--gray-soft);
+        border-radius: 4px;
+        @include action {
+          background-color: var(--green);
+          color: var(--white);
+        }
+      }
+    }
+  }
+}
+
+.btn-wrapper {
+  @include form-btn-layout-style;
+  .anyDate {
+    @include form-sub-btn-style;
+    padding: 0 0 5px 0;
+  }
+}
