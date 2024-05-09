@@ -54,7 +54,7 @@ const List = ({
           <span>{"."}</span>
         </div>
         <Input
-          section={section}
+          type="input"
           inputType="title"
           listIndex={index}
           isOptional={false}

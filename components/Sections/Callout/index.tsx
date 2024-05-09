@@ -28,16 +28,18 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
   return (
     <div className={cx("layout")}>
       <div style={{ backgroundColor, borderColor: color }} className={cx("callout")}>
-        <div className={cx("image-container")}>
-          <picture onClick={onClickAddImage} className={cx("image")}>
-            {section.src && <Image width={50} height={50} src={section.src} alt="image" />}
-            {!isDisplayMode && (
-              <button className={cx("image-btn", { ["has-image"]: hasString(section.src) })}>
-                <FontAwesomeIcon icon={faPlus} />
-              </button>
-            )}
-          </picture>
-        </div>
+        {(!isDisplayMode || (isDisplayMode && hasString(section.src))) && (
+          <div className={cx("image-container")}>
+            <picture onClick={onClickAddImage} className={cx("image")}>
+              {section.src && <Image width={50} height={50} src={section.src} alt="image" />}
+              {!isDisplayMode && (
+                <button className={cx("image-btn", { ["has-image"]: hasString(section.src) })}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              )}
+            </picture>
+          </div>
+        )}
         <div className={cx("main")}>
           <Text section={section} isDisplayMode={isDisplayMode} />
         </div>

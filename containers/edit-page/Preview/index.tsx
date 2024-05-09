@@ -2,9 +2,9 @@
 
 import SectionLayout from "@/components/Sections/display"
 import { useEditorStore } from "@/store/editor"
-import { sectionMap } from "@App/[lang]/edit/[userId]/[pageId]/page"
 import cs from "classNames/bind"
 import { useMemo } from "react"
+import { sectionMap } from "../sectionMap"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

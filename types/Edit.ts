@@ -55,6 +55,7 @@ export type DesignTypes =
   | "underline"
   | "caution"
   | "imageWithText"
+  | "simple"
   | AlignTypes
 export type AnimationTypes =
   | "none"

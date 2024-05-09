@@ -2,7 +2,6 @@
 
 import ImageDelete from "@/components/ImageDelete"
 import Input from "@/components/Input"
-import Textarea from "@/components/Textarea"
 import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
@@ -52,17 +51,21 @@ export default function Full({
     >
       {background && !isDisplayMode && <ImageDelete srcKey={"background"} />}
       <div className={cx("main")}>
-        <picture className={cx("thumbnail", isDisplayMode && "isDisplayMode")}>
-          {hasString(section.src) && <img src={section.src} alt="image" />}
-          {section.src && !isDisplayMode && <ImageDelete srcKey={"thumbnail"} />}
-          {!isDisplayMode && (
+        {!isDisplayMode && (
+          <div style={{ background: getImageUrl({ isCenter: true, url: section.src }) }} className={cx("thumbnail")}>
+            {hasString(section.src) && <ImageDelete srcKey={"thumbnail"} />}
             <button className={cx("drop-zone")} onClick={onClickThumbnailUpload}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
-          )}
-        </picture>
+          </div>
+        )}
+        {isDisplayMode && hasString(section.src) && (
+          <picture className={cx("thumbnail", "display")}>
+            <img src={section.src} alt="image" />
+          </picture>
+        )}
         <Input
-          section={section}
+          type="input"
           className={cx(!isDisplayMode && "title-input")}
           inputType="title"
           displayMode={isDisplayMode && "h1"}
@@ -71,8 +74,8 @@ export default function Full({
           style={{ color: textColor }}
           value={title}
         />
-        <Textarea
-          section={section}
+        <Input
+          type="textarea"
           className={cx(!isDisplayMode && "description-input")}
           inputType="description"
           displayMode={isDisplayMode && "p"}
@@ -84,7 +87,7 @@ export default function Full({
         <div className={cx("cta-wrapper")}>
           <button style={{ backgroundColor: color }} className={cx("cta")}>
             <Input
-              section={section}
+              type="input"
               displayMode={isDisplayMode && "span"}
               inputType="cta"
               dataKey="cta"

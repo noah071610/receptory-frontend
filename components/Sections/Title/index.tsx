@@ -1,7 +1,6 @@
 "use client"
 
 import Input from "@/components/Input"
-import Textarea from "@/components/Textarea"
 import { changeOpacity } from "@/config/colors"
 import { SectionType } from "@/types/Edit"
 import { memo, useMemo } from "react"
@@ -19,8 +18,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
   const labelStyle = useMemo(
     () => ({
       textAlign,
-      border: `1px solid ${color}`,
-      backgroundColor,
+      color,
     }),
     [backgroundColor, color, textAlign]
   )
@@ -35,8 +33,8 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           className={cx("label-wrapper")}
         >
           <Input
-            section={section}
-            className={cx(isDisplayMode ? style.label : "label-input")}
+            type="input"
+            className={cx(isDisplayMode ? "label" : "label-input")}
             inputType="label"
             displayMode={isDisplayMode && "span"}
             isOptional={true}
@@ -49,23 +47,23 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
       )}
       {title.isActive && (
         <Input
-          section={section}
+          type="input"
           value={title.value}
           listIndex={0}
           displayMode={isDisplayMode && "h1"}
-          className={cx(isDisplayMode ? style.title : "title-input")}
+          className={cx(isDisplayMode ? "title" : "title-input")}
           inputType="title"
           isOptional={true}
           style={{ textAlign }}
         />
       )}
       {description.isActive && (
-        <Textarea
-          section={section}
+        <Input
+          type="textarea"
           value={description.value}
           listIndex={1}
           displayMode={isDisplayMode && "p"}
-          className={cx(isDisplayMode ? style.description : "description-input")}
+          className={cx(isDisplayMode ? "description" : "description-input")}
           inputType="description"
           isOptional={true}
           style={{ textAlign }}

@@ -3,7 +3,6 @@
 import AddBtn from "@/components/AddBtn"
 import ImageDelete from "@/components/ImageDelete"
 import Input from "@/components/Input"
-import Textarea from "@/components/Textarea"
 import { getImageUrl } from "@/config"
 import { changeOpacity } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
@@ -47,7 +46,7 @@ const BasicSlider = ({
             </div>
             <div className={cx("content")}>
               <Input
-                section={section}
+                type="input"
                 isOptional={true}
                 className={cx(isDisplayMode ? style.title : "title-input")}
                 listIndex={i}
@@ -56,8 +55,8 @@ const BasicSlider = ({
                 displayMode={isDisplayMode && "h2"}
                 value={v.data.title}
               />
-              <Textarea
-                section={section}
+              <Input
+                type="textarea"
                 className={cx(isDisplayMode ? style.description : "description-input")}
                 listIndex={i}
                 dataKey="description"
@@ -95,7 +94,7 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
                 {!isDisplayMode && <ImageDelete srcKey="list" listIndex={i} />}
               </div>
               <Input
-                section={section}
+                type="input"
                 isOptional={true}
                 dataKey={"title"}
                 className={cx(isDisplayMode ? style.title : "title-input")}
@@ -104,8 +103,8 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
                 inputType="title"
                 value={v.data.title}
               />
-              <Textarea
-                section={section}
+              <Input
+                type="textarea"
                 listIndex={i}
                 className={cx(isDisplayMode ? style.description : "description-input")}
                 dataKey={"description"}

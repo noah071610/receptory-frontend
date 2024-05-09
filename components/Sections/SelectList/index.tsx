@@ -39,7 +39,7 @@ const ListEdit = ({
       </div>
       <div className={cx("content")}>
         <Input
-          section={section}
+          type="input"
           className={cx("title")}
           inputType="title"
           isOptional={false}
@@ -48,7 +48,7 @@ const ListEdit = ({
           dataKey="title"
         />
         <Input
-          section={section}
+          type="input"
           className={cx("description")}
           inputType="description"
           isOptional={true}

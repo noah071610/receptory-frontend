@@ -2,41 +2,54 @@
 
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { SectionType, StyleProperties } from "@/types/Edit"
+import { StyleProperties } from "@/types/Edit"
 import hasString from "@/utils/hasString"
 import { useParams } from "next/navigation"
-import { memo, useState } from "react"
+import { memo, useRef, useState } from "react"
+import TextareaAutosize from "react-textarea-autosize"
 
 function Input({
   className,
+  type,
   inputType,
   style,
   value,
   maxLength = 30,
   dataKey,
+  lineMax = 4,
   listIndex,
   isOptional,
   displayMode,
-  section,
 }: {
+  type: "input" | "textarea"
   className?: string
   inputType: string
   isOptional: boolean
   listIndex?: number
   maxLength?: number
+  lineMax?: number
   dataKey?: string
   value: string
   style?: StyleProperties
   displayMode?: boolean | "h1" | "p" | "h2" | "span"
-  section: SectionType
 }) {
+  if (type === "textarea") {
+    maxLength = 100
+  }
+  const inputRef = useRef(null)
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
-  const { setValue, setList, setData, saveSectionHistory } = useEditorStore()
+  const { setValue, setList, setData, saveSectionHistory, selectedSection } = useEditorStore()
   const [isEdit, setIsEdit] = useState(false)
+
   const onChangeInput = (e: any) => {
     const inputValue = e.target.value
-    if (inputValue.length > maxLength) return
+    const lines = inputValue.split("\n")
+    if (type === "input") {
+      if (inputValue.length > maxLength) return
+    } else if (type === "textarea") {
+      if (lines.length > lineMax) return
+    }
 
     if (dataKey) {
       if (typeof listIndex === "number") {
@@ -52,6 +65,13 @@ function Input({
       }
     }
     setIsEdit(true)
+  }
+
+  const onBlurInput = () => {
+    if (isEdit && selectedSection) {
+      saveSectionHistory({ payload: selectedSection })
+      setIsEdit(false)
+    }
   }
 
   const displayComponent = {
@@ -77,24 +97,34 @@ function Input({
     ),
   }
 
-  const onBlurInput = () => {
-    if (isEdit) {
-      saveSectionHistory({ payload: section })
-      setIsEdit(false)
-    }
+  const inputComponent = {
+    textarea: (
+      <TextareaAutosize
+        className={className}
+        placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
+        value={value ?? ""}
+        onChange={onChangeInput}
+        onBlur={onBlurInput}
+        style={style as any}
+      />
+    ),
+    input: (
+      <input
+        ref={inputRef}
+        className={className}
+        placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
+        value={value ?? ""}
+        onChange={onChangeInput}
+        onBlur={onBlurInput}
+        style={style as any}
+      />
+    ),
   }
 
   return displayMode ? (
     <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>
   ) : (
-    <input
-      className={className}
-      placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
-      value={value ?? ""}
-      onChange={onChangeInput}
-      onBlur={onBlurInput}
-      style={style as any}
-    />
+    inputComponent[type]
   )
 }
 

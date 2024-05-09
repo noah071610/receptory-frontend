@@ -59,8 +59,8 @@
 
   border: 1px dashed var(--border);
 
-  &.isDisplayMode {
-    display: none;
+  &.display {
+    border: none;
   }
   img {
     width: 100%;

@@ -65,7 +65,7 @@ function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?:
         <div className={cx("input-wrapper")}>
           <h3 className={cx("input-title")}>{t("임베드 코드 입력")}</h3>
           <Input
-            section={section}
+            type="input"
             className={cx("input")}
             inputType="<iframe src= ..."
             maxLength={99999}

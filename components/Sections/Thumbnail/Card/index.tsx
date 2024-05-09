@@ -2,7 +2,6 @@
 
 import ImageDelete from "@/components/ImageDelete"
 import Input from "@/components/Input"
-import Textarea from "@/components/Textarea"
 import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
@@ -56,7 +55,7 @@ export default function Card({
           </picture>
         )}
         <Input
-          section={section}
+          type="input"
           inputType="title"
           className={cx(!isDisplayMode && "title-input")}
           displayMode={isDisplayMode && "h1"}
@@ -65,8 +64,8 @@ export default function Card({
           style={{ color: textColor }}
           value={title}
         />
-        <Textarea
-          section={section}
+        <Input
+          type="textarea"
           inputType="description"
           className={cx(!isDisplayMode && "description-input")}
           displayMode={isDisplayMode && "p"}
@@ -78,7 +77,7 @@ export default function Card({
         <div className={cx("cta-wrapper")}>
           <button style={{ backgroundColor: color }} className={cx("cta")}>
             <Input
-              section={section}
+              type="input"
               displayMode={isDisplayMode && "span"}
               inputType="cta"
               dataKey={"cta"}

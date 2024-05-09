@@ -139,6 +139,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
     design: [
       { value: "card", icon: faIdCard, actionType: "cta" },
       { value: "full", icon: faExpand, actionType: "cta" },
+      { value: "simple", icon: faExpand, actionType: "cta" },
     ],
   },
   checkList: {

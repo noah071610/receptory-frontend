@@ -1,5 +1,5 @@
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: false, // todo:
+  enabled: true, // todo:
   openAnalyzer: true,
   swcMinify: true,
 })

@@ -14,8 +14,16 @@ function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; i
   return (
     <div className={cx("edit-inputs")}>
       <h4>{t("타이틀 수정")}</h4>
-      <Input className={cx("title")} inputType="title" isOptional={false} value={section.data.title} dataKey="title" />
       <Input
+        type="input"
+        className={cx("title")}
+        inputType="title"
+        isOptional={false}
+        value={section.data.title}
+        dataKey="title"
+      />
+      <Input
+        type="input"
         className={cx("description")}
         inputType="description"
         isOptional={true}

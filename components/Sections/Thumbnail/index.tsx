@@ -8,6 +8,7 @@ import { useParams } from "next/navigation"
 import { useMemo } from "react"
 import Card from "./Card"
 import Full from "./Full"
+import Simple from "./Simple"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -40,6 +41,7 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
       {design === "full" && (
         <Full ctaTextColor={ctaTextColor} section={section} textColor={textColor} isDisplayMode={isDisplayMode} />
       )}
+      {design === "simple" && <Simple ctaTextColor={ctaTextColor} section={section} isDisplayMode={isDisplayMode} />}
     </div>
   )
 }

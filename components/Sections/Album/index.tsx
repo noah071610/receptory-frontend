@@ -73,7 +73,7 @@ const ImageComponent = ({
         {!isDisplayMode && <ImageDelete srcKey="list" listIndex={index} />}
       </picture>
       <Input
-        section={section}
+        type="input"
         className={cx("title")}
         inputType="album"
         displayMode={isDisplayMode && "p"}

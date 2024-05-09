@@ -69,7 +69,7 @@ function List({
           inputType="text"
           isOptional={false}
           listIndex={index}
-          section={section}
+          type="input"
           value={list.value}
           displayMode={isDisplayMode && "span"}
           maxLength={25}
