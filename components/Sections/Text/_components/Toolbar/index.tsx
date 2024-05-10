@@ -1,10 +1,8 @@
 // @ts-ignore
 import { colors } from "@/config/colors"
 import { tools } from "@/config/edit"
-import { useEditorStore } from "@/store/editor"
-import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
-import { RichUtils } from "draft-js"
+import { EditorState, RichUtils } from "draft-js"
 import { useCallback } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -12,36 +10,20 @@ const cx = cs.bind(style)
 const Toolbar = ({
   editorState,
   textColor,
-  listIndex,
-  section,
+  setEditorState,
+  setIsEdit,
 }: {
-  editorState: any
+  editorState: EditorState
   textColor?: string
-  listIndex?: number
-  section: SectionType
+  setEditorState: (e: EditorState) => void
+  setIsEdit: (b: boolean) => void
 }) => {
-  const { setList, setText, selectedSection, setSelectedSection } = useEditorStore()
   const applyStyle = (e: any, style: any, method: any) => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
     e.preventDefault()
-    if (method === "block") {
-      if (typeof listIndex === "number") {
-        setList({ index: listIndex, key: "text", payload: RichUtils.toggleBlockType(editorState, style) })
-      } else {
-        setText({ payload: RichUtils.toggleBlockType(editorState, style) })
-      }
-    } else {
-      if (typeof listIndex === "number") {
-        setList({ index: listIndex, key: "text", payload: RichUtils.toggleInlineStyle(editorState, style) })
-      } else {
-        setText({ payload: RichUtils.toggleInlineStyle(editorState, style) })
-      }
-    }
-    // method === "block"
-    //   ? setEditorState(RichUtils.toggleBlockType(editorState, style))
-    //   : setEditorState(RichUtils.toggleInlineStyle(editorState, style))
+    setIsEdit(true)
+    method === "block"
+      ? setEditorState(RichUtils.toggleBlockType(editorState, style))
+      : setEditorState(RichUtils.toggleInlineStyle(editorState, style))
   }
 
   const isActive = useCallback(

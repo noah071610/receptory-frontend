@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
+import PreviewBtn from "../PreviewBtn"
 import { default as List } from "./List"
 import SubList from "./SubList"
 import style from "./style.module.scss"
@@ -44,16 +45,14 @@ export default function EditorFooter() {
   }, [isOpenAllList, selectedSection])
 
   return (
-    <div className={cx("editor", "footer", { isOpenAllList })}>
+    <div data-closer="editor" className={cx("footer", { isOpenAllList })}>
+      <PreviewBtn />
       {/* MAIN LIST (SECTIONS + SECTION) */}
       <div className={cx("main-wrapper")}>
         <div className={cx("main")}>
           <List isOpenAllList={isOpenAllList} isSectionList={selectedSection !== null} list={targetList} />
 
-          <button
-            onClick={() => onClickFooterBtn(selectedSection ? "close" : "toggle")}
-            className={cx("footer-btn", { active: isOpenAllList })}
-          >
+          <button onClick={() => onClickFooterBtn(selectedSection ? "close" : "toggle")} className={cx("footer-btn")}>
             <div className={cx("icon")}>
               <FontAwesomeIcon icon={selectedSection ? faClose : faChevronUp} />
             </div>

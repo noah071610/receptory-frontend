@@ -77,7 +77,7 @@ const List = ({
         </div>
       </div>
       <div className={cx("content-layout")}>
-        {isDisplayMode ? <PageText textState={list.text} /> : <Text listIndex={index} section={section} />}
+        {isDisplayMode ? <PageText text={list.text} /> : <Text listIndex={index} section={section} />}
       </div>
     </li>
   )

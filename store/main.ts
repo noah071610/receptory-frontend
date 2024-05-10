@@ -21,7 +21,7 @@ export interface EditStates {
   userPick: {
     [id: string]: {
       type: SectionListTypes
-      data: any
+      value: any
     }
   }
 }
@@ -86,7 +86,7 @@ export const useMainStore = create<EditStates & Actions>()(
       set((origin) => {
         origin.userPick[section.id] = {
           type: section.type,
-          data: payload,
+          value: payload,
         }
       }),
   }))

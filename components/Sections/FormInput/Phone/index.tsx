@@ -11,13 +11,16 @@ import "react-international-phone/style.css"
 import style from "./style.module.scss"
 
 import OptionRatio from "@/components/Options/OptionRatio"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { PhoneInput } from "react-international-phone"
 const cx = cs.bind(style)
 
 function Phone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setValue, setSelectedSection, selectedSection } = useEditorStore()
+  const { selectedSection, setSelectedSection } = useEditorStore()
+  const { setUserPick, userPick } = useMainStore()
+  const value = userPick[section.id]?.value ?? ""
   const { min, max, phoneNumberCountry } = section.options
   const activeSection = () => {
     if (selectedSection?.id !== section.id) {
@@ -27,19 +30,19 @@ function Phone({ section }: { section: SectionType }) {
 
   const onChangePhoneInput = (value: any) => {
     activeSection()
-    setValue({ payload: value })
+    setUserPick({ section, payload: value })
   }
 
   useEffect(() => {
     if (phoneNumberCountry !== "all") {
-      setValue({ payload: phoneNumberCountry })
+      setUserPick({ section, payload: phoneNumberCountry })
     } else {
-      setValue({ payload: "" })
+      setUserPick({ section, payload: "" })
     }
   }, [phoneNumberCountry])
 
   useEffect(() => {
-    setValue({ payload: 0 })
+    setUserPick({ section, payload: "" })
   }, [min, max])
 
   return (
@@ -53,7 +56,7 @@ function Phone({ section }: { section: SectionType }) {
         >
           <PhoneInput
             className={cx("phone")}
-            value={section.value}
+            value={value}
             defaultCountry={lang === "ko" ? "kr" : (lang as string)}
             hideDropdown={phoneNumberCountry !== "all"}
             forceDialCode={phoneNumberCountry !== "all"}

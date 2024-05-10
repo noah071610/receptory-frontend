@@ -7,8 +7,6 @@ import { dir } from "i18next"
 import { Metadata } from "next"
 import { Prompt } from "next/font/google"
 import localFont from "next/font/local"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 import "swiper/css"
 import "swiper/css/free-mode"
 import "swiper/css/navigation"
@@ -63,7 +61,6 @@ export default async function RootLayout({
       <body suppressHydrationWarning={true}>
         <Init>
           <main>{children}</main>
-          <ToastContainer />
         </Init>
       </body>
     </html>

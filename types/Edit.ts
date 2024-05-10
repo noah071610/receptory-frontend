@@ -1,5 +1,4 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
-import { EditorState } from "draft-js"
 
 export type SectionListTypes =
   | "thumbnail"
@@ -123,7 +122,7 @@ interface _SectionType {
   id: string
   index: number
   value: any
-  text: EditorState
+  text: string
   data: { [key: string]: any }
   collection: any[]
   src: string

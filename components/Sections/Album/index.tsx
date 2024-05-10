@@ -117,6 +117,8 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             </div>
           )}
         </div>
+      ) : isDisplayMode ? (
+        <></>
       ) : (
         <div style={{ background: getImageUrl({ url: "/images/noImage.png" }) }} className={cx("noImage")}>
           <span>{t("noImage")}</span>

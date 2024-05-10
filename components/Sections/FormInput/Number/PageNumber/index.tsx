@@ -1,9 +1,9 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
-import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { SectionType } from "@/types/Edit"
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
+import { onlyNumberFilter } from "@/utils/helpers/inputHelper"
+import { faListOl } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo } from "react"
 import "react-international-phone/style.css"
@@ -13,12 +13,19 @@ import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
-function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+function PageNumber({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const { setUserPick, userPick } = useMainStore()
   const value = userPick[section.id]?.value ?? 0
+  const { min, max } = section.options
 
   const onChangeInput = (e: any) => {
+    if (parseInt(e.target.value) < min) {
+      return setUserPick({ section, payload: min })
+    }
+    if (parseInt(e.target.value) > max) {
+      return setUserPick({ section, payload: max })
+    }
     setUserPick({ section, payload: e.target.value })
   }
 
@@ -26,30 +33,22 @@ function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode
     <div className={cx("layout")}>
       <div className={cx("input-wrapper")}>
         <FormUserInput
-          icon={faEnvelope}
+          icon={faListOl}
           title={section.data.title}
           description={section.data.description}
-          inputStyle={"email"}
+          inputStyle={"number"}
         >
           <input
-            type="email"
-            autoComplete="email"
-            name="email"
-            id="email"
-            required
             className={cx("input")}
+            type="number"
+            onKeyDown={onlyNumberFilter}
             value={value}
             onChange={onChangeInput}
           />
         </FormUserInput>
       </div>
-      {!isDisplayMode && (
-        <div className={cx("options")}>
-          <OptionTitleInputs section={section} />
-        </div>
-      )}
     </div>
   )
 }
 
-export default memo(Email)
+export default memo(PageNumber)

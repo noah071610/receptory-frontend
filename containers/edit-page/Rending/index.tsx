@@ -1,6 +1,5 @@
 "use client"
 
-import { toastError } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
@@ -22,7 +21,7 @@ export default function Rending({}: {}) {
     const str = e.target.value
     if (str.length > 20) return
     const pattern = /^[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=%]+$/
-    if (pattern.test(str)) return toastError("잘못된 값")
+    if (pattern.test(str)) return alert("!!todo:")
     setPageOptions({ type: "customLink", payload: str })
   }
   return (

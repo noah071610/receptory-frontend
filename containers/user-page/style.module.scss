@@ -33,7 +33,7 @@
         object-fit: cover;
         border-radius: 100%;
         @include border;
-        box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+        @include shadow;
       }
     }
     .profile-content {

@@ -1,7 +1,6 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
-import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faPhone } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
@@ -9,17 +8,19 @@ import { memo } from "react"
 import "react-international-phone/style.css"
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { PhoneInput } from "react-international-phone"
 const cx = cs.bind(style)
 
 function PagePhone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setValue } = useEditorStore()
+  const { setUserPick, userPick } = useMainStore()
+  const value = userPick[section.id]?.value ?? ""
   const { phoneNumberCountry } = section.options
 
   const onChangePhoneInput = (value: any) => {
-    setValue({ payload: value })
+    setUserPick({ section, payload: value })
   }
 
   return (
@@ -33,7 +34,7 @@ function PagePhone({ section }: { section: SectionType }) {
         >
           <PhoneInput
             className={cx("phone")}
-            value={section.value}
+            value={value}
             defaultCountry={lang === "ko" ? "kr" : (lang as string)}
             hideDropdown={phoneNumberCountry !== "all"}
             forceDialCode={phoneNumberCountry !== "all"}

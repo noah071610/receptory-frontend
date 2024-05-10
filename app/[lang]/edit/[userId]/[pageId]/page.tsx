@@ -8,24 +8,23 @@ import Thumbnail from "@/components/Sections/Thumbnail"
 import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
 import Rending from "@/containers/edit-page/Rending"
-import { sectionMap } from "@/containers/edit-page/sectionMap"
 import style from "@/containers/edit-page/style.module.scss"
 import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
 import { UserType } from "@/types/User"
 import saveContentFromEditor from "@/utils/editor/saveContentFromEditor"
-import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd"
 import { useQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { isNaN } from "lodash"
 import { useParams, usePathname, useRouter } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 
 import ModalLoading from "@/components/Modal/ModalLoading"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
 import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
+import SectionList from "@/containers/edit-page/SectionList"
 import Header from "@/containers/global/Header"
 import { useMainStore } from "@/store/main"
 import dynamic from "next/dynamic"
@@ -95,23 +94,10 @@ const EditPage = () => {
     if (typeof pageId !== "string") return back()
   }, [userId, pageId, queryUserId])
 
-  const { initSections, stage, formSections, moveSection, active, loadSections, currentUsedImages, currentUsedColors } =
+  const { initSections, stage, formSections, active, loadSections, currentUsedImages, currentUsedColors } =
     useEditorStore()
 
-  const sections = useMemo(
-    () => (stage === "init" ? initSections : stage === "form" ? formSections : []),
-    [initSections, formSections, stage]
-  )
-
   const activeModal = active.modal.type
-
-  const onDragEnd = (result: DropResult) => {
-    const { destination, source } = result
-
-    if (!destination || typeof destination.index !== "number") return
-
-    moveSection({ from: source.index, to: destination.index })
-  }
 
   useEffect(() => {
     const handleBeforeUnloadCallback = async (e: any) => {
@@ -151,52 +137,32 @@ const EditPage = () => {
       <Header />
       <PageLayout>
         <div className={cx("main")}>
+          <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
           <div className={cx("editor")}>
-            <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
-            {sections?.length > 0 && stage !== "rending" && (
-              <SectionLayout pathname={pathname} noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
-                <Thumbnail section={sections[0]} />
+            {stage !== "rending" && (
+              <SectionLayout
+                pathname={pathname}
+                noPadding={true}
+                section={stage === "init" ? initSections[0] : formSections[0]}
+              >
+                <Thumbnail section={stage === "init" ? initSections[0] : formSections[0]} />
               </SectionLayout>
             )}
-            {stage !== "rending" && (
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppable">
-                  {(droppableProvided) => (
-                    <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
-                      {sections.slice(1).map((v, i) => (
-                        <Draggable index={i + 1} key={v.id} draggableId={v.id}>
-                          {(draggableProvided) => {
-                            return (
-                              <SectionLayout
-                                pathname={pathname}
-                                noPadding={v.type === "slider"}
-                                draggableProvided={draggableProvided}
-                                section={v}
-                                key={`${v.id}`}
-                              >
-                                {sectionMap[v.type](v)}
-                              </SectionLayout>
-                            )
-                          }}
-                        </Draggable>
-                      ))}
-                      {droppableProvided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            )}
+            <SectionList sections={initSections} stage={stage} type="init" />
+            <SectionList sections={formSections} stage={stage} type="form" />
             {stage === "rending" && <Rending />}
 
-            {activeModal?.includes("image") && <ImageSelector />}
-            {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
-            {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
-            {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
-            {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
             <EditorFooter />
           </div>
           <Preview />
         </div>
+
+        {activeModal?.includes("image") && <ImageSelector />}
+        {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
+        {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
+        {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
+        {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
+        {/* <ToastContainer /> todo: */}
       </PageLayout>
     </>
   )

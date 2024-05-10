@@ -29,12 +29,15 @@ export default function SectionLayout({
   const { replace } = useRouter()
   const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditorStore()
   const onClickSection = (e: any) => {
-    if (e.target.closest(".delete")) {
-      setSelectedSection({ payload: null })
-    } else {
-      if (e.target.closest(".copy")) return
-      if (e.target.closest(".add")) return
-      setSelectedSection({ payload: section })
+    const closestElement = e.target.closest("[data-closer]")
+    if (closestElement) {
+      const dataType = closestElement.getAttribute("data-closer")
+      if (dataType === "delete") {
+        setSelectedSection({ payload: null })
+      } else {
+        if (dataType === "copy" || dataType === "add") return
+        setSelectedSection({ payload: section })
+      }
     }
 
     // modal은 건드리지 말 것
@@ -56,19 +59,22 @@ export default function SectionLayout({
       ref={draggableProvided?.innerRef}
       onClick={onClickSection}
       data-editor={true}
+      data-closer="editor"
       style={{ ...draggableProvided?.draggableProps.style, padding: noPadding ? "0px" : undefined }}
-      className={cx("section", "editor", { active: selectedSection?.id === section.id })}
+      className={cx("section", { active: selectedSection?.id === section.id })}
     >
       <div className={cx("observer")} id={section.id}></div>
       {children}
 
       {section.type !== "thumbnail" && (
-        <div className={cx("editor", "tools", { active: selectedSection?.id === section.id })}>
-          <button onClick={onClickCopy} className={cx("copy", "copy")}>
-            {/* todo */}
-            <FontAwesomeIcon icon={faCopy} />
-          </button>
-          <button onClick={onClickDelete} className={cx("delete", "delete")}>
+        <div data-closer="editor" className={cx("tools", { active: selectedSection?.id === section.id })}>
+          {section.type !== "calender" && section.type !== "time" && (
+            <button onClick={onClickCopy} data-closer="copy" className={cx("copy")}>
+              {/* todo */}
+              <FontAwesomeIcon icon={faCopy} />
+            </button>
+          )}
+          <button data-closer="delete" onClick={onClickDelete} className={cx("delete")}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
           <button {...draggableProvided?.dragHandleProps} className={cx("grab")}>

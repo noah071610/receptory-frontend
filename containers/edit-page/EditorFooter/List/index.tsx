@@ -1,6 +1,5 @@
 "use client"
 
-import { toastError } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
@@ -8,6 +7,7 @@ import getId from "@/utils/helpers/getId"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
+// import { Bounce, toast } from "react-toastify"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
@@ -33,10 +33,10 @@ export default function List({
       case "createSection":
         const newId = getId()
         if (value === "calender" && formSections.find(({ type }) => type === "calender")) {
-          return toastError("onlyOneSection")
+          return alert("oneSection") // todo:
         }
         if (value === "time" && formSections.find(({ type }) => type === "time")) {
-          return toastError("onlyOneSection")
+          return alert("oneSection") // todo:
         }
         addSection({ type: value as SectionListTypes, newId })
         replace(`${pathname}#${newId}`)

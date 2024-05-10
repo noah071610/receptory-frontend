@@ -248,3 +248,7 @@ $z-index-map: (
   width: 100%;
   height: 100%;
 }
+
+@mixin shadow {
+  box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+}

@@ -9,6 +9,7 @@ import { faCheck, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -83,41 +84,77 @@ export default function Header() {
   return (
     <>
       <header className={cx("header", { visible: visible })}>
-        <div></div>
-        <div className={cx("inner")}>
-          {headers.map((v) => (
-            <div key={`header_${v.value}`} className={cx("list")}>
-              <button onClick={() => onClickStage(v.value as EditStage)} className={cx({ active: v.value === stage })}>
-                <span>{v.value}</span>
-              </button>
-            </div>
-          ))}
+        <div className={cx("nav")}>
+          <div></div>
+          <div className={cx("inner")}>
+            {headers.map((v) => (
+              <div key={`header_${v.value}`} className={cx("list")}>
+                <button
+                  onClick={() => onClickStage(v.value as EditStage)}
+                  className={cx({ active: v.value === stage })}
+                >
+                  <span>{v.value}</span>
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className={cx("right")}>
+            <IconBtn
+              disabled={revert.length <= 1 || revertIndex <= 0}
+              onclick={() => onClickRevert("undo")}
+              size={35}
+              iconClassName={style.rollback}
+              icon={faRotateLeft}
+            />
+            <IconBtn
+              disabled={revert.length - 1 === revertIndex}
+              onclick={() => onClickRevert("do")}
+              size={35}
+              iconClassName={style.rollback}
+              icon={faRotateRight}
+            />
+            {isSaving ? (
+              <IconBtn iconClassName={style.saving} size={35} icon={faCheck} />
+            ) : (
+              <IconBtn onclick={onClickSave} size={35} icon={faSave} />
+            )}
+          </div>
+          <div
+            style={{ width: stage === "init" ? "33%" : stage === "form" ? "66%" : "95%" }}
+            className={cx("progress")}
+          ></div>
         </div>
-        <div className={cx("right")}>
-          <IconBtn
-            disabled={revert.length <= 1 || revertIndex <= 0}
-            onclick={() => onClickRevert("undo")}
-            size={35}
-            iconClassName={style.rollback}
-            icon={faRotateLeft}
-          />
-          <IconBtn
-            disabled={revert.length - 1 === revertIndex}
-            onclick={() => onClickRevert("do")}
-            size={35}
-            iconClassName={style.rollback}
-            icon={faRotateRight}
-          />
-          {isSaving ? (
-            <IconBtn iconClassName={style.saving} size={35} icon={faCheck} />
-          ) : (
-            <IconBtn onclick={onClickSave} size={35} icon={faSave} />
-          )}
+        <div className={cx("mobile-nav")}>
+          <Swiper
+            slidesPerView={3}
+            spaceBetween={10}
+            onClick={(swiper) => {
+              swiper.slideTo(swiper.clickedIndex)
+            }}
+            onSlideChange={(swiper) => {
+              const temp = headers[swiper.activeIndex]
+              if (temp) {
+                onClickStage(temp.value as EditStage)
+              }
+            }}
+            centeredSlides={true}
+            pagination={{
+              clickable: true,
+            }}
+            className={cx("slider")}
+          >
+            {headers.map((v) => (
+              <SwiperSlide className={cx("slide")} key={`mobile-header-${v.value}`}>
+                <button
+                  onClick={() => onClickStage(v.value as EditStage)}
+                  className={cx({ active: v.value === stage })}
+                >
+                  <span>{v.value}</span>
+                </button>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
-        <div
-          style={{ width: stage === "init" ? "33%" : stage === "form" ? "66%" : "95%" }}
-          className={cx("progress")}
-        ></div>
       </header>
       <div className={cx("ghost")} />
     </>

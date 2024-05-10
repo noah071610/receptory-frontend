@@ -63,7 +63,7 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
           </div>
         )}
         <div className={cx("main")}>
-          {isDisplayMode ? <PageText textState={section.text} /> : <Text section={section} />}
+          {isDisplayMode ? <PageText text={section.text} /> : <Text section={section} />}
         </div>
       </div>
     </div>

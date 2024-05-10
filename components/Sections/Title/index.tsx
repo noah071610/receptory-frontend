@@ -35,7 +35,11 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           className={cx("label-wrapper")}
         >
           {isDisplayMode ? (
-            hasString(label.value) && <span className={cx("label")}>{label.value}</span>
+            hasString(label.value) && (
+              <span style={labelStyle} className={cx("label")}>
+                {label.value}
+              </span>
+            )
           ) : (
             <Input
               type="input"

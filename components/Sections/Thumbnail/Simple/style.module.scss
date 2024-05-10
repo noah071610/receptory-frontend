@@ -59,7 +59,7 @@
   @include flex;
   border: 1px dashed var(--border);
   transform: translateY(-35px);
-  box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+  @include shadow;
   &.isDisplayMode {
     border: none;
   }

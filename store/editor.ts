@@ -11,9 +11,7 @@ import { Langs } from "@/types/Main"
 import { PageFormatType, SaveContentType } from "@/types/Page"
 
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
-import { convertStringToEditorState } from "@/utils/editor/textEditor"
 import getId from "@/utils/helpers/getId"
-import { EditorState } from "draft-js"
 import { cloneDeep } from "lodash"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
@@ -63,14 +61,16 @@ type Actions = {
     payload,
     key,
     dataKey,
+    section,
   }: {
     index: number
     payload: any
     key: keyof SectionListType
     dataKey?: string
+    section?: SectionType
   }) => void
   setValue: ({ payload }: { payload: any }) => void
-  setText: ({ payload }: { payload: EditorState }) => void
+  setText: ({ payload, section }: { payload: string; section?: SectionType }) => void
   setData: ({ payload, key }: { payload: any; key: string }) => void
   setOptions: ({ payload, key }: { payload: any; key: string }) => void
   setActive: ({
@@ -103,8 +103,8 @@ type Actions = {
   setPageOptions: ({ type, payload }: { type: "format" | "lang" | "customLink"; payload: any }) => void
 }
 
-const getTarget = (origin: any): SectionType => {
-  return origin[origin.stage === "init" ? "initSections" : "formSections"][origin.selectedSection.index]
+const getTarget = (origin: any, section?: SectionType): SectionType => {
+  return origin[origin.stage === "init" ? "initSections" : "formSections"][(section ?? origin.selectedSection).index]
 }
 const getKey = (origin: any): "initSections" | "formSections" => {
   return origin.stage === "init" ? "initSections" : "formSections"
@@ -229,12 +229,14 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         origin.isEditStart = true
       }),
-    setText: ({ payload }) =>
+    setText: ({ payload, section }) =>
       set((origin) => {
-        if (origin.selectedSection) {
-          const target = getTarget(origin)
+        if (origin.selectedSection || section) {
+          const target = getTarget(origin, section)
           target.text = payload
-          origin.selectedSection.text = payload
+          if (origin.selectedSection) {
+            origin.selectedSection.text = payload
+          }
         }
         origin.isEditStart = true
       }),
@@ -278,17 +280,17 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         origin.isEditStart = true
       }),
-    setList: ({ index, payload, key, dataKey }) =>
+    setList: ({ index, payload, key, dataKey, section }) =>
       set((origin) => {
-        if (origin.selectedSection) {
-          const target = getTarget(origin)
+        if (origin.selectedSection || section) {
+          const target = getTarget(origin, section)
 
           if (dataKey) {
             target.list[index].data[dataKey] = payload as never
-            origin.selectedSection.list[index].data[dataKey] = payload as never
+            if (origin.selectedSection) origin.selectedSection.list[index].data[dataKey] = payload as never
           } else {
             target.list[index][key] = payload as never
-            origin.selectedSection.list[index][key] = payload as never
+            if (origin.selectedSection) origin.selectedSection.list[index][key] = payload as never
             switch (key) {
               // 불필요한 히스토리 등록을 방지하기 위해 특정 값만 히스토리 저장
               case "style":
@@ -499,28 +501,10 @@ export const useEditorStore = create<EditStates & Actions>()(
           origin.stage = payload.stage
         }
         if (payload.initSections?.length > 0) {
-          origin.initSections = payload.initSections.map((v) => {
-            switch (v.type) {
-              case "callout":
-              case "qna":
-              case "text":
-                return convertStringToEditorState(v)
-              default:
-                return v
-            }
-          })
+          origin.initSections = payload.initSections
         }
         if (payload.formSections?.length > 0) {
-          origin.formSections = payload.formSections.map((v) => {
-            switch (v.type) {
-              case "callout":
-              case "qna":
-              case "text":
-                return convertStringToEditorState(v)
-              default:
-                return v
-            }
-          })
+          origin.formSections = payload.formSections
         }
       }),
   }))

@@ -93,7 +93,7 @@ const sectionMap: { [key: string]: any } = {
       .map((v, i) => createNewSectionList(v, i))
       .map((v) => ({ ...v, isActive: true }))
 
-    list[2].style.color = colors.purpleHard
+    list[2].style.color = colors.purple
 
     return {
       style: {
@@ -159,7 +159,7 @@ const sectionMap: { [key: string]: any } = {
   },
   text: () => {
     return {
-      text: getNewEmptyEditor(),
+      text: "",
     }
   },
 }
