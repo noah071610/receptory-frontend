@@ -2,37 +2,38 @@
 
 import NumberRange from "@/components/NumberRange"
 import { useTranslation } from "@/i18n/client"
-import { useEditorStore } from "@/store/editor"
-import setDate from "@/utils/setDate"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
+import { SectionType } from "@/types/Edit"
+import setDateFormat from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
-export const DateSelector = () => {
+export const DateSelector = ({ section }: { section: SectionType }) => {
   const { t } = useTranslation()
-  const { selectedSection, setValue, setActive } = useEditorStore()
-  const specificDates = selectedSection?.collection ?? []
-  const { addAnyDate } = selectedSection?.options ?? {}
+  const { setModal, setDate } = useMainStore()
+  const specificDates = section.collection
+  const { addAnyDate } = section.options
   const onClickDate = ({ specificStartDate, specificEndDate }: { specificStartDate: Date; specificEndDate?: Date }) => {
-    setValue({
+    setDate({
       payload: {
         selectedStartDate: specificStartDate,
-        selectedEndDate: specificEndDate,
+        selectedEndDate: specificEndDate ?? null,
       },
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
 
   const onClickAnyDate = () => {
-    setValue({
+    setDate({
       payload: {
         selectedStartDate: "anyDate",
-        selectedEndDate: undefined,
+        selectedEndDate: null, // undefined 도 가능
       },
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
 
   return (
@@ -41,7 +42,7 @@ export const DateSelector = () => {
         {specificDates.map(({ specificStartDate, specificEndDate }, i: number) => (
           <li key={`date_${i}`}>
             <button onClick={() => onClickDate({ specificStartDate, specificEndDate })}>
-              <NumberRange start={specificStartDate} end={specificEndDate} formatter={setDate} />
+              <NumberRange start={specificStartDate} end={specificEndDate} formatter={setDateFormat} />
             </button>
           </li>
         ))}

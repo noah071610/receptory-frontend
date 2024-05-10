@@ -2,8 +2,7 @@
 
 .layout {
   width: 100%;
-  display: flex;
-  align-items: center;
+  @include flex-y;
   flex-direction: column;
 }
 
@@ -23,7 +22,6 @@
   border-radius: 10px;
   // background-color: var(--white);
   .icon {
-    cursor: pointer;
     @include flex;
     width: 30px;
     height: 30px;
@@ -36,20 +34,8 @@
 }
 
 .content {
-  display: flex;
-  align-items: center;
+  @include flex-y;
   position: relative;
-  input {
-    @include input-style;
-    padding: 5px;
-  }
-  input,
-  .text {
-    @include description-style;
-  }
-  .text {
-    width: auto;
-  }
 }
 
 // list style -> list-wrapper
@@ -107,4 +93,10 @@
       background-color: rgb(255, 215, 0, 0.2);
     }
   }
+}
+
+.input {
+  @include input-style;
+  @include description-style;
+  padding: 5px;
 }

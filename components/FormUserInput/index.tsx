@@ -14,14 +14,15 @@ function FormUserInput({
   children,
   icon,
   inputStyle,
+  isMultiple,
 }: {
   title: string
   description: string
-  isDisplayMode?: boolean
   onClick?: () => void
   children: ReactNode
   icon: IconDefinition
   inputStyle?: string
+  isMultiple?: boolean
 }) {
   return (
     <div className={cx("input-wrapper")}>
@@ -31,7 +32,7 @@ function FormUserInput({
       </label>
       <div onClick={onClick} className={cx("input")}>
         <div className={cx("content")}>
-          {inputStyle ? children : <div className={cx("text")}>{children}</div>}
+          {inputStyle ? children : <div className={cx("text", { isMultiple })}>{children}</div>}
           {inputStyle !== "textarea" && (
             <button className={cx("icon")}>
               <FontAwesomeIcon icon={icon} />

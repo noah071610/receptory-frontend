@@ -2,19 +2,23 @@
 
 import AddBtn from "@/components/AddBtn"
 import Input from "@/components/Input"
-import { changeOpacity, colors } from "@/config/colors"
+import { colors } from "@/config/colors"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
+import { changeOpacity } from "@/utils/styles/changeOpacity"
 import { faChevronDown, faQ } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import { memo, useMemo } from "react"
-import Text from "../Text"
+import dynamic from "next/dynamic"
+import { useMemo } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const Search = memo(({}: {}) => {
-  return <></>
+const PageText = dynamic(() => import("../Text/PageText"), {
+  ssr: true,
+})
+const Text = dynamic(() => import("../Text"), {
+  ssr: true,
 })
 
 const List = ({
@@ -53,23 +57,27 @@ const List = ({
           <FontAwesomeIcon icon={faQ} />
           <span>{"."}</span>
         </div>
-        <Input
-          type="input"
-          inputType="title"
-          listIndex={index}
-          isOptional={false}
-          maxLength={80}
-          dataKey="title"
-          displayMode={isDisplayMode && "h2"}
-          value={list.data.title}
-          className={cx(isDisplayMode ? style.title : "title-input")}
-        />
+        {isDisplayMode ? (
+          <h2 className={cx("title")}>{list.data.title}</h2>
+        ) : (
+          <Input
+            type="input"
+            inputType="title"
+            listIndex={index}
+            isOptional={false}
+            maxLength={80}
+            dataKey="title"
+            value={list.data.title}
+            className={cx("title-input")}
+          />
+        )}
+
         <div style={{ color: isActive ? color : colors.black }} className={cx("icon", "arrow")}>
           <FontAwesomeIcon icon={faChevronDown} />
         </div>
       </div>
       <div className={cx("content-layout")}>
-        <Text isDisplayMode={isDisplayMode} listIndex={index} section={section} />
+        {isDisplayMode ? <PageText textState={list.text} /> : <Text listIndex={index} section={section} />}
       </div>
     </li>
   )
@@ -78,7 +86,6 @@ const List = ({
 export default function QnA({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   return (
     <div className={cx("qna")}>
-      <Search />
       <ul className={cx("qna-list")}>
         {section.list.map((v, i) => (
           <List isDisplayMode={isDisplayMode} index={i} key={v.id} list={v} section={section} />

@@ -76,7 +76,6 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "design", icon: faPaintRoller, actionType: "submenu" },
     { value: "animation", icon: faFilm, actionType: "submenu" },
     { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" },
-    { value: "color", icon: faBrush, actionType: "colorSelector" },
   ],
   text: [],
   title: [

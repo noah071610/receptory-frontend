@@ -57,8 +57,6 @@ export default async function RootLayout({
   return (
     <html className={lang === "th" ? prompt.className : pretendard.className} lang={lang} dir={dir(lang)}>
       <head>
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         {/* <meta name="keywords" content="퀴즈, 게임, 투표, 픽, 월드컵, 이상형 월드컵" /> todo */}
       </head>

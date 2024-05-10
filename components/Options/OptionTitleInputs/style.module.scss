@@ -2,8 +2,7 @@
 
 .edit-inputs {
   width: 100%;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
   input {
     width: 100%;
     max-width: 300px;

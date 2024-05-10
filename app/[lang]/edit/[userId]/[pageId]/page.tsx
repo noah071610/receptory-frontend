@@ -3,11 +3,7 @@
 import { getSave } from "@/actions/save"
 import { getUser } from "@/actions/user"
 import Loading from "@/components/Loading"
-import DatePicker from "@/components/Modal/DatePicker"
-import DateSelector from "@/components/Modal/DateSelector"
 import ImageSelector from "@/components/Modal/ImageSelector"
-import SelectList from "@/components/Modal/SelectList"
-import TimePicker from "@/components/Modal/TimePicker"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
@@ -18,14 +14,39 @@ import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
 import { UserType } from "@/types/User"
-import saveContentFromEditor from "@/utils/saveContentFromEditor"
+import saveContentFromEditor from "@/utils/editor/saveContentFromEditor"
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd"
 import { useQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { isNaN } from "lodash"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
+
+import ModalLoading from "@/components/Modal/ModalLoading"
+import EditorFooter from "@/containers/edit-page/EditorFooter"
+import PageLayout from "@/containers/edit-page/PageLayout"
+import Preview from "@/containers/edit-page/Preview"
+import Header from "@/containers/global/Header"
+import { useMainStore } from "@/store/main"
+import dynamic from "next/dynamic"
 const cx = cs.bind(style)
+
+const DatePicker = dynamic(() => import("@/components/Modal/DatePicker"), {
+  ssr: true,
+  loading: () => <ModalLoading />,
+})
+const TimePicker = dynamic(() => import("@/components/Modal/TimePicker"), {
+  ssr: true,
+  loading: () => <ModalLoading />,
+})
+const DateSelector = dynamic(() => import("@/components/Modal/DateSelector"), {
+  ssr: true,
+  loading: () => <ModalLoading />,
+})
+const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
+  ssr: true,
+  loading: () => <ModalLoading />,
+})
 
 const EditPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -34,6 +55,7 @@ const EditPage = () => {
   const { push, back } = useRouter()
   const { userId, pageId } = useParams()
   const queryUserId = parseInt(userId as string)
+  const { modal } = useMainStore()
   const { data: user, isFetched: isFetchedUserQuery } = useQuery<UserType>({
     queryKey: queryKey.user,
     queryFn: getUser,
@@ -126,46 +148,56 @@ const EditPage = () => {
 
   return (
     <>
-      <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
-      {sections?.length > 0 && stage !== "rending" && (
-        <SectionLayout pathname={pathname} noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
-          <Thumbnail section={sections[0]} />
-        </SectionLayout>
-      )}
-      {stage !== "rending" && (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(droppableProvided) => (
-              <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
-                {sections.slice(1).map((v, i) => (
-                  <Draggable index={i + 1} key={v.id} draggableId={v.id}>
-                    {(draggableProvided) => {
-                      return (
-                        <SectionLayout
-                          pathname={pathname}
-                          noPadding={v.type === "slider"}
-                          draggableProvided={draggableProvided}
-                          section={v}
-                          key={`${v.id}`}
-                        >
-                          {sectionMap[v.type](v)}
-                        </SectionLayout>
-                      )
-                    }}
-                  </Draggable>
-                ))}
-                {droppableProvided.placeholder}
-              </div>
+      <Header />
+      <PageLayout>
+        <div className={cx("main")}>
+          <div className={cx("editor")}>
+            <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
+            {sections?.length > 0 && stage !== "rending" && (
+              <SectionLayout pathname={pathname} noPadding={sections[0].type === "thumbnail"} section={sections[0]}>
+                <Thumbnail section={sections[0]} />
+              </SectionLayout>
             )}
-          </Droppable>
-        </DragDropContext>
-      )}
-      {stage === "rending" && <Rending />}
-      {activeModal?.includes("image") && <ImageSelector />}
-      {activeModal?.includes("time") && <TimePicker />}
-      {activeModal === "calender" && <DatePicker />}
-      {activeModal === "calender-select" && <DateSelector />}
-      {activeModal === "select-list" && <SelectList />}
+            {stage !== "rending" && (
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(droppableProvided) => (
+                    <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
+                      {sections.slice(1).map((v, i) => (
+                        <Draggable index={i + 1} key={v.id} draggableId={v.id}>
+                          {(draggableProvided) => {
+                            return (
+                              <SectionLayout
+                                pathname={pathname}
+                                noPadding={v.type === "slider"}
+                                draggableProvided={draggableProvided}
+                                section={v}
+                                key={`${v.id}`}
+                              >
+                                {sectionMap[v.type](v)}
+                              </SectionLayout>
+                            )
+                          }}
+                        </Draggable>
+                      ))}
+                      {droppableProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            )}
+            {stage === "rending" && <Rending />}
+
+            {activeModal?.includes("image") && <ImageSelector />}
+            {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
+            {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
+            {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
+            {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
+            <EditorFooter />
+          </div>
+          <Preview />
+        </div>
+      </PageLayout>
     </>
   )
 }

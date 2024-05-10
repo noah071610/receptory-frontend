@@ -6,15 +6,11 @@
   height: auto;
   max-height: 600px;
   min-height: auto;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
   padding-bottom: 25px;
 
   .background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    @include full;
     height: 150px;
   }
 }
@@ -22,8 +18,7 @@
 .main {
   width: calc(100% - 60px);
   max-width: 300px;
-  display: flex;
-  align-items: center;
+  @include flex-y;
   flex-direction: column;
   margin-top: 80px;
   z-index: 10;

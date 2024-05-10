@@ -82,8 +82,7 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
 
 .list {
   position: relative;
-  display: flex;
-  align-items: center;
+  @include flex-y;
   height: 100%;
 
   .slider {

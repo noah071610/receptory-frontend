@@ -32,6 +32,10 @@
       font-size: 15px;
       line-height: 1.2;
       letter-spacing: 1px;
+      &.isMultiple {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
     input,
     textarea {

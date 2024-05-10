@@ -1,6 +1,6 @@
 "use client"
 
-import { getAnimation } from "@/utils/getAnimation"
+import { getAnimation } from "@/utils/styles/getAnimation"
 import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock"
 import cs from "classNames/bind"
 import { ReactNode, useEffect } from "react"

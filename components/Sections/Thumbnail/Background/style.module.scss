@@ -2,8 +2,7 @@
 
 .wrapper {
   width: 100%;
-  display: flex;
-  align-items: center;
+  @include flex-y;
   min-height: 180px;
   padding-bottom: 30px;
   margin-bottom: 25px;

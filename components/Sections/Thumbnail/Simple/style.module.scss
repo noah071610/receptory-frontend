@@ -6,8 +6,7 @@
   height: auto;
   max-height: 600px;
   min-height: auto;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
   padding-bottom: 25px;
 
   .background {

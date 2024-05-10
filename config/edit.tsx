@@ -1,11 +1,11 @@
 import {
-  fa1,
   faAlignCenter,
   faAlignLeft,
   faAlignRight,
   faBold,
   faHighlighter,
   faItalic,
+  faListOl,
   faListUl,
   faQuoteRight,
   faStrikethrough,
@@ -82,7 +82,7 @@ export const tools = [
     label: "Ordered-List",
     style: "ordered-list-item",
     method: "block",
-    icon: <FontAwesomeIcon icon={fa1} transform="grow-6" />,
+    icon: <FontAwesomeIcon icon={faListOl} transform="grow-6" />,
   },
   {
     label: "Left",

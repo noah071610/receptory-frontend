@@ -3,11 +3,13 @@
 import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { getImageUrl } from "@/config"
-import { changeOpacity } from "@/config/colors"
+import { getImageUrl } from "@/utils/helpers/getImageUrl"
+
 import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
-import { getAnimation } from "@/utils/getAnimation"
+import hasString from "@/utils/helpers/hasString"
+import { getAnimation } from "@/utils/styles/getAnimation"
+import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
 import { memo, useMemo, useState } from "react"
 import { FreeMode, Navigation, Thumbs } from "swiper/modules"
@@ -18,13 +20,11 @@ const cx = cs.bind(style)
 const BasicSlider = ({
   section,
   isDisplayMode,
-  color,
-  backgroundColor,
+  textColor,
 }: {
   section: SectionType
   isDisplayMode?: boolean
-  color?: string
-  backgroundColor: string
+  textColor?: string
 }) => {
   return (
     <Swiper spaceBetween={7} freeMode={true} slidesPerView={"auto"} modules={[FreeMode]} className={cx("slider")}>
@@ -33,38 +33,54 @@ const BasicSlider = ({
           <div
             style={{
               ...getAnimation({ type: section.style.animation, delay: i * 150 }),
-              border: section.design !== "basic" ? `1px solid ${color}` : "none",
             }}
-            className={cx("card", { cardStyle: section.design === "card" })}
+            className={cx("slide-inner")}
           >
             {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={i} />}
             <div className={cx("card-image")}>
-              {/* <div style={{ background: getImageUrl({ isCenter: true, url: v.src }) }} className={cx("image")} /> */}
+              {/* <div style={{ background: getImageUrl({  url: v.src }) }} className={cx("image")} /> */}
               <picture className={cx("image")}>
                 <img src={v.src} alt="image" />
               </picture>
             </div>
             <div className={cx("content")}>
-              <Input
-                type="input"
-                isOptional={true}
-                className={cx(isDisplayMode ? style.title : "title-input")}
-                listIndex={i}
-                dataKey="title"
-                inputType="title"
-                displayMode={isDisplayMode && "h2"}
-                value={v.data.title}
-              />
-              <Input
-                type="textarea"
-                className={cx(isDisplayMode ? style.description : "description-input")}
-                listIndex={i}
-                dataKey="description"
-                inputType="description"
-                displayMode={isDisplayMode && "p"}
-                isOptional={true}
-                value={v.data.description}
-              />
+              {isDisplayMode ? (
+                <>
+                  {hasString(v.data.title) && (
+                    <h2 style={{ color: textColor }} className={cx("title")}>
+                      {v.data.title}
+                    </h2>
+                  )}
+                  {hasString(v.data.description) && (
+                    <p style={{ color: textColor }} className={cx("description")}>
+                      {v.data.description}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Input
+                    style={{ color: textColor }}
+                    type="input"
+                    isOptional={true}
+                    dataKey={"title"}
+                    className={cx("title-input")}
+                    listIndex={i}
+                    inputType="title"
+                    value={v.data.title}
+                  />
+                  <Input
+                    style={{ color: textColor }}
+                    type="textarea"
+                    listIndex={i}
+                    className={cx("description-input")}
+                    dataKey={"description"}
+                    inputType="description"
+                    isOptional={true}
+                    value={v.data.description}
+                  />
+                </>
+              )}
             </div>
           </div>
         </SwiperSlide>
@@ -72,7 +88,15 @@ const BasicSlider = ({
     </Swiper>
   )
 }
-const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) => {
+const ThumbnailSlider = ({
+  section,
+  isDisplayMode,
+  textColor,
+}: {
+  section: SectionType
+  isDisplayMode?: boolean
+  textColor?: string
+}) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   return (
     <>
@@ -87,32 +111,51 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
             <div className={cx("thumb")}>
               <div
                 style={{
-                  background: getImageUrl({ isCenter: true, url: v.src }),
+                  background: getImageUrl({ url: v.src }),
                 }}
                 className={cx("photo")}
               >
                 {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={i} />}
               </div>
-              <Input
-                type="input"
-                isOptional={true}
-                dataKey={"title"}
-                className={cx(isDisplayMode ? style.title : "title-input")}
-                listIndex={i}
-                displayMode={isDisplayMode && "h2"}
-                inputType="title"
-                value={v.data.title}
-              />
-              <Input
-                type="textarea"
-                listIndex={i}
-                className={cx(isDisplayMode ? style.description : "description-input")}
-                dataKey={"description"}
-                displayMode={isDisplayMode && "p"}
-                inputType="description"
-                isOptional={true}
-                value={v.data.description}
-              />
+              <div>
+                {isDisplayMode ? (
+                  <>
+                    {hasString(v.data.title) && (
+                      <h2 style={{ color: textColor }} className={cx("title")}>
+                        {v.data.title}
+                      </h2>
+                    )}
+                    {hasString(v.data.description) && (
+                      <p style={{ color: textColor }} className={cx("description")}>
+                        {v.data.description}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Input
+                      type="input"
+                      isOptional={true}
+                      dataKey={"title"}
+                      className={cx("title-input")}
+                      listIndex={i}
+                      inputType="title"
+                      value={v.data.title}
+                      style={{ color: textColor }}
+                    />
+                    <Input
+                      type="textarea"
+                      listIndex={i}
+                      className={cx("description-input")}
+                      dataKey={"description"}
+                      inputType="description"
+                      isOptional={true}
+                      value={v.data.description}
+                      style={{ color: textColor }}
+                    />
+                  </>
+                )}
+              </div>
             </div>
           </SwiperSlide>
         ))}
@@ -130,7 +173,7 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
           <SwiperSlide className={cx("thumb-list-slide")} key={`thumb_list_${i}`}>
             <div
               style={{
-                background: getImageUrl({ isCenter: true, url: v.src }),
+                background: getImageUrl({ url: v.src }),
                 ...getAnimation({ type: section.style.animation, delay: i * 150 }),
               }}
               className={cx("photo")}
@@ -145,29 +188,27 @@ const ThumbnailSlider = ({ section, isDisplayMode }: { section: SectionType; isD
 function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
 
-  const backgroundColor = useMemo(() => changeOpacity(section.style.color ?? "rgba(0,0,0,0)"), [section.style.color])
+  const textColor = useMemo(
+    () =>
+      section.design === "card" || section.design === "circle"
+        ? undefined
+        : getContrastTextColor(section.style.backgroundColor ?? "rgba(0,0,0,0)"),
+    [section.style.backgroundColor, section.design]
+  )
   return (
     <div className={cx("layout", { isDisplayMode: isDisplayMode })}>
       {section.list.length > 0 ? (
         <div style={{ background: section.style.backgroundColor }} className={cx("slider-layout")}>
           {section.design !== "thumbnail" ? (
-            <BasicSlider
-              backgroundColor={backgroundColor}
-              color={section.style.color}
-              section={section}
-              isDisplayMode={isDisplayMode}
-            />
+            <BasicSlider textColor={textColor} section={section} isDisplayMode={isDisplayMode} />
           ) : (
-            <ThumbnailSlider section={section} isDisplayMode={isDisplayMode} />
+            <ThumbnailSlider textColor={textColor} section={section} isDisplayMode={isDisplayMode} />
           )}
         </div>
       ) : isDisplayMode ? (
         <></>
       ) : (
-        <div
-          style={{ background: getImageUrl({ isCenter: true, url: "/images/noImage.png" }) }}
-          className={cx("noImage")}
-        >
+        <div style={{ background: getImageUrl({ url: "/images/noImage.png" }) }} className={cx("noImage")}>
           <span>{t("noImage")}</span>
         </div>
       )}

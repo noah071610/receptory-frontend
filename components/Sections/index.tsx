@@ -4,7 +4,7 @@ import { ReactNode } from "react"
 
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import getId from "@/utils/getId"
+import getId from "@/utils/helpers/getId"
 import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { DraggableProvided } from "@hello-pangea/dnd"

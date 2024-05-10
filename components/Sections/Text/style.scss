@@ -1,0 +1,63 @@
+@import "@/styles/variables.scss";
+
+@mixin layout {
+  .text-wrapper {
+    width: 100%;
+  }
+  .text-global-style {
+    line-height: 1.3;
+    font-size: 14px;
+    * {
+      min-height: 20px;
+    }
+    ul {
+      margin: 5px 0;
+      li {
+        list-style: disc;
+        margin-left: 14px;
+        margin-bottom: 1px;
+      }
+    }
+    ol {
+      margin: 5px 0;
+      li {
+        list-style: decimal;
+        margin-left: 17px;
+        margin-bottom: 1px;
+      }
+    }
+    h1 {
+      font-size: 22px;
+    }
+    h2 {
+      font-size: 18px;
+    }
+    h3 {
+      font-size: 15px;
+    }
+  }
+  .container {
+    width: 100%;
+    padding: 0 3px;
+  }
+
+  .superFancyBlockquote {
+    color: var(--gray-hard);
+    font-style: italic;
+    border-left: 5px solid var(--gray-hard);
+    padding-left: 10px;
+  }
+
+  .leftAlign {
+    text-align: left;
+  }
+  .rightAlign {
+    text-align: right;
+  }
+  .centerAlign {
+    text-align: center;
+  }
+  .justifyAlign {
+    text-align: justify;
+  }
+}

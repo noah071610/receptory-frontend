@@ -2,14 +2,15 @@
 
 import { addSave } from "@/actions/save"
 import { getUser, getUserSaves } from "@/actions/user"
-import { getImageUrl, queryKey } from "@/config"
+import { queryKey } from "@/config"
 import { colors } from "@/config/colors"
 import style from "@/containers/user-page/style.module.scss"
 import { Langs } from "@/types/Main"
 import { SaveListType } from "@/types/Page"
 import { UserType } from "@/types/User"
-import hasString from "@/utils/hasString"
-import setDate from "@/utils/setDate"
+import { getImageUrl } from "@/utils/helpers/getImageUrl"
+import hasString from "@/utils/helpers/hasString"
+import setDateFormat from "@/utils/helpers/setDate"
 import { faArrowUpRightFromSquare, faChartLine, faPencil } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQuery } from "@tanstack/react-query"
@@ -41,7 +42,7 @@ const List = ({
     <li className={cx("list")}>
       <div
         style={{
-          background: getImageUrl({ isCenter: true, url: thumbnail ? thumbnail : "/images/noImage.png" }),
+          background: getImageUrl({ url: thumbnail ? thumbnail : "/images/noImage.png" }),
         }}
         className={cx("list-main")}
       >
@@ -136,40 +137,42 @@ const UserPage = () => {
 
   return (
     user && (
-      <>
-        <h1>
-          <img src="/images/icons/user.png" /> <span>안녕하세요! {user.userName}</span>
-        </h1>
-        <div className={cx("profile")}>
-          <picture>
-            <img src={user.userImage} alt={`${user.userImage}_profile`} />
-          </picture>
-          <div className={cx("profile-content")}>
-            <span>이름 : {user.userName}</span>
-            <span>소셜 로그인 : {user.provider}</span>
-            <span>플랜 : {user.plan}</span>
-            <span>가입일 : {setDate(user.createdAt)}</span>
+      <div className={cx("main")}>
+        <div className={cx("content")}>
+          <h1>
+            <img src="/images/icons/user.png" /> <span>안녕하세요! {user.userName}</span>
+          </h1>
+          <div className={cx("profile")}>
+            <picture>
+              <img src={user.userImage} alt={`${user.userImage}_profile`} />
+            </picture>
+            <div className={cx("profile-content")}>
+              <span>이름 : {user.userName}</span>
+              <span>소셜 로그인 : {user.provider}</span>
+              <span>플랜 : {user.plan}</span>
+              <span>가입일 : {setDateFormat(user.createdAt)}</span>
+            </div>
           </div>
-        </div>
-        <h1>
-          <img src="/images/icons/house.png" /> <span>페이지 리스트</span>
-        </h1>
-        <ul className={cx("page-list")}>
-          {(!saves || saves.length <= 0) && (
-            <li className={cx("no-list")}>
-              <img src="/images/icons/crying.png" alt="crying" />
-              <span>만들어진 페이지가 없어요</span>
-            </li>
-          )}
-          {saves && saves.map((save, i) => <List userId={user?.userId} save={save} key={`user-save-${i}`} />)}
+          <h1>
+            <img src="/images/icons/house.png" /> <span>페이지 리스트</span>
+          </h1>
+          <ul className={cx("page-list")}>
+            {(!saves || saves.length <= 0) && (
+              <li className={cx("no-list")}>
+                <img src="/images/icons/crying.png" alt="crying" />
+                <span>만들어진 페이지가 없어요</span>
+              </li>
+            )}
+            {saves && saves.map((save, i) => <List userId={user?.userId} save={save} key={`user-save-${i}`} />)}
 
-          <div className={cx("add-list")}>
-            <button onClick={onClickAddSave} className={cx("add")}>
-              <span>새로운 페이지 추가</span>
-            </button>
-          </div>
-        </ul>
-      </>
+            <div className={cx("add-list")}>
+              <button onClick={onClickAddSave} className={cx("add")}>
+                <span>새로운 페이지 추가</span>
+              </button>
+            </div>
+          </ul>
+        </div>
+      </div>
     )
   )
 }

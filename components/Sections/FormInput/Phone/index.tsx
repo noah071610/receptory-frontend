@@ -15,7 +15,7 @@ import cs from "classNames/bind"
 import { PhoneInput } from "react-international-phone"
 const cx = cs.bind(style)
 
-function Phone({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+function Phone({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const { setValue, setSelectedSection, selectedSection } = useEditorStore()
   const { min, max, phoneNumberCountry } = section.options
@@ -61,16 +61,10 @@ function Phone({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           />
         </FormUserInput>
       </div>
-      {!isDisplayMode && (
-        <div className={cx("options")}>
-          <OptionTitleInputs section={section} />
-          <OptionRatio
-            optionsArr={["all", "+82", "+81", "+66", "+1"]}
-            section={section}
-            targetKey="phoneNumberCountry"
-          />
-        </div>
-      )}
+      <div className={cx("options")}>
+        <OptionTitleInputs section={section} />
+        <OptionRatio optionsArr={["all", "+82", "+81", "+66", "+1"]} section={section} targetKey="phoneNumberCountry" />
+      </div>
     </div>
   )
 }

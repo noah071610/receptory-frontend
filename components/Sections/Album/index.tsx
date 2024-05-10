@@ -4,32 +4,24 @@ import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import Loading from "@/components/Loading"
-import { getImageUrl } from "@/config"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
 import { useTranslation } from "@/i18n/client"
-import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
+import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import cs from "classNames/bind"
-import { memo, useCallback, useMemo } from "react"
+import { memo, useMemo } from "react"
 import { Gallery, Image, ImageExtended, ThumbnailImageProps } from "react-grid-gallery"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 const AlbumImageComponent = ({
   props,
-  section,
   isDisplayMode,
 }: {
   props: ThumbnailImageProps<ImageExtended<Image>>
-  section: SectionType
   isDisplayMode?: boolean
 }) => {
-  // const { isIntersecting, ref } = useIntersectionObserver({
-  //   freezeOnceVisible: true,
-  // })
-  // const status = useProgressiveImage(props.imageProps.src, isIntersecting)
-
   return (
     <div>
       {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={props.index} />}
@@ -67,7 +59,7 @@ const ImageComponent = ({
         }}
         className={cx("photo")}
       >
-        <div style={{ background: getImageUrl({ isCenter: true, url: photo.src }) }} className={cx("background")} />
+        <div style={{ background: getImageUrl({ url: photo.src }) }} className={cx("background")} />
         <img src={photo.src} alt={photo.src} />
         {status === "loading" && <Loading />}
         {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={index} />}
@@ -86,7 +78,6 @@ const ImageComponent = ({
 }
 
 function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { setActive } = useEditorStore()
   const { t } = useTranslation()
 
   const galleryImages = useMemo(
@@ -97,20 +88,13 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
     [section.list]
   )
 
-  const comp = useCallback(
-    (props: any) => {
-      return <AlbumImageComponent props={props} section={section} isDisplayMode={isDisplayMode} />
-    },
-    [section, isDisplayMode]
-  )
-
   return (
     <div className={cx("layout")}>
       {galleryImages.length > 0 ? (
         <div className={cx("album")}>
           {section.design === "basic" ? (
             <Gallery
-              thumbnailImageComponent={(props) => comp(props)}
+              thumbnailImageComponent={(props) => <AlbumImageComponent props={props} isDisplayMode={isDisplayMode} />}
               images={galleryImages as any}
               enableImageSelection={false}
               onSelect={undefined}
@@ -134,10 +118,7 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           )}
         </div>
       ) : (
-        <div
-          style={{ background: getImageUrl({ isCenter: true, url: "/images/noImage.png" }) }}
-          className={cx("noImage")}
-        >
+        <div style={{ background: getImageUrl({ url: "/images/noImage.png" }) }} className={cx("noImage")}>
           <span>{t("noImage")}</span>
         </div>
       )}

@@ -5,15 +5,16 @@ import FormUserInput from "@/components/FormUserInput"
 import Input from "@/components/Input"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
+import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { memo } from "react"
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -21,18 +22,16 @@ const ListEdit = ({
   list,
   listIndex,
   onClickAddImage,
-  section,
 }: {
   list: SectionListType
   listIndex: number
   onClickAddImage: (i: number) => void
-  section: SectionType
 }) => {
   return (
     <li key={`edit-${list.id}`}>
       <div
         onClick={() => onClickAddImage(listIndex)}
-        style={{ background: list.src ? getImageUrl({ isCenter: true, url: list.src }) : "none" }}
+        style={{ background: list.src ? getImageUrl({ url: list.src }) : "none" }}
         className={cx("image")}
       >
         <FontAwesomeIcon icon={faPlus} />
@@ -61,16 +60,14 @@ const ListEdit = ({
   )
 }
 
-function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+function Select({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const { setActive } = useEditorStore()
-  const selectedList = section.value
+  const { setModal, selects } = useMainStore()
   const selectList = section.list
 
   const toggleSelect = () => {
-    setTimeout(() => {
-      setActive({ key: "modal", payload: { type: "select-list" } })
-    }, 0)
+    setModal({ section, type: "select" })
   }
 
   const onClickAddImage = (i: number) => {
@@ -86,30 +83,32 @@ function Select({ section, isDisplayMode }: { section: SectionType; isDisplayMod
         onClick={toggleSelect}
         title={section.data.title}
         description={section.data.description}
+        isMultiple={true}
       >
-        <span> {selectedList ? selectedList.data.title : t("리스트 선택")}</span>
+        {selects?.length > 0 ? (
+          selects.map((v, i) => (
+            <div className={cx("selected-list-text")} key={`select-${i}`}>
+              <span>{v.title}</span>
+            </div>
+          ))
+        ) : (
+          <span>{t("none")}</span>
+        )}
       </FormUserInput>
-      {!isDisplayMode && (
-        <div className={cx("options")}>
-          <OptionTitleInputs section={section} />
-          <OptionBar value="addSelectNone" section={section} />
-          <div className={cx("list-edit-wrapper")}>
-            <h4>리스트 수정</h4>
-            <ul className={cx("list-edit")}>
-              {selectList.map((list, i) => (
-                <ListEdit
-                  section={section}
-                  onClickAddImage={onClickAddImage}
-                  key={`${list.id}-edit`}
-                  list={list}
-                  listIndex={i}
-                />
-              ))}
-            </ul>
-            <AddBtn section={section} type="select" />
-          </div>
+      <div className={cx("options")}>
+        <OptionTitleInputs section={section} />
+        <OptionBar value="addSelectNone" section={section} />
+        <OptionBar value="isMultiple" section={section} />
+        <div className={cx("list-edit-wrapper")}>
+          <h4>리스트 수정</h4>
+          <ul className={cx("list-edit")}>
+            {selectList.map((list, i) => (
+              <ListEdit onClickAddImage={onClickAddImage} key={`${list.id}-edit`} list={list} listIndex={i} />
+            ))}
+          </ul>
+          <AddBtn section={section} type="select" />
         </div>
-      )}
+      </div>
     </div>
   )
 }

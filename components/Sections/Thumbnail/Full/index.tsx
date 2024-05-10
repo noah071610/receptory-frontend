@@ -2,11 +2,11 @@
 
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import hasString from "@/utils/hasString"
+import { getImageUrl } from "@/utils/helpers/getImageUrl"
+import hasString from "@/utils/helpers/hasString"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -39,7 +39,7 @@ export default function Full({
 
   const mainBackground = background
     ? // 풀 타입 배경 화면
-      getImageUrl({ isCenter: true, url: background ?? "" })
+      getImageUrl({ url: background ?? "" })
     : // 풀 타입 백그라운드 컬러
       `linear-gradient(180deg, ${backgroundColor} 87%, rgba(0,0,0,0) 100%)`
 
@@ -53,7 +53,7 @@ export default function Full({
       {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
       <div className={cx("main")}>
         {!isDisplayMode && (
-          <div style={{ background: getImageUrl({ isCenter: true, url: section.src }) }} className={cx("thumbnail")}>
+          <div style={{ background: getImageUrl({ url: section.src }) }} className={cx("thumbnail")}>
             {hasString(section.src) && <DeleteBtn srcKey={"thumbnail"} />}
             <button className={cx("drop-zone")} onClick={onClickThumbnailUpload}>
               <FontAwesomeIcon icon={faPlus} />

@@ -1,16 +1,14 @@
 "use client"
 
-import { useEditorStore } from "@/store/editor"
-
+import { SectionType } from "@/types/Edit"
 import { DPDayInteger, DatePickerStateProvider } from "@rehookify/datepicker"
 import { useMemo, useState } from "react"
 import ModalLayout from ".."
 import CalenderMain from "./CalenderMain"
 
-export const DatePicker = () => {
-  const { selectedSection } = useEditorStore()
-  const { startDate, endDate, interval, specificDate, selectRange } = selectedSection?.options ?? {}
-  const specificDateCollection = selectedSection?.collection ?? []
+export const DatePicker = ({ section }: { section: SectionType }) => {
+  const { startDate, endDate, interval, specificDate, selectRange } = section.options
+  const specificDateCollection = section?.collection ?? []
 
   const startDateForSpecific = useMemo(() => {
     if (specificDateCollection?.length < 1) return []
@@ -47,7 +45,7 @@ export const DatePicker = () => {
 
   return (
     <ModalLayout>
-      {selectedSection && (
+      {section && (
         <DatePickerStateProvider
           config={{
             selectedDates,
@@ -65,7 +63,7 @@ export const DatePicker = () => {
             },
           }}
         >
-          <CalenderMain selectedDates={selectedDates} />
+          <CalenderMain section={section} selectedDates={selectedDates} />
         </DatePickerStateProvider>
       )}
     </ModalLayout>

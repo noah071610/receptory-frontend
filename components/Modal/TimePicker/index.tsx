@@ -2,30 +2,24 @@
 
 import NumberRange from "@/components/NumberRange"
 import { useTranslation } from "@/i18n/client"
-import { useEditorStore } from "@/store/editor"
 import { generateHourSlots, generateSecondSlots, isMoreLateTime } from "@/utils/time"
 import { useMemo, useState } from "react"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
+import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
-export const TimePicker = () => {
+export const TimePicker = ({ section }: { section: SectionType }) => {
   const { t } = useTranslation()
-  const { setData, setActive, selectedSection, setValue } = useEditorStore()
+  const { setModal, setTime } = useMainStore()
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const [startTime, setStartTime] = useState<null | string>(null)
   const [step, setStep] = useState("startTime")
-  const {
-    startHour: _startHour,
-    endHour: _endHour,
-    interval,
-    specificTime,
-    selectRange,
-    addAnytime,
-  } = selectedSection?.options ?? {}
+  const { startHour: _startHour, endHour: _endHour, interval, specificTime, selectRange, addAnytime } = section.options
   const [startHour, endHour] = useMemo(() => {
     const s = parseInt(_startHour ?? "00")
     const e = parseInt(_endHour ?? "00")
@@ -36,6 +30,8 @@ export const TimePicker = () => {
       return [e, s]
     }
   }, [_startHour, _endHour])
+
+  const close = () => setModal({ section: null, type: null })
 
   const onClickTime = (type: "hour" | "minute" | "meridiem" | "any" | "select", value: any) => {
     switch (type) {
@@ -56,31 +52,31 @@ export const TimePicker = () => {
           // 오후 5시 ~ 오후 3시를 같이 선택하면 바꿔준다.
 
           if (isMoreLateTime(startTime, calcValue)) {
-            setValue({
+            setTime({
               payload: {
                 selectedStartTime: calcValue,
                 selectedEndTime: startTime,
               },
             })
           } else {
-            setValue({
+            setTime({
               payload: {
                 selectedStartTime: startTime,
                 selectedEndTime: calcValue,
               },
             })
           }
-          setActive({ key: "all", payload: { type: null } })
+          close()
         }
         if (selectRange === "single") {
           // 하나의 시간만 선택함으로 분단위 까지 선택하면 모달 종료
-          setValue({
+          setTime({
             payload: {
               selectedStartTime: calcValue,
-              selectedEndTime: undefined,
+              selectedEndTime: null,
             },
           })
-          setActive({ key: "all", payload: { type: null } })
+          close()
         } else {
           // endTime 선택해야함 재선택 시작
 
@@ -93,22 +89,22 @@ export const TimePicker = () => {
       case "select": // 리스트에 추가한 특정 시간을 선택
         // 이 로직은 따로 빼는게 좋지만... 그냥 사용하기로 했다 ㅠㅠ 귀찮아
         // 덕분에 value가 any가 되어버림요
-        setValue({
+        setTime({
           payload: {
             selectedStartTime: value.specificStartTime,
             selectedEndTime: value.specificEndTime, // undefined 도 가능
           },
         })
-        setActive({ key: "all", payload: { type: null } })
+        close()
         break
       case "any":
-        setValue({
+        setTime({
           payload: {
-            selectedStartDate: "anytime",
-            selectedEndDate: undefined,
+            selectedStartTime: "anytime",
+            selectedEndTime: null,
           },
         })
-        setActive({ key: "all", payload: { type: null } })
+        close()
         break
 
       default:
@@ -130,74 +126,72 @@ export const TimePicker = () => {
       : amArr
 
   return (
-    selectedSection && (
-      <ModalLayout modalStyle={cx(style.time)}>
-        {!specificTime && (
-          <>
-            <div className={cx("basic-time-list")}>
-              <ul className={cx("meridiem")}>
-                {amArr?.length > 0 && (
-                  <li className={cx({ selected: "am" === selectedMeridiem })}>
-                    <button onClick={() => onClickTime("meridiem", "am")}>AM</button>
-                  </li>
-                )}
-                {pmArr?.length > 0 && (
-                  <li className={cx({ selected: "pm" === selectedMeridiem })}>
-                    <button onClick={() => onClickTime("meridiem", "pm")}>PM</button>
-                  </li>
-                )}
-              </ul>
-              <ul className={cx("hours", { disabled: !selectedMeridiem })}>
-                {displayHours.map((v) => (
-                  <li className={cx({ selected: v === selectedHour })} key={`hours-${v}`}>
-                    <button disabled={!selectedMeridiem} onClick={() => onClickTime("hour", v)}>
-                      {v}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <ul className={cx("seconds", { disabled: !selectedHour })}>
-                {seconds.map((v) => (
-                  <li key={`second-${v}`}>
-                    <button disabled={!selectedHour} onClick={() => onClickTime("minute", v)}>
-                      {v}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </>
-        )}
-        {specificTime && (
-          <ul className={cx("select-time-list")}>
-            {selectedSection.collection.map(({ specificStartTime, specificEndTime }, i) => (
-              <li key={`time_${i}`}>
-                <button onClick={() => onClickTime("select", { specificStartTime, specificEndTime })}>
-                  <NumberRange start={specificStartTime} end={specificEndTime} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-        {/* selectRange가 range 이거나 anytime 버튼이 있으면 display */}
-        {(!!startTime || addAnytime) && (
-          <div className={cx("result-wrapper")}>
-            {startTime && (
-              <div className={cx("selected")}>
-                <span>
-                  {startTime} {" ~ "}
-                </span>
-              </div>
-            )}
-            {!startTime && addAnytime && (
-              <button className={cx("anytime")} onClick={() => onClickTime("any", "anytime")}>
-                <span>{t("아무때나")}</span>
-              </button>
-            )}
+    <ModalLayout modalStyle={cx(style.time)}>
+      {!specificTime && (
+        <>
+          <div className={cx("basic-time-list")}>
+            <ul className={cx("meridiem")}>
+              {amArr?.length > 0 && (
+                <li className={cx({ selected: "am" === selectedMeridiem })}>
+                  <button onClick={() => onClickTime("meridiem", "am")}>AM</button>
+                </li>
+              )}
+              {pmArr?.length > 0 && (
+                <li className={cx({ selected: "pm" === selectedMeridiem })}>
+                  <button onClick={() => onClickTime("meridiem", "pm")}>PM</button>
+                </li>
+              )}
+            </ul>
+            <ul className={cx("hours", { disabled: !selectedMeridiem })}>
+              {displayHours.map((v) => (
+                <li className={cx({ selected: v === selectedHour })} key={`hours-${v}`}>
+                  <button disabled={!selectedMeridiem} onClick={() => onClickTime("hour", v)}>
+                    {v}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <ul className={cx("seconds", { disabled: !selectedHour })}>
+              {seconds.map((v) => (
+                <li key={`second-${v}`}>
+                  <button disabled={!selectedHour} onClick={() => onClickTime("minute", v)}>
+                    {v}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-        )}
-      </ModalLayout>
-    )
+        </>
+      )}
+      {specificTime && (
+        <ul className={cx("select-time-list")}>
+          {section.collection?.map(({ specificStartTime, specificEndTime }, i) => (
+            <li key={`time_${i}`}>
+              <button onClick={() => onClickTime("select", { specificStartTime, specificEndTime })}>
+                <NumberRange start={specificStartTime} end={specificEndTime} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {/* selectRange가 range 이거나 anytime 버튼이 있으면 display */}
+      {(!!startTime || addAnytime) && (
+        <div className={cx("result-wrapper")}>
+          {startTime && (
+            <div className={cx("selected")}>
+              <span>
+                {startTime} {" ~ "}
+              </span>
+            </div>
+          )}
+          {!startTime && addAnytime && (
+            <button className={cx("anytime")} onClick={() => onClickTime("any", "anytime")}>
+              <span>{t("아무때나")}</span>
+            </button>
+          )}
+        </div>
+      )}
+    </ModalLayout>
   )
 }
 

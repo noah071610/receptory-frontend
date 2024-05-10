@@ -30,7 +30,7 @@
     justify-content: center;
     margin-top: 40px;
     button {
-      @include form-btn-style;
+      @include btn-submit-style;
     }
   }
 }

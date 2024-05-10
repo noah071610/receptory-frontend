@@ -4,7 +4,7 @@ import { LangParams, LayoutLangParams } from "@/types/Main"
 
 import { _url } from "@/config"
 import style from "@/containers/login-page/style.module.scss"
-import { getAnimation } from "@/utils/getAnimation"
+import { getAnimation } from "@/utils/styles/getAnimation"
 import cs from "classNames/bind"
 import Image from "next/image"
 const cx = cs.bind(style)
@@ -18,7 +18,7 @@ export async function generateMetadata({ params: { lang } }: LangParams) {
   }
 }
 
-export default async function LoginPageLayout({ children, params: { lang } }: Readonly<LayoutLangParams>) {
+export default async function LoginPageLayout({ params: { lang } }: Readonly<LayoutLangParams>) {
   return (
     <div className={cx("main")}>
       <div className={cx("content")}>
@@ -49,7 +49,6 @@ export default async function LoginPageLayout({ children, params: { lang } }: Re
             </a>
           </li>
         </ul>
-        {children}
       </div>
     </div>
   )

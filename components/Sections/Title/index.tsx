@@ -1,11 +1,13 @@
 "use client"
 
 import Input from "@/components/Input"
-import { changeOpacity } from "@/config/colors"
+
 import { SectionType } from "@/types/Edit"
 import { memo, useMemo } from "react"
 import style from "./style.module.scss"
 
+import hasString from "@/utils/helpers/hasString"
+import { changeOpacity } from "@/utils/styles/changeOpacity"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -32,43 +34,50 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           }}
           className={cx("label-wrapper")}
         >
-          <Input
-            type="input"
-            className={cx(isDisplayMode ? "label" : "label-input")}
-            inputType="label"
-            displayMode={isDisplayMode && "span"}
-            isOptional={true}
-            maxLength={20}
-            listIndex={2}
-            value={label.value}
-            style={labelStyle}
-          />
+          {isDisplayMode ? (
+            hasString(label.value) && <span className={cx("label")}>{label.value}</span>
+          ) : (
+            <Input
+              type="input"
+              className={cx("label-input")}
+              inputType="label"
+              isOptional={true}
+              maxLength={20}
+              listIndex={2}
+              value={label.value}
+              style={labelStyle}
+            />
+          )}
         </div>
       )}
-      {title.isActive && (
-        <Input
-          type="input"
-          value={title.value}
-          listIndex={0}
-          displayMode={isDisplayMode && "h1"}
-          className={cx(isDisplayMode ? "title" : "title-input")}
-          inputType="title"
-          isOptional={true}
-          style={{ textAlign }}
-        />
-      )}
-      {description.isActive && (
-        <Input
-          type="textarea"
-          value={description.value}
-          listIndex={1}
-          displayMode={isDisplayMode && "p"}
-          className={cx(isDisplayMode ? "description" : "description-input")}
-          inputType="description"
-          isOptional={true}
-          style={{ textAlign }}
-        />
-      )}
+      {title.isActive &&
+        (isDisplayMode ? (
+          hasString(title.value) && <h1 className={cx("title")}>{title.value}</h1>
+        ) : (
+          <Input
+            type="input"
+            value={title.value}
+            listIndex={0}
+            className={cx("title-input")}
+            inputType="title"
+            isOptional={true}
+            style={{ textAlign }}
+          />
+        ))}
+      {description.isActive &&
+        (isDisplayMode ? (
+          hasString(description.value) && <p className={cx("description")}>{description.value}</p>
+        ) : (
+          <Input
+            type="textarea"
+            value={description.value}
+            listIndex={1}
+            className={cx("description-input")}
+            inputType="description"
+            isOptional={true}
+            style={{ textAlign }}
+          />
+        ))}
     </div>
   )
 }

@@ -6,3 +6,9 @@ export type LayoutLangParams = {
     lang: Langs
   }
 }
+export interface UserSelectedListType {
+  index: number
+  title: string
+  description: string
+  src: string
+}

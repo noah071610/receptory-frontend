@@ -3,7 +3,7 @@
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { StyleProperties } from "@/types/Edit"
-import hasString from "@/utils/hasString"
+import hasString from "@/utils/helpers/hasString"
 import { useParams } from "next/navigation"
 import { memo, useRef, useState } from "react"
 import TextareaAutosize from "react-textarea-autosize"

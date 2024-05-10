@@ -1,39 +1,14 @@
 @import "@/styles/variables.scss";
+@import "@/styles/editor.scss";
 
 .layout {
   width: 100%;
   padding-top: 40px;
-  display: flex;
+  @include flex-x;
   flex-direction: column;
 
   h1 {
-    margin: 0 20px;
-    margin-bottom: 50px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    img {
-      width: 25px;
-      height: 25px;
-      background-color: var(--white);
-      z-index: 10;
-    }
-    span {
-      padding-left: 10px;
-      padding-right: 20px;
-      background-color: var(--white);
-      z-index: 10;
-    }
-    &::after {
-      content: "";
-      width: 100%;
-      position: absolute;
-      height: 1px;
-      top: 50%;
-      left: 0;
-      background-color: var(--border);
-    }
+    @include header-style;
   }
 
   h3 {
@@ -44,16 +19,14 @@
 }
 
 .options {
-  @include flex;
-  flex-direction: column;
+  @include flex(true);
   gap: 20px;
   margin-bottom: 70px;
 }
 
 .option-bar {
   width: 100%;
-  @include flex;
-  flex-direction: column;
+  @include flex(true);
 
   max-width: 300px;
   border-radius: 20px;
@@ -61,34 +34,7 @@
   background-color: var(--bg-color);
 
   .content {
-    .bar {
-      width: 50px;
-      padding: 3px 6px;
-      background-color: var(--gray-soft);
-      display: flex;
-      align-items: center;
-      border-radius: 30px;
-      transition: 300ms all;
-      .circle {
-        width: 18px;
-        height: 18px;
-        border-radius: 100%;
-        background-color: var(--gray);
-        transition: 300ms all;
-      }
-    }
-    &.active {
-      h3 {
-        color: var(--pink-hard);
-      }
-      .bar {
-        background-color: var(--pink-soft);
-      }
-      .circle {
-        transform: translateX(21px);
-        background-color: var(--white);
-      }
-    }
+    @include toggle-bar;
   }
 }
 
@@ -101,50 +47,13 @@
   background-color: var(--bg-color);
 
   .content {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px 20px;
-    .ratio-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      .ratio {
-        width: 20px;
-        height: 20px;
-        @include flex;
-        border-radius: 100%;
-        @include border;
-        .circle {
-          width: 12px;
-          height: 12px;
-          border-radius: 100%;
-          transform: scale(0);
-          transition: 300ms all;
-        }
-      }
-      label {
-        cursor: pointer;
-      }
-      &.active {
-        label {
-          color: var(--pink);
-        }
-        .circle {
-          background-color: var(--pink);
-          transform: scale(1);
-        }
-      }
-    }
+    @include ratio-content;
   }
 }
 
 .option-link {
   width: 100%;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
 
   max-width: 300px;
   border-radius: 20px;
@@ -166,5 +75,5 @@
   @include flex;
 }
 .deploy {
-  @include form-btn-style;
+  @include btn-submit-style;
 }

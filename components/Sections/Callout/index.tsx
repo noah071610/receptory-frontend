@@ -1,18 +1,26 @@
 "use client"
 
 import DeleteBtn from "@/components/DeleteBtn"
-import { changeOpacity } from "@/config/colors"
+
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import hasString from "@/utils/hasString"
+import hasString from "@/utils/helpers/hasString"
+import { changeOpacity } from "@/utils/styles/changeOpacity"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import { memo, useMemo } from "react"
-import Text from "../Text"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
+
+const PageText = dynamic(() => import("../Text/PageText"), {
+  ssr: true,
+})
+const Text = dynamic(() => import("../Text"), {
+  ssr: true,
+})
 
 function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { setActive } = useEditorStore()
@@ -41,10 +49,13 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
             className={cx("image-container")}
           >
             {section.src && !isDisplayMode && <DeleteBtn isSmall={true} srcKey="callout" />}
-            <picture onClick={onClickAddImage} className={cx("image")}>
+            <picture className={cx("image")}>
               {section.src && <Image width={50} height={50} src={section.src} alt="image" />}
               {!isDisplayMode && (
-                <button className={cx("image-btn", { ["has-image"]: hasString(section.src) })}>
+                <button
+                  onClick={onClickAddImage}
+                  className={cx("image-btn", { ["has-image"]: hasString(section.src) })}
+                >
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
               )}
@@ -52,7 +63,7 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
           </div>
         )}
         <div className={cx("main")}>
-          <Text section={section} isDisplayMode={isDisplayMode} />
+          {isDisplayMode ? <PageText textState={section.text} /> : <Text section={section} />}
         </div>
       </div>
     </div>

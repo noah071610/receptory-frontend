@@ -50,33 +50,7 @@
   }
 
   h1 {
-    margin: 0 20px;
-    margin-bottom: 10px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    img {
-      width: 25px;
-      height: 25px;
-      background-color: var(--white);
-      z-index: 10;
-    }
-    span {
-      padding-left: 10px;
-      padding-right: 20px;
-      background-color: var(--white);
-      z-index: 10;
-    }
-    &::after {
-      content: "";
-      width: 100%;
-      position: absolute;
-      height: 1px;
-      top: 50%;
-      left: 0;
-      background-color: var(--border);
-    }
+    @include header-style;
   }
 
   // list
@@ -179,29 +153,15 @@
 
 .add-list {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 20px;
   position: fixed;
   left: 0;
   bottom: 0;
+  @include flex-x;
+  padding-bottom: 20px;
 }
 
 .no-list {
-  width: 100%;
-  height: 250px;
-  background-color: var(--gray-softest);
-  @include flex;
-  flex-direction: column;
-  gap: 10px;
-  img {
-    width: 40px;
-    height: 40px;
-  }
-  span {
-    font-size: 15px;
-    color: #042a52;
-  }
+  @include no-list;
 }
 
 .add {

@@ -9,51 +9,6 @@
   display: flex;
   position: relative;
 
-  .image-container {
-    width: 60px;
-    height: 60px;
-    padding: 5px;
-    position: relative;
-
-    @include flex;
-    .image {
-      width: 50px;
-      height: 50px;
-
-      @include flex;
-      position: relative;
-      border-radius: 100%;
-      overflow: hidden;
-      img {
-        object-fit: cover;
-      }
-      button {
-        @include full;
-        border-radius: 100%;
-        border: 1px dashed var(--border);
-        width: 100%;
-        height: 100%;
-        @include flex;
-        svg {
-          color: var(--gray);
-        }
-        &.has-image {
-          border: none;
-        }
-        @include action {
-          border-color: var(--pink);
-          svg {
-            color: var(--pink);
-          }
-        }
-      }
-    }
-  }
-  .main {
-    width: 100%;
-    padding: 5px;
-  }
-
   &.card {
     margin-top: 20px;
     .image-container {
@@ -76,6 +31,53 @@
     }
     .main {
       padding-top: 35px;
+    }
+  }
+}
+
+.image-container {
+  width: 60px;
+  height: 60px;
+  padding: 5px;
+  position: relative;
+
+  @include flex;
+  .image {
+    width: 50px;
+    height: 50px;
+
+    @include flex;
+    position: relative;
+    border-radius: 100%;
+    overflow: hidden;
+    img {
+      object-fit: cover;
+    }
+  }
+}
+
+.text-content {
+  width: 100%;
+  padding: 5px;
+}
+
+.image-btn {
+  @include full;
+  border-radius: 100%;
+  border: 1px dashed var(--border);
+  width: 100%;
+  height: 100%;
+  @include flex;
+  svg {
+    color: var(--gray);
+  }
+  &.has-image {
+    border: none;
+  }
+  @include action {
+    border-color: var(--pink);
+    svg {
+      color: var(--pink);
     }
   }
 }

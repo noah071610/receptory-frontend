@@ -6,7 +6,7 @@ import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 import { RichUtils } from "draft-js"
 import { useCallback } from "react"
-import style from "../style.module.scss"
+import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 const Toolbar = ({

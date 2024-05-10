@@ -1,0 +1,7 @@
+{
+  "scssimport": {
+    "prefix": "scssimport",
+    "body": ["@import \"./style.scss\";@include layout;"],
+    "description": "cx",
+  },
+}

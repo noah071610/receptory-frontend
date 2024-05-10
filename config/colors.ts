@@ -1,37 +1,3 @@
-export const backgroundColors = [
-  "rgba(255, 99, 132, 0.2)",
-  "rgba(54, 162, 235, 0.2)",
-  "rgba(255, 206, 86, 0.2)",
-  "rgba(75, 192, 192, 0.2)",
-  "rgba(153, 102, 255, 0.2)",
-  "rgba(234,147,31,0.2)",
-  "rgba(123,123,123,0.2)",
-  "rgba(152, 251, 152, 0.2)",
-  "rgba(187,201,254, 0.2)",
-  "rgba(235,31,32, 0.2)",
-  "rgba(100, 200, 50, 0.2)",
-  "rgba(10, 150, 200, 0.2)",
-  "rgba(200, 100, 150, 0.2)",
-  "rgba(50, 50, 100, 0.2)",
-  "rgba(150, 200, 10, 0.2)",
-  "rgba(200, 50, 100, 0.2)",
-]
-
-export const borderColors = backgroundColors.map((v) => v.replace("0.2)", "1)"))
-
-export function changeOpacity(rgbaString: string, newOpacity: number = 0.2) {
-  // rgba 문자열에서 각 색상 값 추출
-  const rgbaValues = rgbaString.match(/[\d.]+/g)
-  if (!rgbaValues || !rgbaValues[3]) return rgbaString
-  // 투명도 값만 변경
-  rgbaValues[3] = newOpacity.toString()
-
-  // 변경된 값으로 새로운 rgba 문자열 생성
-  const newRgbaString = `rgba(${rgbaValues.join(",")})`
-
-  return newRgbaString
-}
-
 export const colors = {
   white: "rgba(255,255,255,1)",
   textWhite: "rgba(255,255,255,1)",
@@ -68,12 +34,4 @@ export const colors = {
 
   green: "rgba(99,206,99,0.90)",
   greenHard: "rgba(81,255,81,0.90)",
-}
-
-export const defaultColors = {
-  bgColor: colors.white,
-  ctaColor: colors.purple,
-  textColor: colors.blackSoft,
-  mainColor: colors.white,
-  subColor: colors.white,
 }

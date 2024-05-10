@@ -1,3 +1,5 @@
+const { prependListener } = require("process")
+
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: false, // todo:
   openAnalyzer: true,

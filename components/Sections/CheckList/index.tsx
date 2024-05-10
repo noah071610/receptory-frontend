@@ -5,7 +5,7 @@ import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
-import { getAnimation } from "@/utils/getAnimation"
+import { getAnimation } from "@/utils/styles/getAnimation"
 import { faPenFancy, faSquareCheck, faSquareXmark, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -66,16 +66,20 @@ function List({
         {design === "caution" && <FontAwesomeIcon icon={faTriangleExclamation} />}
       </div>
       <div className={cx("content")}>
-        <Input
-          inputType="text"
-          isOptional={false}
-          listIndex={index}
-          type="input"
-          value={list.value}
-          displayMode={isDisplayMode && "span"}
-          maxLength={35}
-          className={isDisplayMode ? style.text : ""}
-        />
+        {isDisplayMode ? (
+          <span className={cx("text")}>{list.value}</span>
+        ) : (
+          <Input
+            className={cx("input")}
+            inputType="text"
+            isOptional={false}
+            listIndex={index}
+            type="input"
+            value={list.value}
+            maxLength={35}
+          />
+        )}
+
         {!isDisplayMode && <DeleteBtn isSmall={true} listIndex={index} srcKey="checklist" isDeleteList={true} />}
       </div>
     </li>

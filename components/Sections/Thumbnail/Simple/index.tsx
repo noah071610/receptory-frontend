@@ -2,12 +2,12 @@
 
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { getImageUrl } from "@/config"
 import { colors } from "@/config/colors"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import hasString from "@/utils/hasString"
+import { getImageUrl } from "@/utils/helpers/getImageUrl"
+import hasString from "@/utils/helpers/hasString"
 import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -32,7 +32,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
     <div className={cx("wrapper")}>
       <div
         style={{
-          background: background ? getImageUrl({ isCenter: true, url: background ?? "" }) : backgroundColor,
+          background: background ? getImageUrl({ url: background ?? "" }) : backgroundColor,
         }}
         className={cx("background")}
       >
@@ -43,7 +43,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
         {
           <div
             style={{
-              background: hasString(section.src) ? getImageUrl({ isCenter: true, url: section.src }) : colors.white,
+              background: hasString(section.src) ? getImageUrl({ url: section.src }) : colors.white,
             }}
             className={cx("thumbnail", { isDisplayMode })}
           >

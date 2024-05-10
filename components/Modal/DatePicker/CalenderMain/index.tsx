@@ -3,7 +3,6 @@
 import { FC, ReactNode, useEffect } from "react"
 
 import { useTranslation } from "@/i18n/client"
-import { useEditorStore } from "@/store/editor"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -14,6 +13,8 @@ import {
 } from "@rehookify/datepicker"
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
+import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -60,33 +61,40 @@ const CalenderComponent: FC<CalendarProps> = ({ prevButton, nextButton, calendar
   )
 }
 
-function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: boolean; selectedDates?: Date[] }) {
+function CalenderMain({
+  section,
+  isOptionCalender,
+  selectedDates,
+}: {
+  section: SectionType
+  isOptionCalender?: boolean
+  selectedDates?: Date[]
+}) {
   const { t } = useTranslation()
-  const { selectedSection, setValue, setActive } = useEditorStore()
+  const { setDate, setModal } = useMainStore()
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
-  const { options } = selectedSection ?? {}
-  const { startDate, addAnyDate, selectRange } = options ?? {}
+  const { startDate, addAnyDate, selectRange } = section.options
   const inactiveBtn = !selectedDates || selectedDates.length <= (selectRange === "range" ? 1 : 0)
 
   const onClickSubmit = () => {
     if (!selectedDates || selectedDates.length <= 0) return
-    setValue({
+    setDate({
       payload: {
         selectedStartDate: selectedDates[0],
-        selectedEndDate: selectedDates[1], // undefined 도 가능
+        selectedEndDate: selectedDates[1] ?? null, // undefined 도 가능
       },
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
   const onClickAnyDate = () => {
-    setValue({
+    setDate({
       payload: {
         selectedStartDate: "anyDate",
-        selectedEndDate: undefined,
+        selectedEndDate: null, // undefined 도 가능
       },
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
 
   useEffect(() => {

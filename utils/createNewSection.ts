@@ -1,41 +1,34 @@
 import { colors } from "@/config/colors"
 import { SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
 import { EditorState } from "draft-js"
-import getId from "./getId"
+import getId from "./helpers/getId"
 
 const getNewEmptyEditor = () => EditorState.createEmpty()
 const getNewDate = () => new Date()
+const title = {
+  title: "타이틀 입력",
+  description: "설명 입력",
+}
 
 const sectionMap: { [key: string]: any } = {
   calender: () => {
     return {
-      value: {
-        selectedStartDate: undefined,
-        selectedEndDate: undefined,
-      },
       collection: [],
       options: {
         isAlways: true,
         specificDate: false,
         addAnyDate: false,
         interval: "all",
-        startDate: new Date(),
+        startDate: getNewDate(),
         endDate: undefined,
         selectRange: "single",
         selectedSpecificDates: [],
       },
-      data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
+      data: title,
     }
   },
   time: () => {
     return {
-      value: {
-        selectedStartTime: undefined,
-        selectedEndTime: undefined,
-      },
       collection: [],
       options: {
         isAlways: true,
@@ -47,10 +40,7 @@ const sectionMap: { [key: string]: any } = {
         selectRange: "single",
         selectedSpecificTimes: [],
       },
-      data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
+      data: title,
     }
   },
   slider: () => {
@@ -70,27 +60,18 @@ const sectionMap: { [key: string]: any } = {
   },
   email: () => {
     return {
-      data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
+      data: title,
     }
   },
   phone: () => {
     return {
-      data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
+      data: title,
       options: { phoneNumberCountry: "all" },
     }
   },
   numberInput: () => {
     return {
-      data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
+      data: title,
       options: {
         min: 0,
         max: 9999999,
@@ -99,10 +80,7 @@ const sectionMap: { [key: string]: any } = {
   },
   textInput: () => {
     return {
-      data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
+      data: title,
       design: "text",
       options: {
         min: 0,
@@ -153,16 +131,14 @@ const sectionMap: { [key: string]: any } = {
   select: () => {
     const target = createNewSectionList("select", 0, { data: { title: "리스트 타이틀 todo:" } })
     return {
-      value: null,
+      value: undefined,
       design: "imageWithText",
       list: [target],
       options: {
+        isMultiple: false,
         addSelectNone: false,
       },
-      data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
-      },
+      data: title,
     }
   },
   thumbnail: (designInit?: string) => {
@@ -170,8 +146,7 @@ const sectionMap: { [key: string]: any } = {
       id: "thumbnail",
       design: designInit ?? "simple",
       data: {
-        title: "타이틀 입력",
-        description: "설명 입력",
+        ...title,
         cta: "폼으로 이동",
       },
       style: {
@@ -225,6 +200,7 @@ export const createNewSection = ({
   const setProperties = sectionMap[type] ? sectionMap[type](designInit) : {}
 
   return {
+    // 객체 참조 이슈 때문에 하드 코딩, 바꾸지마세요..!
     id: newId ?? getId(),
     index,
     type,

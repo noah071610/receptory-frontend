@@ -2,11 +2,11 @@
 
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { getImageUrl } from "@/config"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import hasString from "@/utils/hasString"
+import { getImageUrl } from "@/utils/helpers/getImageUrl"
+import hasString from "@/utils/helpers/hasString"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -44,7 +44,7 @@ export default function Card({
       {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
       <div style={{ borderColor }} className={cx("main")}>
         {!isDisplayMode && (
-          <div style={{ background: getImageUrl({ isCenter: true, url: section.src }) }} className={cx("thumbnail")}>
+          <div style={{ background: getImageUrl({ url: section.src }) }} className={cx("thumbnail")}>
             {hasString(section.src) && !isDisplayMode && <DeleteBtn isSmall={true} srcKey={"thumbnail"} />}
             <button className={cx("drop-zone")} onClick={onClickThumbnailUpload}>
               <FontAwesomeIcon icon={faPlus} />
@@ -95,7 +95,7 @@ export default function Card({
 
       <div
         style={{
-          background: background ? getImageUrl({ isCenter: true, url: background ?? "" }) : backgroundColor,
+          background: background ? getImageUrl({ url: background ?? "" }) : backgroundColor,
         }}
         className={cx("background")}
       />

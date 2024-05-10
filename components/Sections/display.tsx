@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, useEffect, useRef, useState } from "react"
+import { ReactNode, useEffect, useRef } from "react"
 
 import { useEditorStore } from "@/store/editor"
 import cs from "classNames/bind"
@@ -17,7 +17,6 @@ export default function SectionLayout({
   id: string
 }) {
   const observerRef = useRef<HTMLDivElement | null>(null)
-  const [curSectionId, setCurSectionId] = useState("")
   const { selectedSection } = useEditorStore()
 
   useEffect(() => {

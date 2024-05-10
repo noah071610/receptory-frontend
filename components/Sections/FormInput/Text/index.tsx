@@ -4,7 +4,7 @@ import FormUserInput from "@/components/FormUserInput"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import { enforceMinMax, onlyNumberFilter } from "@/utils/inputHelper"
+import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo, useEffect } from "react"
@@ -15,20 +15,14 @@ import style from "./style.module.scss"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
-function Text({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+function Text({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setValue, setSelectedSection, setOptions, selectedSection } = useEditorStore()
+  const { setValue, setOptions } = useEditorStore()
   const { max } = section.options
   const design = section.design
   const globalMax = design === "text" ? 50 : 500
-  const activeSection = () => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
-  }
 
   const onChangeInput = (e: any) => {
-    activeSection()
     if (e.target.value.length > max) {
       return
     }
@@ -36,8 +30,9 @@ function Text({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
   }
 
   const onChangeMax = (e: any) => {
-    activeSection()
-    setOptions({ payload: e.target.value, key: "max" })
+    setTimeout(() => {
+      setOptions({ payload: e.target.value, key: "max" })
+    }, 0)
   }
 
   useEffect(() => {
@@ -70,26 +65,24 @@ function Text({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
           )}
         </FormUserInput>
       </div>
-      {!isDisplayMode && (
-        <div className={cx("options")}>
-          <OptionTitleInputs section={section} />
-          <div>
-            <h4>최대 글자수 조정</h4>
-            <div className={cx("minMax-wrapper")}>
-              <input
-                className={cx("minMax")}
-                onKeyDown={onlyNumberFilter}
-                onKeyUp={enforceMinMax}
-                type="number"
-                min={1}
-                max={globalMax}
-                value={section.options.max}
-                onChange={onChangeMax}
-              />
-            </div>
+      <div className={cx("options")}>
+        <OptionTitleInputs section={section} />
+        <div>
+          <h4>최대 글자수 조정</h4>
+          <div className={cx("minMax-wrapper")}>
+            <input
+              className={cx("minMax")}
+              onKeyDown={onlyNumberFilter}
+              onKeyUp={enforceMinMax}
+              type="number"
+              min={1}
+              max={globalMax}
+              value={section.options.max}
+              onChange={onChangeMax}
+            />
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

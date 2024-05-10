@@ -6,8 +6,7 @@
   height: 100svh;
   max-height: 800px;
   overflow: hidden;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
   &.isDisplayMode {
     height: 600px;
     min-height: 600px;
@@ -52,8 +51,7 @@
   overflow: hidden;
   position: relative;
   margin-bottom: 10px;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
   border-radius: 15px;
   background-color: rgba(255, 255, 255, 0.5);
 
