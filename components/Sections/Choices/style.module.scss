@@ -1,0 +1,59 @@
+@import "@/styles/editor.scss";
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.title {
+  width: auto;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  margin-bottom: 7px;
+  h2 {
+    font-size: 15px;
+  }
+  p {
+    font-size: 13px;
+  }
+}
+
+.choices {
+  width: 100%;
+  max-width: 400px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  .icon {
+    @include flex;
+    height: 60px;
+    margin-bottom: 20px;
+    svg {
+      font-size: 30px;
+    }
+  }
+  .content {
+    padding: 10px;
+    border-radius: 10px;
+    @include border;
+  }
+  .list-title {
+    @include input-style;
+    @include description-style(true);
+    text-align: center;
+  }
+  p {
+    @include description-style(true);
+    white-space: pre-line;
+    word-break: break-all;
+  }
+}
+
+.options {
+  @include options-style;
+}
+
+.selected-list-text {
+  width: 100%;
+}

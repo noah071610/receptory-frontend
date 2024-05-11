@@ -1,13 +1,20 @@
 "use client"
 
-import Calender from "@/components/Sections/Calender"
 import Empty from "@/components/Sections/Empty"
 import SectionLoading from "@/components/Sections/SectionLoading"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import { SectionListTypes, SectionType } from "@/types/Edit"
 import dynamic from "next/dynamic"
 
+const Calender = dynamic(() => import("@/components/Sections/Calender/index"), {
+  ssr: true,
+  loading: () => <SectionLoading />,
+})
 const Callout = dynamic(() => import("@/components/Sections/Callout/index"), {
+  ssr: true,
+  loading: () => <SectionLoading />,
+})
+const Choices = dynamic(() => import("@/components/Sections/Choices/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
 })
@@ -116,6 +123,7 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   phone: (section, isDisplayMode = false) =>
     !isDisplayMode ? <Phone section={section} /> : <PagePhone section={section} />,
   email: (section, isDisplayMode = false) => <Email section={section} isDisplayMode={isDisplayMode} />,
+  choices: (section, isDisplayMode = false) => <Choices section={section} isDisplayMode={isDisplayMode} />,
   time: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageTime section={section} /> : <Time section={section} />,
   select: (section, isDisplayMode = false) =>

@@ -5,7 +5,7 @@ import { SectionType } from "@/types/Edit"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo } from "react"
-import "react-international-phone/style.css"
+
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 

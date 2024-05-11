@@ -19,39 +19,31 @@
 
     @include input-style;
   }
-
-  .date {
-    .date-title {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    input[type="date"] {
-      margin-left: 10px;
-      border-radius: 5px;
-      @include border;
-      padding: 6px 15px;
-    }
-  }
 }
 
 .option-date-picker {
   width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  @include shadow;
+}
+
+.options-bars {
+  margin-bottom: 30px;
 }
 
 .dates {
   padding: 15px;
-  background-color: var(--gray-softest);
+  margin-bottom: 15px;
   width: 100%;
-  max-width: 400px;
   display: flex;
   gap: 10px 5px;
   flex-wrap: wrap;
   justify-content: center;
   button {
-    font-size: 14px;
+    font-size: 13px;
     padding: 8px 15px;
-    border: 1px solid var(--pink);
-    background-color: var(--white);
+    background-color: var(--gray-softest);
     border-radius: 5px;
   }
 }

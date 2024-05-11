@@ -6,7 +6,7 @@ import { onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faListOl } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo } from "react"
-import "react-international-phone/style.css"
+
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"

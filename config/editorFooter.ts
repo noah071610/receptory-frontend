@@ -9,6 +9,7 @@ import {
   faBrush,
   faCalendar,
   faCheck,
+  faCircleDot,
   faClock,
   faCommentAlt,
   faEnvelope,
@@ -28,6 +29,7 @@ import {
   faPhotoFilm,
   faRectangleXmark,
   faSquareCheck,
+  faVenusMars,
 } from "@fortawesome/free-solid-svg-icons"
 
 const initSectionList: EditorFooterList[] = [
@@ -46,6 +48,7 @@ const formSectionList: EditorFooterList[] = [
   { value: "calender", icon: faCalendar, actionType: "createSection" },
   { value: "time", icon: faClock, actionType: "createSection" },
   { value: "select", icon: faList, actionType: "createSection" },
+  { value: "choices", icon: faHandPointer, actionType: "createSection" },
   { value: "textInput", icon: faPencil, actionType: "createSection" },
   { value: "numberInput", icon: fa1, actionType: "createSection" },
   { value: "phone", icon: faPhone, actionType: "createSection" },
@@ -92,6 +95,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   email: [],
   phone: [],
   calender: [],
+  choices: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
 }
 
 // ####### SUBMENU
@@ -185,6 +189,13 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   email: {},
   numberInput: {},
   phone: {},
+  choices: {
+    design: [
+      { value: "basic", icon: faCircleDot, actionType: "cta" },
+      { value: "gender", icon: faVenusMars, actionType: "cta" },
+      { value: "thumbnail", icon: faVenusMars, actionType: "cta" },
+    ],
+  },
 }
 // ####### SUBMENU
 

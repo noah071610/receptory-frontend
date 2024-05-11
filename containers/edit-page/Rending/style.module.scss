@@ -7,15 +7,32 @@
   @include flex-x;
   flex-direction: column;
 
-  h1 {
-    @include header-style;
-    margin-bottom: 50px;
-  }
-
   h3 {
     font-size: 18px;
     text-align: center;
     margin-bottom: 10px;
+  }
+}
+
+.option {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  h1 {
+    @include flex-y;
+    font-size: 20px;
+    margin-bottom: 10px;
+    img {
+      width: 22px;
+      height: 22px;
+      margin-right: 10px;
+    }
+  }
+  .content {
+    width: 100%;
+    height: 300px;
+    border-radius: 5px;
+    background-color: var(--gray-softest);
   }
 }
 

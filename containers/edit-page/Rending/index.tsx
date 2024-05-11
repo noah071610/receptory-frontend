@@ -26,11 +26,14 @@ export default function Rending({}: {}) {
   }
   return (
     <div className={cx("layout")}>
-      <h1>
-        <img src="/images/icons/user.png" /> <span>거의 다 왔어요!</span>
-      </h1>
+      <div className={cx("option")}>
+        <h1>
+          <img src="/images/icons/user.png" /> <span>거의 다 왔어요!</span>
+        </h1>
+        <div className={cx("content")}></div>
+      </div>
 
-      <div className={cx(style.options)}>
+      {/* <div className={cx(style.options)}>
         <div className={cx("option-bar")}>
           <h3>{t("format")}</h3>
           <button onClick={onClickSlider} className={cx("content", { active: format === "active" })}>
@@ -70,7 +73,7 @@ export default function Rending({}: {}) {
         <button className={cx("deploy")}>
           <span>배포하기</span>
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

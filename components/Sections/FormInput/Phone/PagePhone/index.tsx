@@ -5,12 +5,13 @@ import { SectionType } from "@/types/Edit"
 import { faPhone } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo } from "react"
-import "react-international-phone/style.css"
+
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
+import { getPhoneNumber } from "@/utils/helpers/getPhoneNumber"
 import cs from "classNames/bind"
-import { PhoneInput } from "react-international-phone"
+import Image from "next/image"
 const cx = cs.bind(style)
 
 function PagePhone({ section }: { section: SectionType }) {
@@ -19,8 +20,19 @@ function PagePhone({ section }: { section: SectionType }) {
   const value = userPick[section.id]?.value ?? ""
   const { phoneNumberCountry } = section.options
 
-  const onChangePhoneInput = (value: any) => {
-    setUserPick({ section, payload: value })
+  const onChangePhoneInput = (e: any) => {
+    const output = getPhoneNumber(e, phoneNumberCountry)
+
+    setUserPick({ section, payload: output })
+  }
+
+  const onBlur = () => {
+    if (phoneNumberCountry === "ko" || phoneNumberCountry === "ja") {
+      setUserPick({ section, payload: value.slice(0, 13) })
+    }
+    if (phoneNumberCountry === "th") {
+      setUserPick({ section, payload: value.slice(0, 12) })
+    }
   }
 
   return (
@@ -32,14 +44,15 @@ function PagePhone({ section }: { section: SectionType }) {
           description={section.data.description}
           inputStyle={"phone"}
         >
-          <PhoneInput
-            className={cx("phone")}
-            value={value}
-            defaultCountry={lang === "ko" ? "kr" : (lang as string)}
-            hideDropdown={phoneNumberCountry !== "all"}
-            forceDialCode={phoneNumberCountry !== "all"}
-            onChange={(phone: any) => onChangePhoneInput(phone)}
-          />
+          <div className={cx("phone-wrapper")}>
+            <Image
+              width={25}
+              height={25}
+              src={`/images/icons/${phoneNumberCountry}.png`}
+              alt={`${phoneNumberCountry}-image`}
+            />
+            <input onBlur={onBlur} className={cx("phone")} value={value} onChange={onChangePhoneInput} />
+          </div>
         </FormUserInput>
       </div>
     </div>

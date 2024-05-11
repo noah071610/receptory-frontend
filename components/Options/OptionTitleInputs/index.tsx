@@ -13,7 +13,9 @@ function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; i
 
   return (
     <div className={cx("edit-inputs")}>
-      <h4>{t("타이틀 수정")}</h4>
+      <h4>
+        <span>{t("타이틀 수정")}</span>
+      </h4>
       <Input
         type="input"
         className={cx("title")}

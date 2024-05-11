@@ -195,24 +195,6 @@ textarea {
   touch-action: manipulation;
 }
 
-.react-international-phone-input-container {
-  .react-international-phone-country-selector-button {
-    border: none;
-    height: auto !important;
-    &:hover {
-      background-color: transparent;
-    }
-  }
-  .react-international-phone-input {
-    border: none !important;
-    font-size: 16px !important;
-    height: auto !important;
-  }
-}
-.react-international-phone-country-selector-dropdown {
-  border: none !important;
-}
-
 :root {
   body {
     color: var(--black);

@@ -1,21 +1,21 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
-import CalenderMain from "@/components/Modal/DatePicker/CalenderMain"
-import NumberRange from "@/components/NumberRange"
 import OptionBar from "@/components/Options/OptionBar"
-import OptionRatio from "@/components/Options/OptionRatio"
-import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import setDateFormat from "@/utils/helpers/setDate"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
-import { DatePickerStateProvider } from "@rehookify/datepicker"
 import { memo, useEffect, useState } from "react"
 import style from "./style.module.scss"
 
+import CalenderMain from "@/components/Modal/DatePicker/CalenderMain"
+import NumberRange from "@/components/NumberRange"
+import OptionRatio from "@/components/Options/OptionRatio"
+import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useMainStore } from "@/store/main"
+import { DatePickerStateProvider } from "@rehookify/datepicker"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 const cx = cs.bind(style)
@@ -113,22 +113,21 @@ function Calender({ section }: { section: SectionType }) {
       </FormUserInput>
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />
-        <OptionBar section={section} value="specificDate" />
-        <OptionBar section={section} value="addAnyDate" />
-        <OptionRatio optionsArr={["single", "range"]} section={section} targetKey="selectRange" />
-        {!specificDate && (
-          <>
-            <OptionBar section={section} value="isAlways" />
-            {!isAlways && (
+        <div className={cx("options-bars")}>
+          <h4>
+            <span>{t("세부 설정")}</span>
+          </h4>
+          <OptionBar section={section} value="specificDate" />
+          {specificDate && (
+            <>
               <div className={cx("option-date-picker")}>
-                <h4>{t("selectMinMaxDate")}</h4>
                 <DatePickerStateProvider
                   config={{
-                    selectedDates: minMaxDate,
-                    onDatesChange: onChangeMinMaxDate,
+                    selectedDates: selectRange === "single" ? [] : tempDateForSpecificDate,
+                    onDatesChange: onChangeSpecificDate,
                     dates: {
                       minDate: new Date(),
-                      mode: "range",
+                      mode: selectRange === "single" ? "multiple" : "range",
                       toggle: true,
                     },
                   }}
@@ -136,44 +135,50 @@ function Calender({ section }: { section: SectionType }) {
                   <CalenderMain section={section} isOptionCalender={true} />
                 </DatePickerStateProvider>
               </div>
-            )}
-          </>
-        )}
-        {specificDate && (
-          <>
-            <div className={cx("option-date-picker")}>
-              <h4>{t("selectDate")}</h4>
-              <DatePickerStateProvider
-                config={{
-                  selectedDates: selectRange === "single" ? [] : tempDateForSpecificDate,
-                  onDatesChange: onChangeSpecificDate,
-                  dates: {
-                    minDate: new Date(),
-                    mode: selectRange === "single" ? "multiple" : "range",
-                    toggle: true,
-                  },
-                }}
-              >
-                <CalenderMain section={section} isOptionCalender={true} />
-              </DatePickerStateProvider>
-            </div>
-            <ul className={cx("dates")}>
-              {section.collection.map(({ specificStartDate, specificEndDate }, i) => (
-                <li key={`specific_date_${i}`}>
-                  <button onClick={() => onClickDeleteSelectDate(i)}>
-                    <NumberRange
-                      start={specificStartDate}
-                      end={specificEndDate}
-                      formatter={(date: Date) => {
-                        return setDateFormat(date, lang)
+              <ul className={cx("dates")}>
+                {section.collection.map(({ specificStartDate, specificEndDate }, i) => (
+                  <li key={`specific_date_${i}`}>
+                    <button onClick={() => onClickDeleteSelectDate(i)}>
+                      <NumberRange
+                        start={specificStartDate}
+                        end={specificEndDate}
+                        formatter={(date: Date) => {
+                          return setDateFormat(date, lang)
+                        }}
+                      />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <OptionBar section={section} value="isRangeSelect" />
+          <OptionBar section={section} value="addAnyDate" />
+          {!specificDate && (
+            <>
+              <OptionBar section={section} value="isAlways" />
+              {!isAlways && (
+                <>
+                  <div className={cx("option-date-picker")}>
+                    <DatePickerStateProvider
+                      config={{
+                        selectedDates: minMaxDate,
+                        onDatesChange: onChangeMinMaxDate,
+                        dates: {
+                          minDate: new Date(),
+                          mode: "range",
+                          toggle: true,
+                        },
                       }}
-                    />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+                    >
+                      <CalenderMain section={section} isOptionCalender={true} />
+                    </DatePickerStateProvider>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </div>
         {!specificDate && (
           <OptionRatio optionsArr={["all", "everyWeekdays", "everyWeekend"]} section={section} targetKey="interval" />
         )}

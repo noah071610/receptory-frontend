@@ -1,15 +1,24 @@
 @import "@/styles/variables.scss";
 
-@mixin options-minMax-style {
-  display: flex;
+@mixin options-minMax-style($onlyOne: false) {
   input {
-    width: 100px;
+    width: 100%;
+    max-width: 130px;
+    padding: 15px 10px;
+    font-size: 14px;
+    background-color: var(--gray-softest);
     border-radius: 5px;
-    @include border;
-    padding: 6px 15px;
+    border: 1px dashed var(--border);
   }
-  span {
-    margin: 0 10px;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 7px;
+  margin-bottom: 10px;
+  @if ($onlyOne) {
+    justify-content: flex-start;
   }
 }
 
@@ -32,87 +41,42 @@
 
 @mixin options-style {
   margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  padding: 25px 10px;
+  width: 100%;
+  padding: 25px;
   border: 1px dashed var(--border);
   border-radius: 5px;
+
+  @include mobile {
+    padding: 25px 15px;
+  }
+
   h4 {
-    font-size: 15px;
-    text-align: center;
-    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 15px;
+    position: relative;
+
+    span {
+      position: relative;
+      padding-left: 3px;
+      padding-right: 20px;
+      background-color: var(--white);
+      z-index: 10;
+    }
+    &::after {
+      content: "";
+      width: 100%;
+      position: absolute;
+      height: 1px;
+      top: 50%;
+      left: 0;
+      background-color: var(--border);
+    }
   }
 }
 
 @mixin toggle-bar {
-  .bar {
-    width: 50px;
-    padding: 3px 6px;
-    background-color: var(--gray-soft);
-    display: flex;
-    align-items: center;
-    border-radius: 30px;
-    transition: 300ms all;
-    .circle {
-      width: 18px;
-      height: 18px;
-      border-radius: 100%;
-      background-color: var(--gray);
-      transition: 300ms all;
-    }
-  }
-  &.active {
-    h4 {
-      color: var(--pink-hard);
-    }
-    .bar {
-      background-color: var(--pink-soft);
-    }
-    .circle {
-      transform: translateX(21px);
-      background-color: var(--white);
-    }
-  }
 }
 
 @mixin ratio-content {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px 20px;
-  .ratio-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    cursor: pointer;
-    .ratio {
-      width: 20px;
-      height: 20px;
-      @include flex;
-      border-radius: 100%;
-      @include border;
-      .circle {
-        width: 12px;
-        height: 12px;
-        border-radius: 100%;
-        transform: scale(0);
-        transition: 300ms all;
-      }
-    }
-    label {
-      cursor: pointer;
-    }
-    &.active {
-      label {
-        color: var(--pink);
-      }
-      .circle {
-        background-color: var(--pink);
-        transform: scale(1);
-      }
-    }
-  }
 }

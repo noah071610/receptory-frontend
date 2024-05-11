@@ -5,35 +5,77 @@
   width: 100%;
 }
 
-.time-submit {
-  border-radius: 20px;
-  background-color: var(--pink);
-  color: var(--white);
-  padding: 12px 30px;
+.options {
+  @include options-style;
 }
-.times {
-  padding: 15px;
-  background-color: var(--gray-softest);
+
+.time-bars {
+  margin-bottom: 30px;
+}
+
+.option-time-picker {
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   display: flex;
-  gap: 10px 5px;
-  flex-wrap: wrap;
-  justify-content: center;
-  button {
+  align-items: center;
+  justify-content: space-around;
+  gap: 7px;
+  margin-bottom: 30px;
+  input[type="time"] {
+    padding: 15px;
     font-size: 14px;
-    padding: 8px 15px;
-    border: 1px solid var(--pink);
-    background-color: var(--white);
+    background-color: var(--gray-softest);
     border-radius: 5px;
+    border: 1px dashed var(--border);
   }
 }
 
-.options {
-  @include options-style;
+.specific-time-picker {
+  width: 100%;
+  max-width: 300px;
+
   input[type="time"] {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 7px;
+    background-color: var(--gray-softest);
     border-radius: 5px;
-    @include border;
-    padding: 8px 18px;
+    border: 1px dashed var(--border);
+  }
+
+  .time-submit {
+    margin: 5px 0;
+    button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: var(--pink);
+      padding: 8px 18px;
+      span {
+        font-size: 13px;
+        color: var(--white);
+      }
+    }
+  }
+}
+
+.times {
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  gap: 10px 5px;
+  flex-wrap: wrap;
+  button {
+    font-size: 13px;
+    padding: 8px 15px;
+    background-color: var(--gray-softest);
+    border-radius: 5px;
   }
 }

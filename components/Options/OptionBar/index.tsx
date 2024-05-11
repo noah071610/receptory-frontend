@@ -23,14 +23,14 @@ function OptionBar({ value, section }: { value: string; section: SectionType }) 
   }
 
   return (
-    <div className={cx("layout")}>
-      <button onClick={onClickSlider} className={cx("content", { active: !!isActive })}>
-        <h4>{t(value)}</h4>
+    <button onClick={onClickSlider} className={cx("layout", { active: !!isActive })}>
+      <div className={cx("content")}>
         <div className={cx("bar")}>
           <div className={cx("circle")}></div>
         </div>
-      </button>
-    </div>
+      </div>
+      <span>{t(value)}</span>
+    </button>
   )
 }
 export default memo(OptionBar)

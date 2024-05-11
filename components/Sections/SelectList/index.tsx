@@ -32,36 +32,38 @@ const ListEdit = ({
 }) => {
   return (
     <li key={`edit-${list.id}`}>
-      <div
-        onClick={() => onClickAddImage(listIndex)}
-        style={{ background: list.src ? getImageUrl({ url: list.src }) : "none" }}
-        className={cx("image")}
-      >
-        <FontAwesomeIcon icon={faPlus} />
+      <div className={cx("inner")}>
+        <div
+          onClick={() => onClickAddImage(listIndex)}
+          style={{ background: list.src ? getImageUrl({ url: list.src }) : "none" }}
+          className={cx("image")}
+        >
+          <FontAwesomeIcon icon={faPlus} />
+        </div>
+        <div className={cx("content")}>
+          <Input
+            type="input"
+            className={cx("title")}
+            inputType="title"
+            isOptional={false}
+            value={list.data.title}
+            listIndex={listIndex}
+            dataKey="title"
+            section={section}
+          />
+          <Input
+            type="input"
+            className={cx("description")}
+            inputType="description"
+            isOptional={true}
+            value={list.data.description}
+            listIndex={listIndex}
+            section={section}
+            dataKey="description"
+          />
+        </div>
       </div>
-      <div className={cx("content")}>
-        <Input
-          type="input"
-          className={cx("title")}
-          inputType="title"
-          isOptional={false}
-          value={list.data.title}
-          listIndex={listIndex}
-          dataKey="title"
-          section={section}
-        />
-        <Input
-          type="input"
-          className={cx("description")}
-          inputType="description"
-          isOptional={true}
-          value={list.data.description}
-          listIndex={listIndex}
-          section={section}
-          dataKey="description"
-        />
-        <DeleteBtn listIndex={listIndex} srcKey="list" isDeleteList={true} />
-      </div>
+      <DeleteBtn listIndex={listIndex} srcKey="list" isDeleteList={true} />
     </li>
   )
 }
@@ -106,7 +108,9 @@ function Select({ section }: { section: SectionType }) {
         <OptionBar value="addSelectNone" section={section} />
         <OptionBar value="isMultiple" section={section} />
         <div className={cx("list-edit-wrapper")}>
-          <h4>리스트 수정</h4>
+          <h4>
+            <span>리스트 수정</span>
+          </h4>
           <ul className={cx("list-edit")}>
             {selectList.map((list, i) => (
               <ListEdit

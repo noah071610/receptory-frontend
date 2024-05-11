@@ -6,7 +6,7 @@ import { SectionType } from "@/types/Edit"
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo } from "react"
-import "react-international-phone/style.css"
+
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
@@ -16,7 +16,7 @@ const cx = cs.bind(style)
 function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
   const { setUserPick, userPick } = useMainStore()
-  const value = userPick[section.id]?.value ?? 0
+  const value = userPick[section.id]?.value ?? ""
 
   const onChangeInput = (e: any) => {
     setUserPick({ section, payload: e.target.value })

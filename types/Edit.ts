@@ -19,6 +19,7 @@ export type SectionListTypes =
   | "phone"
   | "email"
   | "checkList"
+  | "choices"
 
 export type TargetSectionListTypes =
   | "backgroundColor"
@@ -59,6 +60,8 @@ export type DesignTypes =
   | "imageWithText"
   | "simple"
   | "background"
+  | "gender"
+  | "yesOrNo"
   | "none"
   | AlignTypes
 export type AnimationTypes =

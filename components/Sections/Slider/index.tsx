@@ -12,9 +12,11 @@ import { getAnimation } from "@/utils/styles/getAnimation"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
 import { memo, useMemo, useState } from "react"
+import "swiper/css/thumbs"
 import { FreeMode, Navigation, Thumbs } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
+
 const cx = cs.bind(style)
 
 const BasicSlider = ({

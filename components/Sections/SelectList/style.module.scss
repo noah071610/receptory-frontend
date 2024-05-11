@@ -8,9 +8,11 @@
 .options {
   @include options-style;
 
+  .list-edit-wrapper {
+    margin-top: 30px;
+  }
   .list-edit {
     width: 100%;
-    max-width: 400px;
     max-height: 500px;
     overflow: scroll;
     display: flex;
@@ -18,10 +20,17 @@
     gap: 10px;
 
     li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       padding: 0;
+      position: relative;
+      width: 100%;
+
+      .inner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 400px;
+      }
+
       .image {
         cursor: pointer;
         width: 110px;
@@ -41,9 +50,6 @@
         @include mobile {
           height: 70px;
         }
-      }
-      .content {
-        position: relative;
       }
     }
   }

@@ -8,7 +8,7 @@ import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faListOl } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo, useEffect } from "react"
-import "react-international-phone/style.css"
+
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
@@ -91,7 +91,9 @@ function Number({ section }: { section: SectionType }) {
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />
         <div>
-          <h4>최대 숫자 조정</h4>
+          <h4>
+            <span>최대 숫자 조정</span>
+          </h4>
           <div className={cx("minMax-wrapper")}>
             <input
               className={cx("minMax")}

@@ -7,3 +7,14 @@
 .options {
   @include options-style;
 }
+
+.phone-wrapper {
+  width: 100%;
+  display: flex;
+  img {
+    margin-right: 10px;
+  }
+  .phone {
+    width: 100%;
+  }
+}

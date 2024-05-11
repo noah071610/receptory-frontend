@@ -20,11 +20,14 @@
   }
   .description,
   .description-input {
-    margin-top: 1px;
     @include description-style;
+  }
+  .description-input {
+    margin-top: 5px;
   }
 
   .description {
+    margin-top: 2px;
     white-space: pre-line;
     word-break: break-all;
   }

@@ -2,14 +2,16 @@
 
 .edit-inputs {
   width: 100%;
-  @include flex($col: true);
+  margin-bottom: 30px;
+
   input {
     width: 100%;
-    max-width: 300px;
     @include input-style;
+    max-width: 400px;
   }
   .title {
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 600;
     margin-bottom: 5px;
   }
   .description {

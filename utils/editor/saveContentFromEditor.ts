@@ -12,11 +12,9 @@ export default async function saveContentFromEditor({
   lang: Langs
   event?: any
 }) {
-  // todo:
-  return
-  // if (typeof pageId !== "string") return
+  if (typeof pageId !== "string") return
 
-  // // 살짝 위험하다.. 하지만 무조건 썸네일은 첫번째에 존재한다. 존재하지 않으면 에러다.
+  // 살짝 위험하다.. 하지만 무조건 썸네일은 첫번째에 존재한다. 존재하지 않으면 에러다.
   // const thumbnailSection = content.initSections[0]
   // const title = thumbnailSection?.list[0]?.value ?? ""
   // const description = thumbnailSection?.list[1]?.value ?? ""
@@ -37,7 +35,8 @@ export default async function saveContentFromEditor({
   //   },
   // })
   // if (isOk) {
-  //   toastSuccess("success")
+  //   alert("saved")
+  //   // toastSuccess("success")
   // }
   // if (event) {
   //   event.returnValue = "Are you sure you want to leave?"

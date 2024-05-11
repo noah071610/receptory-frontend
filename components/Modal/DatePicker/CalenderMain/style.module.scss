@@ -69,10 +69,10 @@
       }
       &:disabled {
         color: var(--gray) !important;
-        background-color: var(--white) !important;
+        background-color: transparent !important;
         opacity: 1 !important;
         &:hover {
-          background-color: var(--white) !important;
+          background-color: transparent !important;
           color: var(--gray) !important;
         }
       }

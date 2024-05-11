@@ -3,7 +3,48 @@
 
 .layout {
   width: 100%;
-  .content {
-    @include ratio-content;
+
+  .slider {
+    .slide {
+      width: 110px;
+    }
+    .btn {
+      width: 100%;
+      height: 80px;
+      border-radius: 5px;
+      border: 2px solid var(--gray-softest);
+      background-color: var(--gray-softest);
+
+      .icon {
+        margin-bottom: 5px;
+        svg {
+          font-size: 20px;
+          color: var(--gray);
+        }
+      }
+      .name {
+        font-size: 13px;
+      }
+      &.active {
+        border-color: var(--pink-soft);
+        svg {
+          color: var(--pink-soft);
+        }
+        .name {
+          color: var(--pink-hard);
+        }
+      }
+    }
   }
+}
+
+.prev,
+.next {
+  @include swiper-arrow-style;
+}
+.prev {
+  left: 2px;
+}
+.next {
+  right: 2px;
 }

@@ -7,6 +7,10 @@
 .options {
   @include options-style;
   .minMax-wrapper {
-    @include options-minMax-style;
+    @include options-minMax-style(true);
   }
+}
+
+.options {
+  @include options-style;
 }

@@ -7,18 +7,18 @@ import { SectionType } from "@/types/Edit"
 import { faPhone } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo, useEffect } from "react"
-import "react-international-phone/style.css"
 import style from "./style.module.scss"
 
 import OptionRatio from "@/components/Options/OptionRatio"
 import { useMainStore } from "@/store/main"
+import { getPhoneNumber } from "@/utils/helpers/getPhoneNumber"
 import cs from "classNames/bind"
-import { PhoneInput } from "react-international-phone"
+import Image from "next/image"
 const cx = cs.bind(style)
 
 function Phone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { selectedSection, setSelectedSection } = useEditorStore()
+  const { selectedSection, setSelectedSection, setOptions } = useEditorStore()
   const { setUserPick, userPick } = useMainStore()
   const value = userPick[section.id]?.value ?? ""
   const { min, max, phoneNumberCountry } = section.options
@@ -28,22 +28,29 @@ function Phone({ section }: { section: SectionType }) {
     }
   }
 
-  const onChangePhoneInput = (value: any) => {
+  const onChangePhoneInput = (e: any) => {
     activeSection()
-    setUserPick({ section, payload: value })
+    const output = getPhoneNumber(e, phoneNumberCountry)
+
+    setUserPick({ section, payload: output })
+  }
+
+  const onBlur = () => {
+    if (phoneNumberCountry === "ko" || phoneNumberCountry === "ja") {
+      setUserPick({ section, payload: value.slice(0, 13) })
+    }
+    if (phoneNumberCountry === "th") {
+      setUserPick({ section, payload: value.slice(0, 12) })
+    }
   }
 
   useEffect(() => {
-    if (phoneNumberCountry !== "all") {
-      setUserPick({ section, payload: phoneNumberCountry })
-    } else {
-      setUserPick({ section, payload: "" })
-    }
-  }, [phoneNumberCountry])
+    setOptions({ key: "phoneNumberCountry", payload: lang ?? "ko" })
+  }, [lang])
 
   useEffect(() => {
     setUserPick({ section, payload: "" })
-  }, [min, max])
+  }, [phoneNumberCountry])
 
   return (
     <div className={cx("layout")}>
@@ -54,19 +61,20 @@ function Phone({ section }: { section: SectionType }) {
           description={section.data.description}
           inputStyle={"phone"}
         >
-          <PhoneInput
-            className={cx("phone")}
-            value={value}
-            defaultCountry={lang === "ko" ? "kr" : (lang as string)}
-            hideDropdown={phoneNumberCountry !== "all"}
-            forceDialCode={phoneNumberCountry !== "all"}
-            onChange={(phone: any) => onChangePhoneInput(phone)}
-          />
+          <div className={cx("phone-wrapper")}>
+            <Image
+              width={25}
+              height={25}
+              src={`/images/icons/${phoneNumberCountry}.png`}
+              alt={`${phoneNumberCountry}-image`}
+            />
+            <input onBlur={onBlur} className={cx("phone")} value={value} onChange={onChangePhoneInput} />
+          </div>
         </FormUserInput>
       </div>
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />
-        <OptionRatio optionsArr={["all", "+82", "+81", "+66", "+1"]} section={section} targetKey="phoneNumberCountry" />
+        <OptionRatio optionsArr={["ko", "ja", "th", "en"]} section={section} targetKey="phoneNumberCountry" />
       </div>
     </div>
   )

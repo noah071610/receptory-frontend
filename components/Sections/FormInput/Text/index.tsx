@@ -8,16 +8,18 @@ import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo, useEffect } from "react"
-import "react-international-phone/style.css"
+
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
+import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Text({ section }: { section: SectionType }) {
   const { lang } = useParams()
+  const { t } = useTranslation()
   const { setUserPick, userPick } = useMainStore()
   const value = userPick[section.id]?.value ?? ""
   const { setOptions } = useEditorStore()
@@ -78,7 +80,9 @@ function Text({ section }: { section: SectionType }) {
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />
         <div>
-          <h4>최대 글자수 조정</h4>
+          <h4>
+            <span>{t("maxLetter")}</span>
+          </h4>
           <div className={cx("minMax-wrapper")}>
             <input
               className={cx("minMax")}

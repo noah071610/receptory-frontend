@@ -61,10 +61,17 @@ const sectionMap: { [key: string]: any } = {
       data: title,
     }
   },
+  choices: () => {
+    return {
+      data: title,
+      design: "gender",
+      list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: "" })),
+    }
+  },
   phone: () => {
     return {
       data: title,
-      options: { phoneNumberCountry: "all" },
+      options: { phoneNumberCountry: "ko" },
     }
   },
   numberInput: () => {

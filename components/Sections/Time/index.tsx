@@ -1,7 +1,6 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
-import NumberRange from "@/components/NumberRange"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
@@ -12,6 +11,7 @@ import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
 import style from "./style.module.scss"
 
+import NumberRange from "@/components/NumberRange"
 import { useMainStore } from "@/store/main"
 import { convertStrToTimeSet } from "@/utils/time"
 import cs from "classNames/bind"
@@ -112,53 +112,67 @@ function Time({ section }: { section: SectionType }) {
 
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />
-        <OptionBar section={section} value="specificTime" />
-        <OptionBar section={section} value="addAnytime" />
-        <OptionRatio optionsArr={["single", "range"]} section={section} targetKey="selectRange" />
-        {!specificTime && (
-          <>
-            <OptionBar section={section} value="isAlways" />
-            {!isAlways &&
-              ["startHour", "endHour"].map((v) => (
-                <div key={`time-min-max-${v}`} className={cx("time-min-max")}>
-                  <h4>{v}</h4>
+        <div className={cx("time-bars")}>
+          <h4>
+            <span>{t("세부 설정")}</span>
+          </h4>
+          <OptionBar section={section} value="specificTime" />
+          {specificTime && (
+            <>
+              <div className={cx("specific-time-picker")}>
+                <div className={cx("inner")}>
                   <input
-                    onChange={(e) => onChangeMinMaxHour(e, v)}
-                    value={`${v === "startHour" ? startHour : endHour}:00`}
+                    onChange={(e) => onChangeSpecificTime(e, "specificStartTime")}
+                    value={tempStartTime}
                     type="time"
                   />
+                  {selectRange === "range" && (
+                    <>
+                      <span>{"~"}</span>
+                      <input
+                        onChange={(e) => onChangeSpecificTime(e, "specificEndTime")}
+                        value={tempEndTime}
+                        type="time"
+                      />
+                    </>
+                  )}
                 </div>
-              ))}
-          </>
-        )}
-        {specificTime && (
-          <>
-            <div>
-              <h4>{t("specificStartTime")}</h4>
-              <input onChange={(e) => onChangeSpecificTime(e, "specificStartTime")} value={tempStartTime} type="time" />
-            </div>
-            {selectRange === "range" && (
-              <div>
-                <h4>{t("specificEndTime")}</h4>
-                <input onChange={(e) => onChangeSpecificTime(e, "specificEndTime")} value={tempEndTime} type="time" />
-              </div>
-            )}
-            <div>
-              <button onClick={onSubmitSpecificTime} className={cx("time-submit")}>
-                {t("addTime")}
-              </button>
-            </div>
-            <ul className={cx("times")}>
-              {section.collection.map(({ specificStartTime, specificEndTime }, i) => (
-                <li key={`specific_time_${i}`}>
-                  <button onClick={() => onClickDeleteSelectTime(i)}>
-                    <NumberRange start={specificStartTime} end={specificEndTime} />
+                <div className={cx("time-submit")}>
+                  <button onClick={onSubmitSpecificTime} className={cx("time-submit")}>
+                    <span> {t("addTime")}</span>
                   </button>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+                </div>
+              </div>
+              <ul className={cx("times")}>
+                {section.collection.map(({ specificStartTime, specificEndTime }, i) => (
+                  <li key={`specific_time_${i}`}>
+                    <button onClick={() => onClickDeleteSelectTime(i)}>
+                      <NumberRange start={specificStartTime} end={specificEndTime} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <OptionBar section={section} value="isRangeSelect" />
+          <OptionBar section={section} value="addAnytime" />
+          {!specificTime && (
+            <>
+              <OptionBar section={section} value="isAlways" />
+              {!isAlways && (
+                <div className={cx("option-time-picker")}>
+                  <div key={`time-min-max-startHour`} className={cx("time-min-max")}>
+                    <input onChange={(e) => onChangeMinMaxHour(e, "startHour")} value={`${startHour}:00`} type="time" />
+                  </div>
+                  <span>{"~"}</span>
+                  <div key={`time-min-max-endHour`} className={cx("time-min-max")}>
+                    <input onChange={(e) => onChangeMinMaxHour(e, "endHour")} value={`${endHour}:00`} type="time" />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
         {!specificTime && <OptionRatio optionsArr={[1, 15, 30, 60]} section={section} targetKey="interval" />}
       </div>
     </div>

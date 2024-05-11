@@ -42,7 +42,8 @@ const formats = [
 
 const Text = ({ section, listIndex }: { section: SectionType; listIndex?: number }) => {
   const { setValue, setList, selectedSection, setSelectedSection, saveSectionHistory } = useEditorStore()
-  const [initLength, setInitLength] = useState(section.value?.length ?? 0)
+  const targetValue = typeof listIndex === "number" ? section.list[listIndex]?.value : section?.value
+  const [initLength, setInitLength] = useState(targetValue?.length ?? 0)
   const [isEdited, setIsEdited] = useState(false)
 
   const onChangeEditor = (str: string) => {
@@ -67,7 +68,7 @@ const Text = ({ section, listIndex }: { section: SectionType; listIndex?: number
     if (isEdited) {
       saveSectionHistory()
       setIsEdited(false)
-      setInitLength(section.value.length)
+      setInitLength(targetValue.length)
     }
   }
 
@@ -78,7 +79,7 @@ const Text = ({ section, listIndex }: { section: SectionType; listIndex?: number
         theme="snow"
         modules={modules}
         formats={formats}
-        value={section.value}
+        value={targetValue}
         onChange={onChangeEditor}
       />
     </div>

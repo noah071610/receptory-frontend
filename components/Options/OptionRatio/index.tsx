@@ -1,10 +1,15 @@
 "use client"
 
+import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
+import { faCheckSquare } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { memo } from "react"
+import { isMobile } from "react-device-detect"
+import { SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -34,23 +39,30 @@ function OptionRatio({
 
   return (
     <div className={cx("layout")}>
-      <h4>{t(targetKey)}</h4>
-      <div className={cx("content")}>
+      <h4>
+        <span>{t(targetKey)}</span>
+      </h4>
+      <SwiperNavigation
+        perSlideView={2}
+        className={cx("slider")}
+        spaceBetween={5}
+        slidesPerView={"auto"}
+        prevArrowClassName={cx("prev")}
+        nextArrowClassName={cx("next")}
+        isSingle={!isMobile && optionsArr.length <= 4}
+      >
         {optionsArr.map((v) => (
-          <div
-            key={`options-${section.id}-${v}`}
-            onClick={() => onClickRatio(v)}
-            className={cx("ratio-wrapper", { active: target === v })}
-          >
-            <div className={cx("ratio")}>
-              <div className={cx("circle")}></div>
-            </div>
-            <div className={cx("label")}>
-              <label>{t(`${v}`)}</label>
-            </div>
-          </div>
+          <SwiperSlide className={cx("slide")} key={`options-${section.id}-${v}`}>
+            <button onClick={() => onClickRatio(v)} className={cx("btn", { active: target === v })}>
+              <div className={cx("icon")}>
+                <FontAwesomeIcon icon={faCheckSquare} />
+              </div>
+              <span className={cx("name")}>{v}</span>
+            </button>
+          </SwiperSlide>
         ))}
-      </div>
+      </SwiperNavigation>
+      <div className={cx("content")}></div>
     </div>
   )
 }

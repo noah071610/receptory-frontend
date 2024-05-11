@@ -199,8 +199,8 @@ export default function ImageSelector() {
             spaceBetween={5}
             slidesPerView={"auto"}
             modules={[FreeMode]}
-            prevArrowClassName={style.prev}
-            nextArrowClassName={style.next}
+            prevArrowClassName={cx("prev")}
+            nextArrowClassName={cx("next")}
           >
             {currentUsedImagesArr.map(({ src, isAdd }, i) => {
               return (
