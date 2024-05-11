@@ -9,7 +9,6 @@ import {
   faBrush,
   faCalendar,
   faCheck,
-  faCircleDot,
   faClock,
   faCommentAlt,
   faEnvelope,
@@ -191,9 +190,9 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   phone: {},
   choices: {
     design: [
-      { value: "basic", icon: faCircleDot, actionType: "cta" },
+      { value: "basic", icon: faCheck, actionType: "cta" },
       { value: "gender", icon: faVenusMars, actionType: "cta" },
-      { value: "thumbnail", icon: faVenusMars, actionType: "cta" },
+      { value: "thumbnail", icon: faImage, actionType: "cta" },
     ],
   },
 }

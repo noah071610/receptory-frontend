@@ -67,7 +67,7 @@ export default function ImageSelector() {
             })
           }
 
-          if (type === "select") {
+          if (type === "select" || type === "choices") {
             // 스토어에서 히스토리 저장
             return setList({
               index: active.modal.payload,

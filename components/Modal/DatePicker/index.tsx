@@ -7,7 +7,7 @@ import ModalLayout from ".."
 import CalenderMain from "./CalenderMain"
 
 export const DatePicker = ({ section }: { section: SectionType }) => {
-  const { startDate, endDate, interval, specificDate, selectRange } = section.options
+  const { startDate, endDate, interval, specificDate, isRangeSelect } = section.options
   const specificDateCollection = section?.collection ?? []
 
   const startDateForSpecific = useMemo(() => {
@@ -53,10 +53,10 @@ export const DatePicker = ({ section }: { section: SectionType }) => {
             offsetDate,
             onOffsetChange,
             dates: {
-              mode: selectRange,
+              mode: isRangeSelect ? "range" : "single",
               minDate: specificDate ? startDateForSpecific : startDate,
               maxDate: specificDate ? endDateForSpecific : endDate,
-              toggle: selectRange !== "range",
+              toggle: !isRangeSelect,
             },
             exclude: {
               day: excludeDays,

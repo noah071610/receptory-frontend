@@ -19,7 +19,7 @@ const sectionMap: { [key: string]: any } = {
         interval: "all",
         startDate: undefined,
         endDate: undefined,
-        selectRange: "single",
+        isRangeSelect: false,
         selectedSpecificDates: [],
       },
       data: title,
@@ -35,7 +35,7 @@ const sectionMap: { [key: string]: any } = {
         interval: 1,
         startHour: "00",
         endHour: "00",
-        selectRange: "single",
+        isRangeSelect: false,
         selectedSpecificTimes: [],
       },
       data: title,
@@ -64,6 +64,9 @@ const sectionMap: { [key: string]: any } = {
   choices: () => {
     return {
       data: title,
+      options: {
+        initialSelect: "none",
+      },
       design: "gender",
       list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: "" })),
     }

@@ -74,8 +74,8 @@ function CalenderMain({
   const { setDate, setModal } = useMainStore()
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
-  const { startDate, addAnyDate, selectRange } = section.options
-  const inactiveBtn = !selectedDates || selectedDates.length <= (selectRange === "range" ? 1 : 0)
+  const { startDate, addAnyDate, isRangeSelect } = section.options
+  const inactiveBtn = !selectedDates || selectedDates.length <= (isRangeSelect ? 1 : 0)
 
   const onClickSubmit = () => {
     if (!selectedDates || selectedDates.length <= 0) return

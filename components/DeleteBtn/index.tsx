@@ -17,11 +17,11 @@ function DeleteBtn({
 }: {
   isSmall?: boolean
   isDeleteList?: boolean
-  srcKey: "list" | "background" | "thumbnail" | "imageModal" | "callout" | "checklist"
+  srcKey: "list" | "background" | "thumbnail" | "imageModal" | "callout" | "checklist" | "choices"
   listIndex?: number
   deleteEvent?: (listIndex: number) => void
 }) {
-  const { setSrc, setStyle, deleteList } = useEditorStore()
+  const { setSrc, setStyle, deleteList, setList } = useEditorStore()
   const onClickDelete = () => {
     setTimeout(() => {
       if (typeof listIndex === "number") {
@@ -30,6 +30,9 @@ function DeleteBtn({
         }
         if (srcKey === "imageModal") {
           return deleteEvent && deleteEvent(listIndex)
+        }
+        if (srcKey === "choices") {
+          return setList({ index: listIndex, key: "src", payload: "" })
         }
       }
       if (srcKey === "background") {

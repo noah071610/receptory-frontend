@@ -19,7 +19,14 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const [startTime, setStartTime] = useState<null | string>(null)
   const [step, setStep] = useState("startTime")
-  const { startHour: _startHour, endHour: _endHour, interval, specificTime, selectRange, addAnytime } = section.options
+  const {
+    startHour: _startHour,
+    endHour: _endHour,
+    interval,
+    specificTime,
+    isRangeSelect,
+    addAnytime,
+  } = section.options
   const [startHour, endHour] = useMemo(() => {
     const s = parseInt(_startHour ?? "00")
     const e = parseInt(_endHour ?? "00")
@@ -68,7 +75,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
           }
           close()
         }
-        if (selectRange === "single") {
+        if (!isRangeSelect) {
           // 하나의 시간만 선택함으로 분단위 까지 선택하면 모달 종료
           setTime({
             payload: {

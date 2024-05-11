@@ -24,7 +24,7 @@ function Time({ section }: { section: SectionType }) {
     time: { selectedStartTime, selectedEndTime },
   } = useMainStore()
   const { setOptions, addCollection, deleteCollection } = useEditorStore()
-  const { startHour, endHour, isAlways, specificTime, selectRange } = section.options
+  const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 
   const [tempStartTime, setTempStartTime] = useState<string>("00:00")
   const [tempEndTime, setTempEndTime] = useState<string>("00:00")
@@ -47,7 +47,7 @@ function Time({ section }: { section: SectionType }) {
     const endTimeResult = convertStrToTimeSet(tempEndTime)
 
     let isWrongTimeSet = false
-    if (selectRange === "range") {
+    if (isRangeSelect) {
       const start = parseInt(tempStartTime.split(":").join(""))
       const end = parseInt(tempEndTime.split(":").join(""))
       if (start > end) {
@@ -69,7 +69,7 @@ function Time({ section }: { section: SectionType }) {
             }
           : {
               specificStartTime: startTimeResult,
-              specificEndTime: selectRange === "range" ? endTimeResult : undefined,
+              specificEndTime: isRangeSelect ? endTimeResult : undefined,
             },
       })
     }, 0)
@@ -126,7 +126,7 @@ function Time({ section }: { section: SectionType }) {
                     value={tempStartTime}
                     type="time"
                   />
-                  {selectRange === "range" && (
+                  {isRangeSelect && (
                     <>
                       <span>{"~"}</span>
                       <input

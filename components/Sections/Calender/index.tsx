@@ -28,7 +28,7 @@ function Calender({ section }: { section: SectionType }) {
     date: { selectedStartDate, selectedEndDate },
   } = useMainStore()
   const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
-  const { isAlways, specificDate, selectRange, startDate, endDate } = section.options
+  const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options
 
   const [tempDateForSpecificDate, setTempDateForSpecificDate] = useState<Date[]>([])
   const [minMaxDate, setMinMaxDate] = useState<Date[]>([])
@@ -44,7 +44,7 @@ function Calender({ section }: { section: SectionType }) {
 
   const onChangeSpecificDate = (d: Date[]) => {
     setTimeout(() => {
-      if (selectRange === "single") {
+      if (!isRangeSelect) {
         // 싱글이면 걍 추가 EASY
         addCollection({
           payload: {
@@ -123,11 +123,11 @@ function Calender({ section }: { section: SectionType }) {
               <div className={cx("option-date-picker")}>
                 <DatePickerStateProvider
                   config={{
-                    selectedDates: selectRange === "single" ? [] : tempDateForSpecificDate,
+                    selectedDates: !isRangeSelect ? [] : tempDateForSpecificDate,
                     onDatesChange: onChangeSpecificDate,
                     dates: {
                       minDate: new Date(),
-                      mode: selectRange === "single" ? "multiple" : "range",
+                      mode: !isRangeSelect ? "multiple" : "range",
                       toggle: true,
                     },
                   }}
