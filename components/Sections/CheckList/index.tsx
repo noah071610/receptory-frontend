@@ -77,6 +77,7 @@ function List({
             type="input"
             value={list.value}
             maxLength={35}
+            section={section}
           />
         )}
 

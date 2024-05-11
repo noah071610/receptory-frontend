@@ -19,7 +19,7 @@ function OptionRatio({
   optionsArr: any[]
   section: SectionType
 }) {
-  const { selectedSection, setDesign, setSelectedSection, setOptions } = useEditorStore()
+  const { selectedSection, setDesign, setSelectedSection, setOptions, saveSectionHistory } = useEditorStore()
   const { t } = useTranslation()
   const target = isDesign ? section.design : section.options[targetKey]
 
@@ -29,6 +29,7 @@ function OptionRatio({
     }
     if (isDesign) return setDesign({ payload: v })
     setOptions({ payload: v, key: targetKey })
+    saveSectionHistory()
   }
 
   return (

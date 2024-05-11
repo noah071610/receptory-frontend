@@ -17,7 +17,7 @@ const sectionMap: { [key: string]: any } = {
         specificDate: false,
         addAnyDate: false,
         interval: "all",
-        startDate: getNewDate(),
+        startDate: undefined,
         endDate: undefined,
         selectRange: "single",
         selectedSpecificDates: [],
@@ -126,7 +126,7 @@ const sectionMap: { [key: string]: any } = {
     }
   },
   select: () => {
-    const target = createNewSectionList("select", 0, { data: { title: "리스트 타이틀 todo:" } })
+    const target = createNewSectionList("select", 0, { data: { title: "", description: "" } })
     return {
       value: undefined,
       design: "imageWithText",
@@ -140,7 +140,6 @@ const sectionMap: { [key: string]: any } = {
   },
   thumbnail: (designInit?: string) => {
     return {
-      id: "thumbnail",
       design: designInit ?? "simple",
       data: {
         ...title,

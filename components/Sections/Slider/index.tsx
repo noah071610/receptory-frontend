@@ -68,6 +68,7 @@ const BasicSlider = ({
                     listIndex={i}
                     inputType="title"
                     value={v.data.title}
+                    section={section}
                   />
                   <Input
                     style={{ color: textColor }}
@@ -78,6 +79,7 @@ const BasicSlider = ({
                     inputType="description"
                     isOptional={true}
                     value={v.data.description}
+                    section={section}
                   />
                 </>
               )}
@@ -142,6 +144,7 @@ const ThumbnailSlider = ({
                       inputType="title"
                       value={v.data.title}
                       style={{ color: textColor }}
+                      section={section}
                     />
                     <Input
                       type="textarea"
@@ -152,6 +155,7 @@ const ThumbnailSlider = ({
                       isOptional={true}
                       value={v.data.description}
                       style={{ color: textColor }}
+                      section={section}
                     />
                   </>
                 )}

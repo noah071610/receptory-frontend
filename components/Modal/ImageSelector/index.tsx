@@ -7,7 +7,6 @@ import { useEditorStore } from "@/store/editor"
 import { ImageUpload, SectionListType, SectionListTypes } from "@/types/Edit"
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import cs from "classNames/bind"
-import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { FreeMode } from "swiper/modules"
 import { SwiperSlide } from "swiper/react"
@@ -17,8 +16,6 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function ImageSelector() {
-  const { replace } = useRouter()
-  const pathname = usePathname()
   const [selectedImages, setSelectedImages] = useState<Array<ImageUpload>>([])
   const [listForRending, setListForRending] = useState<SectionListType[]>([])
 
@@ -38,8 +35,6 @@ export default function ImageSelector() {
   const [currentUsedImagesArr, setCurrentUsedImagesArr] = useState(
     currentUsedImages?.map((v) => ({ src: v, isAdd: false })) ?? []
   )
-
-  console.log(currentUsedImagesArr)
 
   const type = active.modal.type?.replace("-image", "")
 
@@ -73,6 +68,7 @@ export default function ImageSelector() {
           }
 
           if (type === "select") {
+            // 스토어에서 히스토리 저장
             return setList({
               index: active.modal.payload,
               key: "src",

@@ -48,7 +48,7 @@ function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?:
       ) : (
         <div className={cx("empty")}></div>
       )}
-      {!isDisplayMode && <EmbedForm value={section.value} />}
+      {!isDisplayMode && <EmbedForm section={section} value={section.value} />}
     </div>
   )
 }

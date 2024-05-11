@@ -49,11 +49,20 @@ function Dropzone({
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
+    onDropRejected: (files) => {
+      if (files.length > 10) {
+        return alert("10개 이하의 이미지를 업로드 해주세요")
+      }
+      for (let i = 0; i < files.length; i++) {
+        return alert(files[i].errors[0].code)
+      }
+    },
     multiple: isMultiple,
     accept: {
-      "image/*": [],
+      "image/*": [".jpeg", ".png", ".jpg"],
     },
-    maxSize: 8000000,
+    maxFiles: 10,
+    maxSize: 8000000, // 8mb
   })
 
   return (

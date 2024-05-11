@@ -28,6 +28,7 @@ export default function SectionLayout({
 }) {
   const { replace } = useRouter()
   const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditorStore()
+
   const onClickSection = (e: any) => {
     const closestElement = e.target.closest("[data-closer]")
     if (closestElement) {
@@ -53,6 +54,7 @@ export default function SectionLayout({
 
     replace(`${pathname}#${newId}`)
   }
+
   return (
     <section
       {...draggableProvided?.draggableProps}

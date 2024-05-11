@@ -23,10 +23,12 @@ const ListEdit = ({
   list,
   listIndex,
   onClickAddImage,
+  section,
 }: {
   list: SectionListType
   listIndex: number
   onClickAddImage: (i: number) => void
+  section: SectionType
 }) => {
   return (
     <li key={`edit-${list.id}`}>
@@ -46,6 +48,7 @@ const ListEdit = ({
           value={list.data.title}
           listIndex={listIndex}
           dataKey="title"
+          section={section}
         />
         <Input
           type="input"
@@ -54,6 +57,7 @@ const ListEdit = ({
           isOptional={true}
           value={list.data.description}
           listIndex={listIndex}
+          section={section}
           dataKey="description"
         />
         <DeleteBtn listIndex={listIndex} srcKey="list" isDeleteList={true} />
@@ -105,7 +109,13 @@ function Select({ section }: { section: SectionType }) {
           <h4>리스트 수정</h4>
           <ul className={cx("list-edit")}>
             {selectList.map((list, i) => (
-              <ListEdit onClickAddImage={onClickAddImage} key={`${list.id}-edit`} list={list} listIndex={i} />
+              <ListEdit
+                section={section}
+                onClickAddImage={onClickAddImage}
+                key={`${list.id}-edit`}
+                list={list}
+                listIndex={i}
+              />
             ))}
           </ul>
           <AddBtn section={section} type="select" />

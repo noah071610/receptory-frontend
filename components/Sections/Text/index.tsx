@@ -1,5 +1,5 @@
 // @ts-ignore
-import { memo } from "react"
+import { memo, useState } from "react"
 
 import { bgColorArr, textColorArr } from "@/config/colors"
 import { useEditorStore } from "@/store/editor"
@@ -41,10 +41,14 @@ const formats = [
 ]
 
 const Text = ({ section, listIndex }: { section: SectionType; listIndex?: number }) => {
-  const { setValue, setList } = useEditorStore()
+  const { setValue, setList, selectedSection, setSelectedSection, saveSectionHistory } = useEditorStore()
+  const [initLength, setInitLength] = useState(section.value?.length ?? 0)
+  const [isEdited, setIsEdited] = useState(false)
 
   const onChangeEditor = (str: string) => {
-    setValue({ payload: str })
+    if (!selectedSection) {
+      setSelectedSection({ payload: section })
+    }
     if (typeof listIndex === "number") {
       setList({
         index: listIndex,
@@ -54,40 +58,29 @@ const Text = ({ section, listIndex }: { section: SectionType; listIndex?: number
     } else {
       setValue({ payload: str })
     }
+    if (!isEdited && initLength !== str.length) {
+      setIsEdited(true)
+    }
   }
 
-  // useEffect(() => {
-  //   // save
-  //   if (selectedSection?.id !== section.id && isEdit && editorState) {
-  //     if (typeof listIndex === "number") {
-  //       setList({
-  //         index: listIndex,
-  //         key: "text",
-  //         payload: editorState,
-  //         section,
-  //       })
-  //     } else {
-  //       setText({ payload: editorState, section })
-  //     }
-  //     setIsEdit(false)
-  //   }
-  // }, [isEdit, selectedSection, editorState, section])
-
-  // useEffect(() => {
-  //   // revert
-  //   if (editorState) {
-  //     const load = typeof listIndex === "number" ? section.list[listIndex].text : section.text
-  //     if (load) {
-  //       setEditorState(load)
-  //     } else {
-  //       setEditorState(EditorState.createEmpty())
-  //     }
-  //   }
-  // }, [revertIndex])
+  const onBlurInput = () => {
+    if (isEdited) {
+      saveSectionHistory()
+      setIsEdited(false)
+      setInitLength(section.value.length)
+    }
+  }
 
   return (
     <div className={cx("text-wrapper")}>
-      <ReactQuill theme="snow" modules={modules} formats={formats} value={section.value} onChange={onChangeEditor} />
+      <ReactQuill
+        onBlur={onBlurInput}
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        value={section.value}
+        onChange={onChangeEditor}
+      />
     </div>
   )
 }

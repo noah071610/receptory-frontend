@@ -65,6 +65,7 @@ export default function Card({
           dataKey={"title"}
           style={{ color: textColor }}
           value={title}
+          section={section}
         />
         <Input
           type="textarea"
@@ -75,6 +76,7 @@ export default function Card({
           dataKey={"description"}
           style={{ color: textColor }}
           value={description}
+          section={section}
         />
         {!isForm && (
           <div className={cx("cta-wrapper")}>
@@ -87,6 +89,7 @@ export default function Card({
                 isOptional={false}
                 style={{ color: ctaTextColor }}
                 value={cta}
+                section={section}
               />
             </button>
           </div>

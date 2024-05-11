@@ -9,7 +9,7 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function OptionBar({ value, section }: { value: string; section: SectionType }) {
-  const { selectedSection, setSelectedSection, setOptions } = useEditorStore()
+  const { selectedSection, setSelectedSection, setOptions, saveSectionHistory } = useEditorStore()
   const { t } = useTranslation()
   const isActive = section.options[value]
 
@@ -19,6 +19,7 @@ function OptionBar({ value, section }: { value: string; section: SectionType }) 
     }
 
     setOptions({ key: value, payload: !isActive })
+    saveSectionHistory()
   }
 
   return (

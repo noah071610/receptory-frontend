@@ -50,6 +50,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
               listIndex={2}
               value={label.value}
               style={labelStyle}
+              section={section}
             />
           )}
         </div>
@@ -66,6 +67,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             inputType="title"
             isOptional={true}
             style={{ textAlign }}
+            section={section}
           />
         ))}
       {description.isActive &&
@@ -80,6 +82,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             inputType="description"
             isOptional={true}
             style={{ textAlign }}
+            section={section}
           />
         ))}
     </div>

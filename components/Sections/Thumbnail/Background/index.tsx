@@ -71,6 +71,7 @@ export default function Background({
           isOptional={true}
           dataKey={"title"}
           value={title}
+          section={section}
           style={{ color: hasString(background) ? colors.white : textColor }}
         />
         <Input
@@ -81,6 +82,7 @@ export default function Background({
           isOptional={true}
           dataKey={"description"}
           value={description}
+          section={section}
           style={{ color: hasString(background) ? colors.white : textColor }}
         />
         {!isForm && (
@@ -88,6 +90,7 @@ export default function Background({
             <button style={{ backgroundColor: color }} className={cx("cta")}>
               <Input
                 type="input"
+                section={section}
                 displayMode={isDisplayMode && "span"}
                 inputType="cta"
                 dataKey={"cta"}

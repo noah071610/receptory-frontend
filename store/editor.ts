@@ -32,8 +32,7 @@ export interface EditStates {
   active: ActiveTypes
   revert: {
     sectionKey: "initSections" | "formSections"
-    payload: SectionType
-    snapshot: string[]
+    snapshot: SectionType[]
   }[]
   revertIndex: number
   currentUsedImages: string[]
@@ -97,7 +96,7 @@ type Actions = {
   loadSections: (payload: SaveContentType) => void
 
   setRevert: (revertType: "do" | "undo") => void
-  saveSectionHistory: ({ payload }: { payload: SectionType }) => void
+  saveSectionHistory: () => void
   setPageOptions: ({ type, payload }: { type: "format" | "lang" | "customLink"; payload: any }) => void
 }
 
@@ -108,14 +107,14 @@ const getKey = (origin: any): "initSections" | "formSections" => {
   return origin.stage === "init" ? "initSections" : "formSections"
 }
 
-const saveSectionHistory = ({ origin, payload }: { origin: any; payload: SectionType }) => {
+const saveSectionHistoryCallback = ({ origin }: { origin: any }) => {
   const sectionKey = getKey(origin)
   if (origin.revertIndex > -1) {
     // 뒤로가기 하고 다시 시작 하면 뒤에껀 지워버림 (안쓰겠다는 의미로 간주)
     origin.revert = origin.revert.slice(0, origin.revertIndex + 1)
   }
 
-  origin.revert.push({ sectionKey, payload, snapshot: origin[sectionKey].map((v: any) => v.id) })
+  origin.revert.push({ sectionKey, snapshot: [...origin[sectionKey]] })
   if (origin.revert.length >= 20) {
     // 20개 넘게 뒤로가기 할거면 인간적으로 저장 버튼을 눌러라.. 라는 취지
     origin.revert.shift()
@@ -128,8 +127,8 @@ export const useEditorStore = create<EditStates & Actions>()(
   immer((set) => ({
     // STATE
     isEditStart: false,
-    initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple" })],
-    formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background" })],
+    initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
+    formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
     selectedSection: null,
     stage: "init",
     active: {
@@ -162,10 +161,10 @@ export const useEditorStore = create<EditStates & Actions>()(
     },
 
     // SET
-    saveSectionHistory: ({ payload }) =>
+    saveSectionHistory: () =>
       set((origin) => {
         // 컴포넌트에서 호출할때, 기본적으로 store에서 처리함
-        saveSectionHistory({ origin, payload })
+        saveSectionHistoryCallback({ origin })
       }),
     setRevert: (revertType: "do" | "undo") =>
       set((origin) => {
@@ -175,31 +174,17 @@ export const useEditorStore = create<EditStates & Actions>()(
         const doIndex = revertType === "do" ? 1 : -1
         const targetRevert = origin.revert[origin.revertIndex + doIndex]
         if (!targetRevert) return
-        const { payload, sectionKey, snapshot } = targetRevert
+        const { sectionKey, snapshot } = targetRevert
 
-        let target = null
-
-        // sections의 스냅샷 처리
-        const arr = []
-        for (let i = 0; i < snapshot.length; i++) {
-          const target = origin[sectionKey].find((v) => v.id === snapshot[i])
-          if (target) {
-            arr.push(target)
-          } else {
-            arr.push(payload)
-          }
+        // 스테이지 이동
+        if (sectionKey === "initSections" && origin.stage !== "init") {
+          origin.stage = "init"
         }
-        origin[sectionKey] = arr
+        if (sectionKey === "formSections" && origin.stage !== "form") {
+          origin.stage = "form"
+        }
 
-        // 스냅샷을 찍은 섹션을 덮어씌움 (virtual dom 이니까 재렌더링 안됨요)
-        origin[sectionKey] = origin[sectionKey].map((v) => {
-          if (v.id === payload.id) {
-            target = payload
-            return target
-          } else {
-            return v
-          }
-        })
+        origin[sectionKey] = snapshot
 
         if (revertType === "undo") {
           origin.revertIndex--
@@ -210,25 +195,31 @@ export const useEditorStore = create<EditStates & Actions>()(
     setSelectedSection: ({ payload }) =>
       set((origin) => {
         if (origin.revert.length <= 0 && payload) {
-          saveSectionHistory({ origin, payload })
+          saveSectionHistoryCallback({ origin })
         }
         origin.selectedSection = payload
       }),
     setStage: (stage) =>
       set((origin) => {
+        if (origin.revert.length <= 0) {
+          saveSectionHistoryCallback({ origin })
+        }
         origin.stage = stage
+        saveSectionHistoryCallback({ origin })
       }),
     setValue: ({ payload }) =>
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
-          target.value = payload
-          origin.selectedSection.value = payload
+          if (!!payload) {
+            target.value = payload
+            origin.selectedSection.value = payload
+          }
         }
-        origin.isEditStart = true
       }),
     setText: ({ payload }) =>
       set((origin) => {
+        // todo: 안씀
         if (origin.selectedSection) {
           const target = getTarget(origin)
           target.text = payload
@@ -236,7 +227,6 @@ export const useEditorStore = create<EditStates & Actions>()(
             origin.selectedSection.text = payload
           }
         }
-        origin.isEditStart = true
       }),
     setSrc: ({ payload }) =>
       set((origin) => {
@@ -244,9 +234,8 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.src = payload
           origin.selectedSection.src = payload
-          saveSectionHistory({ origin, payload: target })
+          saveSectionHistoryCallback({ origin })
         }
-        origin.isEditStart = true
       }),
     setDesign: ({ payload }) =>
       set((origin) => {
@@ -254,29 +243,27 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.design = payload
           origin.selectedSection.design = payload
-          saveSectionHistory({ origin, payload: target })
+          saveSectionHistoryCallback({ origin })
         }
-        origin.isEditStart = true
       }),
     setData: ({ payload, key }) =>
+      // 히스토리 작동중, 현재 input밖에 안씀.
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
           target.data[key] = payload
           origin.selectedSection.data[key] = payload
         }
-        origin.isEditStart = true
       }),
     setOptions: ({ payload, key }) =>
+      // todo :
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
 
           target.options[key] = payload
           origin.selectedSection.options[key] = payload
-          saveSectionHistory({ origin, payload: target })
         }
-        origin.isEditStart = true
       }),
     setList: ({ index, payload, key, dataKey }) =>
       set((origin) => {
@@ -289,21 +276,10 @@ export const useEditorStore = create<EditStates & Actions>()(
           } else {
             target.list[index][key] = payload as never
             if (origin.selectedSection) origin.selectedSection.list[index][key] = payload as never
-            switch (key) {
-              // 불필요한 히스토리 등록을 방지하기 위해 특정 값만 히스토리 저장
-              case "style":
-                saveSectionHistory({ origin, payload: target })
-                break
-              case "isActive":
-                saveSectionHistory({ origin, payload: target })
-                break
-              case "design":
-                saveSectionHistory({ origin, payload: target })
-                break
+          }
 
-              default:
-                break
-            }
+          if (key !== "value" && key !== "data") {
+            saveSectionHistoryCallback({ origin })
           }
         }
       }),
@@ -313,9 +289,8 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.style[key] = payload
           origin.selectedSection.style[key] = payload
-          saveSectionHistory({ origin, payload: target })
+          saveSectionHistoryCallback({ origin })
         }
-        origin.isEditStart = true
       }),
     setActive: ({ key, payload }) =>
       set((origin) => {
@@ -338,23 +313,21 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = { payload: null, ...payload }
           origin.active[key] = target
         }
-        origin.isEditStart = true
       }),
     setCollection: ({ payload }) =>
+      // 사용 안함
       set((origin) => {
+        // todo: 안씀
         if (origin.selectedSection) {
           const target = getTarget(origin)
 
           target.collection = payload
           origin.selectedSection.collection = payload
-          saveSectionHistory({ origin, payload: target })
         }
-        origin.isEditStart = true
       }),
     setPageOptions: ({ type, payload }) =>
       set((origin) => {
         origin.pageOptions[type] = payload as never
-        origin.isEditStart = true
       }),
 
     // ADD
@@ -363,12 +336,11 @@ export const useEditorStore = create<EditStates & Actions>()(
         const sections = origin[getKey(origin)]
         const newSection = payload ?? createNewSection({ type, index: sections.length, newId })
         if (origin.revert.length <= 0) {
-          saveSectionHistory({ origin, payload: newSection })
+          saveSectionHistoryCallback({ origin })
         }
         sections.push(newSection)
-        saveSectionHistory({ origin, payload: newSection })
+        saveSectionHistoryCallback({ origin })
         origin.selectedSection = newSection
-        origin.isEditStart = true
       }),
     addList: ({ type, valueArrForNewList }) =>
       set((origin) => {
@@ -379,8 +351,8 @@ export const useEditorStore = create<EditStates & Actions>()(
             target.list.push(newList)
           })
           origin.selectedSection.list = target.list
-          saveSectionHistory({ origin, payload: target })
-          origin.isEditStart = true
+
+          saveSectionHistoryCallback({ origin })
         }
       }),
     addCollection: ({ payload }) =>
@@ -390,9 +362,8 @@ export const useEditorStore = create<EditStates & Actions>()(
 
           target.collection.push(payload)
           origin.selectedSection.collection.push(payload)
-          saveSectionHistory({ origin, payload: target })
+          saveSectionHistoryCallback({ origin })
         }
-        origin.isEditStart = true
       }),
     addUsed: ({ type, payload }) =>
       set((origin) => {
@@ -407,8 +378,6 @@ export const useEditorStore = create<EditStates & Actions>()(
           }
         }
         origin[type] = [payload, ...origin[type]]
-
-        origin.isEditStart = true
       }),
 
     // DELETE
@@ -418,9 +387,8 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.list = target.list.filter((_, i) => i !== targetIndex).map((v, i) => ({ ...v, index: i }))
           origin.selectedSection.list = target.list
-          saveSectionHistory({ origin, payload: target })
+          saveSectionHistoryCallback({ origin })
         }
-        origin.isEditStart = true
       }),
 
     deleteSection: (payload) =>
@@ -430,14 +398,13 @@ export const useEditorStore = create<EditStates & Actions>()(
         if (!deleteSection) return
 
         if (origin.revert.length <= 0) {
-          saveSectionHistory({ origin, payload: deleteSection })
+          saveSectionHistoryCallback({ origin })
         }
         origin[key] = origin[key].filter((v) => v.id !== payload)
         origin.selectedSection = null
         origin[key] = origin[key].map((v, i) => ({ ...v, index: i }))
 
-        saveSectionHistory({ origin, payload: deleteSection })
-        origin.isEditStart = true
+        saveSectionHistoryCallback({ origin })
       }),
 
     deleteCollection: ({ targetIndex }) =>
@@ -446,9 +413,8 @@ export const useEditorStore = create<EditStates & Actions>()(
           const target = getTarget(origin)
           target.collection = target.collection.filter((_, i) => i !== targetIndex)
           origin.selectedSection.collection = target.collection
-          saveSectionHistory({ origin, payload: target })
+          saveSectionHistoryCallback({ origin })
         }
-        origin.isEditStart = true
       }),
 
     // ETC
@@ -458,7 +424,7 @@ export const useEditorStore = create<EditStates & Actions>()(
         const key = getKey(origin)
 
         if (origin.revert.length <= 0) {
-          saveSectionHistory({ origin, payload: copy })
+          saveSectionHistoryCallback({ origin })
         }
 
         origin[key].splice(payload.index + 1, 0, copy)
@@ -466,8 +432,7 @@ export const useEditorStore = create<EditStates & Actions>()(
 
         origin.selectedSection = origin[key].find((v) => v.id === copy.id) ?? null
 
-        saveSectionHistory({ origin, payload: copy })
-        origin.isEditStart = true
+        saveSectionHistoryCallback({ origin })
       }),
 
     moveSection: ({ from, to }) =>
@@ -476,15 +441,14 @@ export const useEditorStore = create<EditStates & Actions>()(
         const _target = sections[from]
 
         if (origin.revert.length <= 0) {
-          saveSectionHistory({ origin, payload: _target })
+          saveSectionHistoryCallback({ origin })
         }
 
         sections.splice(from, 1)
         sections.splice(to, 0, _target)
         origin[getKey(origin)] = sections.map((v, i) => ({ ...v, index: i }))
 
-        saveSectionHistory({ origin, payload: _target })
-        origin.isEditStart = true
+        saveSectionHistoryCallback({ origin })
       }),
 
     loadSections: (payload) =>

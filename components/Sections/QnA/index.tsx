@@ -68,6 +68,7 @@ const List = ({
             maxLength={80}
             dataKey="title"
             value={list.data.title}
+            section={section}
             className={cx("title-input")}
           />
         )}

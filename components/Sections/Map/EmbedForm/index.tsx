@@ -6,11 +6,12 @@ import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import style from "./style.module.scss"
 
+import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 import { useState } from "react"
 const cx = cs.bind(style)
 
-export default function EmbedForm({ value }: { value: string }) {
+export default function EmbedForm({ value, section }: { value: string; section: SectionType }) {
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation()
   return (
@@ -23,6 +24,7 @@ export default function EmbedForm({ value }: { value: string }) {
         maxLength={99999}
         isOptional={false}
         value={value}
+        section={section}
       />
       <div
         onClick={() => {

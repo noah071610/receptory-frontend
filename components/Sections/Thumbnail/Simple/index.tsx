@@ -64,6 +64,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
             isOptional={true}
             dataKey={"title"}
             value={title}
+            section={section}
           />
           <Input
             type="textarea"
@@ -73,6 +74,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
             isOptional={true}
             dataKey={"description"}
             value={description}
+            section={section}
           />
           {!isForm && (
             <div className={cx("cta-wrapper")}>
@@ -85,6 +87,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
                   isOptional={false}
                   style={{ color }}
                   value={cta}
+                  section={section}
                 />
                 {isDisplayMode && <FontAwesomeIcon style={{ color }} icon={faChevronRight} />}
               </button>

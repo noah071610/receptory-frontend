@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { StyleProperties } from "@/types/Edit"
+import { SectionType, StyleProperties } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { useParams } from "next/navigation"
 import { memo, useRef, useState } from "react"
@@ -20,6 +20,7 @@ function Input({
   listIndex,
   isOptional,
   displayMode,
+  section,
 }: {
   type: "input" | "textarea"
   className?: string
@@ -32,6 +33,7 @@ function Input({
   value: string
   style?: StyleProperties
   displayMode?: boolean | "h1" | "p" | "h2" | "span"
+  section: SectionType
 }) {
   if (type === "textarea") {
     maxLength = 100
@@ -39,12 +41,16 @@ function Input({
   const inputRef = useRef(null)
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
-  const { setValue, setList, setData, saveSectionHistory, selectedSection } = useEditorStore()
-  const [isEdit, setIsEdit] = useState(false)
+  const { setValue, setList, setData, saveSectionHistory, selectedSection, setSelectedSection } = useEditorStore()
+  const [initLength, setInitLength] = useState(value?.length ?? 0)
+  const [isEdited, setIsEdited] = useState(false)
 
   const onChangeInput = (e: any) => {
     const inputValue = e.target.value
     const lines = inputValue.split("\n")
+    if (!selectedSection) {
+      setSelectedSection({ payload: section })
+    }
     if (type === "input") {
       if (inputValue.length > maxLength) return
     } else if (type === "textarea") {
@@ -64,13 +70,16 @@ function Input({
         setValue({ payload: inputValue })
       }
     }
-    setIsEdit(true)
+    if (!isEdited && initLength !== e.target.value.length) {
+      setIsEdited(true)
+    }
   }
 
   const onBlurInput = () => {
-    if (isEdit && selectedSection) {
-      saveSectionHistory({ payload: selectedSection })
-      setIsEdit(false)
+    if (isEdited) {
+      saveSectionHistory()
+      setIsEdited(false)
+      setInitLength(value.length)
     }
   }
 

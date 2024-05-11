@@ -27,8 +27,8 @@ function Calender({ section }: { section: SectionType }) {
     setModal,
     date: { selectedStartDate, selectedEndDate },
   } = useMainStore()
-  const { setOptions, addCollection, deleteCollection } = useEditorStore()
-  const { isAlways, specificDate, selectRange } = section.options
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
+  const { isAlways, specificDate, selectRange, startDate, endDate } = section.options
 
   const [tempDateForSpecificDate, setTempDateForSpecificDate] = useState<Date[]>([])
   const [minMaxDate, setMinMaxDate] = useState<Date[]>([])
@@ -38,6 +38,7 @@ function Calender({ section }: { section: SectionType }) {
     if (d.length > 1) {
       setOptions({ payload: d[0], key: "startDate" })
       setOptions({ payload: d[1], key: "endDate" })
+      saveSectionHistory()
     }
   }
 
@@ -82,10 +83,18 @@ function Calender({ section }: { section: SectionType }) {
   useEffect(() => {
     if (isAlways) {
       setMinMaxDate([])
-      setOptions({ payload: new Date(), key: "startDate" })
+      setOptions({ payload: undefined, key: "startDate" })
       setOptions({ payload: undefined, key: "endDate" })
     }
   }, [isAlways])
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      setMinMaxDate([startDate, endDate])
+    } else {
+      setMinMaxDate([])
+    }
+  }, [startDate, endDate])
 
   return (
     <div className={cx("layout")}>

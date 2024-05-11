@@ -73,6 +73,7 @@ export default function Full({
           isOptional={true}
           dataKey="title"
           style={{ color: textColor }}
+          section={section}
           value={title}
         />
         <Input
@@ -84,6 +85,7 @@ export default function Full({
           dataKey="description"
           style={{ color: textColor }}
           value={description}
+          section={section}
         />
         {!isForm && (
           <div className={cx("cta-wrapper")}>
@@ -96,6 +98,7 @@ export default function Full({
                 isOptional={false}
                 style={{ color: ctaTextColor }}
                 value={cta}
+                section={section}
               />
             </button>
           </div>

@@ -38,11 +38,14 @@ export default function Header() {
     setRevert,
     revert,
     revertIndex,
+    saveSectionHistory,
   } = useEditorStore()
   const [isSaving, setIsSaving] = useState(false)
 
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [visible, setVisible] = useState(true)
+
+  console.log(revert, revertIndex)
 
   useEffect(() => {
     const handleScroll = () => {

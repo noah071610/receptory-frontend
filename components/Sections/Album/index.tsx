@@ -66,12 +66,13 @@ const ImageComponent = ({
       </picture>
       <Input
         type="input"
-        className={cx("title")}
+        className={cx("title", !isDisplayMode && "input")}
         inputType="album"
         displayMode={isDisplayMode && "p"}
         isOptional={true}
         listIndex={index}
         value={photo.value}
+        section={section}
       />
     </div>
   )

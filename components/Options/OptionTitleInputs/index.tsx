@@ -21,6 +21,7 @@ function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; i
         isOptional={false}
         value={section.data.title}
         dataKey="title"
+        section={section}
       />
       <Input
         type="input"
@@ -29,6 +30,7 @@ function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; i
         isOptional={true}
         value={section.data.description}
         dataKey="description"
+        section={section}
       />
     </div>
   )
