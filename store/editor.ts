@@ -61,16 +61,14 @@ type Actions = {
     payload,
     key,
     dataKey,
-    section,
   }: {
     index: number
     payload: any
     key: keyof SectionListType
     dataKey?: string
-    section?: SectionType
   }) => void
   setValue: ({ payload }: { payload: any }) => void
-  setText: ({ payload, section }: { payload: string; section?: SectionType }) => void
+  setText: ({ payload }: { payload: string }) => void
   setData: ({ payload, key }: { payload: any; key: string }) => void
   setOptions: ({ payload, key }: { payload: any; key: string }) => void
   setActive: ({
@@ -103,8 +101,8 @@ type Actions = {
   setPageOptions: ({ type, payload }: { type: "format" | "lang" | "customLink"; payload: any }) => void
 }
 
-const getTarget = (origin: any, section?: SectionType): SectionType => {
-  return origin[origin.stage === "init" ? "initSections" : "formSections"][(section ?? origin.selectedSection).index]
+const getTarget = (origin: any): SectionType => {
+  return origin[origin.stage === "init" ? "initSections" : "formSections"][origin.selectedSection.index]
 }
 const getKey = (origin: any): "initSections" | "formSections" => {
   return origin.stage === "init" ? "initSections" : "formSections"
@@ -229,10 +227,10 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         origin.isEditStart = true
       }),
-    setText: ({ payload, section }) =>
+    setText: ({ payload }) =>
       set((origin) => {
-        if (origin.selectedSection || section) {
-          const target = getTarget(origin, section)
+        if (origin.selectedSection) {
+          const target = getTarget(origin)
           target.text = payload
           if (origin.selectedSection) {
             origin.selectedSection.text = payload
@@ -280,10 +278,10 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         origin.isEditStart = true
       }),
-    setList: ({ index, payload, key, dataKey, section }) =>
+    setList: ({ index, payload, key, dataKey }) =>
       set((origin) => {
-        if (origin.selectedSection || section) {
-          const target = getTarget(origin, section)
+        if (origin.selectedSection) {
+          const target = getTarget(origin)
 
           if (dataKey) {
             target.list[index].data[dataKey] = payload as never

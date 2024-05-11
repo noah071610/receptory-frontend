@@ -17,9 +17,11 @@ import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
+import { useParams } from "next/navigation"
 const cx = cs.bind(style)
 
 function Calender({ section }: { section: SectionType }) {
+  const { lang } = useParams()
   const { t } = useTranslation()
   const {
     setModal,
@@ -74,7 +76,7 @@ function Calender({ section }: { section: SectionType }) {
   }
 
   const onClickOpenModal = () => {
-    setModal({ section, type: "date" })
+    setModal({ section, type: specificDate ? "dateSelect" : "date" })
   }
 
   useEffect(() => {
@@ -95,10 +97,10 @@ function Calender({ section }: { section: SectionType }) {
       >
         {!selectedStartDate && t("날짜 입력")}
         {selectedStartDate && (
-          <span>{selectedStartDate === "anyDate" ? t("anyDate") : setDateFormat(selectedStartDate)}</span>
+          <span>{selectedStartDate === "anyDate" ? t("anyDate") : setDateFormat(selectedStartDate, lang)}</span>
         )}
         {selectedEndDate && <span>{" ~ "}</span>}
-        {selectedEndDate && <span>{setDateFormat(selectedEndDate)}</span>}
+        {selectedEndDate && <span>{setDateFormat(selectedEndDate, lang)}</span>}
       </FormUserInput>
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />
@@ -150,7 +152,13 @@ function Calender({ section }: { section: SectionType }) {
               {section.collection.map(({ specificStartDate, specificEndDate }, i) => (
                 <li key={`specific_date_${i}`}>
                   <button onClick={() => onClickDeleteSelectDate(i)}>
-                    <NumberRange start={specificStartDate} end={specificEndDate} formatter={setDateFormat} />
+                    <NumberRange
+                      start={specificStartDate}
+                      end={specificEndDate}
+                      formatter={(date: Date) => {
+                        return setDateFormat(date, lang)
+                      }}
+                    />
                   </button>
                 </li>
               ))}

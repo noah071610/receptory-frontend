@@ -1,9 +1,7 @@
 import { colors } from "@/config/colors"
 import { SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
-import { EditorState } from "draft-js"
 import getId from "./helpers/getId"
 
-const getNewEmptyEditor = () => EditorState.createEmpty()
 const getNewDate = () => new Date()
 const title = {
   title: "타이틀 입력",
@@ -112,7 +110,6 @@ const sectionMap: { [key: string]: any } = {
       style: {
         backgroundColor: colors.graySoft,
       },
-      text: getNewEmptyEditor(),
     }
   },
   album: () => {
@@ -125,7 +122,7 @@ const sectionMap: { [key: string]: any } = {
       style: {
         color: colors.pink,
       },
-      list: [{ ...createNewSectionList("qna", 0), isActive: true, text: getNewEmptyEditor() }],
+      list: [{ ...createNewSectionList("qna", 0), isActive: true }],
     }
   },
   select: () => {
@@ -157,16 +154,11 @@ const sectionMap: { [key: string]: any } = {
       },
     }
   },
-  text: () => {
-    return {
-      text: "",
-    }
-  },
 }
 
 export const createNewSectionList = (subType: string, index: number, obj?: any): SectionListType => {
   if (subType === "qna") {
-    obj = { isActive: true, text: getNewEmptyEditor() }
+    obj = { isActive: true }
   }
   return {
     id: getId(),

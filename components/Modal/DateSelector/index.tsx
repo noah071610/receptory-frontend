@@ -9,9 +9,11 @@ import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import setDateFormat from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
+import { useParams } from "next/navigation"
 const cx = cs.bind(style)
 
 export const DateSelector = ({ section }: { section: SectionType }) => {
+  const { lang } = useParams()
   const { t } = useTranslation()
   const { setModal, setDate } = useMainStore()
   const specificDates = section.collection
@@ -42,7 +44,13 @@ export const DateSelector = ({ section }: { section: SectionType }) => {
         {specificDates.map(({ specificStartDate, specificEndDate }, i: number) => (
           <li key={`date_${i}`}>
             <button onClick={() => onClickDate({ specificStartDate, specificEndDate })}>
-              <NumberRange start={specificStartDate} end={specificEndDate} formatter={setDateFormat} />
+              <NumberRange
+                start={specificStartDate}
+                end={specificEndDate}
+                formatter={(date: Date) => {
+                  return setDateFormat(date, lang)
+                }}
+              />
             </button>
           </li>
         ))}

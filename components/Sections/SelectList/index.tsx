@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { memo } from "react"
 import style from "./style.module.scss"
 
+import DeleteBtn from "@/components/DeleteBtn"
 import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
@@ -55,6 +56,7 @@ const ListEdit = ({
           listIndex={listIndex}
           dataKey="description"
         />
+        <DeleteBtn listIndex={listIndex} srcKey="list" isDeleteList={true} />
       </div>
     </li>
   )

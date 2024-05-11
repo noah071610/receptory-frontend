@@ -1,5 +1,59 @@
-import dayjs from "dayjs"
-
-export default function setDateFormat(date: Date) {
-  return dayjs(date).format("DD/MM/YYYY")
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
+function formatDateToEnglish(month: number) {
+  return months[month]
 }
+
+function getJapaneseEra(year: number) {
+  const japaneseEras = [
+    { name: "明治", startYear: 1868, endYear: 1912 },
+    { name: "大正", startYear: 1912, endYear: 1926 },
+    { name: "昭和", startYear: 1926, endYear: 1989 },
+    { name: "平成", startYear: 1989, endYear: 2019 },
+    { name: "令和", startYear: 2019, endYear: Infinity },
+  ]
+
+  for (const era of japaneseEras) {
+    if (year >= era.startYear && year < era.endYear) {
+      return `${era.name}${year - era.startYear + 1}年`
+    }
+  }
+
+  return year
+}
+
+export default function setDateFormat(date: Date, lang: any = "ja") {
+  const year = date.getFullYear() // 연도를 추출합니다.
+  const month = date.getMonth() // 월을 추출하고 2자리로 만듭니다.
+  const day = date.getDate() // 일을 추출하고 2자리로 만듭니다.
+
+  switch (lang) {
+    case "ko":
+      return `${year}년 ${month}월 ${day}일`
+
+    case "en":
+      return `${formatDateToEnglish(month)} ${day}, ${year}`
+
+    case "ja":
+      return `${getJapaneseEra(year)} ${month}月 ${day}日`
+
+    case "th":
+      return `พ.ศ. ${year + 543} ${month}. ${day}.`
+
+    default:
+      return `${year}-${month}-${day}`
+  }
+}
+// พ.ศ. 2562

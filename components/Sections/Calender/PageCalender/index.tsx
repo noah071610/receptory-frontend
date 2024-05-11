@@ -10,9 +10,11 @@ import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
+import { useParams } from "next/navigation"
 const cx = cs.bind(style)
 
 function PageCalender({ section }: { section: SectionType }) {
+  const { lang } = useParams()
   const { t } = useTranslation()
   const {
     date: { selectedStartDate, selectedEndDate },
@@ -33,10 +35,10 @@ function PageCalender({ section }: { section: SectionType }) {
       >
         {!selectedStartDate && t("날짜 입력")}
         {selectedStartDate && (
-          <span>{selectedStartDate === "anyDate" ? t("anyDate") : setDateFormat(selectedStartDate)}</span>
+          <span>{selectedStartDate === "anyDate" ? t("anyDate") : setDateFormat(selectedStartDate, lang)}</span>
         )}
         {selectedEndDate && <span>{" ~ "}</span>}
-        {selectedEndDate && <span>{setDateFormat(selectedEndDate)}</span>}
+        {selectedEndDate && <span>{setDateFormat(selectedEndDate, lang)}</span>}
       </FormUserInput>
     </div>
   )

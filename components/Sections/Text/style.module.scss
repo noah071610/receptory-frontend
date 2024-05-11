@@ -1,3 +1,54 @@
 @import "@/styles/variables.scss";
 @import "./style.scss";
 @include layout;
+
+.text-wrapper {
+  :global {
+    .ql-formats {
+      margin-right: 5px !important;
+    }
+    .ql-toolbar,
+    .ql-container {
+      border: none;
+      padding: 0;
+    }
+    .ql-container {
+      font-family: inherit !important;
+    }
+    .ql-editor {
+      padding: 0;
+      font-size: 14px;
+
+      h1 {
+        font-size: 22px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      h3 {
+        font-size: 17px;
+      }
+      p {
+        line-height: 1.5;
+      }
+      li {
+        line-height: 1.5;
+      }
+      ul,
+      ol {
+        margin: 5px 0;
+      }
+      blockquote {
+        color: var(--gray-hard);
+        font-style: italic;
+        border-left: 5px solid var(--gray-hard);
+        padding-left: 10px;
+      }
+    }
+    .ql-toolbar {
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+  }
+}

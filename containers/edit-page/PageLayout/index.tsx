@@ -12,18 +12,25 @@ export default function PageLayout({ children }: { children: ReactNode }) {
   const { modal, setModal } = useMainStore()
   const onClickPage = (e: any) => {
     const closestElement = e.target.closest("[data-closer]")
+
     if (closestElement) {
       const dataType = closestElement.getAttribute("data-closer")
 
       if (dataType !== "editor") {
+        if (modal.type) {
+          setModal({ section: null, type: null }) // main store (유저용)
+        }
+
         if (dataType === "preview" && typeof window === "object") {
           if (window.innerWidth <= 800) return
         }
-        if (modal.type) {
-          setModal({ section: null, type: null })
-        }
+        setSelectedSection({ payload: null })
+        setActive({ payload: { type: null }, key: "all" })
       }
     } else {
+      if (modal.type) {
+        setModal({ section: null, type: null }) // main store (유저용)
+      }
       setSelectedSection({ payload: null })
       setActive({ payload: { type: null }, key: "all" })
     }

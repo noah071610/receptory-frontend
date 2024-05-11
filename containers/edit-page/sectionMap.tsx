@@ -99,7 +99,7 @@ const CheckList = dynamic(() => import("@/components/Sections/CheckList/index"),
 export const sectionMap: Record<SectionListTypes, (section: SectionType, isDisplayMode?: boolean) => any> = {
   album: (section, isDisplayMode = false) => <Album section={section} isDisplayMode={isDisplayMode} />,
   text: (section, isDisplayMode = false) =>
-    isDisplayMode ? <PageText text={section.text} /> : <Text section={section} />,
+    isDisplayMode ? <PageText text={section.value} /> : <Text section={section} />,
   title: (section, isDisplayMode = false) => <Title section={section} isDisplayMode={isDisplayMode} />,
   contact: (section, isDisplayMode = false) => <Contact section={section} isDisplayMode={isDisplayMode} />,
   callout: (section, isDisplayMode = false) => <Callout section={section} isDisplayMode={isDisplayMode} />,

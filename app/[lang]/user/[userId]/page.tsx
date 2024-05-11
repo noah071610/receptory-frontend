@@ -150,7 +150,7 @@ const UserPage = () => {
               <span>이름 : {user.userName}</span>
               <span>소셜 로그인 : {user.provider}</span>
               <span>플랜 : {user.plan}</span>
-              <span>가입일 : {setDateFormat(user.createdAt)}</span>
+              <span>가입일 : {setDateFormat(user.createdAt, lang)}</span>
             </div>
           </div>
           <h1>
