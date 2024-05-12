@@ -1,5 +1,5 @@
 @mixin label-style {
-  width: 30%;
+  width: 100%;
   font-size: 11px;
 }
 
@@ -251,4 +251,33 @@ $z-index-map: (
 
 @mixin shadow {
   box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+}
+
+@mixin getAnimation {
+  @at-root {
+    @keyframes comp-visible {
+      from {
+        visibility: hidden;
+      }
+      1% {
+        visibility: visible;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+    @keyframes comp-hide {
+      from {
+        visibility: visible;
+      }
+
+      99% {
+        visibility: visible;
+      }
+      to {
+        visibility: hidden;
+      }
+    }
+  }
 }

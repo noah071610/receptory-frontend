@@ -1,0 +1,12 @@
+@import "@/styles/editor.scss";
+
+.layout {
+  width: 100%;
+}
+
+.submit {
+}
+
+.options {
+  @include options-style;
+}

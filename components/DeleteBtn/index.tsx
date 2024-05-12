@@ -26,7 +26,7 @@ function DeleteBtn({
     setTimeout(() => {
       if (typeof listIndex === "number") {
         if (srcKey === "list" || srcKey === "checklist") {
-          return deleteList({ targetIndex: listIndex })
+          return deleteEvent && deleteEvent(listIndex)
         }
         if (srcKey === "imageModal") {
           return deleteEvent && deleteEvent(listIndex)

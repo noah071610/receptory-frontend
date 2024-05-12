@@ -87,6 +87,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
                   isOptional={false}
                   style={{ color }}
                   value={cta}
+                  maxLength={20}
                   section={section}
                 />
                 {isDisplayMode && <FontAwesomeIcon style={{ color }} icon={faChevronRight} />}

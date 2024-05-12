@@ -24,7 +24,7 @@ function List({
   index: number
   isDisplayMode?: boolean
 }) {
-  const { setList } = useEditorStore()
+  const { setList, deleteList } = useEditorStore()
   const [design, animation] = [list.design, section.style.animation]
   const getDesign = (str: string) => {
     switch (str) {
@@ -49,6 +49,13 @@ function List({
         payload: getDesign(design),
       })
     }, 0)
+  }
+
+  const onDelete = (i: number) => {
+    if (section.list.length <= 1) {
+      return alert("atLeastOneList")
+    }
+    deleteList({ targetIndex: i })
   }
 
   return (
@@ -81,13 +88,15 @@ function List({
           />
         )}
 
-        {!isDisplayMode && <DeleteBtn isSmall={true} listIndex={index} srcKey="checklist" isDeleteList={true} />}
+        {!isDisplayMode && (
+          <DeleteBtn isSmall={true} deleteEvent={onDelete} listIndex={index} srcKey="checklist" isDeleteList={true} />
+        )}
       </div>
     </li>
   )
 }
 
-function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+function CheckList({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   return (
     <div className={cx("layout")}>
       <ul className={cx("check-list")}>
@@ -100,4 +109,4 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
   )
 }
 
-export default memo(Callout)
+export default memo(CheckList)

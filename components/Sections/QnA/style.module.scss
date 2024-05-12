@@ -1,69 +1,92 @@
 @import "@/styles/variables.scss";
 
-.qna-list {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  .title-wrapper {
-    border-bottom: 1px solid var(--border);
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 7px;
-
-    .title,
-    input {
-      width: 100%;
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 1.3;
-    }
-    input {
-      padding: 3px 5px;
-    }
-
-    .title {
-      white-space: pre-line;
-      word-break: break-all;
-    }
-    .icon {
-      padding: 5px;
-      svg {
-        font-size: 17px;
-      }
-    }
-    .q {
-      align-self: flex-start;
-      display: flex;
-    }
-    .arrow {
-      cursor: pointer;
-      transition: transform 450ms;
-    }
-  }
-  .content-layout {
-    border-radius: 5px;
-    background-color: var(--gray-softest);
-    transition: max-height 500ms ease-out;
-    overflow: hidden;
-  }
-
-  .list {
+@mixin qna {
+  .qna-list {
     width: 100%;
-    .content-layout {
-      display: none;
-    }
-    &.isOpen {
-      .content-layout {
-        padding: 10px;
-        display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .title-wrapper {
+      border-bottom: 1px solid var(--border);
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 7px;
+
+      .q {
+        align-self: flex-start;
+        display: flex;
+      }
+
+      .title-inner {
+        width: 100%;
+
+        .title,
+        input {
+          width: 100%;
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 1.3;
+        }
+        input {
+          padding: 3px 5px;
+        }
+
+        .title {
+          white-space: pre-line;
+          word-break: break-all;
+        }
+      }
+
+      .icon {
+        padding: 5px;
+        svg {
+          font-size: 17px;
+        }
       }
       .arrow {
-        transform: rotateX(180deg);
+        cursor: pointer;
+        transition: transform 450ms;
       }
     }
+    .content-layout {
+      border-radius: 5px;
+      background-color: var(--gray-softest);
+      overflow: hidden;
+      position: relative;
+    }
+    .list {
+      width: 100%;
+    }
+  }
+}
+
+@include qna;
+
+.content-layout {
+  display: none;
+}
+
+.list.isOpen {
+  .content-layout {
+    padding: 10px;
+    display: block;
+  }
+  .arrow {
+    transform: rotateX(180deg);
+  }
+}
+
+.title-inner {
+  width: 100%;
+
+  input {
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 3px 5px;
   }
 }

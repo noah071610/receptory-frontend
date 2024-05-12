@@ -6,6 +6,7 @@ import Input from "@/components/Input"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 
 import { useTranslation } from "@/i18n/client"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { getAnimation } from "@/utils/styles/getAnimation"
@@ -23,10 +24,12 @@ const BasicSlider = ({
   section,
   isDisplayMode,
   textColor,
+  onDelete,
 }: {
   section: SectionType
   isDisplayMode?: boolean
   textColor?: string
+  onDelete: (i: number) => void
 }) => {
   return (
     <Swiper spaceBetween={7} freeMode={true} slidesPerView={"auto"} modules={[FreeMode]} className={cx("slider")}>
@@ -38,7 +41,7 @@ const BasicSlider = ({
             }}
             className={cx("slide-inner")}
           >
-            {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={i} />}
+            {!isDisplayMode && <DeleteBtn srcKey="list" deleteEvent={onDelete} listIndex={i} />}
             <div className={cx("card-image")}>
               {/* <div style={{ background: getImageUrl({  url: v.src }) }} className={cx("image")} /> */}
               <picture className={cx("image")}>
@@ -96,12 +99,15 @@ const ThumbnailSlider = ({
   section,
   isDisplayMode,
   textColor,
+  onDelete,
 }: {
   section: SectionType
   isDisplayMode?: boolean
   textColor?: string
+  onDelete: (i: number) => void
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
+
   return (
     <>
       <Swiper
@@ -119,7 +125,7 @@ const ThumbnailSlider = ({
                 }}
                 className={cx("photo")}
               >
-                {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={i} />}
+                {!isDisplayMode && <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={i} />}
               </div>
               <div>
                 {isDisplayMode ? (
@@ -193,6 +199,7 @@ const ThumbnailSlider = ({
 
 function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
+  const { deleteList } = useEditorStore()
 
   const textColor = useMemo(
     () =>
@@ -201,21 +208,28 @@ function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMod
         : getContrastTextColor(section.style.backgroundColor ?? "rgba(0,0,0,0)"),
     [section.style.backgroundColor, section.design]
   )
+
+  const onDelete = (i: number) => {
+    if (section.list.length <= 1) {
+      return alert("atLeastOneList")
+    }
+    deleteList({ targetIndex: i })
+  }
+
   return (
     <div className={cx("layout", { isDisplayMode: isDisplayMode })}>
-      {section.list.length > 0 ? (
+      {section.list.length > 0 && (
         <div style={{ background: section.style.backgroundColor }} className={cx("slider-layout")}>
           {section.design !== "thumbnail" ? (
-            <BasicSlider textColor={textColor} section={section} isDisplayMode={isDisplayMode} />
+            <BasicSlider onDelete={onDelete} textColor={textColor} section={section} isDisplayMode={isDisplayMode} />
           ) : (
-            <ThumbnailSlider textColor={textColor} section={section} isDisplayMode={isDisplayMode} />
+            <ThumbnailSlider
+              onDelete={onDelete}
+              textColor={textColor}
+              section={section}
+              isDisplayMode={isDisplayMode}
+            />
           )}
-        </div>
-      ) : isDisplayMode ? (
-        <></>
-      ) : (
-        <div style={{ background: getImageUrl({ url: "/images/noImage.png" }) }} className={cx("noImage")}>
-          <span>{t("noImage")}</span>
         </div>
       )}
       {!isDisplayMode && <AddBtn section={section} type="slider-image" />}

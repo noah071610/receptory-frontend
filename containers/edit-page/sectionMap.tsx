@@ -2,6 +2,7 @@
 
 import Empty from "@/components/Sections/Empty"
 import SectionLoading from "@/components/Sections/SectionLoading"
+import Submit from "@/components/Sections/Submit"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import { SectionListTypes, SectionType } from "@/types/Edit"
 import dynamic from "next/dynamic"
@@ -74,6 +75,10 @@ const QnA = dynamic(() => import("@/components/Sections/QnA/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
 })
+const PageQnA = dynamic(() => import("@/components/Sections/QnA/PageQnA/index"), {
+  ssr: true,
+  loading: () => <SectionLoading />,
+})
 const Time = dynamic(() => import("@/components/Sections/Time/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
@@ -112,7 +117,7 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   callout: (section, isDisplayMode = false) => <Callout section={section} isDisplayMode={isDisplayMode} />,
   slider: (section, isDisplayMode = false) => <Slider section={section} isDisplayMode={isDisplayMode} />,
   map: (section, isDisplayMode = false) => <Map section={section} isDisplayMode={isDisplayMode} />,
-  qna: (section, isDisplayMode = false) => <QnA section={section} isDisplayMode={isDisplayMode} />,
+  qna: (section, isDisplayMode = false) => (isDisplayMode ? <PageQnA section={section} /> : <QnA section={section} />),
   calender: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageCalender section={section} /> : <Calender section={section} />,
   thumbnail: (section, isDisplayMode = false) => <Thumbnail section={section} isDisplayMode={isDisplayMode} />,
@@ -130,4 +135,5 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
     isDisplayMode ? <PageSelectList section={section} /> : <SelectList section={section} />,
   empty: () => <Empty />,
   checkList: (section, isDisplayMode = false) => <CheckList section={section} isDisplayMode={isDisplayMode} />,
+  submit: (section, isDisplayMode = false) => <Submit section={section} isDisplayMode={isDisplayMode} />,
 }

@@ -20,8 +20,8 @@
   cursor: pointer;
 
   .content {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 46px;
     border-radius: 5px;
     @include border;
     transition: 300ms all;
@@ -29,7 +29,6 @@
       padding: 14px 0 14px 12px;
       width: 100%;
       display: flex;
-      flex-grow: 1;
       font-size: 15px;
       line-height: 1.2;
       letter-spacing: 1px;
@@ -42,7 +41,6 @@
     textarea {
       width: 100%;
       display: flex;
-      flex-grow: 1;
       font-size: 15px;
       line-height: 1.2;
     }

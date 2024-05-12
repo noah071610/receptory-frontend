@@ -45,8 +45,10 @@ function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?:
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
-      ) : (
+      ) : !isDisplayMode ? (
         <div className={cx("empty")}></div>
+      ) : (
+        <></>
       )}
       {!isDisplayMode && <EmbedForm section={section} value={section.value} />}
     </div>

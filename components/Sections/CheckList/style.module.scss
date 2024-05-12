@@ -97,6 +97,9 @@
 
 .input {
   @include input-style;
-  @include description-style;
+  @include description-style(true);
   padding: 5px;
+}
+.text {
+  @include description-style(true);
 }

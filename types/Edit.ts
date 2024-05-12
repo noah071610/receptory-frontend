@@ -20,6 +20,7 @@ export type SectionListTypes =
   | "email"
   | "checkList"
   | "choices"
+  | "submit"
 
 export type TargetSectionListTypes =
   | "backgroundColor"
@@ -75,6 +76,7 @@ export type AnimationTypes =
   | "fadeInLeft"
   | "heartBeat"
   | "fadeUpBig"
+  | "headShake"
 export type TitleSelectTypes = "title" | "description" | "label"
 export type StyleSelectTypes = "cover" | "contain"
 

@@ -7,6 +7,7 @@ import Loading from "@/components/Loading"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
 import { useTranslation } from "@/i18n/client"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import cs from "classNames/bind"
@@ -18,13 +19,15 @@ const cx = cs.bind(style)
 const AlbumImageComponent = ({
   props,
   isDisplayMode,
+  onDelete,
 }: {
   props: ThumbnailImageProps<ImageExtended<Image>>
   isDisplayMode?: boolean
+  onDelete: (i: number) => void
 }) => {
   return (
     <div>
-      {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={props.index} />}
+      {!isDisplayMode && <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={props.index} />}
       <img
         {...(props.imageProps as any)}
         key={`album_${props.index}`}
@@ -39,11 +42,13 @@ const ImageComponent = ({
   section,
   index,
   isDisplayMode,
+  onDelete,
 }: {
   photo: { width?: number; height?: number; src: string; value: any }
   section: SectionType
   index: number
   isDisplayMode?: boolean
+  onDelete: (i: number) => void
 }) => {
   const { isIntersecting, ref } = useIntersectionObserver({
     freezeOnceVisible: true,
@@ -62,7 +67,7 @@ const ImageComponent = ({
         <div style={{ background: getImageUrl({ url: photo.src }) }} className={cx("background")} />
         <img src={photo.src} alt={photo.src} />
         {status === "loading" && <Loading />}
-        {!isDisplayMode && <DeleteBtn srcKey="list" listIndex={index} />}
+        {!isDisplayMode && <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={index} />}
       </picture>
       <Input
         type="input"
@@ -80,6 +85,7 @@ const ImageComponent = ({
 
 function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
+  const { deleteList } = useEditorStore()
 
   const galleryImages = useMemo(
     () =>
@@ -89,13 +95,22 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
     [section.list]
   )
 
+  const onDelete = (i: number) => {
+    if (section.list.length <= 1) {
+      return alert("atLeastOneList")
+    }
+    deleteList({ targetIndex: i })
+  }
+
   return (
     <div className={cx("layout")}>
       {galleryImages.length > 0 ? (
         <div className={cx("album")}>
           {section.design === "basic" ? (
             <Gallery
-              thumbnailImageComponent={(props) => <AlbumImageComponent props={props} isDisplayMode={isDisplayMode} />}
+              thumbnailImageComponent={(props) => (
+                <AlbumImageComponent props={props} onDelete={onDelete} isDisplayMode={isDisplayMode} />
+              )}
               images={galleryImages as any}
               enableImageSelection={false}
               onSelect={undefined}
@@ -108,6 +123,7 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             >
               {galleryImages.map((v, i) => (
                 <ImageComponent
+                  onDelete={onDelete}
                   isDisplayMode={isDisplayMode}
                   key={`album_${section.id}_${i}`}
                   index={i}

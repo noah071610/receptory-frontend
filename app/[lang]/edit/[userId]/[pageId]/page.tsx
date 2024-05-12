@@ -7,7 +7,6 @@ import ImageSelector from "@/components/Modal/ImageSelector"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
-import Rending from "@/containers/edit-page/Rending"
 import style from "@/containers/edit-page/style.module.scss"
 import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
@@ -21,6 +20,7 @@ import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import ModalLoading from "@/components/Modal/ModalLoading"
+import Submit from "@/components/Sections/Submit"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
 import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
@@ -94,8 +94,16 @@ const EditPage = () => {
     if (typeof pageId !== "string") return back()
   }, [userId, pageId, queryUserId])
 
-  const { initSections, stage, formSections, active, loadSections, currentUsedImages, currentUsedColors } =
-    useEditorStore()
+  const {
+    initSections,
+    stage,
+    formSections,
+    active,
+    loadSections,
+    currentUsedImages,
+    currentUsedColors,
+    rendingSections,
+  } = useEditorStore()
 
   const activeModal = active.modal.type
 
@@ -132,6 +140,8 @@ const EditPage = () => {
     })()
   }, [save])
 
+  const firstSection = stage === "init" ? initSections[0] : stage === "form" ? formSections[0] : rendingSections[0]
+
   return (
     <>
       <Header />
@@ -139,18 +149,11 @@ const EditPage = () => {
         <div className={cx("main")}>
           <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
           <div className={cx("editor")}>
-            {stage !== "rending" && (
-              <SectionLayout
-                pathname={pathname}
-                noPadding={true}
-                section={stage === "init" ? initSections[0] : formSections[0]}
-              >
-                <Thumbnail section={stage === "init" ? initSections[0] : formSections[0]} />
-              </SectionLayout>
-            )}
+            <SectionLayout pathname={pathname} noPadding={stage !== "rending"} section={firstSection}>
+              {stage === "rending" ? <Submit section={firstSection} /> : <Thumbnail section={firstSection} />}
+            </SectionLayout>
             <SectionList sections={initSections} stage={stage} type="init" />
             <SectionList sections={formSections} stage={stage} type="form" />
-            {stage === "rending" && <Rending />}
 
             <EditorFooter />
           </div>

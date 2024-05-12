@@ -43,6 +43,7 @@ const sectionMap: { [key: string]: any } = {
   },
   slider: () => {
     return {
+      design: "card",
       style: {
         backgroundColor: colors.white,
         color: colors.border,
@@ -132,7 +133,7 @@ const sectionMap: { [key: string]: any } = {
       style: {
         color: colors.pink,
       },
-      list: [{ ...createNewSectionList("qna", 0), isActive: true }],
+      list: [{ ...createNewSectionList("qna", 0, { isActive: true, data: { title: "타이틀 입력" } }) }],
     }
   },
   select: () => {
@@ -167,7 +168,10 @@ const sectionMap: { [key: string]: any } = {
 
 export const createNewSectionList = (subType: string, index: number, obj?: any): SectionListType => {
   if (subType === "qna") {
-    obj = { isActive: true }
+    obj = { isActive: true, data: { title: "타이틀 입력" } }
+  }
+  if (subType === "checkList") {
+    obj = { value: "내용 입력", design: "check" }
   }
   return {
     id: getId(),

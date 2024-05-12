@@ -27,6 +27,7 @@ export interface EditStates {
   isEditStart: boolean
   initSections: SectionType[]
   formSections: SectionType[]
+  rendingSections: SectionType[]
   stage: EditStage
   selectedSection: SectionType | null
   active: ActiveTypes
@@ -129,6 +130,7 @@ export const useEditorStore = create<EditStates & Actions>()(
     isEditStart: false,
     initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
     formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
+    rendingSections: [createNewSection({ type: "submit", index: 0, newId: "submit" })],
     selectedSection: null,
     stage: "init",
     active: {

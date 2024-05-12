@@ -94,6 +94,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   email: [],
   phone: [],
   calender: [],
+  submit: [], // 사용하지 않음
   choices: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
 }
 
@@ -188,6 +189,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   email: {},
   numberInput: {},
   phone: {},
+  submit: {},
   choices: {
     design: [
       { value: "basic", icon: faCheck, actionType: "cta" },

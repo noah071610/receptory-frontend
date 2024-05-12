@@ -1,12 +1,16 @@
 "use client"
 
+import { useError } from "@/hooks/useError"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType, StyleProperties } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
+import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { memo, useRef, useState } from "react"
 import TextareaAutosize from "react-textarea-autosize"
+import style from "./style.module.scss"
+const cx = cs.bind(style)
 
 function Input({
   className,
@@ -38,25 +42,16 @@ function Input({
   if (type === "textarea") {
     maxLength = 100
   }
+  const { isError, errorMessage, setErrorClear, errorStyle, onError } = useError({ type: "noEmptyText" })
   const inputRef = useRef(null)
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
   const { setValue, setList, setData, saveSectionHistory, selectedSection, setSelectedSection } = useEditorStore()
   const [initLength, setInitLength] = useState(value?.length ?? 0)
   const [isEdited, setIsEdited] = useState(false)
+  const [snapshot, setSnapshot] = useState<string | null>(value ?? null)
 
-  const onChangeInput = (e: any) => {
-    const inputValue = e.target.value
-    const lines = inputValue.split("\n")
-    if (!selectedSection) {
-      setSelectedSection({ payload: section })
-    }
-    if (type === "input") {
-      if (inputValue.length > maxLength) return
-    } else if (type === "textarea") {
-      if (lines.length > lineMax) return
-    }
-
+  const setInput = (inputValue: string) => {
     if (dataKey) {
       if (typeof listIndex === "number") {
         setList({ payload: inputValue, index: listIndex, key: "data", dataKey })
@@ -70,17 +65,46 @@ function Input({
         setValue({ payload: inputValue })
       }
     }
+  }
+
+  const onChangeInput = (e: any) => {
+    const inputValue = e.target.value
+
+    const lines = inputValue.split("\n")
+    if (!selectedSection) {
+      setSelectedSection({ payload: section })
+    }
+    if (type === "input") {
+      if (inputValue.length > maxLength) return
+    } else if (type === "textarea") {
+      if (lines.length > lineMax) return
+    }
+
+    setInput(inputValue)
     if (!isEdited && initLength !== e.target.value.length) {
       setIsEdited(true)
     }
   }
 
   const onBlurInput = () => {
+    if (value?.length <= 0 && !isOptional && snapshot) {
+      onError()
+      setInput(snapshot)
+      return
+    }
     if (isEdited) {
+      setSnapshot(null)
       saveSectionHistory()
       setIsEdited(false)
       setInitLength(value.length)
     }
+  }
+
+  const onfocus = () => {
+    if (isError) {
+      setErrorClear()
+    }
+    setSnapshot(value)
   }
 
   const displayComponent = {
@@ -114,26 +138,34 @@ function Input({
         value={value ?? ""}
         onChange={onChangeInput}
         onBlur={onBlurInput}
-        style={style as any}
+        style={isError ? { ...style, ...errorStyle } : style}
       />
     ),
     input: (
       <input
         ref={inputRef}
+        onFocus={onfocus}
         className={className}
         placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
         value={value ?? ""}
         onChange={onChangeInput}
         onBlur={onBlurInput}
-        style={style as any}
+        style={isError ? { ...style, ...errorStyle } : style}
       />
     ),
   }
 
-  return displayMode ? (
-    <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>
-  ) : (
-    inputComponent[type]
+  return (
+    <div className={cx("input-wrapper")}>
+      <div className={cx("tooltip", { isError })}>
+        <div className={cx("error")}>{errorMessage}</div>
+      </div>
+      {displayMode ? (
+        <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>
+      ) : (
+        inputComponent[type]
+      )}
+    </div>
   )
 }
 

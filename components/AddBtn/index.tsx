@@ -13,15 +13,16 @@ function AddBtn({ type, section }: { type: string; section: SectionType }) {
   const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore()
 
   const onClickAddList = () => {
-    if (selectedSection?.id !== section.id) {
+    if (!selectedSection || selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
     switch (type) {
       case "qna":
+      // qna의 new list 의 추가 ojb { isActive: true, data: { title: "타이틀 입력" } }
+      // 는 createNewSectionList에서 자동으로 추가한다
       case "select":
-        return addList({ type })
       case "checkList":
-        return addList({ type, valueArrForNewList: [{ design: "check" }] })
+        return addList({ type })
 
       default:
         setActive({ payload: { type, payload: "add" }, key: "modal" })

@@ -40,7 +40,7 @@ export default function EmbedForm({ value, section }: { value: string; section: 
 
       <div className={cx("explain", { isOpen: isOpen })}>
         <img src="" alt="explain-1" />
-        <span>{t("1. 구글맵에서 위치를 찾아주세요.")}</span>
+        <span>{t("1. 구글맵에서 위치를 찾아주세요. // todo:")}</span>
         <img src="" alt="explain-2" />
         <span>{t("2. 공유하기를 누르세요.")}</span>
         <img src="" alt="explain-3" />
