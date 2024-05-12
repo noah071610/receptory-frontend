@@ -4,9 +4,10 @@ import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import { faCheckSquare } from "@fortawesome/free-solid-svg-icons"
+import { IconDefinition, faCheckSquare } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
+import Image from "next/image"
 import { memo } from "react"
 import { isMobile } from "react-device-detect"
 import { SwiperSlide } from "swiper/react"
@@ -21,7 +22,7 @@ function OptionRatio({
 }: {
   targetKey: string
   isDesign?: boolean
-  optionsArr: any[]
+  optionsArr: { value: string; icon?: IconDefinition; src?: string }[]
   section: SectionType
 }) {
   const { selectedSection, setDesign, setSelectedSection, setOptions, saveSectionHistory } = useEditorStore()
@@ -51,13 +52,16 @@ function OptionRatio({
         nextArrowClassName={cx("next")}
         isSingle={!isMobile && optionsArr.length <= 4}
       >
-        {optionsArr.map((v) => (
-          <SwiperSlide className={cx("slide")} key={`options-${section.id}-${v}`}>
-            <button onClick={() => onClickRatio(v)} className={cx("btn", { active: target === v })}>
-              <div className={cx("icon")}>
-                <FontAwesomeIcon icon={faCheckSquare} />
-              </div>
-              <span className={cx("name")}>{v}</span>
+        {optionsArr.map(({ value, icon, src }) => (
+          <SwiperSlide className={cx("slide")} key={`options-${section.id}-${value}`}>
+            <button onClick={() => onClickRatio(value)} className={cx("btn", { active: target === value })}>
+              {!src && (
+                <div className={cx("icon")}>
+                  <FontAwesomeIcon icon={icon ?? faCheckSquare} />
+                </div>
+              )}
+              {src && <Image width={20} height={20} src={src} alt={value} />}
+              <span className={cx("name")}>{value}</span>
             </button>
           </SwiperSlide>
         ))}

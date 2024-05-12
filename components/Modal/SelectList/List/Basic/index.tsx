@@ -5,8 +5,6 @@ import Image from "next/image"
 import style from "./style.module.scss"
 
 import { UserSelectedListType } from "@/types/Main"
-import { faCheck } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -25,12 +23,7 @@ export const BasicList = ({
 }) => {
   const active = userSelectedList.findIndex(({ index }) => index === i) >= 0
   return (
-    <li className={cx("list", { active })} onClick={() => onChangeSelect(v, i)}>
-      {active && (
-        <div data-type="selected">
-          <FontAwesomeIcon icon={faCheck} />
-        </div>
-      )}
+    <li className={cx("list", design, { active })} onClick={() => onChangeSelect(v, i)}>
       {design === "imageWithText" &&
         (v.src ? (
           <picture className={cx("image")}>

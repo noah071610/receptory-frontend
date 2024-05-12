@@ -4,9 +4,16 @@
 
 .phone-wrapper {
   width: 100%;
-  display: flex;
+  position: relative;
   img {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
     margin-right: 10px;
+  }
+  input {
+    padding-left: 50px !important;
   }
   .phone {
     width: 100%;

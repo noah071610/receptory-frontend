@@ -32,7 +32,7 @@ const sectionMap: { [key: string]: any } = {
         isAlways: true,
         specificTime: false,
         addAnytime: false,
-        interval: 1,
+        interval: "1",
         startHour: "00",
         endHour: "00",
         isRangeSelect: false,
@@ -118,7 +118,7 @@ const sectionMap: { [key: string]: any } = {
   callout: () => {
     return {
       style: {
-        backgroundColor: colors.graySoft,
+        color: colors.orange,
       },
     }
   },

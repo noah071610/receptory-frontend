@@ -13,6 +13,7 @@ import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
 import { useMainStore } from "@/store/main"
+import hasString from "@/utils/helpers/hasString"
 import { convertStrToTimeSet } from "@/utils/time"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
@@ -21,6 +22,7 @@ function Time({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const {
     setModal,
+    setTime,
     time: { selectedStartTime, selectedEndTime },
   } = useMainStore()
   const { setOptions, addCollection, deleteCollection } = useEditorStore()
@@ -96,6 +98,15 @@ function Time({ section }: { section: SectionType }) {
     }
   }, [isAlways])
 
+  const reset = () => {
+    setTime({
+      payload: {
+        selectedEndTime: null,
+        selectedStartTime: null,
+      },
+    })
+  }
+
   return (
     <div className={cx("layout")}>
       <FormUserInput
@@ -103,6 +114,8 @@ function Time({ section }: { section: SectionType }) {
         onClick={onClickOpenModal}
         title={section.data.title}
         description={section.data.description}
+        isActive={!!hasString(selectedStartTime)}
+        resetEvent={reset}
       >
         {!selectedStartTime && t("날짜 입력")}
         {!!selectedStartTime && <span>{selectedStartTime === "anytime" ? t("anytime") : selectedStartTime}</span>}
@@ -173,7 +186,18 @@ function Time({ section }: { section: SectionType }) {
             </>
           )}
         </div>
-        {!specificTime && <OptionRatio optionsArr={[1, 15, 30, 60]} section={section} targetKey="interval" />}
+        {!specificTime && (
+          <OptionRatio
+            optionsArr={[
+              { value: "1", icon: faClock },
+              { value: "15", icon: faClock },
+              { value: "30", icon: faClock },
+              { value: "60", icon: faClock },
+            ]}
+            section={section}
+            targetKey="interval"
+          />
+        )}
       </div>
     </div>
   )

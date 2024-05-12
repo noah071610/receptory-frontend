@@ -122,7 +122,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
 
   const { amArr, pmArr } = generateHourSlots({ startHour, endHour })
   const seconds = generateSecondSlots({
-    interval,
+    interval: parseInt(interval),
   })
   const displayHours = !selectedMeridiem
     ? amArr?.length > 0

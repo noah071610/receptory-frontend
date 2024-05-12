@@ -13,10 +13,13 @@ const cx = cs.bind(style)
 
 function PageSelectList({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { setModal, selects } = useMainStore()
+  const { setModal, setSelects, selects } = useMainStore()
 
   const toggleSelect = () => {
     setModal({ section, type: "select" })
+  }
+  const reset = () => {
+    setSelects({ payload: [] })
   }
 
   return (
@@ -27,6 +30,8 @@ function PageSelectList({ section }: { section: SectionType }) {
         title={section.data.title}
         description={section.data.description}
         isMultiple={true}
+        isActive={!!selects?.length}
+        resetEvent={reset}
       >
         <span>
           {selects?.length > 0 ? (

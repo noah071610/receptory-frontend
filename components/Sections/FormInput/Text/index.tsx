@@ -7,18 +7,21 @@ import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
-import { memo, useEffect } from "react"
+import { memo, useEffect, useRef } from "react"
 
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
 import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
+import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Text({ section }: { section: SectionType }) {
   const { lang } = useParams()
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const { t } = useTranslation()
   const { setUserPick, userPick } = useMainStore()
   const value = userPick[section.id]?.value ?? ""
@@ -55,6 +58,30 @@ function Text({ section }: { section: SectionType }) {
     }
   }
 
+  const onFocus = () => {
+    if (design === "textarea") {
+      if (textareaRef?.current) {
+        textareaRef.current.focus()
+      }
+    } else {
+      if (inputRef?.current) {
+        inputRef.current.focus()
+      }
+    }
+  }
+  const reset = () => {
+    setUserPick({ section, payload: "" })
+    if (design === "textarea") {
+      if (textareaRef?.current) {
+        textareaRef.current.focus()
+      }
+    } else {
+      if (inputRef?.current) {
+        inputRef.current.focus()
+      }
+    }
+  }
+
   return (
     <div className={cx("layout")}>
       <div className={cx("input-wrapper")}>
@@ -63,15 +90,19 @@ function Text({ section }: { section: SectionType }) {
           title={section.data.title}
           description={section.data.description}
           inputStyle={design}
+          onFocus={onFocus}
+          isActive={hasString(value)}
+          resetEvent={reset}
         >
           {design === "text" ? (
-            <input className={cx("input")} type="text" value={value} onChange={onChangeInput} />
+            <input ref={inputRef} className={cx("input")} type="text" value={value} onChange={onChangeInput} />
           ) : (
             <TextareaAutosize
               className={cx("textarea")}
               value={value}
               maxRows={5}
               maxLength={max}
+              ref={textareaRef}
               onChange={onChangeInput}
             />
           )}

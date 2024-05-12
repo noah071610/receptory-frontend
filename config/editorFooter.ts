@@ -67,7 +67,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   ],
   album: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
   callout: [
-    { value: "design", icon: faPaintRoller, actionType: "submenu" },
+    { value: "animation", icon: faFilm, actionType: "submenu" },
     { value: "color", icon: faPalette, actionType: "colorSelector" },
   ],
 

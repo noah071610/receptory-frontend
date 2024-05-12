@@ -1,6 +1,7 @@
 "use client"
 
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { ReactNode, memo } from "react"
@@ -15,14 +16,20 @@ function FormUserInput({
   icon,
   inputStyle,
   isMultiple,
+  isActive,
+  resetEvent,
+  onFocus,
 }: {
   title: string
   description: string
   onClick?: () => void
+  resetEvent: () => void
   children: ReactNode
   icon: IconDefinition
   inputStyle?: string
   isMultiple?: boolean
+  isActive?: boolean
+  onFocus?: () => void
 }) {
   return (
     <div className={cx("input-wrapper")}>
@@ -30,12 +37,23 @@ function FormUserInput({
         <h2>{title}</h2>
         <p>{description}</p>
       </label>
-      <div onClick={onClick} className={cx("input")}>
-        <div className={cx("content")}>
-          {inputStyle ? children : <div className={cx("text", { isMultiple })}>{children}</div>}
+      <div className={cx("input")}>
+        <div className={cx("content", { active: isActive })}>
+          {inputStyle ? (
+            children
+          ) : (
+            <div onClick={onClick} className={cx("text", { isMultiple })}>
+              {children}
+            </div>
+          )}
           {inputStyle !== "textarea" && (
-            <button className={cx("icon")}>
-              <FontAwesomeIcon icon={icon} />
+            <button onClick={isActive ? resetEvent : onClick ?? onFocus} className={cx("icon-wrapper")}>
+              <div className={cx("icon", "before")}>
+                <FontAwesomeIcon icon={icon} />
+              </div>
+              <div className={cx("icon", "after")}>
+                <FontAwesomeIcon icon={faClose} />
+              </div>
             </button>
           )}
         </div>

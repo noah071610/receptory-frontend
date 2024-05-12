@@ -7,7 +7,7 @@ import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faListOl } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
-import { memo, useEffect } from "react"
+import { memo, useEffect, useRef } from "react"
 
 import style from "./style.module.scss"
 
@@ -19,9 +19,10 @@ const globalMax = 9999999
 
 function Number({ section }: { section: SectionType }) {
   const { lang } = useParams()
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const { setSelectedSection, setOptions, selectedSection } = useEditorStore()
   const { setUserPick, userPick } = useMainStore()
-  const value = userPick[section.id]?.value ?? 0
+  const value = userPick[section.id]?.value ?? ""
   const { min, max } = section.options
 
   const activeSection = () => {
@@ -52,7 +53,7 @@ function Number({ section }: { section: SectionType }) {
   }
 
   useEffect(() => {
-    setUserPick({ section, payload: 0 })
+    setUserPick({ section, payload: "" })
   }, [min, max])
 
   const onBlur = (type: "min" | "max") => {
@@ -70,6 +71,18 @@ function Number({ section }: { section: SectionType }) {
     }
   }
 
+  const onFocus = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus()
+    }
+  }
+  const reset = () => {
+    setUserPick({ section, payload: "" })
+    if (inputRef?.current) {
+      inputRef.current.focus()
+    }
+  }
+
   return (
     <div className={cx("layout")}>
       <div className={cx("input-wrapper")}>
@@ -78,10 +91,14 @@ function Number({ section }: { section: SectionType }) {
           title={section.data.title}
           description={section.data.description}
           inputStyle={"number"}
+          onFocus={onFocus}
+          resetEvent={reset}
+          isActive={`${value}`.length > 0}
         >
           <input
             className={cx("input")}
             type="number"
+            ref={inputRef}
             onKeyDown={onlyNumberFilter}
             value={value}
             onChange={onChangeInput}

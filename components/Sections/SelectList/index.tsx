@@ -71,7 +71,7 @@ const ListEdit = ({
 function Select({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const { setActive } = useEditorStore()
-  const { setModal, selects } = useMainStore()
+  const { setModal, selects, setSelects } = useMainStore()
   const selectList = section.list
 
   const toggleSelect = () => {
@@ -84,6 +84,10 @@ function Select({ section }: { section: SectionType }) {
     }, 0)
   }
 
+  const reset = () => {
+    setSelects({ payload: [] })
+  }
+
   return (
     <div className={cx("layout")}>
       <FormUserInput
@@ -92,6 +96,8 @@ function Select({ section }: { section: SectionType }) {
         title={section.data.title}
         description={section.data.description}
         isMultiple={true}
+        isActive={!!selects?.length}
+        resetEvent={reset}
       >
         {selects?.length > 0 ? (
           selects.map((v, i) => (

@@ -45,6 +45,10 @@ export const getAnimation = ({
       temp = `${type} ${speed ?? 700}ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
       opacity = 0
       break
+    case "fadeInLeft":
+      temp = `${type} ${speed ?? 700}ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
+      opacity = 0
+      break
     case "heartBeat":
       temp = `${type} ${speed ?? 700}ms ${delay}ms cubic-bezier(.11,.83,.13,1) forwards`
       break

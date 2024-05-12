@@ -249,7 +249,7 @@ textarea {
   --post-card-thumbnail-height: 150px;
 
   --editor-width: 550px;
-  --preview-width: 450px;
+  --preview-width: 400px;
 }
 
 body.dark {
@@ -374,6 +374,18 @@ body.dark {
   from {
     opacity: 0;
     transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
   }
 
   to {

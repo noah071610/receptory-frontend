@@ -14,7 +14,7 @@ import { useMainStore } from "@/store/main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import hasString from "@/utils/helpers/hasString"
 import { faCircle } from "@fortawesome/free-regular-svg-icons"
-import { faClose, faMars, faPlus, faVenus } from "@fortawesome/free-solid-svg-icons"
+import { faClose, faLeftLong, faMars, faPlus, faRightLong, faVenus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
@@ -103,7 +103,15 @@ function Choices({ section, isDisplayMode }: { section: SectionType; isDisplayMo
       {!isDisplayMode && (
         <div className={cx("options")}>
           <OptionTitleInputs section={section} />
-          <OptionRatio optionsArr={["none", "left", "right"]} section={section} targetKey="initialSelect" />
+          <OptionRatio
+            optionsArr={[
+              { value: "none", icon: faClose },
+              { value: "left", icon: faLeftLong },
+              { value: "right", icon: faRightLong },
+            ]}
+            section={section}
+            targetKey="initialSelect"
+          />
         </div>
       )}
     </div>

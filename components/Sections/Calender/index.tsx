@@ -25,6 +25,7 @@ function Calender({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const {
     setModal,
+    setDate,
     date: { selectedStartDate, selectedEndDate },
   } = useMainStore()
   const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
@@ -96,6 +97,15 @@ function Calender({ section }: { section: SectionType }) {
     }
   }, [startDate, endDate])
 
+  const reset = () => {
+    setDate({
+      payload: {
+        selectedEndDate: null,
+        selectedStartDate: null,
+      },
+    })
+  }
+
   return (
     <div className={cx("layout")}>
       <FormUserInput
@@ -103,6 +113,8 @@ function Calender({ section }: { section: SectionType }) {
         onClick={onClickOpenModal}
         title={section.data.title}
         description={section.data.description}
+        isActive={!!selectedStartDate}
+        resetEvent={reset}
       >
         {!selectedStartDate && t("날짜 입력")}
         {selectedStartDate && (
@@ -180,7 +192,11 @@ function Calender({ section }: { section: SectionType }) {
           )}
         </div>
         {!specificDate && (
-          <OptionRatio optionsArr={["all", "everyWeekdays", "everyWeekend"]} section={section} targetKey="interval" />
+          <OptionRatio
+            optionsArr={[{ value: "all" }, { value: "everyWeekdays" }, { value: "everyWeekend" }]}
+            section={section}
+            targetKey="interval"
+          />
         )}
       </div>
     </div>

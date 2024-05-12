@@ -18,11 +18,21 @@ function PageCalender({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const {
     date: { selectedStartDate, selectedEndDate },
+    setDate,
     setModal,
   } = useMainStore()
 
   const onClickOpenModal = () => {
     setModal({ section, type: "date" })
+  }
+
+  const reset = () => {
+    setDate({
+      payload: {
+        selectedEndDate: null,
+        selectedStartDate: null,
+      },
+    })
   }
 
   return (
@@ -32,6 +42,8 @@ function PageCalender({ section }: { section: SectionType }) {
         onClick={onClickOpenModal}
         title={section.data.title}
         description={section.data.description}
+        isActive={!!selectedStartDate}
+        resetEvent={reset}
       >
         {!selectedStartDate && t("날짜 입력")}
         {selectedStartDate && (

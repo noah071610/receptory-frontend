@@ -42,6 +42,12 @@
   gap: 4px;
 }
 
+.basic-list-wrapper {
+  @include flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .no-list {
   @include no-list;
 }

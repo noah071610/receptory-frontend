@@ -72,6 +72,7 @@ export type AnimationTypes =
   | "bounce"
   | "scaleUp"
   | "fadeInRight"
+  | "fadeInLeft"
   | "heartBeat"
   | "fadeUpBig"
 export type TitleSelectTypes = "title" | "description" | "label"

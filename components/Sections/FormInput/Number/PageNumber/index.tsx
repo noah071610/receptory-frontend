@@ -5,7 +5,7 @@ import { SectionType } from "@/types/Edit"
 import { onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faListOl } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
-import { memo } from "react"
+import { memo, useRef } from "react"
 
 import style from "./style.module.scss"
 
@@ -18,6 +18,7 @@ function PageNumber({ section }: { section: SectionType }) {
   const { setUserPick, userPick } = useMainStore()
   const value = userPick[section.id]?.value ?? 0
   const { min, max } = section.options
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const onChangeInput = (e: any) => {
     if (parseInt(e.target.value) < min) {
@@ -28,6 +29,17 @@ function PageNumber({ section }: { section: SectionType }) {
     }
     setUserPick({ section, payload: e.target.value })
   }
+  const onFocus = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus()
+    }
+  }
+  const reset = () => {
+    setUserPick({ section, payload: "" })
+    if (inputRef?.current) {
+      inputRef.current.focus()
+    }
+  }
 
   return (
     <div className={cx("layout")}>
@@ -37,10 +49,14 @@ function PageNumber({ section }: { section: SectionType }) {
           title={section.data.title}
           description={section.data.description}
           inputStyle={"number"}
+          onFocus={onFocus}
+          isActive={`${value}`.length > 0}
+          resetEvent={reset}
         >
           <input
             className={cx("input")}
             type="number"
+            ref={inputRef}
             onKeyDown={onlyNumberFilter}
             value={value}
             onChange={onChangeInput}
