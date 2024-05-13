@@ -1,11 +1,13 @@
 "use client"
 
 import IconBtn from "@/components/IconBtn"
+import { queryKey } from "@/config"
 import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import { faCheck, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-solid-svg-icons"
+import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -26,6 +28,7 @@ const headers = [
 ]
 
 export default function Header() {
+  const queryClient = useQueryClient()
   const { lang, pageId } = useParams()
   const {
     stage,
@@ -67,7 +70,7 @@ export default function Header() {
 
   const onClickSave = async () => {
     if (!isSaving) {
-      await saveContentFromEditor({
+      const isOk = await saveContentFromEditor({
         content: {
           stage,
           initSections,
@@ -80,6 +83,12 @@ export default function Header() {
         pageId,
         lang: lang as Langs,
       })
+
+      if (isOk) {
+        await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
+        await queryClient.invalidateQueries({ queryKey: queryKey.save.edit })
+      }
+
       setIsSaving(true)
       setTimeout(() => {
         setIsSaving(false)

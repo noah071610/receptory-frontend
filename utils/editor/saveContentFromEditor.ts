@@ -16,11 +16,12 @@ export const convertContent = ({
   isDeploy?: boolean
 }) => {
   const thumbnailSection = content.initSections[0]
-  const title = thumbnailSection?.list[0]?.value ?? ""
-  const description = thumbnailSection?.list[1]?.value ?? ""
+  const title = thumbnailSection?.data?.title ?? ""
+  const description = thumbnailSection?.data?.description ?? ""
   const background = thumbnailSection?.style.background ?? ""
   const image = thumbnailSection?.src
   const { currentUsedColors, currentUsedImages, stage, ...rest } = content
+
   return {
     pageId,
     title,
@@ -50,6 +51,7 @@ export async function saveContentFromEditor({
   const isOk = await save(data)
   if (isOk) {
     toastSuccess("saved")
+    return isOk
   }
   if (event) {
     event.returnValue = "Are you sure you want to leave?"

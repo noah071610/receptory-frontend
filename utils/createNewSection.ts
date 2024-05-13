@@ -57,7 +57,7 @@ const sectionMap: { [key: string]: any } = {
     return {
       value: "텍스트 입력",
       style: {
-        backgroundColor: colors.pinkSoft,
+        backgroundColor: colors.ctaColor,
       },
       data: {
         link: "https://",
@@ -162,9 +162,9 @@ const sectionMap: { [key: string]: any } = {
       },
       style: {
         src: "",
-        color: "rgba(130, 42, 202, 0.6)",
+        color: colors.ctaColor,
         background: "",
-        backgroundColor: "rgba(255,176,176,0.25)",
+        backgroundColor: colors.backgroundDefaultColor,
       },
     }
   },

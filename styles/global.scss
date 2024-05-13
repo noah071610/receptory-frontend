@@ -196,17 +196,36 @@ textarea {
 
 .toast-error {
   background: var(--white) !important;
-  background: var(--radial-bg) !important;
+
   border: 1px solid rgba(235, 235, 235, 0.45);
   padding: 20px;
   font-size: 14px !important;
   line-height: 1.4 !important;
-  svg {
-    color: var(--red);
-  }
+
   button {
     background-color: var(--pink-hard) !important;
     color: var(--white) !important;
+  }
+  background: var(--radial-bg) !important;
+  svg {
+    color: var(--red);
+  }
+}
+.toast-success {
+  background: var(--white) !important;
+
+  border: 1px solid rgba(235, 235, 235, 0.45);
+  padding: 20px;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+
+  button {
+    background-color: var(--green-hard) !important;
+    color: var(--white) !important;
+  }
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 70%, rgb(227, 255, 234) 100%) !important;
+  svg {
+    color: var(--green-hard);
   }
 }
 

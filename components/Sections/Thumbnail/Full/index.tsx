@@ -55,7 +55,7 @@ export default function Full({
         {!isDisplayMode && (
           <div style={{ background: getImageUrl({ url: section.src }) }} className={cx("thumbnail")}>
             {hasString(section.src) && <DeleteBtn srcKey={"thumbnail"} />}
-            <button className={cx("drop-zone")} onClick={onClickThumbnailUpload}>
+            <button className={cx("drop-zone", { hidden: !!section.src })} onClick={onClickThumbnailUpload}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
           </div>

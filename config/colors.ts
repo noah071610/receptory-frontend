@@ -2,6 +2,8 @@ export const colors = {
   white: "rgba(255,255,255,1)",
   textWhite: "rgba(255,255,255,1)",
   black: "rgba(0,0,0,1)",
+  ctaColor: "rgba(130, 42, 202, 0.6)",
+  backgroundDefaultColor: "rgba(219, 0, 0, 0.28)",
 
   pinkSoft: "rgba(255,176,176,0.7)",
   pink: "rgba(255,138,138,1)",

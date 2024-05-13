@@ -83,7 +83,7 @@ type Actions = {
 
   moveSection: ({ from, to }: { from: number; to: number }) => void
   copySection: (payload: { payload: SectionType; newId?: string }) => void
-  loadSections: (payload: SaveContentType) => void
+  loadSections: (payload: SaveContentType, lang: Langs, format: PageFormatType) => void
 
   setRevert: (revertType: "do" | "undo") => void
   saveSectionHistory: () => void
@@ -458,7 +458,7 @@ export const useEditorStore = create<EditStates & Actions>()(
         saveSectionHistoryCallback({ origin })
       }),
 
-    loadSections: (payload) =>
+    loadSections: (payload, lang, format) =>
       set((origin) => {
         if (payload.currentUsedColors) {
           origin.currentUsedColors = payload.currentUsedColors
@@ -477,6 +477,12 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         if (payload.rendingSections?.length > 0) {
           origin.rendingSections = payload.rendingSections
+        }
+
+        if (payload.pageOptions) {
+          origin.pageOptions = payload.pageOptions
+          origin.pageOptions.format = format
+          origin.pageOptions.lang = lang
         }
       }),
   }))

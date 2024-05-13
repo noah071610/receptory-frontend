@@ -17,3 +17,14 @@ export async function deploy({ content, pageId, lang }: { content: SaveContentTy
     }
   }
 }
+
+export async function inactivePage({ pageId }: { pageId: string }) {
+  const cookie = cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME ?? "")
+  if (cookie) {
+    if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+      const response = await API.patch(`/page/inactive?pageId=${pageId}`)
+
+      return response.data
+    }
+  }
+}

@@ -8,10 +8,8 @@ import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
 import style from "@/containers/edit-page/style.module.scss"
 import { useEditorStore } from "@/store/editor"
-import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
 import { UserType } from "@/types/User"
-import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import { useQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { isNaN } from "lodash"
@@ -111,20 +109,20 @@ const EditPage = () => {
 
   useEffect(() => {
     const handleBeforeUnloadCallback = async (e: any) => {
-      await saveContentFromEditor({
-        content: {
-          stage,
-          initSections,
-          formSections,
-          rendingSections,
-          currentUsedImages,
-          currentUsedColors,
-          pageOptions,
-        },
-        pageId,
-        lang: lang as Langs,
-        event: e,
-      })
+      // await saveContentFromEditor({
+      //   content: {
+      //     stage,
+      //     initSections,
+      //     formSections,
+      //     rendingSections,
+      //     currentUsedImages,
+      //     currentUsedColors,
+      //     pageOptions,
+      //   },
+      //   pageId,
+      //   lang: lang as Langs,
+      //   event: e,
+      // })
     }
     window.addEventListener("beforeunload", handleBeforeUnloadCallback)
 
@@ -137,11 +135,10 @@ const EditPage = () => {
     !(async function () {
       if (save) {
         // 완전 처음
-
         if (save.content?.initSections && save.content?.initSections?.length <= 0) return setIsLoading(false)
 
         // 아니면 로드 어짜피 store에서도 reducer들이 걸러줌
-        loadSections(save.content)
+        loadSections(save.content, save.lang, save.format)
 
         setTimeout(() => {
           setIsLoading(false)
