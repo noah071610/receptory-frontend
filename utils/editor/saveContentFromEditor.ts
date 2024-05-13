@@ -1,7 +1,38 @@
+import { save } from "@/actions/save"
+import { toastSuccess } from "@/config/toast"
 import { Langs } from "@/types/Main"
-import { SaveContentType } from "@/types/Page"
+import { SaveContentType, SaveUpdateType } from "@/types/Page"
+import hasString from "../helpers/hasString"
 
-export default async function saveContentFromEditor({
+export const convertContent = ({
+  content,
+  pageId,
+  lang,
+  isDeploy,
+}: {
+  content: SaveContentType
+  pageId?: string | string[]
+  lang: Langs
+  isDeploy?: boolean
+}) => {
+  const thumbnailSection = content.initSections[0]
+  const title = thumbnailSection?.list[0]?.value ?? ""
+  const description = thumbnailSection?.list[1]?.value ?? ""
+  const background = thumbnailSection?.style.background ?? ""
+  const image = thumbnailSection?.src
+  const { currentUsedColors, currentUsedImages, stage, ...rest } = content
+  return {
+    pageId,
+    title,
+    description,
+    format: content.pageOptions.format, // todo:
+    lang,
+    thumbnail: hasString(background) ? background : image ?? "",
+    content: isDeploy ? { ...rest } : content,
+  } as SaveUpdateType
+}
+
+export async function saveContentFromEditor({
   content,
   pageId,
   lang,
@@ -14,31 +45,13 @@ export default async function saveContentFromEditor({
 }) {
   if (typeof pageId !== "string") return
 
-  // 살짝 위험하다.. 하지만 무조건 썸네일은 첫번째에 존재한다. 존재하지 않으면 에러다.
-  // const thumbnailSection = content.initSections[0]
-  // const title = thumbnailSection?.list[0]?.value ?? ""
-  // const description = thumbnailSection?.list[1]?.value ?? ""
-  // const background = thumbnailSection?.style.background ?? ""
-  // const image = thumbnailSection?.src
-  // const isOk = await save({
-  //   pageId,
-  //   title,
-  //   description,
-  //   format: "inactive", // todo:
-  //   lang,
-  //   thumbnail: hasString(background) ? background : image ?? "",
-  //   content: {
-  //     ...content,
-  //     currentUsedImages: [], // todo 일단 제외
-  //     initSections: content.initSections,
-  //     formSections: content.formSections,
-  //   },
-  // })
-  // if (isOk) {
-  //   alert("saved")
-  //   // toastSuccess("success")
-  // }
-  // if (event) {
-  //   event.returnValue = "Are you sure you want to leave?"
-  // }
+  const data = convertContent({ content, pageId, lang })
+
+  const isOk = await save(data)
+  if (isOk) {
+    toastSuccess("saved")
+  }
+  if (event) {
+    event.returnValue = "Are you sure you want to leave?"
+  }
 }

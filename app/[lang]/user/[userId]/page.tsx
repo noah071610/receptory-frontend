@@ -4,6 +4,7 @@ import { addSave } from "@/actions/save"
 import { getUser, getUserSaves } from "@/actions/user"
 import { queryKey } from "@/config"
 import { colors } from "@/config/colors"
+import { toastError } from "@/config/toast"
 import style from "@/containers/user-page/style.module.scss"
 import { Langs } from "@/types/Main"
 import { SaveListType } from "@/types/Page"
@@ -108,7 +109,7 @@ const UserPage = () => {
 
       // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
       if (user?.userId !== queryUserId) {
-        alert("잘못된 접근입니다.")
+        toastError("잘못된 접근입니다.")
         return back()
       }
     }
@@ -116,7 +117,7 @@ const UserPage = () => {
 
   useEffect(() => {
     if (isError) {
-      alert("저장 데이터를 불러오는데에 에러가 발생했어요")
+      toastError("저장 데이터를 불러오는데에 에러가 발생했어요")
     }
   }, [isError])
 

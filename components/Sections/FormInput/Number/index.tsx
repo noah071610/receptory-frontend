@@ -21,9 +21,11 @@ function Number({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { setSelectedSection, setOptions, selectedSection } = useEditorStore()
-  const { setUserPick, userPick } = useMainStore()
-  const value = userPick[section.id]?.value ?? ""
+  const { setUserPickText, userPick } = useMainStore()
   const { min, max } = section.options
+
+  const { value } = userPick[section.id] ?? {}
+  const text = value ? value[0].text : ""
 
   const activeSection = () => {
     if (selectedSection?.id !== section.id) {
@@ -33,12 +35,12 @@ function Number({ section }: { section: SectionType }) {
 
   const onChangeInput = (e: any) => {
     if (parseInt(e.target.value) < min) {
-      return setUserPick({ section, payload: min })
+      return setUserPickText({ section, text: min })
     }
     if (parseInt(e.target.value) > max) {
-      return setUserPick({ section, payload: max })
+      return setUserPickText({ section, text: max })
     }
-    setUserPick({ section, payload: e.target.value })
+    setUserPickText({ section, text: e.target.value })
   }
 
   const onChangeMinMax = (type: "min" | "max", e: any) => {
@@ -53,7 +55,7 @@ function Number({ section }: { section: SectionType }) {
   }
 
   useEffect(() => {
-    setUserPick({ section, payload: "" })
+    setUserPickText({ section, text: "" })
   }, [min, max])
 
   const onBlur = (type: "min" | "max") => {
@@ -77,10 +79,8 @@ function Number({ section }: { section: SectionType }) {
     }
   }
   const reset = () => {
-    setUserPick({ section, payload: "" })
-    if (inputRef?.current) {
-      inputRef.current.focus()
-    }
+    setUserPickText({ section, text: "" })
+    onFocus()
   }
 
   return (
@@ -93,14 +93,14 @@ function Number({ section }: { section: SectionType }) {
           inputStyle={"number"}
           onFocus={onFocus}
           resetEvent={reset}
-          isActive={`${value}`.length > 0}
+          isActive={!!text}
         >
           <input
             className={cx("input")}
             type="number"
             ref={inputRef}
             onKeyDown={onlyNumberFilter}
-            value={value}
+            value={text}
             onChange={onChangeInput}
           />
         </FormUserInput>

@@ -11,10 +11,12 @@ export default function SectionLayout({
   children,
   noPadding,
   id,
+  style,
 }: {
   children: ReactNode
   noPadding?: boolean
   id: string
+  style: any
 }) {
   const observerRef = useRef<HTMLDivElement | null>(null)
   const { selectedSection } = useEditorStore()
@@ -26,7 +28,11 @@ export default function SectionLayout({
   }, [selectedSection, observerRef?.current])
 
   return (
-    <section ref={observerRef} style={{ padding: noPadding ? "0px" : undefined }} className={cx("section", "display")}>
+    <section
+      ref={observerRef}
+      style={{ padding: noPadding ? "0px" : undefined, ...style }}
+      className={cx("section", "display")}
+    >
       <div className={cx("observer")}></div>
       {children}
     </section>

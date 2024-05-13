@@ -19,19 +19,41 @@ function OptionRatio({
   optionsArr,
   isDesign,
   section,
+  isMultiple,
 }: {
   targetKey: string
   isDesign?: boolean
   optionsArr: { value: string; icon?: IconDefinition; src?: string }[]
   section: SectionType
+  isMultiple?: boolean
 }) {
-  const { selectedSection, setDesign, setSelectedSection, setOptions, saveSectionHistory } = useEditorStore()
+  const {
+    selectedSection,
+    setDesign,
+    addCollection,
+    deleteCollection,
+    setSelectedSection,
+    setOptions,
+    saveSectionHistory,
+  } = useEditorStore()
   const { t } = useTranslation()
   const target = isDesign ? section.design : section.options[targetKey]
+  const collection = section.collection
 
   const onClickRatio = (v: any) => {
     if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
+    }
+    if (isMultiple) {
+      if (collection.findIndex((k) => k.key === v) >= 0) {
+        if (collection.length - 1 <= 0) {
+          return toastError("atLeastOneList")
+        }
+        deleteCollection({ targetKey: v })
+      } else {
+        addCollection({ payload: { key: v, link: "" } })
+      }
+      return
     }
     if (isDesign) return setDesign({ payload: v })
     setOptions({ payload: v, key: targetKey })
@@ -54,7 +76,12 @@ function OptionRatio({
       >
         {optionsArr.map(({ value, icon, src }) => (
           <SwiperSlide className={cx("slide")} key={`options-${section.id}-${value}`}>
-            <button onClick={() => onClickRatio(value)} className={cx("btn", { active: target === value })}>
+            <button
+              onClick={() => onClickRatio(value)}
+              className={cx("btn", {
+                active: isMultiple ? collection.findIndex((v) => v.key === value) >= 0 : target === value,
+              })}
+            >
               {!src && (
                 <div className={cx("icon")}>
                   <FontAwesomeIcon icon={icon ?? faCheckSquare} />

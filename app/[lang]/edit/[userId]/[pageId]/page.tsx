@@ -4,7 +4,6 @@ import { getSave } from "@/actions/save"
 import { getUser } from "@/actions/user"
 import Loading from "@/components/Loading"
 import ImageSelector from "@/components/Modal/ImageSelector"
-import Thumbnail from "@/components/Sections/Thumbnail"
 import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
 import style from "@/containers/edit-page/style.module.scss"
@@ -12,7 +11,7 @@ import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
 import { UserType } from "@/types/User"
-import saveContentFromEditor from "@/utils/editor/saveContentFromEditor"
+import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import { useQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { isNaN } from "lodash"
@@ -20,11 +19,13 @@ import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import ModalLoading from "@/components/Modal/ModalLoading"
-import Submit from "@/components/Sections/Submit"
+import { toastError } from "@/config/toast"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
 import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
+import Rending from "@/containers/edit-page/Rending"
 import SectionList from "@/containers/edit-page/SectionList"
+import { sectionMap } from "@/containers/edit-page/sectionMap"
 import Header from "@/containers/global/Header"
 import { useMainStore } from "@/store/main"
 import dynamic from "next/dynamic"
@@ -74,7 +75,7 @@ const EditPage = () => {
 
       // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
       if (user?.userId !== queryUserId) {
-        alert("잘못된 접근입니다.")
+        toastError("잘못된 접근입니다.")
         return back()
       }
     }
@@ -82,7 +83,7 @@ const EditPage = () => {
 
   useEffect(() => {
     if (isErrorGetSave) {
-      alert("데이터를 찾지 못했습니다.")
+      toastError("데이터를 찾지 못했습니다.")
       return back()
     }
   }, [isErrorGetSave])
@@ -103,6 +104,7 @@ const EditPage = () => {
     currentUsedImages,
     currentUsedColors,
     rendingSections,
+    pageOptions,
   } = useEditorStore()
 
   const activeModal = active.modal.type
@@ -110,7 +112,15 @@ const EditPage = () => {
   useEffect(() => {
     const handleBeforeUnloadCallback = async (e: any) => {
       await saveContentFromEditor({
-        content: { stage, initSections, formSections, currentUsedImages, currentUsedColors },
+        content: {
+          stage,
+          initSections,
+          formSections,
+          rendingSections,
+          currentUsedImages,
+          currentUsedColors,
+          pageOptions,
+        },
         pageId,
         lang: lang as Langs,
         event: e,
@@ -140,7 +150,8 @@ const EditPage = () => {
     })()
   }, [save])
 
-  const firstSection = stage === "init" ? initSections[0] : stage === "form" ? formSections[0] : rendingSections[0]
+  const topSections =
+    stage === "rending" ? rendingSections.slice(0, 2) : (stage === "init" ? initSections : formSections).slice(0, 1)
 
   return (
     <>
@@ -149,11 +160,16 @@ const EditPage = () => {
         <div className={cx("main")}>
           <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
           <div className={cx("editor")}>
-            <SectionLayout pathname={pathname} noPadding={stage !== "rending"} section={firstSection}>
-              {stage === "rending" ? <Submit section={firstSection} /> : <Thumbnail section={firstSection} />}
-            </SectionLayout>
+            {topSections?.map((v, i) => (
+              <SectionLayout key={`top-${stage}-${i}`} pathname={pathname} isTopSection={true} section={v}>
+                {sectionMap[v.type](v)}
+              </SectionLayout>
+            ))}
+
             <SectionList sections={initSections} stage={stage} type="init" />
             <SectionList sections={formSections} stage={stage} type="form" />
+            <SectionList sections={rendingSections} stage={stage} type="rending" />
+            {stage === "rending" && <Rending />}
 
             <EditorFooter />
           </div>
@@ -165,7 +181,6 @@ const EditPage = () => {
         {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
         {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
         {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
-        {/* <ToastContainer /> todo: */}
       </PageLayout>
     </>
   )

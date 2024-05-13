@@ -1,15 +1,15 @@
 "use client"
 
+import { toastError } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload } from "@/types/Edit"
 import { faImages } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import cs from "classNames/bind"
 import { Dispatch, SetStateAction, memo, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import style from "./style.module.scss"
-
-import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Dropzone({
@@ -51,10 +51,10 @@ function Dropzone({
     onDrop,
     onDropRejected: (files) => {
       if (files.length > 10) {
-        return alert("10개 이하의 이미지를 업로드 해주세요")
+        return toastError("10개 이하의 이미지를 업로드 해주세요")
       }
       for (let i = 0; i < files.length; i++) {
-        return alert(files[i].errors[0].code)
+        return toastError(files[i].errors[0].code)
       }
     },
     multiple: isMultiple,

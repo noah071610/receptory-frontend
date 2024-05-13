@@ -53,6 +53,15 @@
   width: 100%;
   overflow: scroll;
   padding-bottom: 300px;
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+  &::-webkit-scrollbar-thumb {
+    display: none; /* Chrome, Safari, Edge */
+  }
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
 .btn-wrapper {

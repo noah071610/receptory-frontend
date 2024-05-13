@@ -3,13 +3,20 @@ import { Langs } from "./Main"
 
 export type PageFormatType = "inactive" | "active"
 
-export interface SaveContentType {
-  stage: EditStage
+export interface PageContentType {
   initSections: SectionType[]
   formSections: SectionType[]
+  rendingSections: SectionType[]
+  pageOptions: {
+    format: PageFormatType
+    lang: Langs
+    customLink: string
+  }
+}
+export interface SaveContentType extends PageContentType {
+  stage: EditStage
   currentUsedImages: string[]
   currentUsedColors: string[]
-  // todo: 더 추가될 예정
 }
 
 interface _SAVE {
@@ -34,4 +41,8 @@ export interface SaveType extends _SAVE {
 
 export interface SaveUpdateType extends _SAVE {
   content: SaveContentType
+}
+
+export interface PageUpdateType extends _SAVE {
+  content: PageContentType
 }

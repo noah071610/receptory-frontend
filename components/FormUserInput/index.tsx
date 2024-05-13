@@ -42,7 +42,7 @@ function FormUserInput({
           {inputStyle ? (
             children
           ) : (
-            <div onClick={onClick} className={cx("text", { isMultiple })}>
+            <div onClick={onClick} className={cx("text")}>
               {children}
             </div>
           )}

@@ -19,6 +19,7 @@ import {
   faIdCard,
   faImage,
   faImages,
+  faLink,
   faList,
   faMap,
   faPaintRoller,
@@ -31,17 +32,29 @@ import {
   faVenusMars,
 } from "@fortawesome/free-solid-svg-icons"
 
-const initSectionList: EditorFooterList[] = [
+const design = { value: "design", icon: faPaintRoller, actionType: "submenu" } as EditorFooterList
+const animation = { value: "animation", icon: faFilm, actionType: "submenu" } as EditorFooterList
+const basicSections = [
   { value: "text", icon: faFont, actionType: "createSection" },
   { value: "title", icon: faHeading, actionType: "createSection" },
   { value: "empty", icon: faRectangleXmark, actionType: "createSection" },
   { value: "callout", icon: faIdCard, actionType: "createSection" },
+  { value: "checkList", icon: faSquareCheck, actionType: "createSection" },
+] as EditorFooterList[]
+const animations = [
+  { value: "none", icon: faCheck, actionType: "cta" },
+  { value: "fadeIn", icon: faCheck, actionType: "cta" },
+  { value: "fadeUp", icon: faCheck, actionType: "cta" },
+  { value: "flip", icon: faCheck, actionType: "cta" },
+] as EditorFooterList[]
+
+const initSectionList: EditorFooterList[] = [
+  ...basicSections,
   { value: "slider", icon: faPhotoFilm, actionType: "imageSelector" },
-  { value: "album", icon: faImages, actionType: "imageSelector" },
   { value: "contact", icon: faPhone, actionType: "createSection" },
+  { value: "album", icon: faImages, actionType: "imageSelector" },
   { value: "map", icon: faMap, actionType: "createSection" },
   { value: "qna", icon: faCommentAlt, actionType: "createSection" },
-  { value: "checkList", icon: faSquareCheck, actionType: "createSection" },
 ]
 const formSectionList: EditorFooterList[] = [
   { value: "calender", icon: faCalendar, actionType: "createSection" },
@@ -52,33 +65,30 @@ const formSectionList: EditorFooterList[] = [
   { value: "numberInput", icon: fa1, actionType: "createSection" },
   { value: "phone", icon: faPhone, actionType: "createSection" },
   { value: "email", icon: faEnvelope, actionType: "createSection" },
-  { value: "text", icon: faFont, actionType: "createSection" },
-  { value: "title", icon: faHeading, actionType: "createSection" },
-  { value: "callout", icon: faIdCard, actionType: "createSection" },
-  { value: "checkList", icon: faSquareCheck, actionType: "createSection" },
+
+  ...basicSections,
+]
+const rendingSectionList: EditorFooterList[] = [
+  { value: "linkBtn", icon: faLink, actionType: "createSection" },
+  ...basicSections,
+  { value: "contact", icon: faPhone, actionType: "createSection" },
+  { value: "qna", icon: faCommentAlt, actionType: "createSection" },
 ]
 
 const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   thumbnail: [
-    { value: "design", icon: faPaintRoller, actionType: "submenu" },
+    design,
     { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" },
     { value: "ctaBackgroundColor", icon: faBrush, actionType: "colorSelector" },
     { value: "background", icon: faImage, actionType: "imageSelector" },
   ],
-  album: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
-  callout: [
-    { value: "animation", icon: faFilm, actionType: "submenu" },
-    { value: "color", icon: faPalette, actionType: "colorSelector" },
-  ],
+  album: [design],
+  callout: [{ value: "color", icon: faPalette, actionType: "colorSelector" }],
 
-  contact: [{ value: "animation", icon: faFilm, actionType: "submenu" }],
+  contact: [design, animation],
   map: [],
   qna: [{ value: "color", icon: faBrush, actionType: "colorSelector" }],
-  slider: [
-    { value: "design", icon: faPaintRoller, actionType: "submenu" },
-    { value: "animation", icon: faFilm, actionType: "submenu" },
-    { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" },
-  ],
+  slider: [design, animation, { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" }],
   text: [],
   title: [
     { value: "textAlign", icon: faAlignJustify, actionType: "submenu" },
@@ -86,27 +96,23 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "select", icon: faHandPointer, actionType: "submenu" },
   ],
   empty: [],
-  checkList: [{ value: "animation", icon: faFilm, actionType: "submenu" }],
+  checkList: [animation],
   time: [],
-  select: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
-  textInput: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
+  select: [design],
+  textInput: [design],
   numberInput: [],
   email: [],
   phone: [],
   calender: [],
-  submit: [], // 사용하지 않음
-  choices: [{ value: "design", icon: faPaintRoller, actionType: "submenu" }],
+  confirm: [],
+  linkBtn: [{ value: "backgroundColor", icon: faPalette, actionType: "colorSelector" }],
+  choices: [design],
 }
 
 // ####### SUBMENU
 const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterList[] }> = {
   contact: {
-    animation: [
-      { value: "none", icon: faCheck, actionType: "cta" },
-      { value: "fadeIn", icon: faCheck, actionType: "cta" },
-      { value: "fadeUp", icon: faCheck, actionType: "cta" },
-      { value: "flip", icon: faCheck, actionType: "cta" },
-    ],
+    animation: animations,
   },
   title: {
     textAlign: [
@@ -126,11 +132,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "gridOne", icon: faCheck, actionType: "cta" },
       { value: "gridTwo", icon: faCheck, actionType: "cta" },
     ],
-    animation: [
-      { value: "none", icon: faCheck, actionType: "cta" },
-      { value: "fadeIn", icon: faCheck, actionType: "cta" },
-      { value: "scaleUp", icon: faCheck, actionType: "cta" },
-    ],
+    animation: animations,
   },
   callout: {
     design: [
@@ -148,11 +150,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "circle", icon: faCheck, actionType: "cta" },
       { value: "thumbnail", icon: faCheck, actionType: "cta" },
     ],
-    animation: [
-      { value: "none", icon: faCheck, actionType: "cta" },
-      { value: "fadeIn", icon: faCheck, actionType: "cta" },
-      { value: "flip", icon: faCheck, actionType: "cta" },
-    ],
+    animation: animations,
   },
   text: {},
   empty: {},
@@ -165,11 +163,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
     ],
   },
   checkList: {
-    animation: [
-      { value: "none", icon: faCheck, actionType: "cta" },
-      { value: "fadeIn", icon: faCheck, actionType: "cta" },
-      { value: "fadeInRight", icon: faCheck, actionType: "cta" },
-    ],
+    animation: animations,
   },
   time: {},
   select: {
@@ -189,7 +183,8 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   email: {},
   numberInput: {},
   phone: {},
-  submit: {},
+  linkBtn: {},
+  confirm: {},
   choices: {
     design: [
       { value: "basic", icon: faCheck, actionType: "cta" },
@@ -201,9 +196,13 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
 // ####### SUBMENU
 
 export const getEditorFooterList = (selectedSection: SectionType | null, stage: EditStage) => {
-  if (selectedSection === null) return stage === "init" ? initSectionList : stage === "form" ? formSectionList : []
+  const stageList = stage === "init" ? initSectionList : stage === "form" ? formSectionList : rendingSectionList
+  if (selectedSection === null) {
+    return stageList
+  }
   let target = footerListMap[selectedSection.type].map((v) => ({ ...v, parent: selectedSection.type }))
-  if (selectedSection.type === "thumbnail" && stage === "form") {
+  if (target?.length <= 0) return stageList
+  if (selectedSection.type === "thumbnail" && (stage === "form" || stage === "rending")) {
     target = target.filter(({ value }) => value !== "ctaBackgroundColor")
   }
   return target
@@ -216,7 +215,11 @@ export const getSubmenuList = (
   if (selectedSection === null || currentSubmenu === null) return []
 
   let target = footerSubmenuMap[selectedSection.type][currentSubmenu]
-  if (selectedSection.type === "thumbnail" && stage === "form" && currentSubmenu === "design") {
+  if (
+    selectedSection.type === "thumbnail" &&
+    (stage === "form" || stage === "rending") &&
+    currentSubmenu === "design"
+  ) {
     target = target.filter(({ value }) => value !== "full")
   }
 

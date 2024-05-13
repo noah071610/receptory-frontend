@@ -25,7 +25,7 @@ export const colors = {
   bgColor: "rgba(249,249,249,0.8)",
   shadowColor: "rgba(0,0,0,0.08)",
 
-  red: "rgba(255,82,79,0.7)",
+  red: "rgb(255, 93, 90)",
 
   inputColor: "rgba(234,234,234,0.67)",
   radialBg: "radial-gradient(circle, rgba(255,255,255,1) 70%, rgba(255,241,244,1) 100%)",

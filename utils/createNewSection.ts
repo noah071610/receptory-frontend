@@ -1,5 +1,5 @@
 import { colors } from "@/config/colors"
-import { SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
+import { DesignTypes, SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
 import getId from "./helpers/getId"
 
 const getNewDate = () => new Date()
@@ -7,7 +7,7 @@ const title = {
   title: "타이틀 입력",
   description: "설명 입력",
 }
-
+const a = new Map()
 const sectionMap: { [key: string]: any } = {
   calender: () => {
     return {
@@ -51,11 +51,18 @@ const sectionMap: { [key: string]: any } = {
     }
   },
   contact: () => {
-    const target = {
-      list: ["call", "email", "line", "twitter", "facebook", "kakaoTalk"].map((v, i) => createNewSectionList(v, i)),
+    return {}
+  },
+  linkBtn: () => {
+    return {
+      value: "텍스트 입력",
+      style: {
+        backgroundColor: colors.pinkSoft,
+      },
+      data: {
+        link: "https://",
+      },
     }
-    target.list[0].isActive = true
-    return target
   },
   email: () => {
     return {
@@ -65,11 +72,8 @@ const sectionMap: { [key: string]: any } = {
   choices: () => {
     return {
       data: title,
-      options: {
-        initialSelect: "none",
-      },
       design: "gender",
-      list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: "" })),
+      list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: "타이틀 입력" })),
     }
   },
   phone: () => {
@@ -113,7 +117,7 @@ const sectionMap: { [key: string]: any } = {
   },
   checkList: () => {
     return {
-      list: [createNewSectionList("checkList", 0, { design: "check" })],
+      list: [createNewSectionList("checkList", 0)],
     }
   },
   callout: () => {
@@ -133,11 +137,11 @@ const sectionMap: { [key: string]: any } = {
       style: {
         color: colors.pink,
       },
-      list: [{ ...createNewSectionList("qna", 0, { isActive: true, data: { title: "타이틀 입력" } }) }],
+      list: [{ ...createNewSectionList("qna", 0) }],
     }
   },
   select: () => {
-    const target = createNewSectionList("select", 0, { data: { title: "", description: "" } })
+    const target = createNewSectionList("select", 0)
     return {
       value: undefined,
       design: "imageWithText",
@@ -164,15 +168,35 @@ const sectionMap: { [key: string]: any } = {
       },
     }
   },
+  confirm: () => {
+    return {
+      data: {
+        title: "정상적으로 제출했어요!",
+        description: "귀한 시간 내주셔서 감사합니다.",
+      },
+    }
+  },
 }
 
 export const createNewSectionList = (subType: string, index: number, obj?: any): SectionListType => {
-  if (subType === "qna") {
-    obj = { isActive: true, data: { title: "타이틀 입력" } }
+  let temp = obj
+  const defaultObj = () => {
+    switch (subType) {
+      case "select":
+        return { data: { title: "타이틀 입력", description: "" } }
+      case "checkList":
+        return { value: "내용 입력", design: "check" as DesignTypes }
+      case "qna":
+        return { data: { title: "타이틀 입력" } }
+      default:
+        return {}
+    }
   }
-  if (subType === "checkList") {
-    obj = { value: "내용 입력", design: "check" }
+
+  if (!temp) {
+    temp = defaultObj()
   }
+
   return {
     id: getId(),
     index,
@@ -187,7 +211,7 @@ export const createNewSectionList = (subType: string, index: number, obj?: any):
     design: "basic",
     src: "",
     text: "",
-    ...obj,
+    ...temp,
   }
 }
 

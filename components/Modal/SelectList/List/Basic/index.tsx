@@ -4,7 +4,7 @@ import hasString from "@/utils/helpers/hasString"
 import Image from "next/image"
 import style from "./style.module.scss"
 
-import { UserSelectedListType } from "@/types/Main"
+import { UserPickValueType } from "@/types/Main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -18,12 +18,12 @@ export const BasicList = ({
   v: SectionListType
   i: number
   design: DesignTypes
-  userSelectedList: UserSelectedListType[]
-  onChangeSelect: (selectedList: SectionListType, index: number) => void
+  userSelectedList: UserPickValueType[]
+  onChangeSelect: (selectedList: SectionListType) => void
 }) => {
-  const active = userSelectedList.findIndex(({ index }) => index === i) >= 0
+  const active = userSelectedList.findIndex(({ key }) => key === v.id) >= 0
   return (
-    <li className={cx("list", design, { active })} onClick={() => onChangeSelect(v, i)}>
+    <li className={cx("list", design, { active })} onClick={() => onChangeSelect(v)}>
       {design === "imageWithText" &&
         (v.src ? (
           <picture className={cx("image")}>

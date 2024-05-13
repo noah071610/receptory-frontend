@@ -20,10 +20,12 @@ const cx = cs.bind(style)
 function Phone({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const { selectedSection, setSelectedSection, setOptions } = useEditorStore()
-  const { setUserPick, userPick } = useMainStore()
-  const value = userPick[section.id]?.value ?? ""
+  const { setUserPickText, userPick } = useMainStore()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const { min, max, phoneNumberCountry } = section.options
+  const { phoneNumberCountry } = section.options
+  const { value } = userPick[section.id] ?? {}
+  const text = value ? value[0].text : ""
+
   const activeSection = () => {
     if (selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
@@ -33,26 +35,17 @@ function Phone({ section }: { section: SectionType }) {
   const onChangePhoneInput = (e: any) => {
     activeSection()
     const output = getPhoneNumber(e, phoneNumberCountry)
-
-    setUserPick({ section, payload: output })
+    setUserPickText({ section, text: output })
   }
 
   const onBlur = () => {
     if (phoneNumberCountry === "ko" || phoneNumberCountry === "ja") {
-      setUserPick({ section, payload: value.slice(0, 13) })
+      setUserPickText({ section, text: text.slice(0, 13) })
     }
     if (phoneNumberCountry === "th") {
-      setUserPick({ section, payload: value.slice(0, 12) })
+      setUserPickText({ section, text: text.slice(0, 12) })
     }
   }
-
-  useEffect(() => {
-    setOptions({ key: "phoneNumberCountry", payload: lang ?? "ko" })
-  }, [lang])
-
-  useEffect(() => {
-    setUserPick({ section, payload: "" })
-  }, [phoneNumberCountry])
 
   const onFocus = () => {
     if (inputRef?.current) {
@@ -60,11 +53,18 @@ function Phone({ section }: { section: SectionType }) {
     }
   }
   const reset = () => {
-    setUserPick({ section, payload: "" })
-    if (inputRef?.current) {
-      inputRef.current.focus()
-    }
+    setUserPickText({ section, text: "" })
+    onFocus()
   }
+
+  useEffect(() => {
+    setOptions({ key: "phoneNumberCountry", payload: lang ?? "ko" })
+  }, [lang])
+
+  useEffect(() => {
+    setUserPickText({ section, text: "" })
+  }, [phoneNumberCountry])
+
   return (
     <div className={cx("layout")}>
       <div className={cx("input-wrapper")}>
@@ -74,7 +74,7 @@ function Phone({ section }: { section: SectionType }) {
           description={section.data.description}
           inputStyle={"phone"}
           onFocus={onFocus}
-          isActive={hasString(value)}
+          isActive={hasString(text)}
           resetEvent={reset}
         >
           <div className={cx("phone-wrapper")}>
@@ -84,7 +84,7 @@ function Phone({ section }: { section: SectionType }) {
               src={`/images/icons/${phoneNumberCountry}.png`}
               alt={`${phoneNumberCountry}-image`}
             />
-            <input onBlur={onBlur} className={cx("phone")} ref={inputRef} value={value} onChange={onChangePhoneInput} />
+            <input onBlur={onBlur} className={cx("phone")} ref={inputRef} value={text} onChange={onChangePhoneInput} />
           </div>
         </FormUserInput>
       </div>

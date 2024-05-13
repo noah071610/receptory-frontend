@@ -3,6 +3,7 @@
 import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
+import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
@@ -53,7 +54,7 @@ function List({
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return alert("atLeastOneList")
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }

@@ -1,4 +1,5 @@
 @import "@/styles/variables.scss";
+@import "@/styles/editor.scss";
 
 .contact {
   .main {
@@ -23,4 +24,34 @@
       }
     }
   }
+}
+
+.options {
+  @include options-style;
+}
+
+.link-option {
+  margin-top: 30px;
+}
+
+.link-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  li {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 10px;
+    img {
+      width: 30px;
+      height: 30px;
+      margin: auto 0;
+    }
+  }
+}
+
+.link-input {
+  @include input-style;
+  @include description-style(true);
 }

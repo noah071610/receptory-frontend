@@ -32,7 +32,7 @@ export default function Background({
   const { color, background, backgroundColor } = section.style
 
   const { setActive, stage } = useEditorStore()
-  const isForm = stage === "form"
+  const isInitStage = stage === "init"
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -68,7 +68,7 @@ export default function Background({
           inputType="title"
           className={cx(!isDisplayMode && "title-input")}
           displayMode={isDisplayMode && "h1"}
-          isOptional={true}
+          isOptional={false}
           dataKey={"title"}
           value={title}
           section={section}
@@ -85,7 +85,7 @@ export default function Background({
           section={section}
           style={{ color: hasString(background) ? colors.white : textColor }}
         />
-        {!isForm && (
+        {isInitStage && (
           <div className={cx("cta-wrapper")}>
             <button style={{ backgroundColor: color }} className={cx("cta")}>
               <Input

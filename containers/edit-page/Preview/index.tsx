@@ -11,12 +11,19 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function Preview() {
-  const { initSections, formSections, stage, active, setActive } = useEditorStore()
+  const { initSections, formSections, rendingSections, stage, active, setActive } = useEditorStore()
 
-  const sections = useMemo(
-    () => (stage === "init" ? initSections : stage === "form" ? formSections : []),
-    [initSections, formSections, stage]
-  )
+  const sections = useMemo(() => {
+    switch (stage) {
+      case "init":
+        return initSections
+      case "form":
+        return formSections
+      default:
+        return rendingSections
+    }
+  }, [initSections, formSections, rendingSections, stage])
+
   const onClickPreviewClose = () => {
     setActive({
       key: "modal",
@@ -31,7 +38,12 @@ export default function Preview() {
       <div className={cx("phone")}>
         <div className={cx("content")}>
           {sections.map((v) => (
-            <SectionLayout id={v.id} noPadding={v.type === "thumbnail" || v.type === "slider"} key={`${v.id}`}>
+            <SectionLayout
+              style={{ paddingBottom: v.style?.paddingBottom }}
+              id={v.id}
+              noPadding={v.type === "thumbnail" || v.type === "slider"}
+              key={`${v.id}`}
+            >
               {sectionMap[v.type](v, true)}
             </SectionLayout>
           ))}

@@ -20,7 +20,8 @@ export type SectionListTypes =
   | "email"
   | "checkList"
   | "choices"
-  | "submit"
+  | "confirm"
+  | "linkBtn"
 
 export type TargetSectionListTypes =
   | "backgroundColor"
@@ -91,6 +92,8 @@ export type EditorFooterListTypes =
 
 export type EditStage = "init" | "form" | "rending"
 
+export type SectionsKeys = "initSections" | "formSections" | "rendingSections"
+
 export interface ActiveTypes {
   modal: {
     type: string | null
@@ -122,6 +125,7 @@ export interface StyleProperties {
   animation?: AnimationTypes
   borderColor?: string
   backgroundSize?: "cover" | "contain"
+  paddingBottom?: string
 }
 
 interface _SectionType {
@@ -145,7 +149,13 @@ export interface SectionListType extends _SectionType {
   type: string
 }
 
-export type EditorFooterListActions = "cta" | "colorSelector" | "submenu" | "imageSelector" | "createSection"
+export type EditorFooterListActions =
+  | "cta"
+  | "colorSelector"
+  | "submenu"
+  | "imageSelector"
+  | "createSection"
+  | "copySection"
 
 export interface EditorFooterList {
   value: EditorFooterListTypes

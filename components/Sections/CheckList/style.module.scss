@@ -82,6 +82,7 @@
   }
   span {
     position: relative;
+    width: auto;
     &::after {
       content: "";
       position: absolute;

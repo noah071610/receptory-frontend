@@ -8,24 +8,26 @@ import CalenderMain from "./CalenderMain"
 
 export const DatePicker = ({ section }: { section: SectionType }) => {
   const { startDate, endDate, interval, specificDate, isRangeSelect } = section.options
-  const specificDateCollection = section?.collection ?? []
+  const sd = section?.collection ?? []
 
+  // 특정 날짜를 선택하기 위한 달력, 엄연히 에디터 사용 유저들을 위한 로직
+  // 실제 이용자들은 쓸일이 없다.
   const startDateForSpecific = useMemo(() => {
-    if (specificDateCollection?.length < 1) return []
-    return specificDateCollection.toSorted((a, b) => {
+    if (!specificDate || sd?.length < 1) return []
+    return sd.toSorted((a, b) => {
       if (a.specificStartDate > b.specificStartDate) return -1
       if (a.specificStartDate < b.specificStartDate) return 1
       return 0
     })[0].specificStartDate
-  }, [specificDateCollection])
+  }, [sd, specificDate])
   const endDateForSpecific = useMemo(() => {
-    if (specificDateCollection?.length < 1) return []
-    return specificDateCollection.toSorted((a, b) => {
+    if (!specificDate || sd?.length < 1) return []
+    return sd.toSorted((a, b) => {
       if (a.specificEndDate > b.specificEndDate) return 1
       if (a.specificEndDate < b.specificEndDate) return -1
       return 0
     })[0].specificEndDate
-  }, [specificDateCollection])
+  }, [sd, specificDate])
 
   const [selectedDates, onDatesChange] = useState<Date[]>([])
   const [offsetDate, onOffsetChange] = useState<Date>(startDate)

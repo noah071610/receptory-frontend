@@ -15,6 +15,7 @@ import { memo } from "react"
 import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
+import { toastError } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
@@ -24,11 +25,13 @@ const ListEdit = ({
   listIndex,
   onClickAddImage,
   section,
+  onDelete,
 }: {
   list: SectionListType
   listIndex: number
   onClickAddImage: (i: number) => void
   section: SectionType
+  onDelete: (i: number) => void
 }) => {
   return (
     <li key={`edit-${list.id}`}>
@@ -43,6 +46,7 @@ const ListEdit = ({
         <div className={cx("content")}>
           <Input
             type="input"
+            isBottomError={true}
             className={cx("title")}
             inputType="title"
             isOptional={false}
@@ -63,15 +67,16 @@ const ListEdit = ({
           />
         </div>
       </div>
-      <DeleteBtn listIndex={listIndex} srcKey="list" isDeleteList={true} />
+      <DeleteBtn deleteEvent={onDelete} listIndex={listIndex} srcKey="list" isDeleteList={true} />
     </li>
   )
 }
 
 function Select({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { setActive } = useEditorStore()
-  const { setModal, selects, setSelects } = useMainStore()
+  const { setActive, deleteList } = useEditorStore()
+  const { setModal, userPick, setUserPick } = useMainStore()
+  const { value } = userPick[section.id] ?? {}
   const selectList = section.list
 
   const toggleSelect = () => {
@@ -85,7 +90,14 @@ function Select({ section }: { section: SectionType }) {
   }
 
   const reset = () => {
-    setSelects({ payload: [] })
+    setUserPick({ section, value: [] })
+  }
+
+  const onDelete = (i: number) => {
+    if (section.list.length <= 1) {
+      return toastError("atLeastOneList")
+    }
+    deleteList({ targetIndex: i })
   }
 
   return (
@@ -96,14 +108,15 @@ function Select({ section }: { section: SectionType }) {
         title={section.data.title}
         description={section.data.description}
         isMultiple={true}
-        isActive={!!selects?.length}
+        isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {selects?.length > 0 ? (
-          selects.map((v, i) => (
-            <div className={cx("selected-list-text")} key={`select-${i}`}>
-              <span>{v.title}</span>
-            </div>
+        {value?.length > 0 ? (
+          value.map(({ text }, i) => (
+            <span key={`select-${i}`}>
+              {i > 0 ? " , " : ""}
+              {text}
+            </span>
           ))
         ) : (
           <span>{t("none")}</span>
@@ -123,6 +136,7 @@ function Select({ section }: { section: SectionType }) {
                 section={section}
                 onClickAddImage={onClickAddImage}
                 key={`${list.id}-edit`}
+                onDelete={onDelete}
                 list={list}
                 listIndex={i}
               />

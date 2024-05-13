@@ -1,5 +1,5 @@
-import { SectionListTypes, SectionType } from "@/types/Edit"
-import { UserSelectedListType } from "@/types/Main"
+import { SectionType } from "@/types/Edit"
+import { UserPickType, UserPickValueType } from "@/types/Main"
 import { UserType } from "@/types/User"
 
 import { create } from "zustand"
@@ -11,20 +11,8 @@ export interface EditStates {
     type: "date" | "time" | "select" | "dateSelect" | null
     section: SectionType | null
   }
-  date: {
-    selectedStartDate: Date | null | "anyDate"
-    selectedEndDate: Date | null
-  }
-  time: {
-    selectedStartTime: string | null | "anytime"
-    selectedEndTime: string | null
-  }
-  selects: UserSelectedListType[]
   userPick: {
-    [id: string]: {
-      type: SectionListTypes
-      value: any
-    }
+    [id: string]: UserPickType
   }
 }
 
@@ -37,24 +25,8 @@ type Actions = {
     section: SectionType | null
     type: "date" | "time" | "select" | "dateSelect" | null
   }) => void
-  setDate: ({
-    payload,
-  }: {
-    payload: {
-      selectedStartDate: Date | null | "anyDate"
-      selectedEndDate: Date | null
-    }
-  }) => void
-  setTime: ({
-    payload,
-  }: {
-    payload: {
-      selectedStartTime: string | null | "anytime"
-      selectedEndTime: string | null
-    }
-  }) => void
-  setSelects: ({ payload }: { payload: UserSelectedListType[] }) => void
-  setUserPick: ({ section, payload }: { section: SectionType; payload: any }) => void
+  setUserPick: ({ section, value }: { section: SectionType; value: UserPickValueType[] }) => void
+  setUserPickText: ({ section, text }: { section: SectionType; text: string }) => void
 }
 
 export const useMainStore = create<EditStates & Actions>()(
@@ -64,15 +36,6 @@ export const useMainStore = create<EditStates & Actions>()(
       type: null,
       section: null,
     },
-    date: {
-      selectedStartDate: null,
-      selectedEndDate: null,
-    },
-    time: {
-      selectedStartTime: null,
-      selectedEndTime: null,
-    },
-    selects: [],
     userPick: {},
 
     // SET
@@ -84,24 +47,26 @@ export const useMainStore = create<EditStates & Actions>()(
       set((origin) => {
         origin.modal = payload
       }),
-    setDate: ({ payload }) =>
-      set((origin) => {
-        origin.date = payload
-      }),
-    setTime: ({ payload }) =>
-      set((origin) => {
-        origin.time = payload
-      }),
-    setSelects: ({ payload }) =>
-      set((origin) => {
-        origin.selects = payload
-      }),
-    setUserPick: ({ section, payload }) =>
+    setUserPick: ({ section, value }) =>
       set((origin) => {
         origin.userPick[section.id] = {
+          title: section.data.title as string,
+          value,
+          index: section.index,
           type: section.type,
-          value: payload,
         }
+      }),
+    setUserPickText: ({ section, text }) =>
+      set((origin) => {
+        if (!origin.userPick[section.id]) {
+          origin.userPick[section.id] = {
+            title: section.data.title as string,
+            value: [{ key: section.type, text: "" }],
+            index: section.index,
+            type: section.type,
+          }
+        }
+        origin.userPick[section.id].value[0].text = text
       }),
   }))
 )

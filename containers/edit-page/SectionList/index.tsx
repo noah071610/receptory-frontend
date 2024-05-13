@@ -15,7 +15,7 @@ export default function SectionList({
 }: {
   sections: SectionType[]
   stage: EditStage
-  type: "init" | "form"
+  type: "init" | "form" | "rending"
 }) {
   const pathname = usePathname()
   const { moveSection } = useEditorStore()
@@ -37,8 +37,8 @@ export default function SectionList({
             {...droppableProvided.droppableProps}
             ref={droppableProvided.innerRef}
           >
-            {sections.slice(1).map((v, i) => (
-              <Draggable index={i + 1} key={v.id} draggableId={v.id}>
+            {sections.slice(stage === "rending" ? 2 : 1).map((v, i) => (
+              <Draggable index={i + (stage === "rending" ? 2 : 1)} key={v.id} draggableId={v.id}>
                 {(draggableProvided) => {
                   return (
                     <SectionLayout

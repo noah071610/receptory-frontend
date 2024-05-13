@@ -1,5 +1,4 @@
 @import "@/styles/variables.scss";
-// @import "~react-toastify/dist/ReactToastify.min.css";
 
 html,
 body,
@@ -195,6 +194,22 @@ textarea {
   touch-action: manipulation;
 }
 
+.toast-error {
+  background: var(--white) !important;
+  background: var(--radial-bg) !important;
+  border: 1px solid rgba(235, 235, 235, 0.45);
+  padding: 20px;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  svg {
+    color: var(--red);
+  }
+  button {
+    background-color: var(--pink-hard) !important;
+    color: var(--white) !important;
+  }
+}
+
 :root {
   body {
     color: var(--black);
@@ -227,8 +242,9 @@ textarea {
   --bg-color: rgba(249, 249, 249, 0.8);
   --shadow-color: rgba(0, 0, 0, 0.08);
 
-  --red: rgba(255, 74, 71, 0.85);
-  --red-soft: rgba(253, 172, 171, 0.6); // todo:
+  --red: rgba(255, 93, 90, 1);
+  --red-soft: rgba(255, 131, 129, 0.7);
+  --red-hard: rgba(198, 32, 29, 0.9);
 
   --input-color: rgba(234, 234, 234, 0.4);
   --radial-bg: radial-gradient(circle, rgba(255, 255, 255, 1) 70%, rgba(255, 241, 244, 1) 100%);

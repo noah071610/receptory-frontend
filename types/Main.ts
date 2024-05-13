@@ -1,3 +1,5 @@
+import { SectionListTypes } from "./Edit"
+
 export type Langs = "ko" | "en" | "ja" | "th"
 export type LangParams = { params: { lang: Langs } }
 export type LayoutLangParams = {
@@ -6,9 +8,15 @@ export type LayoutLangParams = {
     lang: Langs
   }
 }
-export interface UserSelectedListType {
-  index: number
+export interface UserPickType {
   title: string
-  description: string
-  src: string
+  value: UserPickValueType[]
+  index: number
+  type: SectionListTypes
+}
+export interface UserPickValueType {
+  key: string
+  text: string
+  description?: string
+  src?: string
 }

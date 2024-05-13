@@ -49,8 +49,7 @@
         }
       }
     }
-    .delete,
-    .copy {
+    .icon {
       width: 22px;
       height: 22px;
       @include flex;
@@ -60,6 +59,11 @@
         @include action {
           color: var(--pink);
         }
+      }
+    }
+    .margin.active {
+      svg {
+        transform: rotate(180deg);
       }
     }
   }

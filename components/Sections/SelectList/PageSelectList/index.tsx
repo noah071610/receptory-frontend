@@ -13,13 +13,14 @@ const cx = cs.bind(style)
 
 function PageSelectList({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { setModal, setSelects, selects } = useMainStore()
+  const { setModal, userPick, setUserPick } = useMainStore()
+  const { value } = userPick[section.id] ?? {}
 
   const toggleSelect = () => {
     setModal({ section, type: "select" })
   }
   const reset = () => {
-    setSelects({ payload: [] })
+    setUserPick({ section, value: [] })
   }
 
   return (
@@ -30,20 +31,19 @@ function PageSelectList({ section }: { section: SectionType }) {
         title={section.data.title}
         description={section.data.description}
         isMultiple={true}
-        isActive={!!selects?.length}
+        isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        <span>
-          {selects?.length > 0 ? (
-            selects.map((v, i) => (
-              <div className={cx("selected-list-text")} key={`select-${i}`}>
-                <span>{v.title}</span>
-              </div>
-            ))
-          ) : (
-            <span>{t("none")}</span>
-          )}
-        </span>
+        {value?.length > 0 ? (
+          value.map(({ text }, i) => (
+            <span key={`select-${i}`}>
+              {i > 0 ? " , " : ""}
+              {text}
+            </span>
+          ))
+        ) : (
+          <span>{t("none")}</span>
+        )}
       </FormUserInput>
     </div>
   )

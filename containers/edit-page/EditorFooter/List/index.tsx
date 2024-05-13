@@ -1,5 +1,6 @@
 "use client"
 
+import { toastError } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
@@ -7,7 +8,6 @@ import getId from "@/utils/helpers/getId"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
-// import { Bounce, toast } from "react-toastify"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
@@ -25,7 +25,7 @@ export default function List({
   const { replace } = useRouter()
   const pathname = usePathname()
   const { lang } = useParams()
-  const { addSection, formSections, setActive, active } = useEditorStore()
+  const { addSection, formSections, initSections, setActive, active } = useEditorStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, type: EditorFooterListActions) => {
@@ -33,11 +33,18 @@ export default function List({
       case "createSection":
         const newId = getId()
         if (value === "calender" && formSections.find(({ type }) => type === "calender")) {
-          return alert("oneSection") // todo:
+          return toastError("oneSection") // todo:
         }
         if (value === "time" && formSections.find(({ type }) => type === "time")) {
-          return alert("oneSection") // todo:
+          return toastError("oneSection") // todo:
         }
+        if (value === "qna" && initSections.find(({ type }) => type === "qna")) {
+          return toastError("oneSection") // todo:
+        }
+        if (value === "map" && initSections.find(({ type }) => type === "map")) {
+          return toastError("oneSection") // todo:
+        }
+
         addSection({ type: value as SectionListTypes, newId })
         replace(`${pathname}#${newId}`)
         break

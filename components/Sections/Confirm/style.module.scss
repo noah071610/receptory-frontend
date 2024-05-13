@@ -1,0 +1,96 @@
+@import "@/styles/editor.scss";
+
+.layout {
+  width: 100%;
+}
+
+.confirm-wrapper {
+  width: 100%;
+  .confirm {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    border-radius: 5px;
+    padding: 20px;
+    @include border;
+    @include shadow;
+    margin-bottom: 50px;
+    .top {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+
+      input,
+      textarea {
+        @include input-style;
+        width: 100%;
+      }
+      .title-input,
+      h1 {
+        font-weight: 700;
+        font-size: 19px;
+      }
+      .description-input,
+      p {
+        margin-top: 5px;
+        @include description-style(true);
+        white-space: pre-line;
+        word-break: break-all;
+      }
+    }
+
+    .picks {
+      @include flex-x;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray-hard);
+      line-height: 1.2;
+      @include flex-y;
+    }
+
+    .value {
+      display: inline-block;
+      padding-left: 10px;
+      @include flex-y;
+      span {
+        padding: 3px;
+        font-size: 13px;
+        line-height: 1.2;
+      }
+    }
+
+    .info {
+      margin-top: 10px;
+      li {
+        display: flex;
+      }
+    }
+
+    .list {
+      h2 {
+        padding-right: 10px;
+        border-right: 1px solid var(--border);
+      }
+      width: 100%;
+      display: grid;
+      grid-template-columns: 130px 1fr;
+    }
+  }
+}
+
+.options {
+  @include options-style;
+}
+.options-bars {
+  margin-bottom: 30px;
+}
+
+.no-list {
+  @include no-list;
+}

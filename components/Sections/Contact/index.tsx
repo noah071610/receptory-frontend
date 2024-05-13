@@ -1,40 +1,47 @@
 "use client"
 
+import Input from "@/components/Input"
+import OptionRatio from "@/components/Options/OptionRatio"
 import { useTranslation } from "@/i18n/client"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import cs from "classNames/bind"
-import dynamic from "next/dynamic"
 import Image from "next/image"
 import { useParams } from "next/navigation"
-import { memo, useMemo } from "react"
+import { memo } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const Providers = dynamic(() => import("./Providers/index"), {
-  ssr: true,
-})
+// https://help.line.me/line/IOSSecondary/categoryId/20009675/3/pc?lang=ko&contentId=20022671
+
+const onClick = {}
 
 function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
   const { t } = useTranslation()
+  const { setCollection } = useEditorStore()
 
-  const btnList = useMemo(() => section.list.filter((v) => v.isActive), [section.list])
+  const list = section.collection
+
+  const onChangeLink = (inputValue: string, i: number) => {
+    setCollection({ payload: inputValue, index: i, key: "link" })
+  }
 
   return (
     <div className={cx("contact")}>
       <div className={cx("main")}>
         <div className={cx("btn-list")}>
-          {btnList.map((v, i) => {
-            switch (v.type) {
+          {list.map(({ key, link }, i) => {
+            switch (key) {
               case "call":
                 return (
                   <a
                     style={getAnimation({ type: section.style.animation, delay: i * 130 })}
-                    href={`tel:${v.value}`}
-                    key={`btn_${v.type}`}
+                    href={`tel:${link}`}
+                    key={`btn_${key}`}
                   >
-                    <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
+                    <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
                   </a>
                 )
               default:
@@ -42,16 +49,58 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
                   <button
                     style={getAnimation({ type: section.style.animation, delay: i * 130 })}
                     // onClick={() => v.onClick(v.value)} todo:
-                    key={`btn_${v.type}`}
+                    key={`btn_${key}`}
                   >
-                    <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
+                    <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
                   </button>
                 )
             }
           })}
         </div>
       </div>
-      {!isDisplayMode && <Providers section={section} />}
+      {!isDisplayMode && (
+        <div className={cx("options")}>
+          <OptionRatio
+            optionsArr={[
+              { value: "call", src: "/images/icons/call.png" },
+              { value: "email", src: "/images/icons/email.png" },
+              { value: "line", src: "/images/icons/line.png" },
+              { value: "instagram", src: "/images/icons/instagram.png" },
+              { value: "twitter", src: "/images/icons/twitter.png" },
+              { value: "facebook", src: "/images/icons/facebook.png" },
+              { value: "kakaoTalk", src: "/images/icons/kakaoTalk.png" },
+            ]}
+            section={section}
+            targetKey="contacts"
+            isMultiple={true}
+          />
+          <div className={cx("link-option")}>
+            <h4>
+              <span>링크 설정</span>
+            </h4>
+            <ul className={cx("link-input-wrapper")}>
+              {list.map(({ key, link }, i) => (
+                <li key={`link-input-${key}`}>
+                  <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
+                  <Input
+                    type="input"
+                    inputType={`${key}Placeholder`}
+                    className={cx("link-input")}
+                    isOptional={false}
+                    maxLength={18}
+                    onChange={(inputValue: string) => {
+                      onChangeLink(inputValue, i)
+                    }}
+                    dataKey={"title"}
+                    value={link}
+                    section={section}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

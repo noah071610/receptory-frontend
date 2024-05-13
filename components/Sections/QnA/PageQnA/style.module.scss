@@ -32,21 +32,3 @@
 .content-wrapper {
   overflow: hidden;
 }
-
-.content-layout {
-  padding: 10px;
-  display: block;
-  transition:
-    transform 300ms,
-    opacity 300ms,
-    max-height 500ms ease-out;
-  transform: translateY(-100%);
-  position: relative;
-  animation: comp-hide 400ms forwards;
-  max-height: 0;
-  &.isActive {
-    transform: translateY(0);
-    max-height: 700px;
-    animation: comp-visible 400ms forwards;
-  }
-}

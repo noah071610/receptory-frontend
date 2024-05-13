@@ -71,14 +71,18 @@
   }
 }
 
-@mixin btn-submit-style {
+@mixin btn-submit-style($isRed: false) {
   width: 100%;
   max-width: 200px;
   padding: 15px 0;
   border-radius: 40px;
   @include flex;
   transition: 200ms transform;
-  background-color: var(--green);
+  @if ($isRed) {
+    background-color: var(--red);
+  } @else {
+    background-color: var(--green);
+  }
   color: var(--white);
 
   // inactive
@@ -92,7 +96,11 @@
   &:not(:disabled) {
     @media (hover: hover) {
       &:hover {
-        background-color: var(--green-hard);
+        @if ($isRed) {
+          background-color: var(--red-hard);
+        } @else {
+          background-color: var(--green-hard);
+        }
         color: var(--white);
       }
     }
@@ -100,7 +108,11 @@
 
   // active
   &:not(:disabled):active {
-    background-color: var(--green-hard);
+    @if ($isRed) {
+      background-color: var(--red-hard);
+    } @else {
+      background-color: var(--green-hard);
+    }
     color: var(--white);
     transform: scale(0.97);
   }

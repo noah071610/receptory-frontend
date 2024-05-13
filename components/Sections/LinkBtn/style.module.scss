@@ -1,0 +1,34 @@
+@import "@/styles/variables.scss";
+@import "@/styles/editor.scss";
+
+.layout {
+  width: 100%;
+  .btn-wrapper {
+    width: 100%;
+    @include flex;
+  }
+  .link {
+    @include btn-submit-style;
+    position: relative;
+    input,
+    span {
+      width: 100%;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    span {
+      white-space: pre-line;
+      word-break: break-all;
+    }
+  }
+}
+
+.options {
+  @include options-style;
+  input {
+    @include input-style;
+    @include description-style(true);
+  }
+}

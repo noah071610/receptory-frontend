@@ -15,30 +15,31 @@ const cx = cs.bind(style)
 
 function PageNumber({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setUserPick, userPick } = useMainStore()
-  const value = userPick[section.id]?.value ?? 0
+  const { setUserPickText, userPick } = useMainStore()
   const { min, max } = section.options
   const inputRef = useRef<HTMLInputElement | null>(null)
 
+  const { value } = userPick[section.id] ?? {}
+  const text = value ? value[0].text : ""
+
   const onChangeInput = (e: any) => {
     if (parseInt(e.target.value) < min) {
-      return setUserPick({ section, payload: min })
+      return setUserPickText({ section, text: min })
     }
     if (parseInt(e.target.value) > max) {
-      return setUserPick({ section, payload: max })
+      return setUserPickText({ section, text: max })
     }
-    setUserPick({ section, payload: e.target.value })
+    setUserPickText({ section, text: e.target.value })
   }
+
   const onFocus = () => {
     if (inputRef?.current) {
       inputRef.current.focus()
     }
   }
   const reset = () => {
-    setUserPick({ section, payload: "" })
-    if (inputRef?.current) {
-      inputRef.current.focus()
-    }
+    setUserPickText({ section, text: "" })
+    onFocus()
   }
 
   return (
@@ -50,7 +51,7 @@ function PageNumber({ section }: { section: SectionType }) {
           description={section.data.description}
           inputStyle={"number"}
           onFocus={onFocus}
-          isActive={`${value}`.length > 0}
+          isActive={!!text}
           resetEvent={reset}
         >
           <input
@@ -58,7 +59,7 @@ function PageNumber({ section }: { section: SectionType }) {
             type="number"
             ref={inputRef}
             onKeyDown={onlyNumberFilter}
-            value={value}
+            value={text}
             onChange={onChangeInput}
           />
         </FormUserInput>

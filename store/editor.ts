@@ -5,6 +5,7 @@ import {
   SectionListType,
   SectionListTypes,
   SectionType,
+  SectionsKeys,
   StyleProperties,
 } from "@/types/Edit"
 import { Langs } from "@/types/Main"
@@ -16,13 +17,6 @@ import { cloneDeep } from "lodash"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 
-interface EditErrorType {
-  text: string
-  sectionIndex: EditStage
-  type: SectionListTypes
-  level: number
-}
-
 export interface EditStates {
   isEditStart: boolean
   initSections: SectionType[]
@@ -32,7 +26,7 @@ export interface EditStates {
   selectedSection: SectionType | null
   active: ActiveTypes
   revert: {
-    sectionKey: "initSections" | "formSections"
+    sectionKey: SectionsKeys
     snapshot: SectionType[]
   }[]
   revertIndex: number
@@ -42,11 +36,6 @@ export interface EditStates {
     format: PageFormatType
     lang: Langs
     customLink: string
-  }
-  error: {
-    init: { [id: string]: EditErrorType }
-    form: { [id: string]: EditErrorType }
-    rending: { [id: string]: EditErrorType }
   }
 }
 
@@ -81,7 +70,7 @@ type Actions = {
       payload?: any
     }
   }) => void
-  setCollection: ({ payload }: { payload: any }) => void
+  setCollection: ({ payload, index, key }: { payload: any; index: number; key: string }) => void
 
   addSection: ({ type, payload, newId }: { type: SectionListTypes; payload?: SectionType; newId?: string }) => void
   addList: ({ type, valueArrForNewList }: { type: string; valueArrForNewList?: { [key: string]: any }[] }) => void
@@ -90,7 +79,7 @@ type Actions = {
 
   deleteSection: (id: string) => void
   deleteList: ({ targetIndex }: { targetIndex: number }) => void
-  deleteCollection: ({ targetIndex }: { targetIndex: number }) => void
+  deleteCollection: ({ targetIndex, targetKey }: { targetIndex?: number; targetKey?: string }) => void
 
   moveSection: ({ from, to }: { from: number; to: number }) => void
   copySection: (payload: { payload: SectionType; newId?: string }) => void
@@ -100,12 +89,11 @@ type Actions = {
   saveSectionHistory: () => void
   setPageOptions: ({ type, payload }: { type: "format" | "lang" | "customLink"; payload: any }) => void
 }
-
-const getTarget = (origin: any): SectionType => {
-  return origin[origin.stage === "init" ? "initSections" : "formSections"][origin.selectedSection.index]
+const getKey = (origin: any): SectionsKeys => {
+  return origin.stage === "init" ? "initSections" : origin.stage === "form" ? "formSections" : "rendingSections"
 }
-const getKey = (origin: any): "initSections" | "formSections" => {
-  return origin.stage === "init" ? "initSections" : "formSections"
+const getTarget = (origin: any): SectionType => {
+  return origin[getKey(origin)][origin.selectedSection.index]
 }
 
 const saveSectionHistoryCallback = ({ origin }: { origin: any }) => {
@@ -130,7 +118,10 @@ export const useEditorStore = create<EditStates & Actions>()(
     isEditStart: false,
     initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
     formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
-    rendingSections: [createNewSection({ type: "submit", index: 0, newId: "submit" })],
+    rendingSections: [
+      createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "rendingThumbnail" }),
+      createNewSection({ type: "confirm", index: 1, newId: "confirm" }),
+    ],
     selectedSection: null,
     stage: "init",
     active: {
@@ -156,11 +147,6 @@ export const useEditorStore = create<EditStates & Actions>()(
       lang: "ko",
       customLink: "",
     },
-    error: {
-      init: {},
-      form: {},
-      rending: {},
-    },
 
     // SET
     saveSectionHistory: () =>
@@ -184,6 +170,9 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         if (sectionKey === "formSections" && origin.stage !== "form") {
           origin.stage = "form"
+        }
+        if (sectionKey === "rendingSections" && origin.stage !== "rending") {
+          origin.stage = "rending"
         }
 
         origin[sectionKey] = snapshot
@@ -213,7 +202,7 @@ export const useEditorStore = create<EditStates & Actions>()(
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
-          if (!!payload) {
+          if (typeof payload !== "undefined") {
             target.value = payload
             origin.selectedSection.value = payload
           }
@@ -316,15 +305,23 @@ export const useEditorStore = create<EditStates & Actions>()(
           origin.active[key] = target
         }
       }),
-    setCollection: ({ payload }) =>
-      // 사용 안함
+    setCollection: ({ payload, index, key }) =>
       set((origin) => {
-        // todo: 안씀
         if (origin.selectedSection) {
           const target = getTarget(origin)
 
-          target.collection = payload
-          origin.selectedSection.collection = payload
+          if (typeof index === "number") {
+            if (key) {
+              target.collection[index][key] = payload
+              origin.selectedSection.collection[index][key] = payload
+            } else {
+              target.collection[index] = payload
+              origin.selectedSection.collection[index] = payload
+            }
+          } else {
+            target.collection = payload
+            origin.selectedSection.collection = payload
+          }
         }
       }),
     setPageOptions: ({ type, payload }) =>
@@ -348,7 +345,7 @@ export const useEditorStore = create<EditStates & Actions>()(
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
-          ;(valueArrForNewList ?? [{}]).forEach((v) => {
+          ;(valueArrForNewList ?? [undefined]).forEach((v) => {
             const newList = createNewSectionList(type, target.list.length, v)
             target.list.push(newList)
           })
@@ -409,11 +406,19 @@ export const useEditorStore = create<EditStates & Actions>()(
         saveSectionHistoryCallback({ origin })
       }),
 
-    deleteCollection: ({ targetIndex }) =>
+    deleteCollection: ({ targetIndex, targetKey }) =>
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
-          target.collection = target.collection.filter((_, i) => i !== targetIndex)
+          if (!targetKey && !targetIndex) return
+
+          if (targetKey) {
+            target.collection = target.collection.filter(({ key }) => key !== targetKey)
+          }
+          if (targetIndex) {
+            target.collection = target.collection.filter((_, i) => i !== targetIndex)
+          }
+
           origin.selectedSection.collection = target.collection
           saveSectionHistoryCallback({ origin })
         }
@@ -469,6 +474,9 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
         if (payload.formSections?.length > 0) {
           origin.formSections = payload.formSections
+        }
+        if (payload.rendingSections?.length > 0) {
+          origin.rendingSections = payload.rendingSections
         }
       }),
   }))

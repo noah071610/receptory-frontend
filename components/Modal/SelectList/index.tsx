@@ -6,7 +6,7 @@ import ModalLayout from ".."
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
-import { UserSelectedListType } from "@/types/Main"
+import { UserPickValueType } from "@/types/Main"
 import cs from "classNames/bind"
 import { useState } from "react"
 import BasicList from "./List/Basic"
@@ -15,33 +15,37 @@ const cx = cs.bind(style)
 
 export const SelectList = ({ section }: { section: SectionType }) => {
   const { t } = useTranslation()
-  const { setModal, setSelects } = useMainStore()
+  const { setModal, setUserPick } = useMainStore()
   const selectList = section.list.filter((v) => hasString(v.data.title))
   const design = section.design ?? "basic"
-  const [userSelectedList, setUserSelectedList] = useState<UserSelectedListType[]>([])
+  const [userSelectedList, setUserSelectedList] = useState<UserPickValueType[]>([])
   const { addSelectNone, isMultiple } = section.options
 
-  const onChangeSelect = (selectedList: SectionListType, index: number) => {
-    const { title, description } = selectedList.data
-    const payload = { index, description, src: selectedList.src, title }
+  const onChangeSelect = (selectedList: SectionListType) => {
+    const target = {
+      key: selectedList.id,
+      text: selectedList.data?.title ?? "",
+      description: selectedList.data.description,
+      src: selectedList.src,
+    }
     if (isMultiple) {
-      if (userSelectedList.findIndex((v) => v.index === index) >= 0) {
-        setUserSelectedList((prev) => prev.filter(({ index: j }) => index !== j))
+      if (userSelectedList.findIndex(({ key }) => key === target.key) >= 0) {
+        setUserSelectedList((prev) => prev.filter(({ key }) => key !== target.key))
       } else {
-        setUserSelectedList((prev) => [...prev, payload])
+        setUserSelectedList((prev) => [...prev, target])
       }
     } else {
-      setUserSelectedList([payload])
+      setUserSelectedList([target])
     }
   }
 
   const onClickNone = () => {
-    setSelects({ payload: [] })
+    setUserPick({ section, value: [{ key: "noneSelect", text: t("noneSelect") }] })
     setModal({ section: null, type: null })
   }
 
   const onClickSubmitMultiple = () => {
-    setSelects({ payload: userSelectedList })
+    setUserPick({ section, value: userSelectedList })
     setModal({ section: null, type: null })
   }
 

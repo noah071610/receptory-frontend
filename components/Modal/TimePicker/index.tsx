@@ -14,7 +14,7 @@ const cx = cs.bind(style)
 
 export const TimePicker = ({ section }: { section: SectionType }) => {
   const { t } = useTranslation()
-  const { setModal, setTime } = useMainStore()
+  const { setModal, setUserPick } = useMainStore()
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const [startTime, setStartTime] = useState<null | string>(null)
@@ -59,29 +59,29 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
           // 오후 5시 ~ 오후 3시를 같이 선택하면 바꿔준다.
 
           if (isMoreLateTime(startTime, calcValue)) {
-            setTime({
-              payload: {
-                selectedStartTime: calcValue,
-                selectedEndTime: startTime,
-              },
+            setUserPick({
+              section,
+              value: [
+                { key: "startTime", text: calcValue },
+                { key: "endTime", text: startTime },
+              ],
             })
           } else {
-            setTime({
-              payload: {
-                selectedStartTime: startTime,
-                selectedEndTime: calcValue,
-              },
+            setUserPick({
+              section,
+              value: [
+                { key: "startTime", text: startTime },
+                { key: "endTime", text: calcValue },
+              ],
             })
           }
           close()
         }
         if (!isRangeSelect) {
           // 하나의 시간만 선택함으로 분단위 까지 선택하면 모달 종료
-          setTime({
-            payload: {
-              selectedStartTime: calcValue,
-              selectedEndTime: null,
-            },
+          setUserPick({
+            section,
+            value: [{ key: "startTime", text: calcValue }],
           })
           close()
         } else {
@@ -93,31 +93,35 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
           setStep("endTime")
         }
         break
-      case "select": // 리스트에 추가한 특정 시간을 선택
-        // 이 로직은 따로 빼는게 좋지만... 그냥 사용하기로 했다 ㅠㅠ 귀찮아
-        // 덕분에 value가 any가 되어버림요
-        setTime({
-          payload: {
-            selectedStartTime: value.specificStartTime,
-            selectedEndTime: value.specificEndTime, // undefined 도 가능
-          },
-        })
-        close()
-        break
       case "any":
-        setTime({
-          payload: {
-            selectedStartTime: "anytime",
-            selectedEndTime: null,
-          },
+        setUserPick({
+          section,
+          value: [{ key: "anytime", text: t("anytime") }],
         })
         close()
         break
 
-      default:
-        alert("에러 발생") //todo:
         break
     }
+  }
+
+  const onClickSpecificTime = ({
+    specificStartTime,
+    specificEndTime,
+  }: {
+    specificStartTime: any
+    specificEndTime: any
+  }) => {
+    setUserPick({
+      section,
+      value: specificEndTime
+        ? [
+            { key: "startTime", text: specificStartTime },
+            { key: "endTime", text: specificEndTime },
+          ]
+        : [{ key: "startTime", text: specificStartTime }],
+    })
+    close()
   }
 
   const { amArr, pmArr } = generateHourSlots({ startHour, endHour })
@@ -174,7 +178,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
         <ul className={cx("select-time-list")}>
           {section.collection?.map(({ specificStartTime, specificEndTime }, i) => (
             <li key={`time_${i}`}>
-              <button onClick={() => onClickTime("select", { specificStartTime, specificEndTime })}>
+              <button onClick={() => onClickSpecificTime({ specificStartTime, specificEndTime })}>
                 <NumberRange start={specificStartTime} end={specificEndTime} />
               </button>
             </li>

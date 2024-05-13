@@ -7,29 +7,24 @@ import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo } from "react"
 import style from "./style.module.scss"
 
+import NumberRange from "@/components/NumberRange"
 import { useMainStore } from "@/store/main"
-import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Time({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const {
-    setModal,
-    setTime,
-    time: { selectedStartTime, selectedEndTime },
-  } = useMainStore()
+  const { setModal, userPick, setUserPick } = useMainStore()
+  const { value } = userPick[section.id] ?? {}
 
   const onClickOpenModal = () => {
     setModal({ type: "time", section })
   }
 
   const reset = () => {
-    setTime({
-      payload: {
-        selectedEndTime: null,
-        selectedStartTime: null,
-      },
+    setUserPick({
+      section,
+      value: [],
     })
   }
 
@@ -40,13 +35,10 @@ function Time({ section }: { section: SectionType }) {
         onClick={onClickOpenModal}
         title={section.data.title}
         description={section.data.description}
-        isActive={!!hasString(selectedStartTime)}
+        isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {!selectedStartTime && t("날짜 입력")}
-        {!!selectedStartTime && <span>{selectedStartTime === "anytime" ? t("anytime") : selectedStartTime}</span>}
-        {!!selectedEndTime && <span>{" ~ "}</span>}
-        {!!selectedEndTime && <span>{selectedEndTime}</span>}
+        {value?.length > 0 && <NumberRange start={value[0].text} end={value[1] && value[1].text} />}
       </FormUserInput>
     </div>
   )

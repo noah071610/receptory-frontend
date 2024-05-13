@@ -1,4 +1,7 @@
 @import "@/styles/variables.scss";
+@import "../thumbnail.module.scss";
+
+@include thumbnail-common-style;
 
 .wrapper {
   width: 100%;
@@ -7,6 +10,7 @@
   max-height: 800px;
   overflow: hidden;
   @include flex($col: true);
+
   &.isDisplayMode {
     height: 600px;
     min-height: 600px;
@@ -35,14 +39,6 @@
     @include description-style;
     text-align: center;
   }
-
-  h1 {
-    word-wrap: break-word;
-  }
-  p {
-    white-space: pre-line;
-    word-break: break-all;
-  }
 }
 
 .thumbnail {
@@ -68,21 +64,12 @@
 }
 
 .drop-zone {
-  @include full;
-  @include flex;
+  position: absolute;
+  top: 0;
+  left: 0;
 
   svg {
-    color: var(--gray);
     font-size: 40px;
-  }
-
-  @include action {
-    svg {
-      color: var(--pink-soft);
-    }
-    &::before {
-      border-color: var(--pink-soft);
-    }
   }
 }
 
@@ -91,12 +78,11 @@
   @include flex;
   margin-top: 20px;
   .cta {
-    width: 220px;
-    border-radius: 100px;
-    background-color: white;
-    padding: 15px 20px;
+    @include btn-submit-style;
+    @include shadow;
     input,
     span {
+      width: 100%;
       text-align: center;
       font-size: 15px;
       font-weight: 600;

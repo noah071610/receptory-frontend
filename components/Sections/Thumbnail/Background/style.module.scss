@@ -1,12 +1,15 @@
 @import "@/styles/variables.scss";
+@import "../thumbnail.module.scss";
+
+@include thumbnail-common-style;
 
 .wrapper {
   width: 100%;
+  position: relative;
   @include flex-y;
-  min-height: 180px;
+  min-height: 160px;
   padding-bottom: 30px;
   margin-bottom: 25px;
-  position: relative;
 
   .background {
     @include full;
@@ -32,37 +35,20 @@
     height: 100%;
     object-fit: cover;
   }
-
-  .drop-zone {
-    width: 100%;
-    height: 100%;
-    svg {
-      color: var(--gray);
-      font-size: 20px;
-    }
-
-    @include action {
-      svg {
-        color: var(--pink-soft);
-      }
-      &::before {
-        border-color: var(--pink-soft);
-      }
-    }
-  }
 }
 
 .content {
   width: 100%;
   height: 100%;
   padding: 10px;
+  padding-left: 20px;
   padding-top: 30px;
   gap: 20px;
   position: relative;
   .title-input,
   .description-input {
     @include input-style;
-  }
+  } // 공통
 
   h1,
   .title-input {
@@ -75,14 +61,6 @@
     margin-top: 2px;
     @include description-style($isSmall: true);
     color: var(--white);
-  }
-
-  h1 {
-    word-wrap: break-word;
-  }
-  p {
-    white-space: pre-line;
-    word-break: break-all;
   }
 }
 

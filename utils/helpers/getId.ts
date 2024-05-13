@@ -1,5 +1,7 @@
-import { nanoid } from "nanoid"
+import { customAlphabet, nanoid } from "nanoid"
 
-export default function getId() {
-  return nanoid(12)
+const getNumber = customAlphabet("123456789ABC", 12)
+
+export default function getId(onlyNumber?: boolean) {
+  return onlyNumber ? getNumber() : nanoid(12)
 }

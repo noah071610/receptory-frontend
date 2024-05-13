@@ -1,5 +1,9 @@
 @import "@/styles/variables.scss";
 
+.input-wrapper {
+  padding-bottom: 10px;
+}
+
 .title {
   width: auto;
   display: flex;
@@ -29,13 +33,11 @@
       padding: 14px 0 14px 12px;
       width: 100%;
       display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
       font-size: 15px;
       line-height: 1.2;
       letter-spacing: 1px;
-      &.isMultiple {
-        flex-direction: column;
-        gap: 10px;
-      }
     }
     input,
     textarea {

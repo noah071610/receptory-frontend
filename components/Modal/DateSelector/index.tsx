@@ -15,25 +15,26 @@ const cx = cs.bind(style)
 export const DateSelector = ({ section }: { section: SectionType }) => {
   const { lang } = useParams()
   const { t } = useTranslation()
-  const { setModal, setDate } = useMainStore()
+  const { setModal, setUserPick } = useMainStore()
   const specificDates = section.collection
   const { addAnyDate } = section.options
   const onClickDate = ({ specificStartDate, specificEndDate }: { specificStartDate: Date; specificEndDate?: Date }) => {
-    setDate({
-      payload: {
-        selectedStartDate: specificStartDate,
-        selectedEndDate: specificEndDate ?? null,
-      },
+    setUserPick({
+      section,
+      value: specificEndDate
+        ? [
+            { key: "startDate", text: setDateFormat(specificStartDate, lang) },
+            { key: "endDate", text: setDateFormat(specificEndDate, lang) },
+          ]
+        : [{ key: "startDate", text: setDateFormat(specificStartDate, lang) }],
     })
     setModal({ section: null, type: null })
   }
 
   const onClickAnyDate = () => {
-    setDate({
-      payload: {
-        selectedStartDate: "anyDate",
-        selectedEndDate: null, // undefined 도 가능
-      },
+    setUserPick({
+      section,
+      value: [{ key: "anyDate", text: t("anyDate") }],
     })
     setModal({ section: null, type: null })
   }

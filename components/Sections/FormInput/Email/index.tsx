@@ -16,12 +16,14 @@ const cx = cs.bind(style)
 
 function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
-  const { setUserPick, userPick } = useMainStore()
-  const value = userPick[section.id]?.value ?? ""
+  const { setUserPickText, userPick } = useMainStore()
   const inputRef = useRef<HTMLInputElement | null>(null)
 
+  const { value } = userPick[section.id] ?? {}
+  const text = value ? value[0].text : ""
+
   const onChangeInput = (e: any) => {
-    setUserPick({ section, payload: e.target.value })
+    setUserPickText({ section, text: e.target.value })
   }
 
   const onFocus = () => {
@@ -30,10 +32,8 @@ function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode
     }
   }
   const reset = () => {
-    setUserPick({ section, payload: "" })
-    if (inputRef?.current) {
-      inputRef.current.focus()
-    }
+    setUserPickText({ section, text: "" })
+    onFocus()
   }
 
   return (
@@ -45,7 +45,7 @@ function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode
           description={section.data.description}
           inputStyle={"email"}
           onFocus={onFocus}
-          isActive={hasString(value)}
+          isActive={hasString(text)}
           resetEvent={reset}
         >
           <input
@@ -56,7 +56,7 @@ function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             id="email"
             required
             className={cx("input")}
-            value={value}
+            value={text}
             onChange={onChangeInput}
           />
         </FormUserInput>

@@ -34,7 +34,7 @@ function getJapaneseEra(year: number) {
   return year
 }
 
-export default function setDateFormat(date: Date, lang: any = "ja") {
+export default function setDateFormat(date: Date, lang: any = "en") {
   const year = date.getFullYear() // 연도를 추출합니다.
   const month = date.getMonth() // 월을 추출하고 2자리로 만듭니다.
   const day = date.getDate() // 일을 추출하고 2자리로 만듭니다.

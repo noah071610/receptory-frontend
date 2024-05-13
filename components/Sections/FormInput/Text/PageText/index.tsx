@@ -18,16 +18,17 @@ function PageText({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const { setUserPick, userPick } = useMainStore()
-  const value = userPick[section.id]?.value ?? ""
+  const { userPick, setUserPickText } = useMainStore()
   const { max } = section.options
   const design = section.design
+  const { value } = userPick[section.id] ?? {}
+  const text = value ? value[0].text : ""
 
   const onChangeInput = (e: any) => {
     if (e.target.value.length > max) {
       return
     }
-    setUserPick({ section, payload: e.target.value })
+    setUserPickText({ section, text: e.target.value })
   }
 
   const onFocus = () => {
@@ -42,16 +43,8 @@ function PageText({ section }: { section: SectionType }) {
     }
   }
   const reset = () => {
-    setUserPick({ section, payload: "" })
-    if (design === "textarea") {
-      if (textareaRef?.current) {
-        textareaRef.current.focus()
-      }
-    } else {
-      if (inputRef?.current) {
-        inputRef.current.focus()
-      }
-    }
+    setUserPickText({ section, text: "" })
+    onFocus()
   }
 
   return (
@@ -63,15 +56,15 @@ function PageText({ section }: { section: SectionType }) {
           description={section.data.description}
           inputStyle={design}
           onFocus={onFocus}
-          isActive={hasString(value)}
+          isActive={hasString(text)}
           resetEvent={reset}
         >
           {design === "text" ? (
-            <input ref={inputRef} className={cx("input")} type="text" value={value} onChange={onChangeInput} />
+            <input ref={inputRef} className={cx("input")} type="text" value={text} onChange={onChangeInput} />
           ) : (
             <TextareaAutosize
               className={cx("textarea")}
-              value={value}
+              value={text}
               maxRows={5}
               maxLength={max}
               ref={textareaRef}

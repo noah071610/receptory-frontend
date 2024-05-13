@@ -26,7 +26,7 @@ export default function EditorFooter() {
   }, [selectedSection, active.submenu.type])
 
   const isOpenedSubmenu = useMemo(() => {
-    return !!active.submenu.type && targetList
+    return !!active.submenu.type && targetList.length > 0
   }, [active.submenu.type, targetList])
 
   const onClickFooterBtn = (type: "toggle" | "close") => {

@@ -31,7 +31,7 @@ export default function Full({
   const { color, background, backgroundColor } = section.style
 
   const { setActive, stage } = useEditorStore()
-  const isForm = stage === "form"
+  const isInitStage = stage === "init"
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -70,7 +70,7 @@ export default function Full({
           className={cx(!isDisplayMode && "title-input")}
           inputType="title"
           displayMode={isDisplayMode && "h1"}
-          isOptional={true}
+          isOptional={false}
           dataKey="title"
           style={{ color: textColor }}
           section={section}
@@ -87,7 +87,7 @@ export default function Full({
           value={description}
           section={section}
         />
-        {!isForm && (
+        {isInitStage && (
           <div className={cx("cta-wrapper")}>
             <button style={{ backgroundColor: color }} className={cx("cta")}>
               <Input

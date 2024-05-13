@@ -5,6 +5,7 @@ import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 
+import { toastError } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
@@ -211,7 +212,7 @@ function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMod
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return alert("atLeastOneList")
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }

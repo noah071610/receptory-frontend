@@ -4,7 +4,7 @@ import IconBtn from "@/components/IconBtn"
 import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
 import { Langs } from "@/types/Main"
-import saveContentFromEditor from "@/utils/editor/saveContentFromEditor"
+import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import { faCheck, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-solid-svg-icons"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
@@ -38,14 +38,13 @@ export default function Header() {
     setRevert,
     revert,
     revertIndex,
-    saveSectionHistory,
+    rendingSections,
+    pageOptions,
   } = useEditorStore()
   const [isSaving, setIsSaving] = useState(false)
 
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [visible, setVisible] = useState(true)
-
-  console.log(revert, revertIndex)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,7 +68,15 @@ export default function Header() {
   const onClickSave = async () => {
     if (!isSaving) {
       await saveContentFromEditor({
-        content: { stage, initSections, formSections, currentUsedImages, currentUsedColors },
+        content: {
+          stage,
+          initSections,
+          formSections,
+          rendingSections,
+          currentUsedImages,
+          currentUsedColors,
+          pageOptions,
+        },
         pageId,
         lang: lang as Langs,
       })

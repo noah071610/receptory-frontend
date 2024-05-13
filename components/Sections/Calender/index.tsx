@@ -23,13 +23,10 @@ const cx = cs.bind(style)
 function Calender({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const { t } = useTranslation()
-  const {
-    setModal,
-    setDate,
-    date: { selectedStartDate, selectedEndDate },
-  } = useMainStore()
+  const { setModal, setUserPick, userPick } = useMainStore()
   const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
   const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options
+  const { value } = userPick[section.id] ?? {}
 
   const [tempDateForSpecificDate, setTempDateForSpecificDate] = useState<Date[]>([])
   const [minMaxDate, setMinMaxDate] = useState<Date[]>([])
@@ -98,11 +95,9 @@ function Calender({ section }: { section: SectionType }) {
   }, [startDate, endDate])
 
   const reset = () => {
-    setDate({
-      payload: {
-        selectedEndDate: null,
-        selectedStartDate: null,
-      },
+    setUserPick({
+      section,
+      value: [],
     })
   }
 
@@ -113,15 +108,10 @@ function Calender({ section }: { section: SectionType }) {
         onClick={onClickOpenModal}
         title={section.data.title}
         description={section.data.description}
-        isActive={!!selectedStartDate}
+        isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {!selectedStartDate && t("날짜 입력")}
-        {selectedStartDate && (
-          <span>{selectedStartDate === "anyDate" ? t("anyDate") : setDateFormat(selectedStartDate, lang)}</span>
-        )}
-        {selectedEndDate && <span>{" ~ "}</span>}
-        {selectedEndDate && <span>{setDateFormat(selectedEndDate, lang)}</span>}
+        {value?.length > 0 && <NumberRange start={value[0].text} end={value[1] && value[1].text} />}
       </FormUserInput>
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />

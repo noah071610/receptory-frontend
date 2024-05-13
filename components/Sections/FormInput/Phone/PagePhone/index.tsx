@@ -17,23 +17,23 @@ const cx = cs.bind(style)
 
 function PagePhone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setUserPick, userPick } = useMainStore()
+  const { setUserPickText, userPick } = useMainStore()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const value = userPick[section.id]?.value ?? ""
   const { phoneNumberCountry } = section.options
+  const { value } = userPick[section.id] ?? {}
+  const text = value ? value[0].text : ""
 
   const onChangePhoneInput = (e: any) => {
     const output = getPhoneNumber(e, phoneNumberCountry)
-
-    setUserPick({ section, payload: output })
+    setUserPickText({ section, text: output })
   }
 
   const onBlur = () => {
     if (phoneNumberCountry === "ko" || phoneNumberCountry === "ja") {
-      setUserPick({ section, payload: value.slice(0, 13) })
+      setUserPickText({ section, text: text.slice(0, 13) })
     }
     if (phoneNumberCountry === "th") {
-      setUserPick({ section, payload: value.slice(0, 12) })
+      setUserPickText({ section, text: text.slice(0, 12) })
     }
   }
 
@@ -43,10 +43,8 @@ function PagePhone({ section }: { section: SectionType }) {
     }
   }
   const reset = () => {
-    setUserPick({ section, payload: "" })
-    if (inputRef?.current) {
-      inputRef.current.focus()
-    }
+    setUserPickText({ section, text: "" })
+    onFocus()
   }
 
   return (
@@ -58,7 +56,7 @@ function PagePhone({ section }: { section: SectionType }) {
           description={section.data.description}
           inputStyle={"phone"}
           onFocus={onFocus}
-          isActive={hasString(value)}
+          isActive={hasString(text)}
           resetEvent={reset}
         >
           <div className={cx("phone-wrapper")}>
@@ -68,7 +66,7 @@ function PagePhone({ section }: { section: SectionType }) {
               src={`/images/icons/${phoneNumberCountry}.png`}
               alt={`${phoneNumberCountry}-image`}
             />
-            <input ref={inputRef} onBlur={onBlur} className={cx("phone")} value={value} onChange={onChangePhoneInput} />
+            <input ref={inputRef} onBlur={onBlur} className={cx("phone")} value={text} onChange={onChangePhoneInput} />
           </div>
         </FormUserInput>
       </div>

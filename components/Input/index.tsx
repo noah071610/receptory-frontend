@@ -24,16 +24,20 @@ function Input({
   listIndex,
   isOptional,
   displayMode,
+  onChange,
   section,
+  isBottomError,
 }: {
   type: "input" | "textarea"
   className?: string
   inputType: string
   isOptional: boolean
+  isBottomError?: boolean
   listIndex?: number
   maxLength?: number
   lineMax?: number
   dataKey?: string
+  onChange?: any
   value: string
   style?: StyleProperties
   displayMode?: boolean | "h1" | "p" | "h2" | "span"
@@ -52,6 +56,7 @@ function Input({
   const [snapshot, setSnapshot] = useState<string | null>(value ?? null)
 
   const setInput = (inputValue: string) => {
+    if (onChange) return onChange(inputValue)
     if (dataKey) {
       if (typeof listIndex === "number") {
         setList({ payload: inputValue, index: listIndex, key: "data", dataKey })
@@ -74,9 +79,9 @@ function Input({
     if (!selectedSection) {
       setSelectedSection({ payload: section })
     }
-    if (type === "input") {
-      if (inputValue.length > maxLength) return
-    } else if (type === "textarea") {
+
+    if (inputValue.length > maxLength) return
+    if (type === "textarea") {
       if (lines.length > lineMax) return
     }
 
@@ -157,7 +162,7 @@ function Input({
 
   return (
     <div className={cx("input-wrapper")}>
-      <div className={cx("tooltip", { isError })}>
+      <div className={cx("tooltip", { isError, isBottomError })}>
         <div className={cx("error")}>{errorMessage}</div>
       </div>
       {displayMode ? (

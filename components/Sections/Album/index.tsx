@@ -97,7 +97,7 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return alert("atLeastOneList")
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }

@@ -1,8 +1,9 @@
 "use client"
 
+import Confirm from "@/components/Sections/Confirm"
+import PageConfirm from "@/components/Sections/Confirm/PageConfirm"
 import Empty from "@/components/Sections/Empty"
 import SectionLoading from "@/components/Sections/SectionLoading"
-import Submit from "@/components/Sections/Submit"
 import Thumbnail from "@/components/Sections/Thumbnail"
 import { SectionListTypes, SectionType } from "@/types/Edit"
 import dynamic from "next/dynamic"
@@ -16,6 +17,10 @@ const Callout = dynamic(() => import("@/components/Sections/Callout/index"), {
   loading: () => <SectionLoading />,
 })
 const Choices = dynamic(() => import("@/components/Sections/Choices/index"), {
+  ssr: true,
+  loading: () => <SectionLoading />,
+})
+const PageChoices = dynamic(() => import("@/components/Sections/Choices/PageChoices/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
 })
@@ -107,6 +112,10 @@ const CheckList = dynamic(() => import("@/components/Sections/CheckList/index"),
   ssr: true,
   loading: () => <SectionLoading />,
 })
+const LinkBtn = dynamic(() => import("@/components/Sections/LinkBtn/index"), {
+  ssr: true,
+  loading: () => <SectionLoading />,
+})
 
 export const sectionMap: Record<SectionListTypes, (section: SectionType, isDisplayMode?: boolean) => any> = {
   album: (section, isDisplayMode = false) => <Album section={section} isDisplayMode={isDisplayMode} />,
@@ -128,12 +137,15 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   phone: (section, isDisplayMode = false) =>
     !isDisplayMode ? <Phone section={section} /> : <PagePhone section={section} />,
   email: (section, isDisplayMode = false) => <Email section={section} isDisplayMode={isDisplayMode} />,
-  choices: (section, isDisplayMode = false) => <Choices section={section} isDisplayMode={isDisplayMode} />,
+  choices: (section, isDisplayMode = false) =>
+    isDisplayMode ? <PageChoices section={section} /> : <Choices section={section} />,
   time: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageTime section={section} /> : <Time section={section} />,
   select: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageSelectList section={section} /> : <SelectList section={section} />,
   empty: () => <Empty />,
   checkList: (section, isDisplayMode = false) => <CheckList section={section} isDisplayMode={isDisplayMode} />,
-  submit: (section, isDisplayMode = false) => <Submit section={section} isDisplayMode={isDisplayMode} />,
+  linkBtn: (section, isDisplayMode = false) => <LinkBtn section={section} isDisplayMode={isDisplayMode} />,
+  confirm: (section, isDisplayMode = false) =>
+    isDisplayMode ? <PageConfirm isEditor={true} section={section} /> : <Confirm section={section} />,
 }

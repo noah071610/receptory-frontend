@@ -22,7 +22,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
   const { color, background, backgroundColor } = section.style
 
   const { setActive, stage } = useEditorStore()
-  const isForm = stage === "form"
+  const isInitStage = stage === "init"
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -61,7 +61,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
             inputType="title"
             className={cx(!isDisplayMode && "title-input")}
             displayMode={isDisplayMode && "h1"}
-            isOptional={true}
+            isOptional={false}
             dataKey={"title"}
             value={title}
             section={section}
@@ -76,7 +76,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
             value={description}
             section={section}
           />
-          {!isForm && (
+          {isInitStage && (
             <div className={cx("cta-wrapper")}>
               <button className={cx("cta")}>
                 <Input

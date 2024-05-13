@@ -3,11 +3,11 @@
 import FormUserInput from "@/components/FormUserInput"
 import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
-import setDateFormat from "@/utils/helpers/setDate"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { memo } from "react"
 import style from "./style.module.scss"
 
+import NumberRange from "@/components/NumberRange"
 import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
@@ -16,22 +16,17 @@ const cx = cs.bind(style)
 function PageCalender({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const { t } = useTranslation()
-  const {
-    date: { selectedStartDate, selectedEndDate },
-    setDate,
-    setModal,
-  } = useMainStore()
+  const { setUserPick, userPick, setModal } = useMainStore()
+  const { value } = userPick[section.id] ?? {}
 
   const onClickOpenModal = () => {
     setModal({ section, type: "date" })
   }
 
   const reset = () => {
-    setDate({
-      payload: {
-        selectedEndDate: null,
-        selectedStartDate: null,
-      },
+    setUserPick({
+      section,
+      value: [],
     })
   }
 
@@ -42,15 +37,10 @@ function PageCalender({ section }: { section: SectionType }) {
         onClick={onClickOpenModal}
         title={section.data.title}
         description={section.data.description}
-        isActive={!!selectedStartDate}
+        isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {!selectedStartDate && t("날짜 입력")}
-        {selectedStartDate && (
-          <span>{selectedStartDate === "anyDate" ? t("anyDate") : setDateFormat(selectedStartDate, lang)}</span>
-        )}
-        {selectedEndDate && <span>{" ~ "}</span>}
-        {selectedEndDate && <span>{setDateFormat(selectedEndDate, lang)}</span>}
+        {value?.length > 0 && <NumberRange start={value[0].text} end={value[1] && value[1].text} />}
       </FormUserInput>
     </div>
   )
