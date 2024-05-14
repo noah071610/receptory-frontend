@@ -15,9 +15,9 @@
       color: var(--gray);
     }
     @include action {
-      border-color: var(--pink);
+      border-color: var(--blue);
       svg {
-        color: var(--pink);
+        color: var(--blue);
       }
     }
   }

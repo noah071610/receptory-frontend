@@ -106,7 +106,7 @@ const sectionMap: { [key: string]: any } = {
       .map((v, i) => createNewSectionList(v, i))
       .map((v) => ({ ...v, isActive: true }))
 
-    list[2].style.color = colors.purple
+    list[2].style.color = colors.blueHard
 
     return {
       style: {
@@ -135,7 +135,7 @@ const sectionMap: { [key: string]: any } = {
   qna: () => {
     return {
       style: {
-        color: colors.pink,
+        color: colors.blue,
       },
       list: [{ ...createNewSectionList("qna", 0) }],
     }

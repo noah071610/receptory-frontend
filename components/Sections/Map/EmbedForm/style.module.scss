@@ -28,16 +28,16 @@
     @include action {
       svg,
       h3 {
-        color: var(--pink);
+        color: var(--blue);
       }
     }
     &.isOpen {
       svg {
-        color: var(--pink);
+        color: var(--blue);
         transform: rotateX(180deg);
       }
       h3 {
-        color: var(--pink);
+        color: var(--blue);
       }
     }
   }

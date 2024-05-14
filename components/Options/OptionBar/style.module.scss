@@ -48,13 +48,13 @@
 
   &.active {
     span {
-      color: var(--pink-hard);
+      color: var(--blue-hard);
     }
     &::before {
-      background-color: var(--pink);
+      background-color: var(--blue);
     }
     .bar {
-      background-color: var(--pink-soft);
+      background-color: var(--blue-soft);
       .circle {
         transform: translateX(21px);
         background-color: var(--white);

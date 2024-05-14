@@ -38,24 +38,24 @@
 
   @include action {
     svg {
-      color: var(--pink-soft);
+      color: var(--blue-soft);
     }
     label {
-      color: var(--pink);
+      color: var(--blue);
     }
     &::before {
-      border-color: var(--pink-soft);
+      border-color: var(--blue-soft);
     }
   }
   &.active {
     svg {
-      color: var(--pink-soft);
+      color: var(--blue-soft);
     }
     label {
-      color: var(--pink);
+      color: var(--blue);
     }
     &::before {
-      border-color: var(--pink-soft);
+      border-color: var(--blue-soft);
     }
   }
 }

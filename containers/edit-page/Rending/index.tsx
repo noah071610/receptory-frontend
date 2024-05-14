@@ -74,6 +74,7 @@ export default function Rending({}: {}) {
       setPageOptions({ type: "format", payload: "active" })
     }
     if (value === "inactive") {
+      payload.content.pageOptions.format = "inactive"
       const isOk = await inactivePage({ pageId })
       if (isOk) {
         toastSuccess("페이지를 비활성화 했어요.")

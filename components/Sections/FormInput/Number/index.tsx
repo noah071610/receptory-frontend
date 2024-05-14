@@ -20,7 +20,7 @@ const globalMax = 9999999
 function Number({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const { setSelectedSection, setOptions, selectedSection } = useEditorStore()
+  const { setSelectedSection, setOptions, saveSectionHistory, selectedSection } = useEditorStore()
   const { setUserPickText, userPick } = useMainStore()
   const { min, max } = section.options
 
@@ -52,6 +52,7 @@ function Number({ section }: { section: SectionType }) {
       return setOptions({ payload: parseInt(e.target.max), key: type })
     }
     setOptions({ payload: e.target.value, key: type })
+    saveSectionHistory()
   }
 
   useEffect(() => {

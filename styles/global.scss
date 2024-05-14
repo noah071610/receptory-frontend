@@ -197,16 +197,15 @@ textarea {
 .toast-error {
   background: var(--white) !important;
 
-  border: 1px solid rgba(235, 235, 235, 0.45);
   padding: 20px;
   font-size: 14px !important;
   line-height: 1.4 !important;
 
   button {
-    background-color: var(--pink-hard) !important;
+    background-color: var(--red) !important;
     color: var(--white) !important;
   }
-  background: var(--radial-bg) !important;
+  background: rgba(255, 241, 244, 1) !important;
   svg {
     color: var(--red);
   }
@@ -214,7 +213,6 @@ textarea {
 .toast-success {
   background: var(--white) !important;
 
-  border: 1px solid rgba(235, 235, 235, 0.45);
   padding: 20px;
   font-size: 14px !important;
   line-height: 1.4 !important;
@@ -223,7 +221,7 @@ textarea {
     background-color: var(--green-hard) !important;
     color: var(--white) !important;
   }
-  background: radial-gradient(circle, rgba(255, 255, 255, 1) 70%, rgb(227, 255, 234) 100%) !important;
+  background-color: rgb(227, 255, 234, 1) !important;
   svg {
     color: var(--green-hard);
   }
@@ -238,9 +236,17 @@ textarea {
   --text-white: white;
   --black: black;
 
-  --pink-soft: rgba(255, 176, 176, 0.7);
-  --pink: rgba(255, 138, 138, 0.8);
-  --pink-hard: rgba(229, 106, 106, 0.9);
+  --gray-bg: rgb(220, 224, 255, 0.5);
+
+  --pink-soft: rgba(220, 224, 255, 0.5);
+  --pink: rgba(117, 130, 253, 1);
+  --pink-hard: rgba(77, 94, 255, 1);
+
+  --blue-soft: rgba(220, 224, 255, 0.5);
+  --blue: rgba(117, 130, 253, 1);
+  --blue-hard: rgba(77, 94, 255, 1);
+
+  --blue-desc: #0a59aeda;
 
   --gray-softest: rgba(225, 225, 225, 0.15);
   --gray-soft: rgba(235, 235, 235, 0.45);
@@ -273,10 +279,6 @@ textarea {
   --green-soft: rgba(131, 218, 131, 0.3);
   --green: rgba(78, 192, 78, 0.8);
   --green-hard: rgba(95, 173, 95, 0.9);
-
-  --blue-soft: rgba(143, 182, 254, 0.6);
-  --blue-hard: rgba(53, 91, 255, 0.9);
-  --blue: rgba(46, 58, 255, 0.9); //todo:
 
   --candidate-height: 94px;
   --nav-width: 100px;

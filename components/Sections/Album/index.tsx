@@ -14,6 +14,7 @@ import cs from "classNames/bind"
 import { memo, useMemo } from "react"
 import { Gallery, Image, ImageExtended, ThumbnailImageProps } from "react-grid-gallery"
 import style from "./style.module.scss"
+import { toastError } from "@/config/toast"
 const cx = cs.bind(style)
 
 const AlbumImageComponent = ({

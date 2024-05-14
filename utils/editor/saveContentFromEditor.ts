@@ -20,13 +20,16 @@ export const convertContent = ({
   const description = thumbnailSection?.data?.description ?? ""
   const background = thumbnailSection?.style.background ?? ""
   const image = thumbnailSection?.src
+  content.initSections = content.initSections.slice(0, 20)
+  content.formSections = content.formSections.slice(0, 20)
+  content.rendingSections = content.rendingSections.slice(0, 20)
   const { currentUsedColors, currentUsedImages, stage, ...rest } = content
 
   return {
     pageId,
     title,
     description,
-    format: content.pageOptions.format, // todo:
+    format: content.pageOptions.format,
     lang,
     thumbnail: hasString(background) ? background : image ?? "",
     content: isDeploy ? { ...rest } : content,

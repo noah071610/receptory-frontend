@@ -1,6 +1,7 @@
 "use client"
 
 import { SwiperNavigation } from "@/components/SwiperNavigation"
+import { toastError } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
@@ -55,7 +56,7 @@ function OptionRatio({
       }
       return
     }
-    if (isDesign) return setDesign({ payload: v })
+    if (isDesign) return setDesign({ payload: v }) // 디자인은 스토어 내부에서 히스토리 저장
     setOptions({ payload: v, key: targetKey })
     saveSectionHistory()
   }

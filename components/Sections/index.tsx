@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react"
 
+import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import getId from "@/utils/helpers/getId"
@@ -27,7 +28,18 @@ export default function SectionLayout({
   pathname: string
 }) {
   const { replace } = useRouter()
-  const { selectedSection, copySection, setActive, setSelectedSection, deleteSection, setStyle } = useEditorStore()
+  const {
+    selectedSection,
+    copySection,
+    stage,
+    initSections,
+    rendingSections,
+    formSections,
+    setActive,
+    setSelectedSection,
+    deleteSection,
+    setStyle,
+  } = useEditorStore()
 
   const onClickSection = (e: any) => {
     const closestElement = e.target.closest("[data-closer]")
@@ -48,6 +60,16 @@ export default function SectionLayout({
     deleteSection(section.id)
   }
   const onClickCopy = () => {
+    if (stage === "init" && initSections.length >= 20) {
+      return toastError("lessThan20sections")
+    }
+    if (stage === "form" && formSections.length >= 20) {
+      return toastError("lessThan20sections")
+    }
+    if (stage === "rending" && rendingSections.length >= 20) {
+      return toastError("lessThan20sections")
+    }
+
     const newId = getId()
     copySection({ payload: section, newId })
 
@@ -88,7 +110,6 @@ export default function SectionLayout({
             section.type !== "qna" &&
             section.type !== "map" && (
               <button onClick={onClickCopy} data-closer="copy" className={cx("icon")}>
-                {/* todo */}
                 <FontAwesomeIcon icon={faCopy} />
               </button>
             )}

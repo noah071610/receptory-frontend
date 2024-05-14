@@ -35,7 +35,7 @@
     border: 1px solid transparent;
     overflow: hidden;
     &.isAdd {
-      border-color: var(--pink);
+      border-color: var(--blue);
     }
     img {
       max-width: 80px;
@@ -49,9 +49,9 @@
   padding: 15px 10px;
   border-radius: 5px;
   margin-top: 20px;
-  background-color: var(--pink);
+  background-color: var(--blue);
   @include action {
-    background-color: var(--pink-hard);
+    background-color: var(--blue-hard);
   }
   span {
     font-weight: 600;

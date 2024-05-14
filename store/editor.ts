@@ -247,13 +247,14 @@ export const useEditorStore = create<EditStates & Actions>()(
         }
       }),
     setOptions: ({ payload, key }) =>
-      // todo :
       set((origin) => {
         if (origin.selectedSection) {
+          // 히스토리 작동중.
           const target = getTarget(origin)
 
           target.options[key] = payload
           origin.selectedSection.options[key] = payload
+          // 히스토리는 섹션 내부에서 다루기로 결정
         }
       }),
     setList: ({ index, payload, key, dataKey }) =>

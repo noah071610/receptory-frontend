@@ -25,7 +25,7 @@ export default function List({
   const { replace } = useRouter()
   const pathname = usePathname()
   const { lang } = useParams()
-  const { addSection, formSections, initSections, setActive, active } = useEditorStore()
+  const { addSection, formSections, initSections, setActive, active, stage, rendingSections } = useEditorStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, type: EditorFooterListActions) => {
@@ -33,16 +33,29 @@ export default function List({
       case "createSection":
         const newId = getId()
         if (value === "calender" && formSections.find(({ type }) => type === "calender")) {
-          return toastError("oneSection") // todo:
+          return toastError("oneSection")
         }
         if (value === "time" && formSections.find(({ type }) => type === "time")) {
-          return toastError("oneSection") // todo:
+          return toastError("oneSection")
+        }
+        if (value === "email" && formSections.find(({ type }) => type === "email")) {
+          return toastError("oneSection")
         }
         if (value === "qna" && initSections.find(({ type }) => type === "qna")) {
-          return toastError("oneSection") // todo:
+          return toastError("oneSection")
         }
         if (value === "map" && initSections.find(({ type }) => type === "map")) {
-          return toastError("oneSection") // todo:
+          return toastError("oneSection")
+        }
+
+        if (stage === "init" && initSections.length >= 20) {
+          return toastError("lessThan20sections")
+        }
+        if (stage === "form" && formSections.length >= 20) {
+          return toastError("lessThan20sections")
+        }
+        if (stage === "rending" && rendingSections.length >= 20) {
+          return toastError("lessThan20sections")
         }
 
         addSection({ type: value as SectionListTypes, newId })

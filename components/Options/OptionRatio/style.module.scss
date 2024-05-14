@@ -31,12 +31,12 @@
         font-size: 13px;
       }
       &.active {
-        border-color: var(--pink-soft);
+        border-color: var(--blue-soft);
         svg {
-          color: var(--pink-soft);
+          color: var(--blue-soft);
         }
         .name {
-          color: var(--pink-hard);
+          color: var(--blue-hard);
         }
       }
     }

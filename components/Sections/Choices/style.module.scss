@@ -168,10 +168,10 @@
 
     @include action {
       svg {
-        color: var(--pink-soft);
+        color: var(--blue-soft);
       }
       &::before {
-        border-color: var(--pink-soft);
+        border-color: var(--blue-soft);
       }
     }
   }

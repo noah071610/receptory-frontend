@@ -2,12 +2,12 @@ export const colors = {
   white: "rgba(255,255,255,1)",
   textWhite: "rgba(255,255,255,1)",
   black: "rgba(0,0,0,1)",
-  ctaColor: "rgba(130, 42, 202, 0.6)",
-  backgroundDefaultColor: "rgba(219, 0, 0, 0.28)",
+  ctaColor: "rgba(14, 32, 196, 0.5)",
+  backgroundDefaultColor: "rgba(14, 32, 196, 0.5)",
 
-  pinkSoft: "rgba(255,176,176,0.7)",
-  pink: "rgba(255,138,138,1)",
-  pinkHard: "rgba(229,106,106,0.9)",
+  blueSoft: "rgba(220, 224, 255, 0.5)",
+  blue: "rgba(117, 130, 253, 1)",
+  blueHard: "rgba(77, 94, 255, 1)",
 
   graySoftest: "rgba(225,225,225,0.15)",
   graySoft: "rgba(235,235,235,0.45)",

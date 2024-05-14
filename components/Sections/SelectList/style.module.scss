@@ -46,7 +46,7 @@
         }
         @include action {
           svg {
-            color: var(--pink);
+            color: var(--blue);
           }
         }
 
@@ -67,8 +67,4 @@
 
     @include input-style;
   }
-}
-
-.selected-list-text {
-  width: 100%;
 }

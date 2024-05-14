@@ -20,7 +20,7 @@ const cx = cs.bind(style)
 function Time({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const { setModal, userPick, setUserPick } = useMainStore()
-  const { setOptions, addCollection, deleteCollection } = useEditorStore()
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
   const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 
   const [tempStartTime, setTempStartTime] = useState<string>("00:00")
@@ -31,6 +31,9 @@ function Time({ section }: { section: SectionType }) {
   const onChangeMinMaxHour = (e: any, type: string) => {
     const onlyHour = e.target.value.split(":")[0]
     setOptions({ payload: onlyHour, key: type })
+  }
+  const onBlurMinMax = () => {
+    saveSectionHistory()
   }
 
   const onChangeSpecificTime = (e: any, type: "specificStartTime" | "specificEndTime") => {
@@ -92,6 +95,9 @@ function Time({ section }: { section: SectionType }) {
     if (isAlways) {
       setOptions({ key: "startHour", payload: "00" })
       setOptions({ key: "endHour", payload: "00" })
+      setTimeout(() => {
+        saveSectionHistory() // 옵션이 업데이트되면 섹션 스냅샷을 찍기위해 비동기
+      }, 100)
     }
   }, [isAlways])
 
@@ -167,11 +173,21 @@ function Time({ section }: { section: SectionType }) {
               {!isAlways && (
                 <div className={cx("option-time-picker")}>
                   <div key={`time-min-max-startHour`} className={cx("time-min-max")}>
-                    <input onChange={(e) => onChangeMinMaxHour(e, "startHour")} value={`${startHour}:00`} type="time" />
+                    <input
+                      onBlur={onBlurMinMax}
+                      onChange={(e) => onChangeMinMaxHour(e, "startHour")}
+                      value={`${startHour}:00`}
+                      type="time"
+                    />
                   </div>
                   <span>{"~"}</span>
                   <div key={`time-min-max-endHour`} className={cx("time-min-max")}>
-                    <input onChange={(e) => onChangeMinMaxHour(e, "endHour")} value={`${endHour}:00`} type="time" />
+                    <input
+                      onBlur={onBlurMinMax}
+                      onChange={(e) => onChangeMinMaxHour(e, "endHour")}
+                      value={`${endHour}:00`}
+                      type="time"
+                    />
                   </div>
                 </div>
               )}

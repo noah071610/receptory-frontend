@@ -19,7 +19,7 @@
 
   &.active {
     @include z-index(edit-content);
-    border-color: var(--pink-soft);
+    border-color: var(--blue-soft);
   }
   .tools {
     position: absolute;
@@ -57,7 +57,7 @@
         font-size: 15px;
         color: var(--white);
         @include action {
-          color: var(--pink);
+          color: var(--blue);
         }
       }
     }

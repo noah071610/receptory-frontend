@@ -24,7 +24,7 @@ function Text({ section }: { section: SectionType }) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const { t } = useTranslation()
   const { setUserPickText, userPick } = useMainStore()
-  const { setOptions } = useEditorStore()
+  const { setOptions, saveSectionHistory } = useEditorStore()
   const { max } = section.options
   const design = section.design
   const globalMax = design === "text" ? 50 : 500
@@ -50,13 +50,14 @@ function Text({ section }: { section: SectionType }) {
     setOptions({ payload: globalMax, key: "max" })
   }, [section.design])
 
-  const onBlur = () => {
+  const onBlurMinMax = () => {
     if (!max || max < 10) {
       setOptions({ payload: 10, key: "max" })
     }
     if (max > globalMax) {
       setOptions({ payload: globalMax, key: "max" })
     }
+    saveSectionHistory()
   }
 
   const onFocus = () => {
@@ -112,7 +113,7 @@ function Text({ section }: { section: SectionType }) {
               className={cx("minMax")}
               onKeyDown={onlyNumberFilter}
               onKeyUp={enforceMinMax}
-              onBlur={onBlur}
+              onBlur={onBlurMinMax}
               type="number"
               min={1}
               max={globalMax}
