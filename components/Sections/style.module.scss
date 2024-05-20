@@ -19,7 +19,7 @@
 
   &.active {
     @include z-index(edit-content);
-    border-color: var(--blue-soft);
+    border-color: var(--blue);
   }
   .tools {
     position: absolute;

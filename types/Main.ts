@@ -20,3 +20,14 @@ export interface UserPickValueType {
   description?: string
   src?: string
 }
+
+export type ModalActiveType =
+  | "date"
+  | "time"
+  | "select"
+  | "dateSelect"
+  | "changeProfile"
+  | "confirmHard"
+  | "confirm"
+  | "report"
+  | null

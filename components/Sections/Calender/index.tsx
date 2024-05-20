@@ -145,7 +145,7 @@ function Calender({ section }: { section: SectionType }) {
                         start={specificStartDate}
                         end={specificEndDate}
                         formatter={(date: Date) => {
-                          return setDateFormat(date, lang)
+                          return setDateFormat({ date, lang })
                         }}
                       />
                     </button>

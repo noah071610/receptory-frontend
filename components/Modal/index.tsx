@@ -22,9 +22,10 @@ export default function ModalLayout({ children, modalStyle }: { children: ReactN
   return (
     <div className={cx("overlay")}>
       <div
-        style={getAnimation({ type: "fadeUp", delay: 0, speed: 600 })}
+        style={getAnimation({ type: "fadeUpBig", delay: 0 })}
         className={cx("modal", modalStyle ?? "")}
         data-closer="editor"
+        data-global-closer="modal"
       >
         {children}
       </div>

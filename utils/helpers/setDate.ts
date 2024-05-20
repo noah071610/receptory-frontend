@@ -34,26 +34,28 @@ function getJapaneseEra(year: number) {
   return year
 }
 
-export default function setDateFormat(date: Date, lang: any = "en") {
+export default function setDateFormat({ date, lang = "en", isTime }: { date: Date; lang: any; isTime?: boolean }) {
   const year = date.getFullYear() // 연도를 추출합니다.
   const month = date.getMonth() // 월을 추출하고 2자리로 만듭니다.
   const day = date.getDate() // 일을 추출하고 2자리로 만듭니다.
+  const hours = date.getHours() // 일을 추출하고 2자리로 만듭니다.
+  const minutes = date.getMinutes() // 일을 추출하고 2자리로 만듭니다.
 
   switch (lang) {
     case "ko":
-      return `${year}년 ${month}월 ${day}일`
+      return `${year}년 ${month}월 ${day}일` + ` ${hours}시 ${minutes}분`
 
     case "en":
-      return `${formatDateToEnglish(month)} ${day}, ${year}`
+      return `${formatDateToEnglish(month)} ${day}, ${year}` + ` ${hours}시 ${minutes}분`
 
     case "ja":
-      return `${getJapaneseEra(year)} ${month}月 ${day}日`
+      return `${getJapaneseEra(year)} ${month}月 ${day}日` + ` ${hours}時${minutes}分`
 
     case "th":
-      return `พ.ศ. ${year + 543} ${month}. ${day}.`
+      return `พ.ศ. ${year + 543} ${month}. ${day}.` + ` ${hours}:${minutes}`
 
     default:
-      return `${year}-${month}-${day}`
+      return `${year}-${month}-${day}` + ` ${hours}:${minutes}`
   }
 }
 // พ.ศ. 2562

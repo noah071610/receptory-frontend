@@ -17,6 +17,41 @@ import { cloneDeep } from "lodash"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 
+export const initialStates: EditStates = {
+  isEditStart: false,
+  initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
+  formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
+  rendingSections: [
+    createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "rendingThumbnail" }),
+    createNewSection({ type: "confirm", index: 1, newId: "confirm" }),
+  ],
+  selectedSection: null,
+  stage: "init",
+  active: {
+    modal: {
+      type: null,
+      payload: null,
+    },
+    tooltip: {
+      type: null,
+      payload: null,
+    },
+    submenu: {
+      type: null,
+      payload: null,
+    },
+  },
+  revert: [],
+  revertIndex: -1,
+  currentUsedImages: [],
+  currentUsedColors: [],
+  pageOptions: {
+    format: "inactive",
+    lang: "ko",
+    customLink: "",
+  },
+}
+
 export interface EditStates {
   isEditStart: boolean
   initSections: SectionType[]
@@ -89,6 +124,7 @@ type Actions = {
   saveSectionHistory: () => void
   setPageOptions: ({ type, payload }: { type: "format" | "lang" | "customLink"; payload: any }) => void
 }
+
 const getKey = (origin: any): SectionsKeys => {
   return origin.stage === "init" ? "initSections" : origin.stage === "form" ? "formSections" : "rendingSections"
 }
@@ -115,38 +151,7 @@ const saveSectionHistoryCallback = ({ origin }: { origin: any }) => {
 export const useEditorStore = create<EditStates & Actions>()(
   immer((set) => ({
     // STATE
-    isEditStart: false,
-    initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
-    formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
-    rendingSections: [
-      createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "rendingThumbnail" }),
-      createNewSection({ type: "confirm", index: 1, newId: "confirm" }),
-    ],
-    selectedSection: null,
-    stage: "init",
-    active: {
-      modal: {
-        type: null,
-        payload: null,
-      },
-      tooltip: {
-        type: null,
-        payload: null,
-      },
-      submenu: {
-        type: null,
-        payload: null,
-      },
-    },
-    revert: [],
-    revertIndex: -1,
-    currentUsedImages: [],
-    currentUsedColors: [],
-    pageOptions: {
-      format: "inactive",
-      lang: "ko",
-      customLink: "",
-    },
+    ...initialStates,
 
     // SET
     saveSectionHistory: () =>
@@ -463,27 +468,48 @@ export const useEditorStore = create<EditStates & Actions>()(
       set((origin) => {
         if (payload.currentUsedColors) {
           origin.currentUsedColors = payload.currentUsedColors
+        } else {
+          origin.currentUsedColors = []
         }
         if (payload.currentUsedImages) {
           origin.currentUsedImages = payload.currentUsedImages
+        } else {
+          origin.currentUsedImages = []
         }
         if (payload.stage) {
           origin.stage = payload.stage
+        } else {
+          origin.stage = "init"
         }
         if (payload.initSections?.length > 0) {
           origin.initSections = payload.initSections
+        } else {
+          origin.initSections = []
         }
         if (payload.formSections?.length > 0) {
           origin.formSections = payload.formSections
+        } else {
+          origin.formSections = []
         }
         if (payload.rendingSections?.length > 0) {
           origin.rendingSections = payload.rendingSections
+        } else {
+          origin.rendingSections = []
         }
 
         if (payload.pageOptions) {
           origin.pageOptions = payload.pageOptions
-          origin.pageOptions.format = format
-          origin.pageOptions.lang = lang
+          if (origin.pageOptions?.format) {
+            origin.pageOptions.format = payload.pageOptions.format
+          } else {
+            origin.pageOptions.format = format ?? "inactive"
+          }
+
+          if (origin.pageOptions?.lang) {
+            origin.pageOptions.lang = payload.pageOptions.lang
+          } else {
+            origin.pageOptions.lang = lang
+          }
         }
       }),
   }))

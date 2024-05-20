@@ -22,7 +22,7 @@ const getExample = (type: any, lang: any) => {
       const today = new Date()
       const anotherDay1 = today.setDate(today.getDate() + 4)
       const anotherDay2 = today.setDate(today.getDate() + 12)
-      return `${setDateFormat(new Date(anotherDay1), lang)} ~ ${setDateFormat(new Date(anotherDay2), lang)}`
+      return `${setDateFormat({ date: new Date(anotherDay1), lang })} ~ ${setDateFormat({ date: new Date(anotherDay2), lang })}`
     }
     case "time":
       return "10:00 AM ~ 06:00 PM"
@@ -110,7 +110,7 @@ function Confirm({ section }: { section: SectionType }) {
                   <span>{"확정 일시"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{setDateFormat(new Date(), lang)}</span>
+                  <span>{setDateFormat({ date: new Date(), lang })}</span>
                 </div>
               </li>
             </ul>

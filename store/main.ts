@@ -1,5 +1,5 @@
 import { SectionType } from "@/types/Edit"
-import { UserPickType, UserPickValueType } from "@/types/Main"
+import { ModalActiveType, UserPickType, UserPickValueType } from "@/types/Main"
 import { UserType } from "@/types/User"
 
 import { create } from "zustand"
@@ -8,8 +8,9 @@ import { immer } from "zustand/middleware/immer"
 export interface EditStates {
   user: UserType | null
   modal: {
-    type: "date" | "time" | "select" | "dateSelect" | null
+    type: ModalActiveType
     section: SectionType | null
+    payload?: any
   }
   userPick: {
     [id: string]: UserPickType
@@ -18,13 +19,7 @@ export interface EditStates {
 
 type Actions = {
   setUser: ({ user }: { user: UserType | null }) => void
-  setModal: ({
-    section,
-    type,
-  }: {
-    section: SectionType | null
-    type: "date" | "time" | "select" | "dateSelect" | null
-  }) => void
+  setModal: ({ section, type, payload }: { section: SectionType | null; type: ModalActiveType; payload?: any }) => void
   setUserPick: ({ section, value }: { section: SectionType; value: UserPickValueType[] }) => void
   setUserPickText: ({ section, text }: { section: SectionType; text: string }) => void
 }
@@ -35,6 +30,7 @@ export const useMainStore = create<EditStates & Actions>()(
     modal: {
       type: null,
       section: null,
+      payload: null,
     },
     userPick: {},
 

@@ -34,7 +34,7 @@ export interface SaveListType extends _SAVE {
 
 export interface SaveType extends _SAVE {
   content: SaveContentType
-  userId: number
+  userId: string
   createdAt: Date
   updatedAt: Date
 }
@@ -43,6 +43,6 @@ export interface SaveUpdateType extends _SAVE {
   content: SaveContentType
 }
 
-export interface PageUpdateType extends _SAVE {
+export interface PageType extends _SAVE {
   content: PageContentType
 }

@@ -41,11 +41,13 @@ export async function saveContentFromEditor({
   pageId,
   lang,
   event,
+  noMessage,
 }: {
   content: SaveContentType
   pageId?: string | string[]
   lang: Langs
   event?: any
+  noMessage?: boolean
 }) {
   if (typeof pageId !== "string") return
 
@@ -53,7 +55,7 @@ export async function saveContentFromEditor({
 
   const isOk = await save(data)
   if (isOk) {
-    toastSuccess("saved")
+    !noMessage && toastSuccess("saved")
     return isOk
   }
   if (event) {

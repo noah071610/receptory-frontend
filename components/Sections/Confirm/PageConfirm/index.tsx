@@ -63,7 +63,7 @@ function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: b
                   <span>{"확정 일시"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{setDateFormat(new Date(), lang)}</span>
+                  <span>{setDateFormat({ date: new Date(), lang })}</span>
                 </div>
               </li>
             </ul>

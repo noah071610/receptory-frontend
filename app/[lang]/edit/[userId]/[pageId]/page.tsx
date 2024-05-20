@@ -1,14 +1,12 @@
 "use client"
 
-import { getSave } from "@/actions/save"
 import { getUser } from "@/actions/user"
 import Loading from "@/components/Loading"
 import ImageSelector from "@/components/Modal/ImageSelector"
 import SectionLayout from "@/components/Sections/index"
 import { queryKey } from "@/config"
 import style from "@/containers/edit-page/style.module.scss"
-import { useEditorStore } from "@/store/editor"
-import { SaveType } from "@/types/Page"
+import { initialStates, useEditorStore } from "@/store/editor"
 import { UserType } from "@/types/User"
 import { useQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
@@ -16,8 +14,8 @@ import { isNaN } from "lodash"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
+import { getSave } from "@/actions/save"
 import ModalLoading from "@/components/Modal/ModalLoading"
-import { toastError } from "@/config/toast"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
 import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
@@ -26,6 +24,9 @@ import SectionList from "@/containers/edit-page/SectionList"
 import { sectionMap } from "@/containers/edit-page/sectionMap"
 import Header from "@/containers/global/Header"
 import { useMainStore } from "@/store/main"
+import { Langs } from "@/types/Main"
+import { SaveType } from "@/types/Page"
+import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import dynamic from "next/dynamic"
 const cx = cs.bind(style)
 
@@ -52,46 +53,13 @@ const EditPage = () => {
   const { lang } = useParams()
   const { push, back } = useRouter()
   const { userId, pageId } = useParams()
-  const queryUserId = parseInt(userId as string)
+  const queryUserId = userId as string
   const { modal } = useMainStore()
   const { data: user, isFetched: isFetchedUserQuery } = useQuery<UserType>({
     queryKey: queryKey.user,
     queryFn: getUser,
   })
-  const { data: save, isError: isErrorGetSave } = useQuery<SaveType>({
-    queryKey: queryKey.save.edit,
-    queryFn: () => getSave(pageId as string),
-    enabled: user?.userId === queryUserId && !!pageId && typeof pageId === "string",
-  })
-
-  useEffect(() => {
-    if (isFetchedUserQuery) {
-      // 로그인 요청을 이미 보냄. 이제부터 판별 시작
-
-      // 로그인 안했네?
-      if (!user) return push("/login")
-
-      // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
-      if (user?.userId !== queryUserId) {
-        toastError("잘못된 접근입니다.")
-        return back()
-      }
-    }
-  }, [user, userId, isFetchedUserQuery])
-
-  useEffect(() => {
-    if (isErrorGetSave) {
-      toastError("데이터를 찾지 못했습니다.")
-      return back()
-    }
-  }, [isErrorGetSave])
-
-  useEffect(() => {
-    // 잘못된 url 접근 차단
-    if (typeof userId !== "string") return back()
-    if (isNaN(queryUserId)) return back()
-    if (typeof pageId !== "string") return back()
-  }, [userId, pageId, queryUserId])
+  const [save, setSave] = useState<null | SaveType>(null)
 
   const {
     initSections,
@@ -108,21 +76,75 @@ const EditPage = () => {
   const activeModal = active.modal.type
 
   useEffect(() => {
+    if (isFetchedUserQuery) {
+      // 로그인 요청을 이미 보냄. 이제부터 판별 시작
+
+      // 로그인 안했네?
+      if (!user) return push("/login")
+
+      // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
+      if (user?.userId !== queryUserId) {
+        alert("잘못된 접근입니다.")
+        return back()
+      }
+    }
+  }, [user, userId, isFetchedUserQuery])
+
+  useEffect(() => {
+    if (!save && user?.userId === queryUserId && !!pageId && typeof pageId === "string") {
+      !(async function () {
+        const data = await getSave(pageId)
+        if (data === "notFound") {
+          alert("포스트가 존재하지 않습니다.")
+          return back()
+        }
+
+        if (!data.content?.initSections || data.content?.initSections?.length <= 0) {
+          await saveContentFromEditor({
+            content: initialStates,
+            pageId,
+            lang: lang as Langs,
+            noMessage: true,
+          })
+          return setIsLoading(false)
+        }
+
+        // 아니면 로드 어짜피 store에서도 reducer들이 걸러줌
+        loadSections(data.content, data.lang, data.format)
+
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 1000)
+
+        setSave(data)
+      })()
+    }
+  }, [save, user, queryUserId, pageId])
+
+  useEffect(() => {
+    // 잘못된 url 접근 차단
+    if (typeof userId !== "string") return back()
+    if (isNaN(queryUserId)) return back()
+    if (typeof pageId !== "string") return back()
+  }, [userId, pageId, queryUserId])
+
+  useEffect(() => {
     const handleBeforeUnloadCallback = async (e: any) => {
-      // await saveContentFromEditor({
-      //   content: {
-      //     stage,
-      //     initSections,
-      //     formSections,
-      //     rendingSections,
-      //     currentUsedImages,
-      //     currentUsedColors,
-      //     pageOptions,
-      //   },
-      //   pageId,
-      //   lang: lang as Langs,
-      //   event: e,
-      // })
+      await saveContentFromEditor({
+        content: {
+          stage,
+          initSections,
+          formSections,
+          rendingSections,
+          currentUsedImages,
+          currentUsedColors,
+          pageOptions,
+        },
+        pageId,
+        lang: lang as Langs,
+        event: e,
+        noMessage: true,
+      })
     }
     window.addEventListener("beforeunload", handleBeforeUnloadCallback)
 
@@ -130,22 +152,6 @@ const EditPage = () => {
       window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
     }
   }, [initSections, formSections, currentUsedImages, currentUsedColors, lang, stage])
-
-  useEffect(() => {
-    !(async function () {
-      if (save) {
-        // 완전 처음
-        if (save.content?.initSections && save.content?.initSections?.length <= 0) return setIsLoading(false)
-
-        // 아니면 로드 어짜피 store에서도 reducer들이 걸러줌
-        loadSections(save.content, save.lang, save.format)
-
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 1000)
-      }
-    })()
-  }, [save])
 
   const topSections =
     stage === "rending" ? rendingSections.slice(0, 2) : (stage === "init" ? initSections : formSections).slice(0, 1)

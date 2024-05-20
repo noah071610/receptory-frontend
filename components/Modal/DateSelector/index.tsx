@@ -23,10 +23,10 @@ export const DateSelector = ({ section }: { section: SectionType }) => {
       section,
       value: specificEndDate
         ? [
-            { key: "startDate", text: setDateFormat(specificStartDate, lang) },
-            { key: "endDate", text: setDateFormat(specificEndDate, lang) },
+            { key: "startDate", text: setDateFormat({ date: specificStartDate, lang }) },
+            { key: "endDate", text: setDateFormat({ date: specificEndDate, lang }) },
           ]
-        : [{ key: "startDate", text: setDateFormat(specificStartDate, lang) }],
+        : [{ key: "startDate", text: setDateFormat({ date: specificStartDate, lang }) }],
     })
     setModal({ section: null, type: null })
   }
@@ -49,7 +49,7 @@ export const DateSelector = ({ section }: { section: SectionType }) => {
                 start={specificStartDate}
                 end={specificEndDate}
                 formatter={(date: Date) => {
-                  return setDateFormat(date, lang)
+                  return setDateFormat({ date, lang })
                 }}
               />
             </button>

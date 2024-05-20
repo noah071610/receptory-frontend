@@ -82,7 +82,10 @@ function CalenderMain({
 
   const onClickSubmit = () => {
     if (!selectedDates || selectedDates.length <= 0) return
-    const arr = selectedDates.map((v, i) => ({ key: i === 0 ? "startDate" : "endDate", text: setDateFormat(v, lang) }))
+    const arr = selectedDates.map((v, i) => ({
+      key: i === 0 ? "startDate" : "endDate",
+      text: setDateFormat({ date: v, lang }),
+    }))
     setUserPick({
       section,
       value: arr,

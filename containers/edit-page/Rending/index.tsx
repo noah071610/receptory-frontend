@@ -35,7 +35,6 @@ export default function Rending({}: {}) {
   const clearQueryCached = async () => {
     await queryClient.invalidateQueries({ queryKey: queryKey.page(pageId as string) })
     await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
-    await queryClient.invalidateQueries({ queryKey: queryKey.save.edit })
   }
 
   const onChangeFormat = async (value: "inactive" | "active" | "save") => {

@@ -6,6 +6,16 @@ import { Cookies } from "react-cookie"
 
 const cookies = new Cookies()
 
+export async function getPage({ pageId }: { pageId: string }) {
+  try {
+    const response = await API.get(`/page?pageId=${pageId}`)
+
+    return response.data
+  } catch (err: any) {
+    alert(err.message)
+  }
+}
+
 export async function deploy({ content, pageId, lang }: { content: SaveContentType; pageId: string; lang: Langs }) {
   const cookie = cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME ?? "")
   const data = convertContent({ content, pageId, lang })

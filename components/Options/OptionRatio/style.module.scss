@@ -31,9 +31,9 @@
         font-size: 13px;
       }
       &.active {
-        border-color: var(--blue-soft);
+        border-color: var(--blue);
         svg {
-          color: var(--blue-soft);
+          color: var(--blue);
         }
         .name {
           color: var(--blue-hard);

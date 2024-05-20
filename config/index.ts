@@ -41,9 +41,10 @@ export const queryKey = {
   user: ["user"],
   page: (pageId: string) => ["page", pageId],
   save: {
-    edit: ["save", "edit"],
     list: ["save", "list"],
   },
 }
 
 export const noImageUrl = "/images/noImage.png"
+
+export const userPlan = ["freeUser", "semiPremium", "premium"]

@@ -86,7 +86,6 @@ export default function Header() {
 
       if (isOk) {
         await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
-        await queryClient.invalidateQueries({ queryKey: queryKey.save.edit })
       }
 
       setIsSaving(true)

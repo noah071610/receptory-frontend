@@ -1,0 +1,57 @@
+@import "@/styles/editor.scss";
+@import "@/styles/variables.scss";
+
+.confirm-hard-content {
+  width: 95%;
+  padding: 25px;
+  h1 {
+    @include title-style;
+    margin-bottom: 10px;
+  }
+  .description {
+    margin-bottom: 50px;
+    p {
+      @include description-style;
+    }
+  }
+  .confirm-text {
+    color: var(--red);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 14px 0 14px 12px;
+    border-radius: 5px;
+    font-size: 15px;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    margin-top: 5px;
+    @include border;
+  }
+  input {
+    &::placeholder {
+      color: var(--gray);
+    }
+  }
+  select {
+    appearance: none; /* 기본 스타일 제거 */
+    -webkit-appearance: none; /* Chrome, Safari, Edge */
+    -moz-appearance: none; /* Firefox */
+    &::-ms-expand {
+      display: none;
+    }
+    option:disabled {
+      color: var(--gray);
+    }
+  }
+}
+
+.btn-wrapper {
+  @include btn-layout-style;
+  button {
+    @include btn-submit-style(true);
+  }
+}
