@@ -1,9 +1,9 @@
 "use client"
 
 import Input from "@/components/Input"
-import { useTranslation } from "@/i18n/client"
 import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import { SectionType } from "@/types/Edit"

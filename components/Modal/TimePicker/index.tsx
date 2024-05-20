@@ -1,9 +1,9 @@
 "use client"
 
 import NumberRange from "@/components/NumberRange"
-import { useTranslation } from "@/i18n/client"
 import { generateHourSlots, generateSecondSlots, isMoreLateTime } from "@/utils/time"
 import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 

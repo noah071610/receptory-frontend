@@ -15,6 +15,7 @@
   &.isLoading {
     opacity: 1;
     animation: comp-visible 500ms forwards;
-    @include z-index(overlay);
+    // @include z-index(overlay);
+    z-index: 999999999;
   }
 }

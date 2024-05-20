@@ -1,12 +1,12 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

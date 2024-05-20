@@ -4,7 +4,7 @@ import { Langs } from "./Main"
 export type PageFormatType = "inactive" | "active"
 
 export interface PageContentType {
-  initSections: SectionType[]
+  homeSections: SectionType[]
   formSections: SectionType[]
   rendingSections: SectionType[]
   pageOptions: {

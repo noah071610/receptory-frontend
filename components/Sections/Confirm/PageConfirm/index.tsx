@@ -1,22 +1,21 @@
 "use client"
 
 import { SectionType } from "@/types/Edit"
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { memo, useEffect, useMemo } from "react"
 
 import style from "../style.module.scss"
 
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import setDateFormat from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const confirmationIdExample = 12345678912
 
 function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: boolean }) {
-  const { lang } = useParams()
   const { t } = useTranslation()
   const { back } = useRouter()
   const { userPick } = useMainStore()
@@ -63,7 +62,8 @@ function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: b
                   <span>{"확정 일시"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{setDateFormat({ date: new Date(), lang })}</span>
+                  {/* // todo: */}
+                  <span>{setDateFormat({ date: new Date(), lang: "ko" })}</span>
                 </div>
               </li>
             </ul>

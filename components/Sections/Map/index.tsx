@@ -1,9 +1,9 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { memo, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import cs from "classNames/bind"

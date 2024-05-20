@@ -1,10 +1,10 @@
 "use client"
 import { RgbaColorPicker } from "react-colorful"
 
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import cs from "classNames/bind"
 import { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

@@ -17,12 +17,12 @@ import { useEffect, useState } from "react"
 import { getSave } from "@/actions/save"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
+import Header from "@/containers/edit-page/Header"
 import PageLayout from "@/containers/edit-page/PageLayout"
 import Preview from "@/containers/edit-page/Preview"
 import Rending from "@/containers/edit-page/Rending"
 import SectionList from "@/containers/edit-page/SectionList"
 import { sectionMap } from "@/containers/edit-page/sectionMap"
-import Header from "@/containers/global/Header"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
@@ -61,17 +61,7 @@ const EditPage = () => {
   })
   const [save, setSave] = useState<null | SaveType>(null)
 
-  const {
-    initSections,
-    stage,
-    formSections,
-    active,
-    loadSections,
-    currentUsedImages,
-    currentUsedColors,
-    rendingSections,
-    pageOptions,
-  } = useEditorStore()
+  const { homeSections, stage, formSections, active, loadSections, rendingSections } = useEditorStore()
 
   const activeModal = active.modal.type
 
@@ -99,7 +89,7 @@ const EditPage = () => {
           return back()
         }
 
-        if (!data.content?.initSections || data.content?.initSections?.length <= 0) {
+        if (!data.content?.homeSections || data.content?.homeSections?.length <= 0) {
           await saveContentFromEditor({
             content: initialStates,
             pageId,
@@ -128,33 +118,33 @@ const EditPage = () => {
     if (typeof pageId !== "string") return back()
   }, [userId, pageId, queryUserId])
 
-  useEffect(() => {
-    const handleBeforeUnloadCallback = async (e: any) => {
-      await saveContentFromEditor({
-        content: {
-          stage,
-          initSections,
-          formSections,
-          rendingSections,
-          currentUsedImages,
-          currentUsedColors,
-          pageOptions,
-        },
-        pageId,
-        lang: lang as Langs,
-        event: e,
-        noMessage: true,
-      })
-    }
-    window.addEventListener("beforeunload", handleBeforeUnloadCallback)
+  // useEffect(() => {
+  //   const handleBeforeUnloadCallback = async (e: any) => {
+  //     await saveContentFromEditor({
+  //       content: {
+  //         stage,
+  //         homeSections,
+  //         formSections,
+  //         rendingSections,
+  //         currentUsedImages,
+  //         currentUsedColors,
+  //         pageOptions,
+  //       },
+  //       pageId,
+  //       lang: lang as Langs,
+  //       event: e,
+  //       noMessage: true,
+  //     })
+  //   }
+  //   window.addEventListener("beforeunload", handleBeforeUnloadCallback)
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
-    }
-  }, [initSections, formSections, currentUsedImages, currentUsedColors, lang, stage])
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnloadCallback)
+  //   }
+  // }, [homeSections, formSections, pageOptions, currentUsedImages, currentUsedColors, lang, stage])
 
   const topSections =
-    stage === "rending" ? rendingSections.slice(0, 2) : (stage === "init" ? initSections : formSections).slice(0, 1)
+    stage === "rending" ? rendingSections.slice(0, 2) : (stage === "home" ? homeSections : formSections).slice(0, 1)
 
   return (
     <>
@@ -169,9 +159,9 @@ const EditPage = () => {
               </SectionLayout>
             ))}
 
-            <SectionList sections={initSections} stage={stage} type="init" />
-            <SectionList sections={formSections} stage={stage} type="form" />
-            <SectionList sections={rendingSections} stage={stage} type="rending" />
+            {stage === "home" && <SectionList sections={homeSections} stage={stage} />}
+            {stage === "form" && <SectionList sections={formSections} stage={stage} />}
+            {stage === "rending" && <SectionList sections={rendingSections} stage={stage} />}
             {stage === "rending" && <Rending />}
 
             <EditorFooter />

@@ -1,13 +1,13 @@
 "use client"
 
 import { useError } from "@/hooks/useError"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType, StyleProperties } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { memo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

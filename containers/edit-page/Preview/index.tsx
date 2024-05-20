@@ -11,18 +11,18 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function Preview() {
-  const { initSections, formSections, rendingSections, stage, active, setActive } = useEditorStore()
+  const { homeSections, formSections, rendingSections, stage, active, setActive } = useEditorStore()
 
   const sections = useMemo(() => {
     switch (stage) {
-      case "init":
-        return initSections
+      case "home":
+        return homeSections
       case "form":
         return formSections
       default:
         return rendingSections
     }
-  }, [initSections, formSections, rendingSections, stage])
+  }, [homeSections, formSections, rendingSections, stage])
 
   const onClickPreviewClose = () => {
     setActive({

@@ -1,13 +1,17 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
+import { deleteSave } from "@/actions/save"
 import { deleteUser } from "@/actions/user"
-import { toastError } from "@/config/toast"
+import { queryKey } from "@/config"
+import { toastError, toastSuccess } from "@/config/toast"
+import { useMainStore } from "@/store/main"
+import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Trans } from "react-i18next"
 const cx = cs.bind(style)
@@ -25,30 +29,70 @@ const optionArr = [
   "tooComplicated",
 ]
 
-export const ConfirmHard = ({ confirmInitText }: { confirmInitText: string }) => {
+export const ConfirmHard = ({
+  confirmInitText,
+  value,
+  setIsLoading,
+}: {
+  confirmInitText: string
+  value?: string
+  setIsLoading: (b: boolean) => void
+}) => {
   const { lang } = useParams()
+  const { push } = useRouter()
+  const queryClient = useQueryClient()
   const { t } = useTranslation()
+  const { setModal } = useMainStore()
   const [selectedOption, setSelectedOption] = useState("")
   const [confirmText, setConfirmText] = useState("")
   const onChangeInput = (e: any) => {
     setConfirmText(e.target.value)
   }
   const onClickDelete = async () => {
+    setIsLoading(true)
     switch (confirmInitText) {
       case "deleteAccount": {
         if (!setSelectedOption) {
+          setIsLoading(false)
           return toastError("mustPickFeedback")
         }
         if (confirmInitText !== confirmText) {
+          setIsLoading(false)
           return toastError("invalidConfirmText")
         }
         const isOk = await deleteUser(selectedOption)
         if (isOk) {
-          alert("감사합니다!")
+          alert("이용해주셔서 감사합니다.")
+          setModal({
+            section: null,
+            type: null,
+          })
+          return push("/login")
         }
       }
 
-      case "deleteAccount":
+      case "deletePage":
+        if (!value) {
+          toastError("에러가 발생했어요. 나중에 다시 시도해주세요.")
+          setIsLoading(false)
+          return setModal({
+            section: null,
+            type: null,
+          })
+        }
+        const isOk = await deleteSave(value)
+        if (isOk) {
+          setTimeout(() => {
+            queryClient.invalidateQueries({ queryKey: queryKey.save.list })
+            queryClient.invalidateQueries({ queryKey: queryKey.page(value) })
+            setIsLoading(false)
+            toastSuccess("페이지를 삭제했어요.")
+            setModal({
+              section: null,
+              type: null,
+            })
+          }, 1000)
+        }
         break
 
       default:
@@ -95,8 +139,10 @@ export const ConfirmHard = ({ confirmInitText }: { confirmInitText: string }) =>
       )}
       <div className={cx("btn-wrapper")}>
         <button
-          disabled={confirmText !== confirmInitText || !selectedOption}
-          className={cx({ inactive: confirmText !== confirmInitText || !selectedOption })}
+          disabled={confirmText !== confirmInitText || (confirmInitText === "deleteAccount" && !selectedOption)}
+          className={cx({
+            inactive: confirmText !== confirmInitText || (confirmInitText === "deleteAccount" && !selectedOption),
+          })}
           onClick={onClickDelete}
         >
           {t("delete")}

@@ -8,15 +8,7 @@ import { sectionMap } from "../sectionMap"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-export default function SectionList({
-  sections,
-  stage,
-  type,
-}: {
-  sections: SectionType[]
-  stage: EditStage
-  type: "init" | "form" | "rending"
-}) {
+export default function SectionList({ sections, stage }: { sections: SectionType[]; stage: EditStage }) {
   const pathname = usePathname()
   const { moveSection } = useEditorStore()
 
@@ -32,18 +24,14 @@ export default function SectionList({
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable">
         {(droppableProvided) => (
-          <div
-            className={cx("wrapper", { visible: type === stage, hide: type !== stage })}
-            {...droppableProvided.droppableProps}
-            ref={droppableProvided.innerRef}
-          >
+          <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
             {sections.slice(stage === "rending" ? 2 : 1).map((v, i) => (
               <Draggable index={i + (stage === "rending" ? 2 : 1)} key={v.id} draggableId={v.id}>
                 {(draggableProvided) => {
                   return (
                     <SectionLayout
                       pathname={pathname}
-                      noPadding={v.type === "slider"}
+                      isTopSection={v.type === "slider"}
                       draggableProvided={draggableProvided}
                       section={v}
                       key={`${v.id}`}

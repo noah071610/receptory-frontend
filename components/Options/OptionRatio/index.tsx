@@ -2,7 +2,6 @@
 
 import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { IconDefinition, faCheckSquare } from "@fortawesome/free-solid-svg-icons"
@@ -11,6 +10,7 @@ import cs from "classNames/bind"
 import Image from "next/image"
 import { memo } from "react"
 import { isMobile } from "react-device-detect"
+import { useTranslation } from "react-i18next"
 import { SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -94,7 +94,6 @@ function OptionRatio({
           </SwiperSlide>
         ))}
       </SwiperNavigation>
-      <div className={cx("content")}></div>
     </div>
   )
 }

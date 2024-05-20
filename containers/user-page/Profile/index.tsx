@@ -6,6 +6,7 @@ import { UserType } from "@/types/User"
 import { faFire, faFlag, faGear } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import style from "./style.module.scss"
@@ -38,20 +39,12 @@ const Profile = ({ user }: { user: UserType }) => {
     }
   }
 
-  const onClickSubmenu = (value: any) => {
-    if (value === "deleteAccount") {
+  const onClickSubmenu = (type: any) => {
+    if (type === "deleteAccount") {
       setModal({
         section: null,
         type: "confirmHard",
-        payload: value,
-      })
-    }
-
-    if (value === "changeProfile") {
-      setModal({
-        section: null,
-        type: "confirmHard",
-        payload: value,
+        payload: { text: type, value: undefined },
       })
     }
   }
@@ -60,7 +53,7 @@ const Profile = ({ user }: { user: UserType }) => {
       <div className={cx("profile")}>
         <div className={cx("background")}></div>
         <picture>
-          <img src={user.userImage} alt={`${user.userImage}_profile`} />
+          <Image width={120} height={120} src={user.userImage} alt={`${user.userName}_profile`} />
         </picture>
         <h1>{user.userName}</h1>
         <span className={cx("plan")}>{userPlan[user.plan]}</span>

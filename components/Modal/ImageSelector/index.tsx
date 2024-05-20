@@ -2,12 +2,12 @@
 
 import DeleteBtn from "@/components/DeleteBtn"
 import { SwiperNavigation } from "@/components/SwiperNavigation"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload, SectionListType, SectionListTypes } from "@/types/Edit"
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import cs from "classNames/bind"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { SwiperSlide } from "swiper/react"
 import ModalLayout from ".."
@@ -25,7 +25,7 @@ export default function ImageSelector() {
     setActive,
     addSection,
     setStyle,
-    initSections,
+    homeSections,
     setSrc,
     setList,
     addList,
@@ -153,7 +153,7 @@ export default function ImageSelector() {
       if (active.modal.payload === "add") {
         addList({ type: type as SectionListTypes, valueArrForNewList: filteredImageList })
       } else {
-        const newSection = createNewSection({ type: type as SectionListTypes, index: initSections.length })
+        const newSection = createNewSection({ type: type as SectionListTypes, index: homeSections.length })
         newSection.list = [...filteredImageList]
         addSection({
           type: type as SectionListTypes,
@@ -163,7 +163,7 @@ export default function ImageSelector() {
       setListForRending([])
       setActive({ payload: { type: null, payload: null }, key: "modal" })
     }
-  }, [listForRending.length, selectedImages.length, type, initSections.length])
+  }, [listForRending.length, selectedImages.length, type, homeSections.length])
 
   return (
     <ModalLayout modalStyle={style.content}>

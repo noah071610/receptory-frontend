@@ -2,14 +2,13 @@
 @import "@/styles/variables.scss";
 
 .confirm-hard-content {
-  width: 95%;
-  padding: 25px;
+  padding: 25px !important;
   h1 {
     @include title-style;
     margin-bottom: 10px;
   }
   .description {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     p {
       @include description-style;
     }

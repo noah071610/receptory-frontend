@@ -38,3 +38,14 @@ export async function inactivePage({ pageId }: { pageId: string }) {
     }
   }
 }
+
+export async function changeLanguage({ pageId, lang }: { pageId: string; lang: Langs }) {
+  const cookie = cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME ?? "")
+  if (cookie) {
+    if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+      const response = await API.patch(`/page/lang?pageId=${pageId}&lang=${lang}`)
+
+      return response.data
+    }
+  }
+}

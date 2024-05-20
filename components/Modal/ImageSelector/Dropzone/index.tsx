@@ -1,7 +1,6 @@
 "use client"
 
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload } from "@/types/Edit"
 import { faImages } from "@fortawesome/free-solid-svg-icons"
@@ -9,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { Dispatch, SetStateAction, memo, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

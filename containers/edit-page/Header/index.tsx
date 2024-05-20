@@ -17,7 +17,7 @@ const cx = cs.bind(style)
 
 const headers = [
   {
-    value: "init",
+    value: "home",
   },
   {
     value: "form",
@@ -34,7 +34,7 @@ export default function Header() {
     stage,
     setStage,
     setSelectedSection,
-    initSections,
+    homeSections,
     formSections,
     currentUsedImages,
     currentUsedColors,
@@ -73,7 +73,7 @@ export default function Header() {
       const isOk = await saveContentFromEditor({
         content: {
           stage,
-          initSections,
+          homeSections,
           formSections,
           rendingSections,
           currentUsedImages,
@@ -138,7 +138,7 @@ export default function Header() {
             )}
           </div>
           <div
-            style={{ width: stage === "init" ? "33%" : stage === "form" ? "66%" : "95%" }}
+            style={{ width: stage === "home" ? "33%" : stage === "form" ? "66%" : "95%" }}
             className={cx("progress")}
           ></div>
         </div>

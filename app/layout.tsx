@@ -1,11 +1,9 @@
 import Init from "@/containers/global/Init"
 import "@/styles/global.scss"
-import { Langs } from "@/types/Main"
 import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import { dir } from "i18next"
 import { Metadata } from "next"
-import { Prompt } from "next/font/google"
 import localFont from "next/font/local"
 import "swiper/css"
 import "swiper/css/free-mode"
@@ -16,24 +14,18 @@ config.autoAddCss = false
 const pretendard = localFont({
   src: [
     {
-      path: "../../libs/fonts/Pretendard-Regular.woff",
+      path: "../libs/fonts/Pretendard-Regular.woff",
       weight: "400",
     },
     {
-      path: "../../libs/fonts/Pretendard-SemiBold.woff",
+      path: "../libs/fonts/Pretendard-SemiBold.woff",
       weight: "600",
     },
     {
-      path: "../../libs/fonts/Pretendard-Bold.woff",
+      path: "../libs/fonts/Pretendard-Bold.woff",
       weight: "700",
     },
   ],
-  display: "swap",
-})
-
-const prompt = Prompt({
-  weight: ["400", "600", "700"],
-  subsets: ["thai"],
   display: "swap",
 })
 
@@ -44,15 +36,11 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params: { lang },
 }: Readonly<{
   children: React.ReactNode
-  params: {
-    lang: Langs
-  }
 }>) {
   return (
-    <html className={lang === "th" ? prompt.className : pretendard.className} lang={lang} dir={dir(lang)}>
+    <html className={pretendard.className} lang={"ko"} dir={dir("ko")}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         {/* <meta name="keywords" content="퀴즈, 게임, 투표, 픽, 월드컵, 이상형 월드컵" /> todo */}

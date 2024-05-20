@@ -5,16 +5,15 @@ import { queryKey } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import { PageType } from "@/types/Page"
 import { useQuery } from "@tanstack/react-query"
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 // import style from "@/containers/edit-page/style.module.scss"
 // import cs from "classNames/bind"
 
 // const cx = cs.bind(style)
 
-const PageHome = () => {
+const PageForm = () => {
   const { lang, pageId } = useParams()
-  const search = useSearchParams()
   const pathname = usePathname()
   const { back, replace } = useRouter()
   const { data, isError } = useQuery<PageType>({
@@ -37,9 +36,8 @@ const PageHome = () => {
   useEffect(() => {
     if (data) {
       !(async function () {
-        const content = data.content.initSections
-        const arr = await Promise.all(
-          content.map(async (v) => {
+        const a = await Promise.all(
+          data.content.formSections.map(async (v) => {
             const Target: any = await getSection(v.type)
             return Target ? (
               <SectionLayout
@@ -55,12 +53,14 @@ const PageHome = () => {
             )
           })
         )
-        setComponents(arr)
+        setComponents(a)
       })()
     }
   }, [data])
 
+  // console.log(data?.content?.homeSections)
+
   return data && components && <>{components.map((v: any) => v)}</>
 }
 
-export default PageHome
+export default PageForm

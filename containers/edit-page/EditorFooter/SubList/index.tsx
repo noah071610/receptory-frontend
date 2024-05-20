@@ -1,11 +1,11 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { AnimationTypes, DesignTypes, EditorFooterList } from "@/types/Edit"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"

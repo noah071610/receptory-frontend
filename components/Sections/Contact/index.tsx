@@ -2,7 +2,6 @@
 
 import Input from "@/components/Input"
 import OptionRatio from "@/components/Options/OptionRatio"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
@@ -10,6 +9,7 @@ import cs from "classNames/bind"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

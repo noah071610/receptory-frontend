@@ -1,7 +1,7 @@
 "use client"
-import { useTranslation } from "@/i18n/client"
 import { SectionListType, SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 

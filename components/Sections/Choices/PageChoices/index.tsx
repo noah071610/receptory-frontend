@@ -1,8 +1,8 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "../style.module.scss"
 
 import { useMainStore } from "@/store/main"

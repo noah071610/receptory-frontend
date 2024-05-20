@@ -3,7 +3,6 @@
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { colors } from "@/config/colors"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
@@ -12,6 +11,7 @@ import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -22,7 +22,7 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
   const { color, background, backgroundColor } = section.style
 
   const { setActive, stage } = useEditorStore()
-  const isInitStage = stage === "init"
+  const isInitStage = stage === "home"
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })

@@ -11,6 +11,17 @@ module.exports = withBundleAnalyzer({
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+        port: "",
+        pathname: "**",
+      },
+    ],
+  },
   webpack(config) {
     const prod = process.env.NODE_ENV === "production"
     const plugins = [...config.plugins]

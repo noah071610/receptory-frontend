@@ -90,9 +90,9 @@ export type EditorFooterListTypes =
   | TitleSelectTypes
   | StyleSelectTypes
 
-export type EditStage = "init" | "form" | "rending"
+export type EditStage = "home" | "form" | "rending"
 
-export type SectionsKeys = "initSections" | "formSections" | "rendingSections"
+export type SectionsKeys = "homeSections" | "formSections" | "rendingSections"
 
 export interface ActiveTypes {
   modal: {

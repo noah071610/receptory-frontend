@@ -1,10 +1,10 @@
 "use client"
 
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"

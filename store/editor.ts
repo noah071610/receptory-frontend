@@ -19,14 +19,14 @@ import { immer } from "zustand/middleware/immer"
 
 export const initialStates: EditStates = {
   isEditStart: false,
-  initSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
+  homeSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
   formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
   rendingSections: [
     createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "rendingThumbnail" }),
     createNewSection({ type: "confirm", index: 1, newId: "confirm" }),
   ],
   selectedSection: null,
-  stage: "init",
+  stage: "home",
   active: {
     modal: {
       type: null,
@@ -54,7 +54,7 @@ export const initialStates: EditStates = {
 
 export interface EditStates {
   isEditStart: boolean
-  initSections: SectionType[]
+  homeSections: SectionType[]
   formSections: SectionType[]
   rendingSections: SectionType[]
   stage: EditStage
@@ -126,7 +126,7 @@ type Actions = {
 }
 
 const getKey = (origin: any): SectionsKeys => {
-  return origin.stage === "init" ? "initSections" : origin.stage === "form" ? "formSections" : "rendingSections"
+  return origin.stage === "home" ? "homeSections" : origin.stage === "form" ? "formSections" : "rendingSections"
 }
 const getTarget = (origin: any): SectionType => {
   return origin[getKey(origin)][origin.selectedSection.index]
@@ -170,8 +170,8 @@ export const useEditorStore = create<EditStates & Actions>()(
         const { sectionKey, snapshot } = targetRevert
 
         // 스테이지 이동
-        if (sectionKey === "initSections" && origin.stage !== "init") {
-          origin.stage = "init"
+        if (sectionKey === "homeSections" && origin.stage !== "home") {
+          origin.stage = "home"
         }
         if (sectionKey === "formSections" && origin.stage !== "form") {
           origin.stage = "form"
@@ -479,12 +479,12 @@ export const useEditorStore = create<EditStates & Actions>()(
         if (payload.stage) {
           origin.stage = payload.stage
         } else {
-          origin.stage = "init"
+          origin.stage = "home"
         }
-        if (payload.initSections?.length > 0) {
-          origin.initSections = payload.initSections
+        if (payload.homeSections?.length > 0) {
+          origin.homeSections = payload.homeSections
         } else {
-          origin.initSections = []
+          origin.homeSections = []
         }
         if (payload.formSections?.length > 0) {
           origin.formSections = payload.formSections
@@ -497,20 +497,8 @@ export const useEditorStore = create<EditStates & Actions>()(
           origin.rendingSections = []
         }
 
-        if (payload.pageOptions) {
-          origin.pageOptions = payload.pageOptions
-          if (origin.pageOptions?.format) {
-            origin.pageOptions.format = payload.pageOptions.format
-          } else {
-            origin.pageOptions.format = format ?? "inactive"
-          }
-
-          if (origin.pageOptions?.lang) {
-            origin.pageOptions.lang = payload.pageOptions.lang
-          } else {
-            origin.pageOptions.lang = lang
-          }
-        }
+        origin.pageOptions.format = format ?? "inactive"
+        origin.pageOptions.lang = lang
       }),
   }))
 )

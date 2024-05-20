@@ -1,6 +1,4 @@
-import { useTranslation } from "@/i18n"
-import { fallbackLng, languages } from "@/i18n/settings"
-import { LangParams, LayoutLangParams } from "@/types/Main"
+import { PageParams } from "@/types/Main"
 
 import { _url } from "@/config"
 import style from "@/containers/login-page/style.module.scss"
@@ -9,16 +7,7 @@ import cs from "classNames/bind"
 import Image from "next/image"
 const cx = cs.bind(style)
 
-export async function generateMetadata({ params: { lang } }: LangParams) {
-  if (languages.indexOf(lang) < 0) lang = fallbackLng
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { t } = await useTranslation(lang, ["meta"])
-  return {
-    title: t("createNew"),
-  }
-}
-
-export default async function LoginPageLayout({ params: { lang } }: Readonly<LayoutLangParams>) {
+export default async function LoginPageLayout({ params: { lang } }: Readonly<PageParams>) {
   return (
     <div className={cx("main")}>
       <div className={cx("content")}>

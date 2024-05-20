@@ -1,13 +1,13 @@
 "use client"
 
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
 import getId from "@/utils/helpers/getId"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
@@ -25,7 +25,7 @@ export default function List({
   const { replace } = useRouter()
   const pathname = usePathname()
   const { lang } = useParams()
-  const { addSection, formSections, initSections, setActive, active, stage, rendingSections } = useEditorStore()
+  const { addSection, formSections, homeSections, setActive, active, stage, rendingSections } = useEditorStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, type: EditorFooterListActions) => {
@@ -41,14 +41,14 @@ export default function List({
         if (value === "email" && formSections.find(({ type }) => type === "email")) {
           return toastError("oneSection")
         }
-        if (value === "qna" && initSections.find(({ type }) => type === "qna")) {
+        if (value === "qna" && homeSections.find(({ type }) => type === "qna")) {
           return toastError("oneSection")
         }
-        if (value === "map" && initSections.find(({ type }) => type === "map")) {
+        if (value === "map" && homeSections.find(({ type }) => type === "map")) {
           return toastError("oneSection")
         }
 
-        if (stage === "init" && initSections.length >= 20) {
+        if (stage === "home" && homeSections.length >= 20) {
           return toastError("lessThan20sections")
         }
         if (stage === "form" && formSections.length >= 20) {

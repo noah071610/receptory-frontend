@@ -15,12 +15,12 @@ export const convertContent = ({
   lang: Langs
   isDeploy?: boolean
 }) => {
-  const thumbnailSection = content.initSections[0]
+  const thumbnailSection = content.homeSections[0]
   const title = thumbnailSection?.data?.title ?? ""
   const description = thumbnailSection?.data?.description ?? ""
   const background = thumbnailSection?.style.background ?? ""
   const image = thumbnailSection?.src
-  content.initSections = content.initSections.slice(0, 20)
+  content.homeSections = content.homeSections.slice(0, 20)
   content.formSections = content.formSections.slice(0, 20)
   content.rendingSections = content.rendingSections.slice(0, 20)
   const { currentUsedColors, currentUsedImages, stage, ...rest } = content

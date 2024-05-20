@@ -1,17 +1,16 @@
 "use client"
 
 import { SectionType } from "@/types/Edit"
-import { useParams } from "next/navigation"
 import { memo, useMemo } from "react"
 
 import style from "./style.module.scss"
 
 import Input from "@/components/Input"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { useMainStore } from "@/store/main"
 import setDateFormat from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const confirmationIdExample = 12345678912
@@ -44,9 +43,8 @@ const getExample = (type: any, lang: any) => {
 }
 
 function Confirm({ section }: { section: SectionType }) {
-  const { lang } = useParams()
   const { t } = useTranslation()
-  const { formSections } = useEditorStore()
+  const { formSections, pageOptions } = useEditorStore()
   const { userPick } = useMainStore()
   const { title, description } = section.data
 
@@ -59,7 +57,7 @@ function Confirm({ section }: { section: SectionType }) {
       }
       const title = section.data?.title ?? "타이틀 입력"
 
-      let text = getExample(section.type, lang)
+      let text = getExample(section.type, pageOptions.lang)
 
       arr.push({
         title,
@@ -110,7 +108,7 @@ function Confirm({ section }: { section: SectionType }) {
                   <span>{"확정 일시"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{setDateFormat({ date: new Date(), lang })}</span>
+                  <span>{setDateFormat({ date: new Date(), lang: pageOptions.lang })}</span>
                 </div>
               </li>
             </ul>

@@ -1,11 +1,10 @@
 "use client"
 
 import { inactivePage } from "@/actions/page"
-import { deleteSave } from "@/actions/save"
 import { queryKey } from "@/config"
 import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
+import { useMainStore } from "@/store/main"
 import { SaveListType } from "@/types/Page"
 import hasString from "@/utils/helpers/hasString"
 import setDateFormat from "@/utils/helpers/setDate"
@@ -15,30 +14,38 @@ import {
   faChartLine,
   faChevronDown,
   faClose,
+  faGlobe,
   faPen,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
+
+const defaultList = [
+  { value: "edit", icon: faPen },
+  { value: "changeLang", icon: faGlobe },
+  { value: "delete", icon: faTrash },
+]
 
 const PageCard = ({
   userId,
   i,
-  save: { title, description, thumbnail, format, pageId, updatedAt },
+  save: { title, description, thumbnail, format, pageId, updatedAt, lang },
 }: {
   save: SaveListType
   i: number
   userId: string
 }) => {
   const queryClient = useQueryClient()
-  const { lang } = useParams()
   const { t } = useTranslation()
   const { push, replace } = useRouter()
+  const { setModal } = useMainStore()
   const [isActive, setIsActive] = useState(format === "active")
   const [isOpen, setIsOpen] = useState(false)
   const onClickList = async (e: any) => {
@@ -67,16 +74,28 @@ const PageCard = ({
             scroll: false,
           })
           break
+        case "changeLang":
+          setModal({
+            section: null,
+            type: "selectLang",
+            payload: {
+              pageId,
+              lang,
+            },
+          })
+          break
         case "gotoPage":
           push(`/${pageId}`)
           break
         case "delete": {
-          const isOk = await deleteSave(pageId)
-          if (isOk) {
-            toastSuccess("페이지를 삭제했어요.")
-            queryClient.invalidateQueries({ queryKey: queryKey.save.list })
-            queryClient.invalidateQueries({ queryKey: queryKey.page(pageId) })
-          }
+          setModal({
+            section: null,
+            type: "confirmHard",
+            payload: {
+              text: "deletePage",
+              value: pageId,
+            },
+          })
           break
         }
       }
@@ -98,13 +117,9 @@ const PageCard = ({
             { value: "insight", icon: faChartLine },
             { value: "gotoPage", icon: faArrowUpRightFromSquare },
             { value: "stop", icon: faClose },
-            { value: "edit", icon: faPen },
-            { value: "delete", icon: faTrash },
+            ...defaultList,
           ]
-        : [
-            { value: "edit", icon: faPen },
-            { value: "delete", icon: faTrash },
-          ],
+        : defaultList,
     [isActive]
   )
 

@@ -2,8 +2,7 @@
 
 import { deploy, inactivePage } from "@/actions/page"
 import { queryKey } from "@/config"
-import { toastSuccess } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
+import { toastError, toastSuccess } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
@@ -11,16 +10,17 @@ import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function Rending({}: {}) {
   const queryClient = useQueryClient()
-  const { lang, pageId } = useParams()
+  const { pageId } = useParams()
   const { t } = useTranslation()
   const {
     stage,
-    initSections,
+    homeSections,
     formSections,
     currentUsedImages,
     currentUsedColors,
@@ -39,11 +39,12 @@ export default function Rending({}: {}) {
 
   const onChangeFormat = async (value: "inactive" | "active" | "save") => {
     if (typeof pageId !== "string") return
+    if (formSections.length <= 1) return toastError("폼에 적어도 한개 이상의 섹션이 필요합니다")
 
     const payload = {
       content: {
         stage,
-        initSections,
+        homeSections,
         formSections,
         rendingSections,
         currentUsedImages,
@@ -54,7 +55,7 @@ export default function Rending({}: {}) {
         },
       },
       pageId,
-      lang: lang as Langs,
+      lang: pageOptions.lang as Langs,
     } as { content: SaveContentType; pageId: string; lang: Langs }
 
     if (value === "active" || value === "save") {

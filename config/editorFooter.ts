@@ -83,7 +83,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "background", icon: faImage, actionType: "imageSelector" },
   ],
   album: [design],
-  callout: [{ value: "color", icon: faPalette, actionType: "colorSelector" }],
+  callout: [design, { value: "color", icon: faPalette, actionType: "colorSelector" }],
 
   contact: [design, animation],
   map: [],
@@ -196,7 +196,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
 // ####### SUBMENU
 
 export const getEditorFooterList = (selectedSection: SectionType | null, stage: EditStage) => {
-  const stageList = stage === "init" ? initSectionList : stage === "form" ? formSectionList : rendingSectionList
+  const stageList = stage === "home" ? initSectionList : stage === "form" ? formSectionList : rendingSectionList
   if (selectedSection === null) {
     return stageList
   }

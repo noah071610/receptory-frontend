@@ -32,7 +32,7 @@ export default function SectionLayout({
     selectedSection,
     copySection,
     stage,
-    initSections,
+    homeSections,
     rendingSections,
     formSections,
     setActive,
@@ -60,7 +60,7 @@ export default function SectionLayout({
     deleteSection(section.id)
   }
   const onClickCopy = () => {
-    if (stage === "init" && initSections.length >= 20) {
+    if (stage === "home" && homeSections.length >= 20) {
       return toastError("lessThan20sections")
     }
     if (stage === "form" && formSections.length >= 20) {

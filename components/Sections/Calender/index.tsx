@@ -2,12 +2,12 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import setDateFormat from "@/utils/helpers/setDate"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import CalenderMain from "@/components/Modal/DatePicker/CalenderMain"

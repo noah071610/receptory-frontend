@@ -12,10 +12,10 @@ import { memo, useEffect, useRef } from "react"
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 function Text({ section }: { section: SectionType }) {

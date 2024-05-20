@@ -1,26 +1,25 @@
 "use client"
 
-import { addSave, getSaves } from "@/actions/save"
+import { getSaves } from "@/actions/save"
 import { getUser } from "@/actions/user"
 import PageLoading from "@/components/Loading/LoadingPage"
 import ConfirmHard from "@/components/Modal/ConfirmHard"
+import SelectLang from "@/components/Modal/SelectLang"
 import { queryKey } from "@/config"
 import { toastError } from "@/config/toast"
 import PageCard from "@/containers/user-page/PageCard"
 import Profile from "@/containers/user-page/Profile"
 import style from "@/containers/user-page/style.module.scss"
 import { useMainStore } from "@/store/main"
-import { Langs } from "@/types/Main"
 import { SaveListType } from "@/types/Page"
 import { UserType } from "@/types/User"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 const cx = cs.bind(style)
 
 const UserPage = () => {
-  const queryClient = useQueryClient()
   const { modal, setModal } = useMainStore()
   const { push, back } = useRouter()
   const { lang, userId } = useParams()
@@ -68,16 +67,7 @@ const UserPage = () => {
       if (saves && saves.length >= 2) {
         return toastError("페이지는 최대 2개까지 만들 수 있어요")
       }
-      setIsLoading(true)
-      const newSave = await addSave(lang as Langs)
-      if (newSave) {
-        await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
-        setTimeout(() => {
-          push(`/edit/${user.userId}/${newSave.pageId}`)
-        }, 500)
-      } else {
-        setIsLoading(false)
-      }
+      setModal({ section: null, type: "selectLang" })
     }
   }
 
@@ -113,7 +103,21 @@ const UserPage = () => {
             </ul>
           </div>
           <PageLoading isLoading={isLoading} />
-          {modal.type === "confirmHard" && modal.payload && <ConfirmHard confirmInitText={modal.payload} />}
+          {modal.type === "confirmHard" && modal.payload && (
+            <ConfirmHard
+              setIsLoading={setIsLoading}
+              confirmInitText={modal.payload.text}
+              value={modal.payload?.value}
+            />
+          )}
+          {modal.type === "selectLang" && (
+            <SelectLang
+              targetPageId={modal?.payload?.pageId}
+              initLang={modal?.payload?.lang}
+              user={user}
+              setIsLoading={setIsLoading}
+            />
+          )}
         </div>
       </>
     )
