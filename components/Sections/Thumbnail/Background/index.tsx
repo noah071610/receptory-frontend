@@ -20,11 +20,15 @@ export default function Background({
   textColor,
   ctaTextColor,
   isDisplayMode,
+  onClickCTA,
+  isButtonVisible,
 }: {
   textColor: string
   ctaTextColor: string
   section: SectionType
   isDisplayMode?: boolean
+  onClickCTA?: () => void
+  isButtonVisible: boolean
 }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
@@ -32,7 +36,6 @@ export default function Background({
   const { color, background, backgroundColor } = section.style
 
   const { setActive, stage } = useEditorStore()
-  const isInitStage = stage === "home"
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -85,9 +88,9 @@ export default function Background({
           section={section}
           style={{ color: hasString(background) ? colors.white : textColor }}
         />
-        {isInitStage && (
+        {isButtonVisible && (
           <div className={cx("cta-wrapper")}>
-            <button style={{ backgroundColor: color }} className={cx("cta")}>
+            <button onClick={onClickCTA} style={{ backgroundColor: color }} className={cx("cta")}>
               <Input
                 type="input"
                 section={section}

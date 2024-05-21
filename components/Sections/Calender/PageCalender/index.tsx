@@ -40,7 +40,7 @@ function PageCalender({ section }: { section: SectionType }) {
         isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {value?.length > 0 && <NumberRange start={value[0].text} end={value[1] && value[1].text} />}
+        {value?.length > 0 ? <NumberRange start={value[0].text} end={value[1] && value[1].text} /> : t("none")}
       </FormUserInput>
     </div>
   )

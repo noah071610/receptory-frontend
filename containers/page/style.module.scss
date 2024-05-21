@@ -1,5 +1,21 @@
 @import "@/styles/variables.scss";
 
+@keyframes shakeY {
+  from {
+    transform: translate3d(-50%, 4px, 0);
+  }
+
+  15% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  30% {
+    transform: translate3d(-50%, 4px, 0);
+  }
+  to {
+    transform: translate3d(-50%, 4px, 0);
+  }
+}
+
 .body {
   background-color: var(--bg-color);
   width: 100%;
@@ -13,6 +29,45 @@
     padding-bottom: 100px;
     @include medium {
       padding-bottom: 50px;
+    }
+  }
+}
+
+.submit-btn-wrapper {
+  width: 100%;
+  position: relative;
+  margin-top: 100px;
+  @include flex(true);
+  .float-message {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    animation: shakeY 1700ms ease-in-out infinite;
+    p {
+      font-size: 13px;
+      color: var(--red);
+      font-weight: 700;
+    }
+    &.active {
+      p {
+        color: var(--green-hard);
+      }
+    }
+  }
+
+  .submit {
+    @include btn-submit-style;
+    margin: 0 auto;
+    span {
+      font-size: 14px;
+    }
+  }
+
+  .goback {
+    margin-top: 15px;
+    span {
+      color: var(--gray-hard);
+      font-size: 14px;
     }
   }
 }

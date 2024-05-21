@@ -20,20 +20,23 @@ export default function Card({
   textColor,
   borderColor,
   isDisplayMode,
+  onClickCTA,
+  isButtonVisible,
 }: {
   ctaTextColor: string
   textColor: string
   borderColor: string
   section: SectionType
   isDisplayMode?: boolean
+  onClickCTA?: () => void
+  isButtonVisible: boolean
 }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
   const { title, description, cta } = section.data
   const { color, background, backgroundColor } = section.style
 
-  const { setActive, stage } = useEditorStore()
-  const isInitStage = stage === "home"
+  const { setActive } = useEditorStore()
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -78,9 +81,9 @@ export default function Card({
           value={description}
           section={section}
         />
-        {isInitStage && (
+        {isButtonVisible && (
           <div className={cx("cta-wrapper")}>
-            <button style={{ backgroundColor: color }} className={cx("cta")}>
+            <button onClick={onClickCTA} style={{ backgroundColor: color }} className={cx("cta")}>
               <Input
                 type="input"
                 displayMode={isDisplayMode && "span"}

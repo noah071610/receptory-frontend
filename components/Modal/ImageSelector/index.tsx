@@ -1,5 +1,6 @@
 "use client"
 
+import { uploadImages } from "@/actions/upload"
 import DeleteBtn from "@/components/DeleteBtn"
 import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { useEditorStore } from "@/store/editor"
@@ -15,7 +16,7 @@ import Dropzone from "./Dropzone"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-export default function ImageSelector() {
+export default function ImageSelector({ setIsLoading }: { setIsLoading: (b: boolean) => void }) {
   const [selectedImages, setSelectedImages] = useState<Array<ImageUpload>>([])
   const [listForRending, setListForRending] = useState<SectionListType[]>([])
 
@@ -42,32 +43,43 @@ export default function ImageSelector() {
 
   const onClickUpload = async () => {
     if (!type) return
+    setIsLoading(true)
 
-    await Promise.allSettled(
-      selectedImages.map(async (imageUpload, index) => {
-        const { payload, uploadType, file } = imageUpload
-        if (!payload) return
+    // 일단
+    const formData = new FormData()
+    selectedImages.forEach(({ uploadType, file }) => uploadType === "file" && file && formData.append("files", file))
+    let srcArr: string[] | undefined
+    if (formData.getAll("files")?.length > 0) {
+      srcArr = await uploadImages(formData)
+    }
 
-        const formData = new FormData()
-        const urlArr = []
+    let imageArr: string[] = []
+    if (srcArr) {
+      // 이미지 업로드를 한 경우,
+      imageArr = selectedImages
+        .map(({ uploadType, payload }) => (uploadType === "file" ? srcArr.shift() : payload))
+        .filter((v) => !!v) as string[]
+    } else {
+      // 사용했던 사진만
+      imageArr = selectedImages.map(({ payload }) => payload).filter((v) => !!v) as string[]
+    }
 
-        if (uploadType === "file") {
-          if (file) formData.append("image", file)
-        } else {
-          urlArr.push(payload)
-        }
-
+    Promise.all(
+      imageArr.map(async (payload, index) => {
         const img = new Image()
 
         img.addEventListener("load", () => {
           addUsed({ type: "currentUsedImages", payload })
+
+          // 단순 하나의 이미지를 업로드하는 기본적인 경우
           if (type === "thumbnail" || type === "callout") {
+            setIsLoading(false)
             return setSrc({
               payload,
             })
           }
-
           if (type === "select" || type === "choices") {
+            setIsLoading(false)
             // 스토어에서 히스토리 저장
             return setList({
               index: active.modal.payload,
@@ -76,12 +88,15 @@ export default function ImageSelector() {
             })
           }
           if (type === "background") {
+            setIsLoading(false)
             return setStyle({
               key: "background",
               payload,
             })
           }
+          // -----------
 
+          // slider 와 album 등 섹션을 만들고 이미지를 넣는 경우.
           setListForRending((arr) => [
             ...arr,
             createNewSectionList(type, index, {
@@ -102,15 +117,11 @@ export default function ImageSelector() {
             ])
           }
         })
-
         img.src = payload
-
-        // const { msg, data: imageSrc } = await uploadImage(formData)
-        // if (msg === "ok") {
-        // }
-        // todo:  일단 보류
       })
     )
+
+    // 단순 단수 사진 업로드일 경우 여기서 끝이남으로 모달을 종료시켜줌
     if (!isMultiple) setActive({ payload: { type: null, payload: null }, key: "modal" })
   }
 
@@ -161,6 +172,7 @@ export default function ImageSelector() {
         })
       }
       setListForRending([])
+      setIsLoading(false)
       setActive({ payload: { type: null, payload: null }, key: "modal" })
     }
   }, [listForRending.length, selectedImages.length, type, homeSections.length])

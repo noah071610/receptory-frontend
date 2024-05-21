@@ -19,12 +19,14 @@ export default function SectionLayout({
   section,
   draggableProvided,
   isTopSection,
+  noPadding,
   pathname,
 }: {
   children: ReactNode
   section: SectionType
   draggableProvided?: DraggableProvided
   isTopSection?: boolean
+  noPadding?: boolean
   pathname: string
 }) {
   const { replace } = useRouter()
@@ -92,7 +94,7 @@ export default function SectionLayout({
       data-closer="editor"
       style={{
         ...draggableProvided?.draggableProps.style,
-        padding: section.type === "thumbnail" ? "0px" : undefined,
+        padding: section.type === "thumbnail" || noPadding ? "0px" : undefined,
         paddingBottom: section.style.paddingBottom,
       }}
       className={cx("section", { active: selectedSection?.id === section.id })}

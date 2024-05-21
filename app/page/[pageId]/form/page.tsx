@@ -1,66 +1,26 @@
-"use client"
-import { getPage } from "@/actions/page"
-import SectionLayout from "@/components/Sections/display"
-import { queryKey } from "@/config"
-import getSection from "@/containers/page/sectionPageMap"
-import { PageType } from "@/types/Page"
-import { useQuery } from "@tanstack/react-query"
-import { useParams, usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-// import style from "@/containers/edit-page/style.module.scss"
-// import cs from "classNames/bind"
+import PageHome from "@/containers/page/Home"
+import style from "@/containers/page/style.module.scss"
+import { PageParams } from "@/types/Main"
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
-// const cx = cs.bind(style)
-
-const PageForm = () => {
-  const { lang, pageId } = useParams()
-  const pathname = usePathname()
-  const { back, replace } = useRouter()
-  const { data, isError } = useQuery<PageType>({
-    queryKey: queryKey.page(pageId as string),
-    queryFn: () => getPage({ pageId: pageId as string }),
-    enabled: typeof pageId === "string",
+async function getData(pageId: string) {
+  const res = await fetch(`http://localhost:5555/api/page?pageId=${pageId}`, {
+    method: "GET",
   })
-  const [components, setComponents] = useState<any>(null)
-
-  useEffect(() => {
-    if (typeof pageId !== "string") {
-      alert("잘못된 접근입니다.")
-      return back()
-    }
-    if (isError) {
-      return back()
-    }
-  }, [pageId, isError])
-
-  useEffect(() => {
-    if (data) {
-      !(async function () {
-        const a = await Promise.all(
-          data.content.formSections.map(async (v) => {
-            const Target: any = await getSection(v.type)
-            return Target ? (
-              <SectionLayout
-                style={{ paddingBottom: v.style?.paddingBottom }}
-                id={v.id}
-                noPadding={v.type === "thumbnail" || v.type === "slider"}
-                key={`${v.id}`}
-              >
-                <Target section={v} text={v.value} isDisplayMode={true} />
-              </SectionLayout>
-            ) : (
-              <section></section>
-            )
-          })
-        )
-        setComponents(a)
-      })()
-    }
-  }, [data])
-
-  // console.log(data?.content?.homeSections)
-
-  return data && components && <>{components.map((v: any) => v)}</>
+  return res.json()
 }
 
-export default PageForm
+export default async function FormPageLayout({ children, params: { pageId } }: Readonly<PageParams>) {
+  const initialData = await getData(pageId)
+
+  return (
+    <>
+      <div className={cx("body")}>
+        <main className={cx("main")}>
+          <PageHome isForm={true} initialData={initialData} />
+        </main>
+      </div>
+    </>
+  )
+}

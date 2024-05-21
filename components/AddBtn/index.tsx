@@ -16,6 +16,7 @@ function AddBtn({ type, section }: { type: string; section: SectionType }) {
     if (!selectedSection || selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
+
     switch (type) {
       case "qna":
       // qna의 new list 의 추가 ojb { isActive: true, data: { title: "타이틀 입력" } }

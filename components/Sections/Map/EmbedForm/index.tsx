@@ -1,12 +1,12 @@
 "use client"
 
 import Input from "@/components/Input"
-import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import { SectionType } from "@/types/Edit"
+import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useState } from "react"
 const cx = cs.bind(style)
@@ -15,8 +15,10 @@ export default function EmbedForm({ value, section }: { value: string; section: 
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation()
   return (
-    <div className={cx("input-wrapper")}>
-      <h3 className={cx("input-title")}>{t("임베드 코드 입력")}</h3>
+    <div className={cx("options")}>
+      <h4 className={cx("input-title")}>
+        <span>{t("임베드 코드 입력")}</span>
+      </h4>
       <Input
         type="input"
         className={cx("input")}
@@ -26,13 +28,21 @@ export default function EmbedForm({ value, section }: { value: string; section: 
         value={value}
         section={section}
       />
+      {/* <div
+        
+        
+      >
+      </div> */}
+
       <div
         onClick={() => {
           setIsOpen((b) => !b)
         }}
         className={cx("explain-title", { isOpen: isOpen })}
       >
-        <h3>{t("임베드 코드 삽입 방법")}</h3>
+        <h4>
+          <span>{t("임베드 코드 삽입 방법")}</span>
+        </h4>
         <div className={cx("icon")}>
           <FontAwesomeIcon icon={faChevronCircleDown} />
         </div>

@@ -29,9 +29,6 @@ function Dropzone({
       acceptedFiles.forEach(async (file: any, i: number) => {
         const formData = new FormData()
         formData.append("image", file)
-        // const { msg, data: imageSrc } = await uploadImage(formData)
-        // if (msg === "ok") {
-        // }
 
         if (process.env.NODE_ENV === "development") {
           const reader = new FileReader()

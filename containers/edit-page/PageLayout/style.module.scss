@@ -4,4 +4,5 @@
   width: 100%;
   @include flex-x;
   background-color: var(--bg-color);
+  position: relative;
 }

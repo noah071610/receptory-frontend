@@ -1,20 +1,32 @@
 "use client"
 
 import { colors } from "@/config/colors"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { changeOpacity } from "@/utils/styles/changeOpacity"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
-import { useParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useMemo } from "react"
 import Background from "./Background"
 import Card from "./Card"
 import Full from "./Full"
 import Simple from "./Simple"
 
-export default function Thumbnail({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { lang } = useParams()
+export default function Thumbnail({
+  section,
+  onClickCTA,
+  isDisplayMode,
+}: {
+  section: SectionType
+  isDisplayMode?: boolean
+  onClickCTA?: () => void
+}) {
+  const search = useSearchParams()
+  const { stage } = useEditorStore()
+  const userStage = search.get("s")
   const { color, backgroundColor } = section.style
   const design = section.design
+  const isButtonVisible = stage === "home" && userStage !== "form" && userStage !== "submit"
 
   const ctaTextColor = useMemo(() => getContrastTextColor(color ?? colors.blackSoft), [color])
   const textColor = useMemo(
@@ -30,19 +42,42 @@ export default function Thumbnail({ section, isDisplayMode }: { section: Section
     <>
       {design === "card" && (
         <Card
+          onClickCTA={onClickCTA}
           borderColor={borderColor}
           ctaTextColor={ctaTextColor}
           section={section}
           textColor={textColor}
           isDisplayMode={isDisplayMode}
+          isButtonVisible={isButtonVisible}
         />
       )}
       {design === "full" && (
-        <Full ctaTextColor={ctaTextColor} section={section} textColor={textColor} isDisplayMode={isDisplayMode} />
+        <Full
+          onClickCTA={onClickCTA}
+          ctaTextColor={ctaTextColor}
+          section={section}
+          textColor={textColor}
+          isDisplayMode={isDisplayMode}
+          isButtonVisible={isButtonVisible}
+        />
       )}
-      {design === "simple" && <Simple section={section} isDisplayMode={isDisplayMode} />}
+      {design === "simple" && (
+        <Simple
+          onClickCTA={onClickCTA}
+          section={section}
+          isDisplayMode={isDisplayMode}
+          isButtonVisible={isButtonVisible}
+        />
+      )}
       {design === "background" && (
-        <Background textColor={textColor} ctaTextColor={ctaTextColor} section={section} isDisplayMode={isDisplayMode} />
+        <Background
+          onClickCTA={onClickCTA}
+          textColor={textColor}
+          ctaTextColor={ctaTextColor}
+          section={section}
+          isDisplayMode={isDisplayMode}
+          isButtonVisible={isButtonVisible}
+        />
       )}
     </>
   )

@@ -37,10 +37,11 @@ export default function Preview() {
     <div data-closer="preview" className={cx("preview", { active: active.modal.type === "preview" })}>
       <div className={cx("phone")}>
         <div className={cx("content")}>
-          {sections.map((v) => (
+          {sections.map((v, i) => (
             <SectionLayout
               style={{ paddingBottom: v.style?.paddingBottom }}
               id={v.id}
+              index={i}
               noPadding={v.type === "thumbnail" || v.type === "slider"}
               key={`${v.id}`}
             >

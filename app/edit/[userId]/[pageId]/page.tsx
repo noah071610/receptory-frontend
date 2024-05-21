@@ -15,6 +15,7 @@ import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { getSave } from "@/actions/save"
+import PageLoading from "@/components/Loading/LoadingPage"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
 import Header from "@/containers/edit-page/Header"
@@ -49,6 +50,7 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
 
 const EditPage = () => {
   const [isLoading, setIsLoading] = useState(true)
+  const [isModalLoading, setIsModalLoading] = useState(false)
   const pathname = usePathname()
   const { lang } = useParams()
   const { push, back } = useRouter()
@@ -169,11 +171,12 @@ const EditPage = () => {
           <Preview />
         </div>
 
-        {activeModal?.includes("image") && <ImageSelector />}
+        {activeModal?.includes("image") && <ImageSelector setIsLoading={setIsModalLoading} />}
         {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
         {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
         {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
         {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
+        <PageLoading isLoading={isModalLoading} />
       </PageLayout>
     </>
   )

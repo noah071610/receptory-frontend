@@ -62,9 +62,13 @@ export async function save(payload: SaveUpdateType) {
   if (cookie) {
     if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
       // 완벽. 가져와
-      const response = await API.put(`/save`, payload)
+      try {
+        const response = await API.put(`/save`, payload)
 
-      return response.data
+        return response.data
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }

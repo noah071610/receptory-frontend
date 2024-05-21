@@ -24,6 +24,9 @@ export default function PageLayout({ children }: { children: ReactNode }) {
         if (dataType === "preview" && typeof window === "object") {
           if (window.innerWidth <= 800) return
         }
+        if (dataType === "add") {
+          return
+        }
         setSelectedSection({ payload: null })
         setActive({ payload: { type: null }, key: "all" })
       }

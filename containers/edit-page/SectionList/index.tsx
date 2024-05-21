@@ -31,7 +31,7 @@ export default function SectionList({ sections, stage }: { sections: SectionType
                   return (
                     <SectionLayout
                       pathname={pathname}
-                      isTopSection={v.type === "slider"}
+                      noPadding={v.type === "slider"}
                       draggableProvided={draggableProvided}
                       section={v}
                       key={`${v.id}`}

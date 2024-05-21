@@ -15,14 +15,23 @@ import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-export default function Simple({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+export default function Simple({
+  section,
+  isDisplayMode,
+  onClickCTA,
+  isButtonVisible,
+}: {
+  section: SectionType
+  isDisplayMode?: boolean
+  onClickCTA?: () => void
+  isButtonVisible: boolean
+}) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
   const { title, description, cta } = section.data
   const { color, background, backgroundColor } = section.style
 
-  const { setActive, stage } = useEditorStore()
-  const isInitStage = stage === "home"
+  const { setActive } = useEditorStore()
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -76,9 +85,9 @@ export default function Simple({ section, isDisplayMode }: { section: SectionTyp
             value={description}
             section={section}
           />
-          {isInitStage && (
+          {isButtonVisible && (
             <div className={cx("cta-wrapper")}>
-              <button className={cx("cta")}>
+              <button onClick={onClickCTA} className={cx("cta")}>
                 <Input
                   type="input"
                   displayMode={isDisplayMode && "span"}
