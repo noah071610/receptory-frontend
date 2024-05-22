@@ -113,6 +113,10 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
 const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterList[] }> = {
   contact: {
     animation: animations,
+    design: [
+      { value: "basic", icon: faCheck, actionType: "cta" },
+      { value: "card", icon: faCheck, actionType: "cta" },
+    ],
   },
   title: {
     textAlign: [

@@ -6,7 +6,7 @@
 }
 
 .content {
-  width: 95%;
+  @include modal-style;
   padding: 15px;
   ul {
     width: 100%;

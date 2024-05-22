@@ -2,7 +2,7 @@
 @import "@/styles/variables.scss";
 
 .add-save-content {
-  width: 95%;
+  @include modal-style;
   padding: 25px;
 
   h1 {

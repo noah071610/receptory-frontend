@@ -1,5 +1,36 @@
 @import "@/styles/variables.scss";
 
+@keyframes comp-visible {
+  from {
+    visibility: hidden;
+    z-index: -1;
+  }
+  1% {
+    z-index: 100;
+    visibility: visible;
+  }
+
+  to {
+    z-index: 100;
+    visibility: visible;
+  }
+}
+@keyframes comp-hide {
+  from {
+    z-index: 100;
+    visibility: visible;
+  }
+
+  99% {
+    z-index: 100;
+    visibility: visible;
+  }
+  to {
+    z-index: -1;
+    visibility: hidden;
+  }
+}
+
 @keyframes shakeY {
   from {
     transform: translate3d(-50%, 4px, 0);
@@ -30,6 +61,18 @@
     @include medium {
       padding-bottom: 50px;
     }
+
+    .overlay {
+      @include full(absolute);
+      background-color: var(--white);
+      opacity: 0;
+      animation: comp-hide 450ms forwards;
+      transition: opacity 450ms;
+      &.isLoading {
+        opacity: 1;
+        animation: comp-visible 450ms forwards;
+      }
+    }
   }
 }
 
@@ -38,6 +81,7 @@
   position: relative;
   margin-top: 100px;
   @include flex(true);
+  gap: 15px;
   .float-message {
     position: absolute;
     top: -30px;
@@ -64,10 +108,63 @@
   }
 
   .goback {
-    margin-top: 15px;
     span {
       color: var(--gray-hard);
       font-size: 14px;
     }
+  }
+
+  .gohome {
+    @include btn-submit-style;
+    margin: 0 auto;
+    span {
+      font-size: 14px;
+    }
+  }
+}
+
+.cta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  a,
+  button {
+    img {
+      transition: 200ms all;
+    }
+    @include action {
+      img {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 500px;
+  transform: translate(-50%, 50px);
+  transition: transform 400ms;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding: 14px 0;
+  background-color: rgba($color: #ffffff, $alpha: 0.1);
+  @include flex;
+  p {
+    span {
+      font-size: 13px;
+      color: var(--gray-hard);
+    }
+    svg {
+      font-size: 12px;
+      color: var(--gray);
+      margin-right: 4px;
+    }
+  }
+  &.active {
+    transform: translate(-50%, 0);
   }
 }

@@ -163,6 +163,14 @@
   }
 }
 
+@mixin modal-style {
+  width: 95%;
+  max-width: 420px;
+  border-radius: 10px;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+  background-color: var(--white);
+}
+
 $z-index-map: (
   edit-overlay: 100,
   edit-content: 140,

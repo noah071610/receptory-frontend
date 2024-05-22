@@ -2,23 +2,20 @@
 
 import { SectionType } from "@/types/Edit"
 import { useRouter } from "next/navigation"
-import { memo, useEffect, useMemo } from "react"
+import { memo, useMemo } from "react"
 
 import style from "../style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
-import setDateFormat from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
-const confirmationIdExample = 12345678912
-
-function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: boolean }) {
+function PageConfirm({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const { back } = useRouter()
-  const { userPick } = useMainStore()
+  const { userPick, curConfirmationId, confirmDate } = useMainStore()
   const { title, description } = section.data
 
   const confirmationArr = useMemo(() => {
@@ -35,12 +32,6 @@ function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: b
     })
   }, [userPick])
 
-  useEffect(() => {
-    if (confirmationArr?.length <= 0 && !isEditor) {
-      back()
-    }
-  }, [isEditor, confirmationArr])
-
   return (
     <div className={cx("layout")}>
       <div className={cx("confirm-wrapper")}>
@@ -54,7 +45,7 @@ function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: b
                   <span>{"예약 번호"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{confirmationIdExample}</span>
+                  <span>{curConfirmationId ?? "접수번호 없음"}</span>
                 </div>
               </li>
               <li>
@@ -62,13 +53,12 @@ function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: b
                   <span>{"확정 일시"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  {/* // todo: */}
-                  <span>{setDateFormat({ date: new Date(), lang: "ko" })}</span>
+                  <span>{confirmDate ?? "날짜 없음"}</span>
                 </div>
               </li>
             </ul>
           </div>
-          {!isEditor && confirmationArr?.length > 0 ? (
+          {confirmationArr?.length > 0 ? (
             <ul className={cx("picks")}>
               {confirmationArr.map(({ title, text, type }, i) => {
                 return (

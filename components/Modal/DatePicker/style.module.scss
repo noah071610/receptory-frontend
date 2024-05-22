@@ -1,0 +1,6 @@
+@import "@/styles/variables.scss";
+
+.modal {
+  @include modal-style;
+  padding: 25px;
+}

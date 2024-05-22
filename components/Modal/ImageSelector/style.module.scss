@@ -1,6 +1,8 @@
 @import "@/styles/variables.scss";
 
 .content {
+  @include modal-style;
+  padding: 15px;
   h2 {
     font-size: 17px;
     margin: 10px 0;

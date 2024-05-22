@@ -1,5 +1,5 @@
 import { API } from "@/config"
-import { Langs } from "@/types/Main"
+import { Langs, UserPickType } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
 import { convertContent } from "@/utils/editor/saveContentFromEditor"
 import { Cookies } from "react-cookie"
@@ -7,12 +7,35 @@ import { Cookies } from "react-cookie"
 const cookies = new Cookies()
 
 export async function getPage({ pageId }: { pageId: string }) {
+  const response = await API.get(`/page?pageId=${pageId}`)
+
+  return response.data
+}
+
+export async function submit(data: {
+  userPick: {
+    [id: string]: UserPickType
+  }
+  confirmId: string
+  pageId: string
+  password: string
+}) {
   try {
-    const response = await API.get(`/page?pageId=${pageId}`)
+    const response = await API.post(`/page/submit`, data)
 
     return response.data
   } catch (err: any) {
     alert(err.message)
+  }
+}
+
+export async function findReservation(data: { pageId: string; confirmId: string; password: string }) {
+  try {
+    const response = await API.post(`/page/find-reservation`, data)
+
+    return { msg: "ok", data: response.data }
+  } catch (err: any) {
+    return { msg: err.message }
   }
 }
 

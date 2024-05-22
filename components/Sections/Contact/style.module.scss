@@ -8,17 +8,49 @@
     flex-direction: column;
 
     .btn-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      a,
-      button {
-        img {
-          transition: 200ms all;
-        }
-        @include action {
+      &.basic {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        a,
+        button {
           img {
-            transform: scale(1.1);
+            transition: 200ms all;
+          }
+          @include action {
+            img {
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+      &.card {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+
+        li {
+          margin: 0 auto;
+          width: 100%;
+          max-width: 350px;
+          border-radius: 8px;
+          background-color: var(--gray-soft);
+          transition: all 300ms;
+          a,
+          button {
+            width: 100%;
+            padding: 15px;
+            @include flex-y;
+
+            span {
+              font-size: 14px;
+              margin-left: 10px;
+            }
+          }
+          @include action {
+            @include shadow;
           }
         }
       }

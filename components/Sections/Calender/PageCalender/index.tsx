@@ -20,7 +20,7 @@ function PageCalender({ section }: { section: SectionType }) {
   const { value } = userPick[section.id] ?? {}
 
   const onClickOpenModal = () => {
-    setModal({ section, type: "date" })
+    setModal({ section, type: section.options.specificDate ? "dateSelect" : "date" })
   }
 
   const reset = () => {

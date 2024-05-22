@@ -4,7 +4,6 @@ import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import setDateFormat from "@/utils/helpers/setDate"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -15,16 +14,15 @@ import NumberRange from "@/components/NumberRange"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useMainStore } from "@/store/main"
+import setDateFormat from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
 const cx = cs.bind(style)
 
 function Calender({ section }: { section: SectionType }) {
-  const { lang } = useParams()
   const { t } = useTranslation()
   const { setModal, setUserPick, userPick } = useMainStore()
-  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = useEditorStore()
   const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options
   const { value } = userPick[section.id] ?? {}
 
@@ -145,7 +143,10 @@ function Calender({ section }: { section: SectionType }) {
                         start={specificStartDate}
                         end={specificEndDate}
                         formatter={(date: Date) => {
-                          return setDateFormat({ date, lang })
+                          return setDateFormat({
+                            date,
+                            lang: pageOptions.lang,
+                          })
                         }}
                       />
                     </button>

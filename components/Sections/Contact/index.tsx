@@ -24,6 +24,8 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
 
   const list = section.collection
 
+  const design = section.design
+
   const onChangeLink = (inputValue: string, i: number) => {
     setCollection({ payload: inputValue, index: i, key: "link" })
   }
@@ -31,32 +33,16 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
   return (
     <div className={cx("contact")}>
       <div className={cx("main")}>
-        <div className={cx("btn-list")}>
-          {list.map(({ key, link }, i) => {
-            switch (key) {
-              case "call":
-                return (
-                  <a
-                    style={getAnimation({ type: section.style.animation, delay: i * 130 })}
-                    href={`tel:${link}`}
-                    key={`btn_${key}`}
-                  >
-                    <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
-                  </a>
-                )
-              default:
-                return (
-                  <button
-                    style={getAnimation({ type: section.style.animation, delay: i * 130 })}
-                    // onClick={() => v.onClick(v.value)} todo:
-                    key={`btn_${key}`}
-                  >
-                    <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
-                  </button>
-                )
-            }
-          })}
-        </div>
+        <ul className={cx("btn-list", design)}>
+          {list.map(({ key, link }, i) => (
+            <li key={`btn_${key}`} style={getAnimation({ type: section.style.animation, delay: i * 130 })}>
+              <a href={key === "call" ? `tel:${link}` : link} target="_blank" rel="noreferrer">
+                <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
+                {design === "card" && <span>{key}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
       {!isDisplayMode && (
         <div className={cx("options")}>

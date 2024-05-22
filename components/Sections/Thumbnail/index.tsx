@@ -26,7 +26,7 @@ export default function Thumbnail({
   const userStage = search.get("s")
   const { color, backgroundColor } = section.style
   const design = section.design
-  const isButtonVisible = stage === "home" && userStage !== "form" && userStage !== "submit"
+  const isButtonVisible = stage === "home" && userStage !== "form" && userStage !== "confirm"
 
   const ctaTextColor = useMemo(() => getContrastTextColor(color ?? colors.blackSoft), [color])
   const textColor = useMemo(

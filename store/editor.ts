@@ -416,12 +416,12 @@ export const useEditorStore = create<EditStates & Actions>()(
       set((origin) => {
         if (origin.selectedSection) {
           const target = getTarget(origin)
-          if (!targetKey && !targetIndex) return
+          if (!targetKey && typeof targetIndex !== "number") return
 
           if (targetKey) {
             target.collection = target.collection.filter(({ key }) => key !== targetKey)
           }
-          if (targetIndex) {
+          if (typeof targetIndex === "number") {
             target.collection = target.collection.filter((_, i) => i !== targetIndex)
           }
 

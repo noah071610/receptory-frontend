@@ -70,7 +70,7 @@ const PageCard = ({
           }
           break
         case "edit":
-          replace(`/edit/${userId}/${pageId}`, {
+          push(`/edit/${userId}/${pageId}`, {
             scroll: false,
           })
           break

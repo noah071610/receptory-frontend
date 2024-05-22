@@ -7,6 +7,9 @@ export type PageParams = {
   params: {
     pageId: Langs
   }
+  searchParams: {
+    s: string
+  }
 }
 export interface UserPickType {
   title: string
@@ -31,4 +34,6 @@ export type ModalActiveType =
   | "confirm"
   | "report"
   | "selectLang"
+  | "makePassword"
+  | "confirmReservation"
   | null

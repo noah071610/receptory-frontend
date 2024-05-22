@@ -20,6 +20,12 @@ module.exports = withBundleAnalyzer({
         port: "",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: `${process.env.NEXT_PUBLIC_BUTKET_NAME}.s3.ap-northeast-2.amazonaws.com`,
+        port: "",
+        pathname: "**",
+      },
     ],
   },
   webpack(config) {

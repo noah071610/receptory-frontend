@@ -1,5 +1,5 @@
 import { SectionType } from "@/types/Edit"
-import { ModalActiveType, UserPickType, UserPickValueType } from "@/types/Main"
+import { Langs, ModalActiveType, UserPickType, UserPickValueType } from "@/types/Main"
 import { UserType } from "@/types/User"
 
 import { create } from "zustand"
@@ -15,13 +15,25 @@ export interface EditStates {
   userPick: {
     [id: string]: UserPickType
   }
+  curConfirmationId: string | null
+  confirmDate: string | null
+  pageLang: Langs | null
 }
 
 type Actions = {
   setUser: ({ user }: { user: UserType | null }) => void
+  setPageLang: (lang: Langs) => void
   setModal: ({ section, type, payload }: { section: SectionType | null; type: ModalActiveType; payload?: any }) => void
   setUserPick: ({ section, value }: { section: SectionType; value: UserPickValueType[] }) => void
+  loadUserPick: (data: { [id: string]: UserPickType }) => void
   setUserPickText: ({ section, text }: { section: SectionType; text: string }) => void
+  setConfirmation: ({
+    curConfirmationId,
+    confirmDate,
+  }: {
+    curConfirmationId: string | null
+    confirmDate: string | null
+  }) => void
 }
 
 export const useMainStore = create<EditStates & Actions>()(
@@ -33,11 +45,23 @@ export const useMainStore = create<EditStates & Actions>()(
       payload: null,
     },
     userPick: {},
+    curConfirmationId: null,
+    confirmDate: null,
+    pageLang: null,
 
     // SET
     setUser: ({ user }) =>
       set((origin) => {
         origin.user = user
+      }),
+    setPageLang: (lang) =>
+      set((origin) => {
+        origin.pageLang = lang
+      }),
+    setConfirmation: ({ confirmDate, curConfirmationId }) =>
+      set((origin) => {
+        origin.curConfirmationId = curConfirmationId
+        origin.confirmDate = confirmDate
       }),
     setModal: (payload) =>
       set((origin) => {
@@ -51,6 +75,10 @@ export const useMainStore = create<EditStates & Actions>()(
           index: section.index,
           type: section.type,
         }
+      }),
+    loadUserPick: (data) =>
+      set((origin) => {
+        origin.userPick = data
       }),
     setUserPickText: ({ section, text }) =>
       set((origin) => {

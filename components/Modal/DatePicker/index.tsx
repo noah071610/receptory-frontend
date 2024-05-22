@@ -5,6 +5,10 @@ import { DPDayInteger, DatePickerStateProvider } from "@rehookify/datepicker"
 import { useMemo, useState } from "react"
 import ModalLayout from ".."
 import CalenderMain from "./CalenderMain"
+import style from "./style.module.scss"
+
+import cs from "classNames/bind"
+const cx = cs.bind(style)
 
 export const DatePicker = ({ section }: { section: SectionType }) => {
   const { startDate, endDate, interval, specificDate, isRangeSelect } = section.options
@@ -46,7 +50,7 @@ export const DatePicker = ({ section }: { section: SectionType }) => {
   }, [interval])
 
   return (
-    <ModalLayout>
+    <ModalLayout modalStyle={cx("modal")}>
       {section && (
         <DatePickerStateProvider
           config={{

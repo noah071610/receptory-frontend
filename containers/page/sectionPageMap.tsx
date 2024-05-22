@@ -23,7 +23,7 @@ const sectionImportMap = {
   empty: () => import("@/components/Sections/Empty/index"),
   checkList: () => import("@/components/Sections/CheckList/index"),
   linkBtn: () => import("@/components/Sections/LinkBtn/index"),
-  confirm: () => import("@/components/Sections/Confirm/index"),
+  confirm: () => import("@/components/Sections/Confirm/PageConfirm/index"),
 }
 
 const getSection = async (type: SectionListTypes) => {

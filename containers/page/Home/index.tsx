@@ -1,14 +1,23 @@
 "use client"
+import PageLoading from "@/components/Loading/LoadingPage"
+import ConfirmReservation from "@/components/Modal/ConfirmReservation"
+import MakePassword from "@/components/Modal/MakeConfirm"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import SectionLayout from "@/components/Sections/display"
+import { _url } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import style from "@/containers/page/style.module.scss"
 import { useMainStore } from "@/store/main"
 import { PageType } from "@/types/Page"
+import getConfirmationId from "@/utils/helpers/getConfirmationId"
+import setDateFormat from "@/utils/helpers/setDate"
+import { getAnimation } from "@/utils/styles/getAnimation"
+import { faFire } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 const cx = cs.bind(style)
 
@@ -29,18 +38,20 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
   loading: () => <ModalLoading />,
 })
 
-const PageHome = ({ isForm, initialData }: { isForm?: boolean; initialData: PageType }) => {
+const PageHome = ({ initialParams, initialData }: { initialParams?: string; initialData: PageType }) => {
   const { pageId } = useParams()
-  const search = useSearchParams()
-  const stage = search.get("s")
   const pathname = usePathname()
-  const { back, replace } = useRouter()
-  const { modal, setModal, userPick } = useMainStore()
-  const [isLoading, setIsLoading] = useState(false)
-  const [components, setComponents] = useState<any>(null)
+  const { back, push, replace } = useRouter()
+  const { modal, setModal, userPick, setConfirmation, pageLang, curConfirmationId, setPageLang } = useMainStore()
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmit, setIsSubmit] = useState(false)
+  const [isConfirming, setIsConfirming] = useState(false)
+  const [isConfirm, setIsConfirm] = useState(false)
+  const [components, setComponents] = useState<JSX.Element[]>([])
 
   const onClickCTA = () => {
-    replace(`${pathname}?s=form`)
+    setIsLoading(true)
+    push(`${pathname}?s=form`)
   }
 
   const onClickPage = (e: any) => {
@@ -62,6 +73,14 @@ const PageHome = ({ isForm, initialData }: { isForm?: boolean; initialData: Page
   }
 
   useEffect(() => {
+    // confirm으로 바로 넘어갔을때 확인 모달
+    if (!isConfirm && initialParams === "confirm") {
+      setModal({ section: null, type: "confirmReservation" })
+    }
+  }, [isConfirm, initialParams])
+
+  useEffect(() => {
+    // 이상한 접근 차단
     if (typeof pageId !== "string") {
       alert("잘못된 접근입니다.")
       return back()
@@ -70,13 +89,35 @@ const PageHome = ({ isForm, initialData }: { isForm?: boolean; initialData: Page
       alert("페이지를 로드하지 못했습니다.")
       return back()
     }
+    if (initialData.format === "inactive") {
+      alert("현재 비공개 상태인 페이지입니다.")
+      return back()
+    }
   }, [pageId, initialData])
 
   useEffect(() => {
+    // 페이지 언어 설정
     if (initialData) {
+      setPageLang(initialData.lang)
+    }
+  }, [initialData])
+
+  useEffect(() => {
+    if (initialData) {
+      setIsLoading(true)
+
+      if (initialParams === "confirm" && !isConfirm) {
+        return replace(`${pathname}?s=home`)
+      }
+
       !(async function () {
         const arr = await Promise.all(
-          (stage === "form" ? initialData.content.formSections : initialData.content.homeSections).map(async (v, i) => {
+          (initialParams === "form"
+            ? initialData.content.formSections
+            : initialParams === "confirm"
+              ? initialData.content.rendingSections
+              : initialData.content.homeSections
+          ).map(async (v, i) => {
             const AwesomeComponent: any = await getSection(v.type)
             return AwesomeComponent ? (
               <SectionLayout
@@ -100,61 +141,107 @@ const PageHome = ({ isForm, initialData }: { isForm?: boolean; initialData: Page
           })
         )
         setComponents(arr)
+        setTimeout(() => {
+          setIsLoading(false)
+        })
       })()
     }
-  }, [stage])
+  }, [initialParams, isConfirm])
 
   const userFormLength = useMemo(
     () =>
-      stage === "form"
+      initialParams === "form"
         ? initialData
           ? initialData.content.formSections.filter(
               (v: any) => !["text", "title", "callout", "checkList", "thumbnail"].includes(v.type)
             ).length
           : 999999
         : 999999,
-    [stage]
+    [initialParams]
   )
   const isReadyToSubmit = useMemo(() => {
     return (
-      stage === "form" &&
-      Object.values(userPick).filter((v) => v?.title && v?.value?.length > 0).length === userFormLength
+      initialParams === "form" &&
+      Object.values(userPick).filter((v) => v?.title && v?.value?.length > 0 && !!v?.value[0]?.text?.trim()).length ===
+        userFormLength
     )
-  }, [userPick, userFormLength, stage])
+  }, [userPick, userFormLength, initialParams])
 
-  const onClickSubmit = () => {
-    alert("끝이 보여")
+  const onClickSubmit = async () => {
+    if (typeof pageId !== "string") return
+
+    setIsSubmit(true)
+    setConfirmation({
+      confirmDate: setDateFormat({ date: new Date(), lang: pageLang, isTime: true }),
+      curConfirmationId: getConfirmationId(),
+    })
+    setModal({
+      section: null,
+      type: "makePassword",
+    })
   }
 
   return (
-    <div onClick={onClickPage} className={cx("body")}>
-      <main className={cx("main")}>
-        {components && components.map((v: any) => v)}
+    initialData?.format === "active" &&
+    pageLang && (
+      <div onClick={onClickPage} className={cx("body")}>
+        <main className={cx("main")}>
+          {components.map((v: any) => v)}
 
-        {stage === "form" && (
-          <div className={cx("submit-btn-wrapper")}>
-            <div className={cx("float-message", { active: isReadyToSubmit })}>
-              <p>{isReadyToSubmit ? "클릭해서 제출" : "내용을 전부 입력해주세요!"}</p>
-            </div>
-            <button
-              disabled={!isReadyToSubmit}
-              onClick={onClickSubmit}
-              className={cx("submit", { inactive: !isReadyToSubmit })}
+          {initialParams === "form" && (
+            <div
+              style={isLoading ? { display: "none" } : getAnimation({ type: "fadeUp", delay: 180 * components.length })}
+              className={cx("submit-btn-wrapper")}
             >
-              <span>{"제출하기"}</span>
-            </button>
-            <Link href={pathname} className={cx("goback")}>
-              <span>메인 페이지로</span>
-            </Link>
-          </div>
-        )}
+              <div className={cx("float-message", { active: isReadyToSubmit })}>
+                <p>{isReadyToSubmit ? "클릭해서 제출" : "내용을 전부 입력해주세요!"}</p>
+              </div>
+              <button
+                disabled={!isReadyToSubmit}
+                onClick={onClickSubmit}
+                className={cx("submit", { inactive: !isReadyToSubmit })}
+              >
+                <span>{"제출하기"}</span>
+              </button>
+              <Link href={pathname} className={cx("goback")}>
+                <span>메인 페이지로</span>
+              </Link>
+            </div>
+          )}
+          {initialParams === "confirm" && isConfirm && (
+            <>
+              <div
+                style={
+                  isLoading ? { display: "none" } : getAnimation({ type: "fadeUp", delay: 180 * components.length })
+                }
+                className={cx("submit-btn-wrapper")}
+              >
+                <Link href={pathname} className={cx("gohome")}>
+                  <span>메인 페이지로</span>
+                </Link>
+              </div>
+            </>
+          )}
 
-        {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
-        {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
-        {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
-        {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
-      </main>
-    </div>
+          {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
+          {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
+          {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
+          {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
+          {modal.type === "makePassword" && isSubmit && curConfirmationId && (
+            <MakePassword setIsConfirming={setIsConfirming} confirmId={curConfirmationId} setIsConfirm={setIsConfirm} />
+          )}
+          {modal.type === "confirmReservation" && (
+            <ConfirmReservation pageLang={pageLang} setIsConfirm={setIsConfirm} setIsConfirming={setIsConfirming} />
+          )}
+          <Link className={cx("footer", { active: initialParams !== "form" })} href={_url.client + "/login"}>
+            <p>
+              <FontAwesomeIcon icon={faFire} /> <span>{"Powered by Receptory"}</span>
+            </p>
+          </Link>
+          <PageLoading isLoading={isConfirming} />
+        </main>
+      </div>
+    )
   )
 }
 
