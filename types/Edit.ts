@@ -79,7 +79,7 @@ export type AnimationTypes =
   | "fadeUpBig"
   | "headShake"
 export type TitleSelectTypes = "title" | "description" | "label"
-export type StyleSelectTypes = "cover" | "contain"
+export type StyleSelectTypes = "imageSize" | "width" | "length"
 
 export type EditorFooterListTypes =
   | SectionListTypes

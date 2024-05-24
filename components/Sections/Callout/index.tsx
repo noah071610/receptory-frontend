@@ -29,7 +29,7 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
 
   const backgroundColor = useMemo(() => changeOpacity(color ?? "rgba(255,255,255,1)", 0.1), [color])
 
-  // const textColor = useMemo(() => getContrastTextColor(backgroundColor ?? colors.black), [backgroundColor])
+  const imageStatus = section.options.imageStatus
 
   const onClickAddImage = () => {
     setActive({ key: "modal", payload: { type: "callout-image" } })
@@ -46,16 +46,13 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
             style={
               design === "card" ? { backgroundColor: changeOpacity(backgroundColor, 0.3), borderColor: color } : {}
             }
-            className={cx("image-container")}
+            className={cx("image-container", imageStatus ? imageStatus : "")}
           >
             {section.src && !isDisplayMode && <DeleteBtn isSmall={true} srcKey="callout" />}
             <picture className={cx("image")}>
               {section.src && <Image width={50} height={50} src={section.src} alt="image" />}
               {!isDisplayMode && (
-                <button
-                  onClick={onClickAddImage}
-                  className={cx("image-btn", { ["has-image"]: hasString(section.src) })}
-                >
+                <button onClick={onClickAddImage} className={cx("image-btn", { ["has-image"]: section.src })}>
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
               )}

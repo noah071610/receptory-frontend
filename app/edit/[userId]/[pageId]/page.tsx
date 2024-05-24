@@ -171,7 +171,9 @@ const EditPage = () => {
           <Preview />
         </div>
 
-        {activeModal?.includes("image") && <ImageSelector setIsLoading={setIsModalLoading} />}
+        {activeModal?.includes("image") && (
+          <ImageSelector IsUseEmoji={activeModal.includes("callout")} setIsLoading={setIsModalLoading} />
+        )}
         {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
         {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
         {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}

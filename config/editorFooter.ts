@@ -6,6 +6,8 @@ import {
   faAlignJustify,
   faAlignLeft,
   faAlignRight,
+  faArrowsLeftRight,
+  faArrowsUpDown,
   faBrush,
   faCalendar,
   faCheck,
@@ -22,6 +24,7 @@ import {
   faLink,
   faList,
   faMap,
+  faMaximize,
   faPaintRoller,
   faPalette,
   faPencil,
@@ -82,13 +85,18 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
     { value: "ctaBackgroundColor", icon: faBrush, actionType: "colorSelector" },
     { value: "background", icon: faImage, actionType: "imageSelector" },
   ],
-  album: [design],
+  album: [{ value: "imageSize", icon: faMaximize, actionType: "submenu" }],
   callout: [design, { value: "color", icon: faPalette, actionType: "colorSelector" }],
 
   contact: [design, animation],
   map: [],
   qna: [{ value: "color", icon: faBrush, actionType: "colorSelector" }],
-  slider: [design, animation, { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" }],
+  slider: [
+    design,
+    animation,
+    { value: "imageSize", icon: faMaximize, actionType: "submenu" },
+    { value: "backgroundColor", icon: faPalette, actionType: "colorSelector" },
+  ],
   text: [],
   title: [
     { value: "textAlign", icon: faAlignJustify, actionType: "submenu" },
@@ -131,12 +139,10 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
     ],
   },
   album: {
-    design: [
-      { value: "basic", icon: faCheck, actionType: "cta" },
-      { value: "gridOne", icon: faCheck, actionType: "cta" },
-      { value: "gridTwo", icon: faCheck, actionType: "cta" },
+    imageSize: [
+      { value: "width", icon: faArrowsLeftRight, actionType: "cta" },
+      { value: "length", icon: faArrowsUpDown, actionType: "cta" },
     ],
-    animation: animations,
   },
   callout: {
     design: [
@@ -152,9 +158,12 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "basic", icon: faCheck, actionType: "cta" },
       { value: "card", icon: faCheck, actionType: "cta" },
       { value: "circle", icon: faCheck, actionType: "cta" },
-      { value: "thumbnail", icon: faCheck, actionType: "cta" },
     ],
     animation: animations,
+    imageSize: [
+      { value: "width", icon: faArrowsLeftRight, actionType: "cta" },
+      { value: "length", icon: faArrowsUpDown, actionType: "cta" },
+    ],
   },
   text: {},
   empty: {},

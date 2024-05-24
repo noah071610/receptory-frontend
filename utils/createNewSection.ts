@@ -2,12 +2,11 @@ import { colors } from "@/config/colors"
 import { DesignTypes, SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
 import getId from "./helpers/getId"
 
-const getNewDate = () => new Date()
 const title = {
   title: "타이틀 입력",
   description: "설명 입력",
 }
-const a = new Map()
+
 const sectionMap: { [key: string]: any } = {
   calender: () => {
     return {
@@ -47,6 +46,9 @@ const sectionMap: { [key: string]: any } = {
       style: {
         backgroundColor: colors.white,
         color: colors.border,
+      },
+      options: {
+        imageSize: "width",
       },
     }
   },
@@ -129,7 +131,9 @@ const sectionMap: { [key: string]: any } = {
   },
   album: () => {
     return {
-      design: "basic",
+      options: {
+        imageSize: "width",
+      },
     }
   },
   qna: () => {

@@ -2,9 +2,25 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
   gap: 5px;
+
+  .title {
+    width: 100%;
+    margin-top: 3px;
+  }
+  &.length {
+    .photo {
+      height: 270px;
+    }
+    .title {
+      @include description-style(true);
+    }
+  }
+  &.width {
+    .title {
+      @include description-style;
+    }
+  }
 }
 
 .display {
@@ -12,8 +28,8 @@
 }
 
 .photo-wrapper {
+  height: 100%;
   .photo {
-    width: 100%;
     position: relative;
     @include flex;
     background-color: var(--blue-soft);
@@ -26,7 +42,7 @@
     }
     .background {
       @include full;
-      filter: blur(2px) grayscale(30%);
+      filter: grayscale(30%);
     }
   }
 }
@@ -43,10 +59,4 @@
 
 .input {
   @include input-style;
-}
-
-.title {
-  width: 100%;
-  margin-top: 3px;
-  @include description-style(true);
 }

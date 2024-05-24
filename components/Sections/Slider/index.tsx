@@ -3,7 +3,6 @@
 import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { getImageUrl } from "@/utils/helpers/getImageUrl"
 
 import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
@@ -12,10 +11,10 @@ import hasString from "@/utils/helpers/hasString"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
-import { memo, useMemo, useState } from "react"
+import { memo, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import "swiper/css/thumbs"
-import { FreeMode, Navigation, Thumbs } from "swiper/modules"
+import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
 
@@ -26,16 +25,20 @@ const BasicSlider = ({
   isDisplayMode,
   textColor,
   onDelete,
+  width,
+  height,
 }: {
   section: SectionType
   isDisplayMode?: boolean
   textColor?: string
   onDelete: (i: number) => void
+  width: string
+  height: string
 }) => {
   return (
     <Swiper spaceBetween={7} freeMode={true} slidesPerView={"auto"} modules={[FreeMode]} className={cx("slider")}>
       {section.list.map((v, i) => (
-        <SwiperSlide className={cx("slide", section.design)} key={`card_${section.id}_${i}`}>
+        <SwiperSlide style={{ width }} className={cx("slide", section.design)} key={`card_${section.id}_${i}`}>
           <div
             style={{
               ...getAnimation({ type: section.style.animation, delay: i * 150 }),
@@ -43,7 +46,7 @@ const BasicSlider = ({
             className={cx("slide-inner")}
           >
             {!isDisplayMode && <DeleteBtn srcKey="list" deleteEvent={onDelete} listIndex={i} />}
-            <div className={cx("card-image")}>
+            <div style={{ height }} className={cx("card-image")}>
               {/* <div style={{ background: getImageUrl({  url: v.src }) }} className={cx("image")} /> */}
               <picture className={cx("image")}>
                 <img src={v.src} alt="image" />
@@ -96,107 +99,6 @@ const BasicSlider = ({
     </Swiper>
   )
 }
-const ThumbnailSlider = ({
-  section,
-  isDisplayMode,
-  textColor,
-  onDelete,
-}: {
-  section: SectionType
-  isDisplayMode?: boolean
-  textColor?: string
-  onDelete: (i: number) => void
-}) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null)
-
-  return (
-    <>
-      <Swiper
-        className={cx("thumb-slider")}
-        spaceBetween={10}
-        thumbs={{ swiper: thumbsSwiper }}
-        modules={[FreeMode, Navigation, Thumbs]}
-      >
-        {section.list.map((v, i) => (
-          <SwiperSlide className={cx("thumb-slide")} key={`thumb_main_${i}`}>
-            <div className={cx("thumb")}>
-              <div
-                style={{
-                  background: getImageUrl({ url: v.src }),
-                }}
-                className={cx("photo")}
-              >
-                {!isDisplayMode && <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={i} />}
-              </div>
-              <div>
-                {isDisplayMode ? (
-                  <>
-                    {hasString(v.data.title) && (
-                      <h2 style={{ color: textColor }} className={cx("title")}>
-                        {v.data.title}
-                      </h2>
-                    )}
-                    {hasString(v.data.description) && (
-                      <p style={{ color: textColor }} className={cx("description")}>
-                        {v.data.description}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <Input
-                      type="input"
-                      isOptional={true}
-                      dataKey={"title"}
-                      className={cx("title-input")}
-                      listIndex={i}
-                      inputType="title"
-                      value={v.data.title}
-                      style={{ color: textColor }}
-                      section={section}
-                    />
-                    <Input
-                      type="textarea"
-                      listIndex={i}
-                      className={cx("description-input")}
-                      dataKey={"description"}
-                      inputType="description"
-                      isOptional={true}
-                      value={v.data.description}
-                      style={{ color: textColor }}
-                      section={section}
-                    />
-                  </>
-                )}
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      <Swiper
-        onSwiper={setThumbsSwiper as any}
-        spaceBetween={5}
-        slidesPerView={section.list.length >= 4 ? 4 : section.list.length}
-        freeMode={true}
-        watchSlidesProgress={true}
-        modules={[FreeMode, Navigation, Thumbs]}
-        className={cx("thumb-list")}
-      >
-        {section.list.map((v, i) => (
-          <SwiperSlide className={cx("thumb-list-slide")} key={`thumb_list_${i}`}>
-            <div
-              style={{
-                background: getImageUrl({ url: v.src }),
-                ...getAnimation({ type: section.style.animation, delay: i * 150 }),
-              }}
-              className={cx("photo")}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </>
-  )
-}
 
 function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
@@ -216,21 +118,26 @@ function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMod
     }
     deleteList({ targetIndex: i })
   }
+  const size = section.options.imageSize
+  const { width, height } =
+    section.design === "card"
+      ? { width: size === "width" ? "300px" : "200px", height: size === "width" ? "200px" : "270px" }
+      : section.design === "circle"
+        ? { width: "150px", height: "100%" }
+        : { width: size === "width" ? "300px" : "250px", height: size === "width" ? "170px" : "400px" }
 
   return (
     <div className={cx("layout", { isDisplayMode: isDisplayMode })}>
       {section.list.length > 0 && (
         <div style={{ background: section.style.backgroundColor }} className={cx("slider-layout")}>
-          {section.design !== "thumbnail" ? (
-            <BasicSlider onDelete={onDelete} textColor={textColor} section={section} isDisplayMode={isDisplayMode} />
-          ) : (
-            <ThumbnailSlider
-              onDelete={onDelete}
-              textColor={textColor}
-              section={section}
-              isDisplayMode={isDisplayMode}
-            />
-          )}
+          <BasicSlider
+            width={width}
+            height={height}
+            onDelete={onDelete}
+            textColor={textColor}
+            section={section}
+            isDisplayMode={isDisplayMode}
+          />
         </div>
       )}
       {!isDisplayMode && <AddBtn section={section} type="slider-image" />}

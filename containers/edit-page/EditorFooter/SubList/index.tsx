@@ -13,7 +13,7 @@ const cx = cs.bind(style)
 
 export default function SubList({ list }: { list: EditorFooterList[] }) {
   const { lang } = useParams()
-  const { active, selectedSection, setStyle, setList, setDesign } = useEditorStore()
+  const { active, selectedSection, setStyle, saveSectionHistory, setOptions, setList, setDesign } = useEditorStore()
   const { t } = useTranslation()
   const submenuType = active.submenu.type
   const onClickList = (value: string, i: number) => {
@@ -31,6 +31,10 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
         break
       case "select":
         setList({ index: i, key: "isActive", payload: !selectedSection.list[i].isActive })
+        break
+      case "imageSize":
+        setOptions({ key: "imageSize", payload: value })
+        saveSectionHistory()
         break
 
       default:
@@ -54,6 +58,8 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
                 return selectedSection?.design === list.value
               case "select":
                 return selectedSection?.list[i].isActive
+              case "imageSize":
+                return selectedSection?.options.imageSize === list.value
 
               default:
                 return false
