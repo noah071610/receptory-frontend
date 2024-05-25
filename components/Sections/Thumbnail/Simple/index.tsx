@@ -20,11 +20,13 @@ export default function Simple({
   isDisplayMode,
   onClickCTA,
   isButtonVisible,
+  imageStatus,
 }: {
   section: SectionType
   isDisplayMode?: boolean
   onClickCTA?: () => void
   isButtonVisible: boolean
+  imageStatus: "image" | "emoji"
 }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
@@ -48,7 +50,7 @@ export default function Simple({
         {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
       </div>
 
-      <div className={cx("main")}>
+      <div className={cx("main", imageStatus)}>
         {
           <div
             style={{

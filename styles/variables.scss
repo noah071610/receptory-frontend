@@ -1,3 +1,9 @@
+@keyframes shine {
+  to {
+    background-position: -200% 0;
+  }
+}
+
 @mixin label-style {
   width: 100%;
   font-size: 11px;
@@ -169,6 +175,27 @@
   border-radius: 10px;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
   background-color: var(--white);
+}
+
+@mixin skeleton {
+  width: 100%;
+  position: relative;
+
+  &::before {
+    @include full;
+    content: "";
+    background: rgb(0, 0, 0);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 68%,
+      rgba(255, 255, 255, 0.7) 90%,
+      rgba(255, 255, 255, 0) 93%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 200%;
+    animation: shine 1200ms 1000ms infinite;
+  }
 }
 
 $z-index-map: (

@@ -21,7 +21,7 @@ function DeleteBtn({
   listIndex?: number
   deleteEvent?: (listIndex: number) => void
 }) {
-  const { setSrc, setStyle, deleteList, setList } = useEditorStore()
+  const { setSrc, setStyle, setOptions, setList } = useEditorStore()
   const onClickDelete = () => {
     setTimeout(() => {
       if (typeof listIndex === "number") {
@@ -40,6 +40,7 @@ function DeleteBtn({
       }
 
       if (srcKey === "thumbnail" || srcKey === "callout") {
+        setOptions({ payload: "image", key: "imageStatus" })
         return setSrc({ payload: "" })
       }
     }, 0)

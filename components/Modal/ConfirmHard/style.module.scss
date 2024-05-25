@@ -2,7 +2,8 @@
 @import "@/styles/variables.scss";
 
 .confirm-hard-content {
-  padding: 25px !important;
+  @include modal-style;
+  padding: 25px;
   h1 {
     @include title-style;
     margin-bottom: 10px;

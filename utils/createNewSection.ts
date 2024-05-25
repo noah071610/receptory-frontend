@@ -131,6 +131,7 @@ const sectionMap: { [key: string]: any } = {
   },
   album: () => {
     return {
+      design: "gridOne",
       options: {
         imageSize: "width",
       },

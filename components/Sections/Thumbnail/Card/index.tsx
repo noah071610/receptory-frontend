@@ -22,6 +22,7 @@ export default function Card({
   isDisplayMode,
   onClickCTA,
   isButtonVisible,
+  imageStatus,
 }: {
   ctaTextColor: string
   textColor: string
@@ -30,6 +31,7 @@ export default function Card({
   isDisplayMode?: boolean
   onClickCTA?: () => void
   isButtonVisible: boolean
+  imageStatus: "image" | "emoji"
 }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
@@ -47,7 +49,7 @@ export default function Card({
       {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
       <div style={{ borderColor }} className={cx("main")}>
         {!isDisplayMode && (
-          <div style={{ background: getImageUrl({ url: section.src }) }} className={cx("thumbnail")}>
+          <div style={{ background: getImageUrl({ url: section.src }) }} className={cx("thumbnail", imageStatus)}>
             {hasString(section.src) && !isDisplayMode && <DeleteBtn isSmall={true} srcKey={"thumbnail"} />}
             <button className={cx("drop-zone")} onClick={onClickThumbnailUpload}>
               <FontAwesomeIcon icon={faPlus} />
@@ -55,7 +57,7 @@ export default function Card({
           </div>
         )}
         {isDisplayMode && hasString(section.src) && (
-          <picture className={cx("thumbnail", "display")}>
+          <picture className={cx("thumbnail", "display", imageStatus)}>
             <img src={section.src} alt="image" />
           </picture>
         )}

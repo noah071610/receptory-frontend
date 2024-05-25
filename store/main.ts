@@ -27,6 +27,7 @@ type Actions = {
   setUserPick: ({ section, value }: { section: SectionType; value: UserPickValueType[] }) => void
   loadUserPick: (data: { [id: string]: UserPickType }) => void
   setUserPickText: ({ section, text }: { section: SectionType; text: string }) => void
+  clearPage: () => void
   setConfirmation: ({
     curConfirmationId,
     confirmDate,
@@ -75,6 +76,12 @@ export const useMainStore = create<EditStates & Actions>()(
           index: section.index,
           type: section.type,
         }
+      }),
+    clearPage: () =>
+      set((origin) => {
+        origin.userPick = {}
+        origin.curConfirmationId = null
+        origin.confirmDate = null
       }),
     loadUserPick: (data) =>
       set((origin) => {

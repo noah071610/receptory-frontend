@@ -161,6 +161,8 @@ export default function ImageStage({
       } else {
         const newSection = createNewSection({ type: type as SectionListTypes, index: homeSections.length })
         newSection.list = [...filteredImageList]
+        console.log(newSection)
+
         addSection({
           type: type as SectionListTypes,
           payload: newSection,

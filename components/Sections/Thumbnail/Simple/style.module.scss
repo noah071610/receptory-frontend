@@ -40,6 +40,17 @@
     margin-top: 2px;
     @include description-style($isSmall: true);
   }
+
+  &.emoji {
+    grid-template-columns: 40px 1fr;
+
+    .thumbnail {
+      width: 50px;
+      height: 50px;
+      border-radius: 0px;
+      box-shadow: none;
+    }
+  }
 }
 
 .content {

@@ -12,7 +12,7 @@ import cs from "classNames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
-function PageConfirm({ section }: { section: SectionType }) {
+function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: boolean }) {
   const { t } = useTranslation()
   const { back } = useRouter()
   const { userPick, curConfirmationId, confirmDate } = useMainStore()
@@ -21,6 +21,7 @@ function PageConfirm({ section }: { section: SectionType }) {
   const confirmationArr = useMemo(() => {
     const pickArr = Object.entries(userPick).toSorted((a, b) => a[1].index - b[1].index)
     if (!pickArr?.length) return []
+    if (isEditor) return []
     return pickArr.map(([id, { title, value, type }]) => {
       let text = value.map((v) => v.text).join(type === "select" ? " , " : " ~ ")
       if (!hasString(text)) text = "empty"

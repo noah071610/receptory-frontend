@@ -17,9 +17,9 @@ export default function ImageSelector({
   setIsLoading: (b: boolean) => void
   IsUseEmoji?: boolean
 }) {
+  const { t } = useTranslation()
   const [curStage, setCurStage] = useState<"emoji" | "image">(IsUseEmoji ? "emoji" : "image")
 
-  const { t } = useTranslation()
   const { active } = useEditorStore()
 
   const type = active.modal.type?.replace("-image", "")

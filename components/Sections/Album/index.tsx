@@ -8,46 +8,35 @@ import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import cs from "classNames/bind"
-import { memo, useEffect, useMemo, useRef, useState } from "react"
+import { memo } from "react"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 const ImageComponent = ({
-  photo,
+  src,
+  value,
   section,
-  maxHeight,
   index,
   isDisplayMode,
   onDelete,
-  setMaxHeight,
 }: {
-  photo: { width?: number; height?: number; src: string; value: any }
+  src: string
+  value: string
   section: SectionType
-  maxHeight: null | number
   index: number
   isDisplayMode?: boolean
   onDelete: (i: number) => void
-  setMaxHeight: (num: number) => void
 }) => {
-  const ref = useRef<HTMLImageElement>(null)
-
-  useEffect(() => {
-    if (ref?.current) {
-      setMaxHeight(ref.current.height)
-    }
-  }, [ref?.current])
-
   return (
     <div className={cx("photo-wrapper")}>
       <picture className={cx("photo")}>
         <img
-          ref={ref}
           // style={{
           //   height: typeof maxHeight === "number" ? `${maxHeight}px` : "100%",
           // }}
-          src={photo.src}
-          alt={photo.src}
+          src={src}
+          alt={src}
         />
         {/* {status === "loading" && <Loading />} */}
         {!isDisplayMode && <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={index} />}
@@ -59,7 +48,7 @@ const ImageComponent = ({
         displayMode={isDisplayMode && "p"}
         isOptional={true}
         listIndex={index}
-        value={photo.value}
+        value={value}
         section={section}
       />
     </div>
@@ -69,15 +58,6 @@ const ImageComponent = ({
 function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { t } = useTranslation()
   const { deleteList } = useEditorStore()
-  const [maxHeight, setMaxHeight] = useState<null | number>(null)
-
-  const galleryImages = useMemo(
-    () =>
-      section.list
-        .map(({ style: { width, height }, src, value }) => ({ width, height, src, value }))
-        .filter(({ width, height }) => typeof width === "number" && typeof height === "number"),
-    [section.list]
-  )
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
@@ -88,21 +68,20 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
 
   return (
     <div className={cx("layout")}>
-      {galleryImages.length > 0 ? (
+      {section.list.length > 0 ? (
         <div className={cx("album")}>
           <div
-            style={{ gridTemplateColumns: `repeat(${section.options.imageSize === "width" ? 1 : 2},1fr)` }}
-            className={cx("grid", section.options.imageSize)}
+            style={{ gridTemplateColumns: `repeat(${section.design === "gridOne" ? 1 : 2},1fr)` }}
+            className={cx("grid", section.options.imageSize, section.design)}
           >
-            {galleryImages.map((v, i) => (
+            {section.list.map((v, i) => (
               <ImageComponent
                 onDelete={onDelete}
-                maxHeight={maxHeight}
-                setMaxHeight={setMaxHeight}
                 isDisplayMode={isDisplayMode}
                 key={`album_${section.id}_${i}`}
                 index={i}
-                photo={v}
+                src={v.src}
+                value={v.value}
                 section={section}
               />
             ))}

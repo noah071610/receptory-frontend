@@ -22,6 +22,7 @@ export default function Background({
   isDisplayMode,
   onClickCTA,
   isButtonVisible,
+  imageStatus,
 }: {
   textColor: string
   ctaTextColor: string
@@ -29,6 +30,7 @@ export default function Background({
   isDisplayMode?: boolean
   onClickCTA?: () => void
   isButtonVisible: boolean
+  imageStatus: "image" | "emoji"
 }) {
   const { lang } = useParams()
   const { t } = useTranslation(lang, ["new-post-page"])
@@ -52,7 +54,7 @@ export default function Background({
       ></div>
       {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
 
-      <div className={cx("content")}>
+      <div className={cx("content", imageStatus)}>
         {!isDisplayMode && (
           <div style={{ background: getImageUrl({ url: section.src }) }} className={cx("thumbnail")}>
             {hasString(section.src) && !isDisplayMode && <DeleteBtn isSmall={true} srcKey={"thumbnail"} />}

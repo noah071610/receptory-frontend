@@ -26,6 +26,7 @@ export default function Thumbnail({
   const userStage = search.get("s")
   const { color, backgroundColor } = section.style
   const design = section.design
+  const imageStatus = section.options.imageStatus
   const isButtonVisible = stage === "home" && userStage !== "form" && userStage !== "confirm"
 
   const ctaTextColor = useMemo(() => getContrastTextColor(color ?? colors.blackSoft), [color])
@@ -49,6 +50,7 @@ export default function Thumbnail({
           textColor={textColor}
           isDisplayMode={isDisplayMode}
           isButtonVisible={isButtonVisible}
+          imageStatus={imageStatus}
         />
       )}
       {design === "full" && (
@@ -59,6 +61,7 @@ export default function Thumbnail({
           textColor={textColor}
           isDisplayMode={isDisplayMode}
           isButtonVisible={isButtonVisible}
+          imageStatus={imageStatus}
         />
       )}
       {design === "simple" && (
@@ -67,6 +70,7 @@ export default function Thumbnail({
           section={section}
           isDisplayMode={isDisplayMode}
           isButtonVisible={isButtonVisible}
+          imageStatus={imageStatus}
         />
       )}
       {design === "background" && (
@@ -77,6 +81,7 @@ export default function Thumbnail({
           section={section}
           isDisplayMode={isDisplayMode}
           isButtonVisible={isButtonVisible}
+          imageStatus={imageStatus}
         />
       )}
     </>

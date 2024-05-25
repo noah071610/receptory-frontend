@@ -8,17 +8,27 @@
     width: 100%;
     margin-top: 3px;
   }
-  &.length {
+  &.width {
     .photo {
-      height: 270px;
+      height: 200px;
+    }
+    &.gridTwo {
+      .photo {
+        height: 160px;
+      }
+    }
+    .title {
+      @include description-style;
+    }
+  }
+  &.length {
+    &.gridTwo {
+      .photo {
+        height: 270px;
+      }
     }
     .title {
       @include description-style(true);
-    }
-  }
-  &.width {
-    .title {
-      @include description-style;
     }
   }
 }

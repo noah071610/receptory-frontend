@@ -42,7 +42,8 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
   const { pageId } = useParams()
   const pathname = usePathname()
   const { back, push, replace } = useRouter()
-  const { modal, setModal, userPick, setConfirmation, pageLang, curConfirmationId, setPageLang } = useMainStore()
+  const { modal, setModal, userPick, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
+    useMainStore()
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmit, setIsSubmit] = useState(false)
   const [isConfirming, setIsConfirming] = useState(false)
@@ -159,6 +160,13 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
         : 999999,
     [initialParams]
   )
+
+  useEffect(() => {
+    if (initialParams !== "confirm") {
+      clearPage()
+    }
+  }, [initialParams])
+
   const isReadyToSubmit = useMemo(() => {
     return (
       initialParams === "form" &&

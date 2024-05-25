@@ -88,7 +88,7 @@
         }
       }
       .content {
-        padding: 10px 20px 30px 10px;
+        padding: 10px 20px 20px 10px;
         min-height: 90px;
         border-top-right-radius: 30px;
         position: relative;
@@ -104,6 +104,11 @@
   height: 100%;
   position: relative;
 
+  .card-background {
+    width: 100%;
+    background-color: var(--border);
+  }
+
   .card-image {
     width: 100%;
     border-radius: 3px;
@@ -114,6 +119,10 @@
         object-fit: cover;
       }
     }
+  }
+
+  .loading {
+    @include skeleton;
   }
   .content {
     padding: 5px 2px;
