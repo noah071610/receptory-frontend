@@ -17,7 +17,15 @@ const cx = cs.bind(style)
 
 const onClick = {}
 
-function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+function Contact({
+  section,
+  isDisplayMode,
+  isEditor,
+}: {
+  section: SectionType
+  isDisplayMode?: boolean
+  isEditor?: boolean
+}) {
   const { lang } = useParams()
   const { t } = useTranslation()
   const { setCollection } = useEditorStore()
@@ -26,20 +34,27 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
 
   const design = section.design
 
-  const onChangeLink = (inputValue: string, i: number) => {
-    setCollection({ payload: inputValue, index: i, key: "link" })
+  const onChangeLink = (value: string, i: number, key: "description" | "link") => {
+    setCollection({ payload: value, index: i, key })
   }
 
   return (
     <div className={cx("contact")}>
       <div className={cx("main")}>
         <ul className={cx("btn-list", design)}>
-          {list.map(({ key, link }, i) => (
+          {list.map(({ key, link, description }, i) => (
             <li key={`btn_${key}`} style={getAnimation({ type: section.style.animation, delay: i * 130 })}>
-              <a href={key === "call" ? `tel:${link}` : link} target="_blank" rel="noreferrer">
-                <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
-                {design === "card" && <span>{key}</span>}
-              </a>
+              {isEditor ? (
+                <div className={cx("preview-btn")}>
+                  <Image width={40} height={40} src={`/images/icons/${key}.png`} alt={key} />
+                  {design === "card" && <span>{description}</span>}
+                </div>
+              ) : (
+                <a href={key === "call" ? `tel:${link}` : link} target={"_blank"} rel="noreferrer">
+                  <Image width={40} height={40} src={`/images/icons/${key}.png`} alt={key} />
+                  {design === "card" && <span>{description}</span>}
+                </a>
+              )}
             </li>
           ))}
         </ul>
@@ -65,22 +80,33 @@ function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMo
               <span>링크 설정</span>
             </h4>
             <ul className={cx("link-input-wrapper")}>
-              {list.map(({ key, link }, i) => (
+              {list.map(({ key, link, description }, i) => (
                 <li key={`link-input-${key}`}>
                   <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
-                  <Input
-                    type="input"
-                    inputType={`${key}Placeholder`}
-                    className={cx("link-input")}
-                    isOptional={false}
-                    maxLength={18}
-                    onChange={(inputValue: string) => {
-                      onChangeLink(inputValue, i)
-                    }}
-                    dataKey={"title"}
-                    value={link}
-                    section={section}
-                  />
+                  <div className={cx("input-content")}>
+                    <h5>링크 설명</h5>
+                    <Input
+                      type="input"
+                      inputType={`${key}Placeholder`}
+                      isOptional={true}
+                      onChange={(value: string) => {
+                        onChangeLink(value, i, "description")
+                      }}
+                      value={description}
+                      section={section}
+                    />
+                    <h5>링크 url</h5>
+                    <Input
+                      type="input"
+                      inputType={`${key}Placeholder`}
+                      isOptional={false}
+                      onChange={(value: string) => {
+                        onChangeLink(value, i, "link")
+                      }}
+                      value={link}
+                      section={section}
+                    />
+                  </div>
                 </li>
               ))}
             </ul>

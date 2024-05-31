@@ -33,6 +33,31 @@
   }
 }
 
+.icon-change {
+  position: absolute;
+  @include flex;
+  z-index: 10;
+
+  top: 50%;
+  right: calc(16px + 5px + 5px + 5px);
+  transform: translateY(-50%);
+  button {
+    padding: 5px;
+    border-radius: 100%;
+    background-color: var(--gray);
+    @include flex;
+    svg {
+      width: 15px;
+      height: 15px;
+      font-size: 13px;
+      color: var(--white);
+    }
+    @include action {
+      background-color: var(--blue);
+    }
+  }
+}
+
 .content {
   @include flex-y;
   position: relative;

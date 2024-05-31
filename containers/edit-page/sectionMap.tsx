@@ -122,7 +122,9 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   text: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageText text={section.value} /> : <Text section={section} />,
   title: (section, isDisplayMode = false) => <Title section={section} isDisplayMode={isDisplayMode} />,
-  contact: (section, isDisplayMode = false) => <Contact section={section} isDisplayMode={isDisplayMode} />,
+  contact: (section, isDisplayMode = false) => (
+    <Contact section={section} isEditor={true} isDisplayMode={isDisplayMode} />
+  ),
   callout: (section, isDisplayMode = false) => <Callout section={section} isDisplayMode={isDisplayMode} />,
   slider: (section, isDisplayMode = false) => <Slider section={section} isDisplayMode={isDisplayMode} />,
   map: (section, isDisplayMode = false) => <Map section={section} isDisplayMode={isDisplayMode} />,

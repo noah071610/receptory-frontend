@@ -7,7 +7,13 @@ import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
-import { faPenFancy, faSquareCheck, faSquareXmark, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
+import {
+  faPenFancy,
+  faRotate,
+  faSquareCheck,
+  faSquareXmark,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { memo } from "react"
@@ -90,7 +96,14 @@ function List({
         )}
 
         {!isDisplayMode && (
-          <DeleteBtn isSmall={true} deleteEvent={onDelete} listIndex={index} srcKey="checklist" isDeleteList={true} />
+          <>
+            <div className={cx("icon-change")}>
+              <button onClick={onClickChangeDesign}>
+                <FontAwesomeIcon icon={faRotate} />
+              </button>
+            </div>
+            <DeleteBtn isSmall={true} deleteEvent={onDelete} listIndex={index} srcKey="checklist" isDeleteList={true} />
+          </>
         )}
       </div>
     </li>

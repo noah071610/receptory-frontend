@@ -8,12 +8,23 @@
     width: 100%;
     margin-top: 3px;
   }
+
+  .loading {
+    @include skeleton;
+  }
+  .photo-background {
+    width: 100%;
+    background-color: var(--border);
+  }
+
   &.width {
-    .photo {
+    .photo,
+    .loading {
       height: 200px;
     }
     &.gridTwo {
-      .photo {
+      .photo,
+      .loading {
         height: 160px;
       }
     }
@@ -23,7 +34,8 @@
   }
   &.length {
     &.gridTwo {
-      .photo {
+      .photo,
+      .loading {
         height: 270px;
       }
     }

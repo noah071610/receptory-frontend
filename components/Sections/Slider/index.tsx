@@ -40,6 +40,8 @@ const Card = ({
   i: number
 }) => {
   const { ref, isIntersecting } = useIntersectionObserver()
+  console.log(list.src)
+
   const status = useProgressiveImage(list.src, isIntersecting)
 
   return (
@@ -52,14 +54,11 @@ const Card = ({
     >
       {!isDisplayMode && <DeleteBtn srcKey="list" deleteEvent={onDelete} listIndex={i} />}
       <div className={cx("card-background")}>
-        {status === "success" && (
-          <div style={{ height }} className={cx("card-image")}>
-            <picture className={cx("image")}>
-              <img src={list.src} alt="image" />
-            </picture>
-          </div>
-        )}
-        {status === "loading" && <div style={{ height }} className={cx("loading")} />}
+        <div style={{ height }} className={cx("card-image")}>
+          <picture className={cx("image")}>
+            <img src={list.src} alt="image" />
+          </picture>
+        </div>
       </div>
       <div className={cx("content")}>
         {isDisplayMode ? (

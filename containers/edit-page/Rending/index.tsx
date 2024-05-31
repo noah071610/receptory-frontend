@@ -27,6 +27,7 @@ export default function Rending({}: {}) {
     rendingSections,
     pageOptions,
     setPageOptions,
+    saveSectionHistory,
   } = useEditorStore()
   const { format, customLink } = pageOptions
   const isActive = format === "active"
@@ -81,6 +82,7 @@ export default function Rending({}: {}) {
       }
       setPageOptions({ type: "format", payload: "inactive" })
     }
+    saveSectionHistory()
   }
   return (
     <div className={cx("layout")}>

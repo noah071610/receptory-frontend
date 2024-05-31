@@ -24,7 +24,7 @@ module.exports = withBundleAnalyzer({
         protocol: "https",
         hostname: `${process.env.NEXT_PUBLIC_BUTKET_NAME}.s3.ap-northeast-2.amazonaws.com`,
         port: "",
-        pathname: "**",
+        pathname: "/images/**",
       },
       {
         protocol: "https",

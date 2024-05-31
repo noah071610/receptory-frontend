@@ -4,6 +4,8 @@ import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
+import { useProgressiveImage } from "@/hooks/useProgressiveImage"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
@@ -28,19 +30,20 @@ const ImageComponent = ({
   isDisplayMode?: boolean
   onDelete: (i: number) => void
 }) => {
+  const { ref, isIntersecting } = useIntersectionObserver()
+  const status = useProgressiveImage(src, isIntersecting)
   return (
-    <div className={cx("photo-wrapper")}>
-      <picture className={cx("photo")}>
-        <img
-          // style={{
-          //   height: typeof maxHeight === "number" ? `${maxHeight}px` : "100%",
-          // }}
-          src={src}
-          alt={src}
-        />
-        {/* {status === "loading" && <Loading />} */}
-        {!isDisplayMode && <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={index} />}
-      </picture>
+    <div ref={ref} className={cx("photo-wrapper")}>
+      <div className={cx("photo-background")}>
+        {status === "success" && (
+          <picture className={cx("photo")}>
+            <img src={src} alt={src} />
+            {!isDisplayMode && <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={index} />}
+          </picture>
+        )}
+        {status === "loading" && <div className={cx("loading")} />}
+      </div>
+
       <Input
         type="input"
         className={cx("title", !isDisplayMode && "input")}
