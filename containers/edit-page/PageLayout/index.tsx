@@ -16,6 +16,10 @@ export default function PageLayout({ children }: { children: ReactNode }) {
     if (closestElement) {
       const dataType = closestElement.getAttribute("data-closer")
 
+      if (dataType === "rending") {
+        return setSelectedSection({ payload: null })
+      }
+
       if (dataType !== "editor") {
         if (modal.type) {
           setModal({ section: null, type: null }) // main store (유저용)

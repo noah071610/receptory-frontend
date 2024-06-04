@@ -25,8 +25,8 @@ export default function SectionList({ sections, stage }: { sections: SectionType
       <Droppable droppableId="droppable">
         {(droppableProvided) => (
           <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
-            {sections.slice(stage === "rending" ? 2 : 1).map((v, i) => (
-              <Draggable index={i + (stage === "rending" ? 2 : 1)} key={v.id} draggableId={v.id}>
+            {sections.slice(stage === "confirm" ? 2 : 1).map((v, i) => (
+              <Draggable index={i + (stage === "confirm" ? 2 : 1)} key={v.id} draggableId={v.id}>
                 {(draggableProvided) => {
                   return (
                     <SectionLayout

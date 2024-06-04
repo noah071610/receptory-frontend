@@ -1,6 +1,5 @@
 "use client"
 
-import { useEditorStore } from "@/store/editor"
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -22,8 +21,6 @@ function IconBtn({
   onclick?: any
   disabled?: boolean
 }) {
-  const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore()
-
   return (
     <div className={cx("btn-wrapper", className)}>
       <button

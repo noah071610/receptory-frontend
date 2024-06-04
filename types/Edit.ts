@@ -90,9 +90,9 @@ export type EditorFooterListTypes =
   | TitleSelectTypes
   | StyleSelectTypes
 
-export type EditStage = "home" | "form" | "rending"
+export type EditStage = "home" | "form" | "rending" | "confirm"
 
-export type SectionsKeys = "homeSections" | "formSections" | "rendingSections"
+export type SectionsKeys = "homeSections" | "formSections" | "confirmSections"
 
 export interface ActiveTypes {
   modal: {
@@ -126,6 +126,7 @@ export interface StyleProperties {
   borderColor?: string
   backgroundSize?: "cover" | "contain"
   paddingBottom?: string
+  src?: string
 }
 
 interface _SectionType {

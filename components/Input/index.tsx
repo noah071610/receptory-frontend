@@ -26,7 +26,9 @@ function Input({
   displayMode,
   onChange,
   section,
+  disabled,
   isBottomError,
+  onBlur,
 }: {
   type: "input" | "textarea"
   className?: string
@@ -41,7 +43,9 @@ function Input({
   value: string
   style?: StyleProperties
   displayMode?: boolean | "h1" | "p" | "h2" | "span"
-  section: SectionType
+  section?: SectionType
+  disabled?: boolean
+  onBlur?: any
 }) {
   if (type === "textarea") {
     maxLength = 100
@@ -76,7 +80,7 @@ function Input({
     const inputValue = e.target.value
 
     const lines = inputValue.split("\n")
-    if (!selectedSection) {
+    if (section && !selectedSection) {
       setSelectedSection({ payload: section })
     }
 
@@ -138,23 +142,25 @@ function Input({
   const inputComponent = {
     textarea: (
       <TextareaAutosize
+        disabled={disabled}
         className={className}
         placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
         value={value ?? ""}
         onChange={onChangeInput}
-        onBlur={onBlurInput}
+        onBlur={onBlur ?? onBlurInput}
         style={isError ? { ...style, ...errorStyle } : style}
       />
     ),
     input: (
       <input
+        disabled={disabled}
         ref={inputRef}
         onFocus={onfocus}
         className={className}
         placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
         value={value ?? ""}
         onChange={onChangeInput}
-        onBlur={onBlurInput}
+        onBlur={onBlur ?? onBlurInput}
         style={isError ? { ...style, ...errorStyle } : style}
       />
     ),

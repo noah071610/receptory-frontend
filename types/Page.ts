@@ -6,11 +6,18 @@ export type PageFormatType = "inactive" | "active"
 export interface PageContentType {
   homeSections: SectionType[]
   formSections: SectionType[]
-  rendingSections: SectionType[]
+  confirmSections: SectionType[]
   pageOptions: {
     format: PageFormatType
     lang: Langs
     customLink: string
+    isUseThumbnailEmbed: boolean
+    isNotUseCustomLink: boolean
+    embed: {
+      title: string
+      description: string
+      src: string
+    }
   }
 }
 export interface SaveContentType extends PageContentType {
@@ -21,6 +28,7 @@ export interface SaveContentType extends PageContentType {
 
 interface _SAVE {
   pageId: string
+  customLink?: string
   title?: string
   description?: string
   format: PageFormatType

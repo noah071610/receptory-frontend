@@ -71,7 +71,7 @@ const formSectionList: EditorFooterList[] = [
 
   ...basicSections,
 ]
-const rendingSectionList: EditorFooterList[] = [
+const confirmSectionList: EditorFooterList[] = [
   { value: "linkBtn", icon: faLink, actionType: "createSection" },
   ...basicSections,
   { value: "contact", icon: faPhone, actionType: "createSection" },
@@ -208,13 +208,13 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
 // ####### SUBMENU
 
 export const getEditorFooterList = (selectedSection: SectionType | null, stage: EditStage) => {
-  const stageList = stage === "home" ? initSectionList : stage === "form" ? formSectionList : rendingSectionList
+  const stageList = stage === "home" ? initSectionList : stage === "form" ? formSectionList : confirmSectionList
   if (selectedSection === null) {
     return stageList
   }
   let target = footerListMap[selectedSection.type].map((v) => ({ ...v, parent: selectedSection.type }))
   if (target?.length <= 0) return stageList
-  if (selectedSection.type === "thumbnail" && (stage === "form" || stage === "rending")) {
+  if (selectedSection.type === "thumbnail" && (stage === "form" || stage === "confirm")) {
     target = target.filter(({ value }) => value !== "ctaBackgroundColor")
   }
   return target
@@ -229,7 +229,7 @@ export const getSubmenuList = (
   let target = footerSubmenuMap[selectedSection.type][currentSubmenu]
   if (
     selectedSection.type === "thumbnail" &&
-    (stage === "form" || stage === "rending") &&
+    (stage === "form" || stage === "confirm") &&
     currentSubmenu === "design"
   ) {
     target = target.filter(({ value }) => value !== "full")

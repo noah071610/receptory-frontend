@@ -7,7 +7,7 @@ import style from "./style.module.scss"
 import { changeLanguage } from "@/actions/page"
 import { addSave } from "@/actions/save"
 import { queryKey } from "@/config"
-import { toastError } from "@/config/toast"
+import { toastError, toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
@@ -53,6 +53,7 @@ export const SelectLang = ({
         await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
         await queryClient.invalidateQueries({ queryKey: queryKey.page(targetPageId) })
         setTimeout(() => {
+          toastSuccess("언어를 변경했어요")
           setIsLoading(false)
           setModal({ section: null, type: null })
         }, 500)

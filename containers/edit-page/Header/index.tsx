@@ -6,10 +6,10 @@ import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
-import { faCheck, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-solid-svg-icons"
+import { faCheck, faHome, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-solid-svg-icons"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
@@ -23,13 +23,17 @@ const headers = [
     value: "form",
   },
   {
+    value: "confirm",
+  },
+  {
     value: "rending",
   },
 ]
 
 export default function Header() {
   const queryClient = useQueryClient()
-  const { lang, pageId } = useParams()
+  const { push } = useRouter()
+  const { lang, pageId, userId } = useParams()
   const {
     stage,
     setStage,
@@ -41,7 +45,7 @@ export default function Header() {
     setRevert,
     revert,
     revertIndex,
-    rendingSections,
+    confirmSections,
     pageOptions,
   } = useEditorStore()
   const [isSaving, setIsSaving] = useState(false)
@@ -75,7 +79,7 @@ export default function Header() {
           stage,
           homeSections,
           formSections,
-          rendingSections,
+          confirmSections,
           currentUsedImages,
           currentUsedColors,
           pageOptions,
@@ -86,6 +90,7 @@ export default function Header() {
 
       if (isOk) {
         await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
+        setRevert("clear")
       }
 
       setIsSaving(true)
@@ -118,27 +123,35 @@ export default function Header() {
           </div>
           <div className={cx("right")}>
             <IconBtn
+              onclick={() => {
+                push(`/user/${userId}`)
+              }}
+              size={30}
+              iconClassName={style.rollback}
+              icon={faHome}
+            />
+            <IconBtn
               disabled={revert.length <= 1 || revertIndex <= 0}
               onclick={() => onClickRevert("undo")}
-              size={35}
+              size={30}
               iconClassName={style.rollback}
               icon={faRotateLeft}
             />
             <IconBtn
               disabled={revert.length - 1 === revertIndex}
               onclick={() => onClickRevert("do")}
-              size={35}
+              size={30}
               iconClassName={style.rollback}
               icon={faRotateRight}
             />
             {isSaving ? (
-              <IconBtn iconClassName={style.saving} size={35} icon={faCheck} />
+              <IconBtn iconClassName={style.saving} size={30} icon={faCheck} />
             ) : (
-              <IconBtn onclick={onClickSave} size={35} icon={faSave} />
+              <IconBtn onclick={onClickSave} size={30} icon={faSave} />
             )}
           </div>
           <div
-            style={{ width: stage === "home" ? "33%" : stage === "form" ? "66%" : "95%" }}
+            style={{ width: stage === "home" ? "25%" : stage === "form" ? "50%" : stage === "confirm" ? "75%" : "95%" }}
             className={cx("progress")}
           ></div>
         </div>

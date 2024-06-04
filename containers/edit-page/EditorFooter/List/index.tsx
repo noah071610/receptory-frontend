@@ -25,7 +25,7 @@ export default function List({
   const { replace } = useRouter()
   const pathname = usePathname()
   const { lang } = useParams()
-  const { addSection, formSections, homeSections, setActive, active, stage, rendingSections } = useEditorStore()
+  const { addSection, formSections, homeSections, setActive, active, stage, confirmSections } = useEditorStore()
   const { t } = useTranslation()
 
   const onClickList = (value: string, type: EditorFooterListActions) => {
@@ -54,7 +54,7 @@ export default function List({
         if (stage === "form" && formSections.length >= 20) {
           return toastError("lessThan20sections")
         }
-        if (stage === "rending" && rendingSections.length >= 20) {
+        if (stage === "confirm" && confirmSections.length >= 20) {
           return toastError("lessThan20sections")
         }
 

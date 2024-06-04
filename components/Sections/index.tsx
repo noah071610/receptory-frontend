@@ -35,7 +35,7 @@ export default function SectionLayout({
     copySection,
     stage,
     homeSections,
-    rendingSections,
+    confirmSections,
     formSections,
     setActive,
     setSelectedSection,
@@ -68,7 +68,7 @@ export default function SectionLayout({
     if (stage === "form" && formSections.length >= 20) {
       return toastError("lessThan20sections")
     }
-    if (stage === "rending" && rendingSections.length >= 20) {
+    if (stage === "confirm" && confirmSections.length >= 20) {
       return toastError("lessThan20sections")
     }
 

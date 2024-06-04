@@ -10,7 +10,6 @@ import {
 } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { PageFormatType, SaveContentType } from "@/types/Page"
-
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import getId from "@/utils/helpers/getId"
 import { cloneDeep } from "lodash"
@@ -21,7 +20,7 @@ export const initialStates: EditStates = {
   isEditStart: false,
   homeSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
   formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
-  rendingSections: [
+  confirmSections: [
     createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "rendingThumbnail" }),
     createNewSection({ type: "confirm", index: 1, newId: "confirm" }),
   ],
@@ -48,7 +47,14 @@ export const initialStates: EditStates = {
   pageOptions: {
     format: "inactive",
     lang: "ko",
+    isUseThumbnailEmbed: true,
+    isNotUseCustomLink: true,
     customLink: "",
+    embed: {
+      title: "임베드 제목 입력",
+      description: "",
+      src: "",
+    },
   },
 }
 
@@ -56,13 +62,14 @@ export interface EditStates {
   isEditStart: boolean
   homeSections: SectionType[]
   formSections: SectionType[]
-  rendingSections: SectionType[]
+  confirmSections: SectionType[]
   stage: EditStage
   selectedSection: SectionType | null
   active: ActiveTypes
   revert: {
-    sectionKey: SectionsKeys
-    snapshot: SectionType[]
+    stage: EditStage
+    selectedSection: SectionType | null
+    snapshot: any
   }[]
   revertIndex: number
   currentUsedImages: string[]
@@ -71,6 +78,13 @@ export interface EditStates {
     format: PageFormatType
     lang: Langs
     customLink: string
+    isUseThumbnailEmbed: boolean
+    isNotUseCustomLink: boolean
+    embed: {
+      title: string
+      description: string
+      src: string
+    }
   }
 }
 
@@ -118,28 +132,48 @@ type Actions = {
 
   moveSection: ({ from, to }: { from: number; to: number }) => void
   copySection: (payload: { payload: SectionType; newId?: string }) => void
-  loadSections: (payload: SaveContentType, lang: Langs, format: PageFormatType) => void
+  loadSections: (payload: SaveContentType) => void
 
-  setRevert: (revertType: "do" | "undo") => void
+  setRevert: (revertType: "do" | "undo" | "clear") => void
   saveSectionHistory: () => void
-  setPageOptions: ({ type, payload }: { type: "format" | "lang" | "customLink"; payload: any }) => void
+  setPageOptions: ({
+    type,
+    payload,
+  }: {
+    type: "format" | "lang" | "customLink" | "isUseThumbnailEmbed" | "isNotUseCustomLink"
+    payload: any
+  }) => void
+  setPageEmbedOption: ({ type, payload }: { type: "title" | "description" | "src"; payload: string }) => void
 }
 
 const getKey = (origin: any): SectionsKeys => {
-  return origin.stage === "home" ? "homeSections" : origin.stage === "form" ? "formSections" : "rendingSections"
+  return origin.stage === "home" ? "homeSections" : origin.stage === "form" ? "formSections" : "confirmSections"
 }
 const getTarget = (origin: any): SectionType => {
   return origin[getKey(origin)][origin.selectedSection.index]
 }
 
 const saveSectionHistoryCallback = ({ origin }: { origin: any }) => {
-  const sectionKey = getKey(origin)
   if (origin.revertIndex > -1) {
     // 뒤로가기 하고 다시 시작 하면 뒤에껀 지워버림 (안쓰겠다는 의미로 간주)
     origin.revert = origin.revert.slice(0, origin.revertIndex + 1)
   }
 
-  origin.revert.push({ sectionKey, snapshot: [...origin[sectionKey]] })
+  const obj: any = {
+    stage: origin.stage,
+    selectedSection: origin.selectedSection,
+  }
+  switch (origin.stage) {
+    case "rending":
+      obj.snapshot = origin.pageOptions
+      break
+    default:
+      obj.snapshot = origin[getKey(origin)]
+      break
+  }
+
+  origin.revert.push(obj)
+
   if (origin.revert.length >= 20) {
     // 20개 넘게 뒤로가기 할거면 인간적으로 저장 버튼을 눌러라.. 라는 취지
     origin.revert.shift()
@@ -159,28 +193,31 @@ export const useEditorStore = create<EditStates & Actions>()(
         // 컴포넌트에서 호출할때, 기본적으로 store에서 처리함
         saveSectionHistoryCallback({ origin })
       }),
-    setRevert: (revertType: "do" | "undo") =>
+    setRevert: (revertType) =>
       set((origin) => {
         origin.active.modal = { type: null, payload: undefined }
         origin.active.submenu = { type: null, payload: undefined }
         origin.active.tooltip = { type: null, payload: undefined }
+        if (revertType === "clear") {
+          origin.revert = []
+          origin.revertIndex = -1
+          return
+        }
         const doIndex = revertType === "do" ? 1 : -1
         const targetRevert = origin.revert[origin.revertIndex + doIndex]
         if (!targetRevert) return
-        const { sectionKey, snapshot } = targetRevert
 
-        // 스테이지 이동
-        if (sectionKey === "homeSections" && origin.stage !== "home") {
-          origin.stage = "home"
-        }
-        if (sectionKey === "formSections" && origin.stage !== "form") {
-          origin.stage = "form"
-        }
-        if (sectionKey === "rendingSections" && origin.stage !== "rending") {
-          origin.stage = "rending"
-        }
+        origin.stage = targetRevert.stage
+        origin.selectedSection = targetRevert.selectedSection
 
-        origin[sectionKey] = snapshot
+        switch (targetRevert.stage) {
+          case "rending":
+            origin.pageOptions = targetRevert.snapshot
+            break
+          default:
+            origin[getKey(origin)] = targetRevert.snapshot
+            break
+        }
 
         if (revertType === "undo") {
           origin.revertIndex--
@@ -333,6 +370,11 @@ export const useEditorStore = create<EditStates & Actions>()(
     setPageOptions: ({ type, payload }) =>
       set((origin) => {
         origin.pageOptions[type] = payload as never
+        if (type !== "customLink") saveSectionHistoryCallback({ origin })
+      }),
+    setPageEmbedOption: ({ type, payload }) =>
+      set((origin) => {
+        origin.pageOptions.embed[type] = payload
       }),
 
     // ADD
@@ -464,7 +506,7 @@ export const useEditorStore = create<EditStates & Actions>()(
         saveSectionHistoryCallback({ origin })
       }),
 
-    loadSections: (payload, lang, format) =>
+    loadSections: (payload) =>
       set((origin) => {
         if (payload.currentUsedColors) {
           origin.currentUsedColors = payload.currentUsedColors
@@ -491,14 +533,15 @@ export const useEditorStore = create<EditStates & Actions>()(
         } else {
           origin.formSections = []
         }
-        if (payload.rendingSections?.length > 0) {
-          origin.rendingSections = payload.rendingSections
+        if (payload.confirmSections?.length > 0) {
+          origin.confirmSections = payload.confirmSections
         } else {
-          origin.rendingSections = []
+          origin.confirmSections = []
         }
 
-        origin.pageOptions.format = format ?? "inactive"
-        origin.pageOptions.lang = lang
+        if (payload.pageOptions) {
+          origin.pageOptions = payload.pageOptions
+        }
       }),
   }))
 )

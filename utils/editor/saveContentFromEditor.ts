@@ -2,7 +2,6 @@ import { save } from "@/actions/save"
 import { toastSuccess } from "@/config/toast"
 import { Langs } from "@/types/Main"
 import { SaveContentType, SaveUpdateType } from "@/types/Page"
-import hasString from "../helpers/hasString"
 
 export const convertContent = ({
   content,
@@ -16,24 +15,32 @@ export const convertContent = ({
   isDeploy?: boolean
 }) => {
   const thumbnailSection = content.homeSections[0]
-  const title = thumbnailSection?.data?.title ?? ""
-  const description = thumbnailSection?.data?.description ?? ""
-  const background = thumbnailSection?.style.background ?? ""
-  const image = thumbnailSection?.src
+  const thumbnailEmbedContent: { title: string; description: string; thumbnail: string } = {
+    title: thumbnailSection.data.title ?? "",
+    description: thumbnailSection.data.description ?? "",
+    thumbnail: thumbnailSection.style?.background ?? thumbnailSection?.src ?? "",
+  }
+  const embedContent = {
+    title: content.pageOptions.embed.title,
+    description: content.pageOptions.embed.description,
+    thumbnail: content.pageOptions.embed.src,
+  }
+
   content.homeSections = content.homeSections.slice(0, 20)
   content.formSections = content.formSections.slice(0, 20)
-  content.rendingSections = content.rendingSections.slice(0, 20)
+  content.confirmSections = content.confirmSections.slice(0, 20)
   const { currentUsedColors, currentUsedImages, stage, ...rest } = content
 
-  return {
-    pageId,
-    title,
-    description,
-    format: content.pageOptions.format,
-    lang,
-    thumbnail: hasString(background) ? background : image ?? "",
-    content: isDeploy ? { ...rest } : content,
-  } as SaveUpdateType
+  return Object.assign(
+    {
+      pageId,
+      format: content.pageOptions.format,
+      lang,
+      customLink: content.pageOptions.customLink,
+      content: isDeploy ? { ...rest } : content,
+    },
+    content.pageOptions.isUseThumbnailEmbed ? thumbnailEmbedContent : embedContent
+  ) as SaveUpdateType
 }
 
 export async function saveContentFromEditor({

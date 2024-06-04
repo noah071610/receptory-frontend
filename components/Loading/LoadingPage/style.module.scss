@@ -9,6 +9,7 @@
   opacity: 0;
   transition: opacity 500ms;
   animation: comp-hide 500ms forwards;
+  z-index: 100;
   &.isAbsolute {
     position: absolute;
   }

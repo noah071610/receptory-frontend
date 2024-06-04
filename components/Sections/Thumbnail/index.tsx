@@ -61,7 +61,6 @@ export default function Thumbnail({
           textColor={textColor}
           isDisplayMode={isDisplayMode}
           isButtonVisible={isButtonVisible}
-          imageStatus={imageStatus}
         />
       )}
       {design === "simple" && (

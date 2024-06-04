@@ -7,6 +7,7 @@ import SectionLayout from "@/components/Sections/display"
 import { _url } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import style from "@/containers/page/style.module.scss"
+import { usePageValidator } from "@/hooks/usePageValidator"
 import { useMainStore } from "@/store/main"
 import { PageType } from "@/types/Page"
 import getConfirmationId from "@/utils/helpers/getConfirmationId"
@@ -39,9 +40,10 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
 })
 
 const PageHome = ({ initialParams, initialData }: { initialParams?: string; initialData: PageType }) => {
+  usePageValidator({ isPage: true, initialData })
   const { pageId } = useParams()
   const pathname = usePathname()
-  const { back, push, replace } = useRouter()
+  const { push, replace } = useRouter()
   const { modal, setModal, userPick, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
     useMainStore()
   const [isLoading, setIsLoading] = useState(true)
@@ -81,22 +83,6 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
   }, [isConfirm, initialParams])
 
   useEffect(() => {
-    // 이상한 접근 차단
-    if (typeof pageId !== "string") {
-      alert("잘못된 접근입니다.")
-      return back()
-    }
-    if (!initialData) {
-      alert("페이지를 로드하지 못했습니다.")
-      return back()
-    }
-    if (initialData.format === "inactive") {
-      alert("현재 비공개 상태인 페이지입니다.")
-      return back()
-    }
-  }, [pageId, initialData])
-
-  useEffect(() => {
     // 페이지 언어 설정
     if (initialData) {
       setPageLang(initialData.lang)
@@ -116,7 +102,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
           (initialParams === "form"
             ? initialData.content.formSections
             : initialParams === "confirm"
-              ? initialData.content.rendingSections
+              ? initialData.content.confirmSections
               : initialData.content.homeSections
           ).map(async (v, i) => {
             const AwesomeComponent: any = await getSection(v.type)

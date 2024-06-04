@@ -23,25 +23,3 @@ export async function uploadImages(formData: FormData): Promise<string[] | undef
     }
   }
 }
-
-// addUsed({ type: "currentUsedImages", payload })
-// if (type === "thumbnail" || type === "callout") {
-//   return setSrc({
-//     payload,
-//   })
-// }
-
-// if (type === "select" || type === "choices") {
-//   // 스토어에서 히스토리 저장
-//   return setList({
-//     index: active.modal.payload,
-//     key: "src",
-//     payload,
-//   })
-// }
-// if (type === "background") {
-//   return setStyle({
-//     key: "background",
-//     payload,
-//   })
-// }

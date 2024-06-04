@@ -40,6 +40,7 @@ API.interceptors.response.use(
 export const queryKey = {
   user: ["user"],
   page: (pageId: string) => ["page", pageId],
+  insight: (pageId: string) => ["insight", pageId],
   save: {
     list: ["save", "list"],
   },

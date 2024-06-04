@@ -63,7 +63,7 @@ const EditPage = () => {
   })
   const [save, setSave] = useState<null | SaveType>(null)
 
-  const { homeSections, stage, formSections, active, loadSections, rendingSections } = useEditorStore()
+  const { homeSections, stage, formSections, active, loadSections, confirmSections } = useEditorStore()
 
   const activeModal = active.modal.type
 
@@ -102,7 +102,7 @@ const EditPage = () => {
         }
 
         // 아니면 로드 어짜피 store에서도 reducer들이 걸러줌
-        loadSections(data.content, data.lang, data.format)
+        loadSections(data.content)
 
         setTimeout(() => {
           setIsLoading(false)
@@ -127,7 +127,7 @@ const EditPage = () => {
   //         stage,
   //         homeSections,
   //         formSections,
-  //         rendingSections,
+  //         confirmSections,
   //         currentUsedImages,
   //         currentUsedColors,
   //         pageOptions,
@@ -146,29 +146,30 @@ const EditPage = () => {
   // }, [homeSections, formSections, pageOptions, currentUsedImages, currentUsedColors, lang, stage])
 
   const topSections =
-    stage === "rending" ? rendingSections.slice(0, 2) : (stage === "home" ? homeSections : formSections).slice(0, 1)
+    stage === "confirm" ? confirmSections.slice(0, 2) : (stage === "home" ? homeSections : formSections).slice(0, 1)
 
   return (
     <>
       <Header />
       <PageLayout>
-        <div className={cx("main")}>
-          <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading />}</div>
+        <div className={cx("main", { isRending: stage === "rending" })}>
+          <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading isFull={true} />}</div>
           <div className={cx("editor")}>
-            {topSections?.map((v, i) => (
-              <SectionLayout key={`top-${stage}-${i}`} pathname={pathname} isTopSection={true} section={v}>
-                {sectionMap[v.type](v)}
-              </SectionLayout>
-            ))}
+            {stage !== "rending" &&
+              topSections?.map((v, i) => (
+                <SectionLayout key={`top-${stage}-${i}`} pathname={pathname} isTopSection={true} section={v}>
+                  {sectionMap[v.type](v)}
+                </SectionLayout>
+              ))}
 
             {stage === "home" && <SectionList sections={homeSections} stage={stage} />}
             {stage === "form" && <SectionList sections={formSections} stage={stage} />}
-            {stage === "rending" && <SectionList sections={rendingSections} stage={stage} />}
-            {stage === "rending" && <Rending />}
+            {stage === "confirm" && <SectionList sections={confirmSections} stage={stage} />}
+            {stage === "rending" && <Rending isLoading={isModalLoading} setIsLoading={setIsModalLoading} />}
 
-            <EditorFooter />
+            {stage !== "rending" && <EditorFooter />}
           </div>
-          <Preview />
+          {stage !== "rending" && <Preview />}
         </div>
 
         {activeModal?.includes("image") && (

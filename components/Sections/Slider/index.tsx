@@ -40,7 +40,6 @@ const Card = ({
   i: number
 }) => {
   const { ref, isIntersecting } = useIntersectionObserver()
-  console.log(list.src)
 
   const status = useProgressiveImage(list.src, isIntersecting)
 

@@ -33,6 +33,7 @@ export default function ImageStage({
     setActive,
     addSection,
     setStyle,
+    setPageEmbedOption,
     homeSections,
     setSrc,
     setList,
@@ -40,6 +41,7 @@ export default function ImageStage({
     addUsed,
     setOptions,
     currentUsedImages,
+    saveSectionHistory,
   } = useEditorStore()
   const [currentUsedImagesArr, setCurrentUsedImagesArr] = useState(
     currentUsedImages?.map((v) => ({ src: v, isAdd: false })) ?? []
@@ -109,6 +111,13 @@ export default function ImageStage({
               payload,
             })
             break
+          case "embed":
+            setPageEmbedOption({
+              type: "src",
+              payload,
+            })
+            saveSectionHistory()
+            break
           default:
             break
         }
@@ -161,7 +170,6 @@ export default function ImageStage({
       } else {
         const newSection = createNewSection({ type: type as SectionListTypes, index: homeSections.length })
         newSection.list = [...filteredImageList]
-        console.log(newSection)
 
         addSection({
           type: type as SectionListTypes,

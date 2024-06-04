@@ -15,10 +15,10 @@ export const useError = ({ delay, type }: { delay?: number; type: string }) => {
     message: null,
   })
 
-  const onError = () => {
+  const onError = (customType?: string) => {
     setError({
-      type,
-      message: type,
+      type: customType ?? type,
+      message: customType ?? type,
     })
     if (typeof delay === "number") {
       setTimeout(() => {

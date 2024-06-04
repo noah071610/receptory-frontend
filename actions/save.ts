@@ -85,3 +85,19 @@ export async function deleteSave(pageId: string) {
     }
   }
 }
+
+export async function checkCustomLink(customLink: string) {
+  const cookie = cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME ?? "")
+
+  if (cookie) {
+    if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+      try {
+        const response = await API.get(`/save/check-link?customLink=${customLink}`)
+
+        return response.data
+      } catch {
+        // return "serverError"
+      }
+    }
+  }
+}
