@@ -32,6 +32,7 @@ import {
   faPhotoFilm,
   faRectangleXmark,
   faSquareCheck,
+  faUser,
   faVenusMars,
 } from "@fortawesome/free-solid-svg-icons"
 
@@ -60,14 +61,15 @@ const initSectionList: EditorFooterList[] = [
   { value: "qna", icon: faCommentAlt, actionType: "createSection" },
 ]
 const formSectionList: EditorFooterList[] = [
-  { value: "calender", icon: faCalendar, actionType: "createSection" },
+  { value: "calendar", icon: faCalendar, actionType: "createSection" },
   { value: "time", icon: faClock, actionType: "createSection" },
   { value: "select", icon: faList, actionType: "createSection" },
+  { value: "nameInput", icon: faUser, actionType: "createSection" },
+  { value: "email", icon: faEnvelope, actionType: "createSection" },
+  { value: "phone", icon: faPhone, actionType: "createSection" },
   { value: "choices", icon: faHandPointer, actionType: "createSection" },
   { value: "textInput", icon: faPencil, actionType: "createSection" },
   { value: "numberInput", icon: fa1, actionType: "createSection" },
-  { value: "phone", icon: faPhone, actionType: "createSection" },
-  { value: "email", icon: faEnvelope, actionType: "createSection" },
 
   ...basicSections,
 ]
@@ -105,12 +107,13 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   empty: [],
   checkList: [],
   time: [],
+  nameInput: [],
   select: [design],
   textInput: [design],
   numberInput: [],
   email: [],
   phone: [],
-  calender: [],
+  calendar: [],
   confirm: [],
   linkBtn: [{ value: "backgroundColor", icon: faPalette, actionType: "colorSelector" }],
   choices: [design],
@@ -184,7 +187,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "text", icon: faCheck, actionType: "cta" },
     ],
   },
-  calender: {},
+  calendar: {},
   textInput: {
     design: [
       { value: "text", icon: faCheck, actionType: "cta" },
@@ -196,6 +199,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
   checkList: {},
   phone: {},
   linkBtn: {},
+  nameInput: {},
   confirm: {},
   choices: {
     design: [

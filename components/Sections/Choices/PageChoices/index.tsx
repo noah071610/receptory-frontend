@@ -15,20 +15,20 @@ const cx = cs.bind(style)
 
 function PageChoices({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { userPick, setUserPick } = useMainStore()
+  const { selected, setSelected } = useMainStore()
   const {
     data: { title, description },
     design,
     list,
   } = section
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
 
-  const onClickBtn = (text: string, index: number, src?: string) => {
-    setUserPick({
+  const onClickBtn = (text: string, id: string, src?: string) => {
+    setSelected({
       section,
       value: [
         {
-          key: `${index}`,
+          key: id,
           text,
           src,
         },
@@ -43,12 +43,12 @@ function PageChoices({ section }: { section: SectionType }) {
         <p>{description}</p>
       </label>
       <div className={cx("choices")}>
-        {list?.map(({ value: text, type, src }, i) => (
+        {list?.map(({ value: text, type, src, id }, i) => (
           <div
-            onClick={() => onClickBtn(text, i, src)}
+            onClick={() => onClickBtn(text, id, src)}
             key={`${type}-${i}-display`}
             className={cx("content", design, i === 0 ? "left" : "right", {
-              selected: value?.length > 0 && value[0].key === String(i),
+              selected: value?.length > 0 && value[0].key === id,
             })}
           >
             {design === "basic" && (

@@ -25,7 +25,7 @@ export const MakePassword = ({
   const { replace } = useRouter()
   const { pageId } = useParams()
   const { t } = useTranslation()
-  const { setModal, userPick } = useMainStore()
+  const { setModal, selected } = useMainStore()
   const [password, setPassword] = useState({
     password: "",
     confirmPassword: "",
@@ -47,7 +47,7 @@ export const MakePassword = ({
     }
     setIsConfirming(true)
 
-    const isOk = await submit({ pageId, confirmId, password: password.password, userPick })
+    const isOk = await submit({ pageId, confirmId, password: password.password, selected })
 
     if (isOk) {
       setTimeout(() => {

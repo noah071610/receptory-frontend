@@ -15,21 +15,21 @@ const cx = cs.bind(style)
 
 function PageNumber({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setUserPickText, userPick } = useMainStore()
+  const { setSelectedText, selected } = useMainStore()
   const { min, max } = section.options
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
   const text = value ? value[0].text : ""
 
   const onChangeInput = (e: any) => {
     if (parseInt(e.target.value) < min) {
-      return setUserPickText({ section, text: min })
+      return setSelectedText({ section, text: min })
     }
     if (parseInt(e.target.value) > max) {
-      return setUserPickText({ section, text: max })
+      return setSelectedText({ section, text: max })
     }
-    setUserPickText({ section, text: e.target.value })
+    setSelectedText({ section, text: e.target.value })
   }
 
   const onFocus = () => {
@@ -38,7 +38,7 @@ function PageNumber({ section }: { section: SectionType }) {
     }
   }
   const reset = () => {
-    setUserPickText({ section, text: "" })
+    setSelectedText({ section, text: "" })
     onFocus()
   }
 

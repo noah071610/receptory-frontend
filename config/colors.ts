@@ -22,7 +22,7 @@ export const colors = {
   orange: "rgba(255,182,126,0.87)",
   orangeHover: "rgba(255,148,34,0.87)",
 
-  blackSoft: "rgba(67,67,72,0.6)",
+  blackSoft: "rgba(73,73,73, 1)",
 
   bgColor: "rgba(249,249,249,0.8)",
   shadowColor: "rgba(0,0,0,0.08)",

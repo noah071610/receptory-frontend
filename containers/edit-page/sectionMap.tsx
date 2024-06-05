@@ -1,7 +1,6 @@
 "use client"
 
 import Confirm from "@/components/Sections/Confirm"
-import PageConfirm from "@/components/Sections/Confirm/PageConfirm"
 import Empty from "@/components/Sections/Empty"
 import SectionLoading from "@/components/Sections/SectionLoading"
 import Thumbnail from "@/components/Sections/Thumbnail"
@@ -41,6 +40,10 @@ const PageSelectList = dynamic(() => import("@/components/Sections/SelectList/Pa
   loading: () => <SectionLoading />,
 })
 const PageTextInput = dynamic(() => import("@/components/Sections/FormInput/Text/PageText/index"), {
+  ssr: true,
+  loading: () => <SectionLoading />,
+})
+const PageNameInput = dynamic(() => import("@/components/Sections/FormInput/Name/PageNameInput/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
 })
@@ -104,6 +107,10 @@ const Phone = dynamic(() => import("@/components/Sections/FormInput/Phone/index"
   ssr: true,
   loading: () => <SectionLoading />,
 })
+const NameInput = dynamic(() => import("@/components/Sections/FormInput/Name/index"), {
+  ssr: true,
+  loading: () => <SectionLoading />,
+})
 const Email = dynamic(() => import("@/components/Sections/FormInput/Email/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
@@ -129,7 +136,7 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   slider: (section, isDisplayMode = false) => <Slider section={section} isDisplayMode={isDisplayMode} />,
   map: (section, isDisplayMode = false) => <Map section={section} isDisplayMode={isDisplayMode} />,
   qna: (section, isDisplayMode = false) => (isDisplayMode ? <PageQnA section={section} /> : <QnA section={section} />),
-  calender: (section, isDisplayMode = false) =>
+  calendar: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageCalender section={section} /> : <Calender section={section} />,
   thumbnail: (section, isDisplayMode = false) => <Thumbnail section={section} isDisplayMode={isDisplayMode} />,
   textInput: (section, isDisplayMode = false) =>
@@ -148,6 +155,7 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   empty: () => <Empty />,
   checkList: (section, isDisplayMode = false) => <CheckList section={section} isDisplayMode={isDisplayMode} />,
   linkBtn: (section, isDisplayMode = false) => <LinkBtn section={section} isDisplayMode={isDisplayMode} />,
-  confirm: (section, isDisplayMode = false) =>
-    isDisplayMode ? <PageConfirm isEditor={true} section={section} /> : <Confirm section={section} />,
+  confirm: (section, isDisplayMode = false) => <Confirm section={section} />,
+  nameInput: (section, isDisplayMode = false) =>
+    isDisplayMode ? <PageNameInput section={section} /> : <NameInput section={section} />,
 }

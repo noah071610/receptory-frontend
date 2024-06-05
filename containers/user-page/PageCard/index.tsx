@@ -7,7 +7,7 @@ import { toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import { SaveListType } from "@/types/Page"
 import hasString from "@/utils/helpers/hasString"
-import setDateFormat from "@/utils/helpers/setDate"
+import { setDateFormat } from "@/utils/helpers/setDate"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import {
   faArrowUpRightFromSquare,

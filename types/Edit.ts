@@ -11,13 +11,14 @@ export type SectionListTypes =
   | "map"
   | "qna"
   | "empty"
-  | "calender"
+  | "calendar"
   | "time"
   | "select"
   | "textInput"
   | "numberInput"
   | "phone"
   | "email"
+  | "nameInput"
   | "checkList"
   | "choices"
   | "confirm"
@@ -65,6 +66,7 @@ export type DesignTypes =
   | "gender"
   | "yesOrNo"
   | "none"
+  | "firstAndLast"
   | AlignTypes
 export type AnimationTypes =
   | "none"

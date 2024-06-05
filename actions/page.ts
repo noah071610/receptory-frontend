@@ -1,5 +1,5 @@
 import { API } from "@/config"
-import { Langs, UserPickType } from "@/types/Main"
+import { Langs, SelectedType } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
 import { convertContent } from "@/utils/editor/saveContentFromEditor"
 import { Cookies } from "react-cookie"
@@ -12,14 +12,7 @@ export async function getPage({ pageId }: { pageId: string }) {
   return response.data
 }
 
-export async function submit(data: {
-  userPick: {
-    [id: string]: UserPickType
-  }
-  confirmId: string
-  pageId: string
-  password: string
-}) {
+export async function submit(data: { selected: SelectedType[]; confirmId: string; pageId: string; password: string }) {
   try {
     const response = await API.post(`/page/submit`, data)
 

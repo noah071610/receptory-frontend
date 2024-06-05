@@ -19,14 +19,14 @@ const cx = cs.bind(style)
 
 function Time({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { setModal, userPick, setUserPick } = useMainStore()
+  const { setModal, selected, setSelected } = useMainStore()
   const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
   const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 
   const [tempStartTime, setTempStartTime] = useState<string>("00:00")
   const [tempEndTime, setTempEndTime] = useState<string>("00:00")
 
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
 
   const onChangeMinMaxHour = (e: any, type: string) => {
     const onlyHour = e.target.value.split(":")[0]
@@ -102,7 +102,7 @@ function Time({ section }: { section: SectionType }) {
   }, [isAlways])
 
   const reset = () => {
-    setUserPick({
+    setSelected({
       section,
       value: [],
     })

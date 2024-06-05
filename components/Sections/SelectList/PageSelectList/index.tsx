@@ -13,14 +13,14 @@ const cx = cs.bind(style)
 
 function PageSelectList({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { setModal, userPick, setUserPick } = useMainStore()
-  const { value } = userPick[section.id] ?? {}
+  const { setModal, selected, setSelected } = useMainStore()
+  const { value } = selected[section.index - 1] ?? {}
 
   const toggleSelect = () => {
     setModal({ section, type: "select" })
   }
   const reset = () => {
-    setUserPick({ section, value: [] })
+    setSelected({ section, value: [] })
   }
 
   return (

@@ -23,19 +23,19 @@ function Text({ section }: { section: SectionType }) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const { t } = useTranslation()
-  const { setUserPickText, userPick } = useMainStore()
+  const { setSelectedText, selected } = useMainStore()
   const { setOptions, saveSectionHistory } = useEditorStore()
   const { max } = section.options
   const design = section.design
   const globalMax = design === "text" ? 50 : 500
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
   const text = value ? value[0].text : ""
 
   const onChangeInput = (e: any) => {
     if (e.target.value.length > max) {
       return
     }
-    setUserPickText({ section, text: e.target.value })
+    setSelectedText({ section, text: e.target.value })
   }
 
   const onChangeMax = (e: any) => {
@@ -43,7 +43,7 @@ function Text({ section }: { section: SectionType }) {
   }
 
   useEffect(() => {
-    setUserPickText({ section, text: "" })
+    setSelectedText({ section, text: "" })
   }, [section.design, max])
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function Text({ section }: { section: SectionType }) {
     }
   }
   const reset = () => {
-    setUserPickText({ section, text: "" })
+    setSelectedText({ section, text: "" })
     onFocus()
   }
 

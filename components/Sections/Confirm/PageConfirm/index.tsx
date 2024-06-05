@@ -8,22 +8,23 @@ import style from "../style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
+import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
-function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: boolean }) {
+function PageConfirm({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const { back } = useRouter()
-  const { userPick, curConfirmationId, confirmDate } = useMainStore()
+  const { selected, curConfirmationId, confirmDate, pageLang } = useMainStore()
   const { title, description } = section.data
 
   const confirmationArr = useMemo(() => {
-    const pickArr = Object.entries(userPick).toSorted((a, b) => a[1].index - b[1].index)
-    if (!pickArr?.length) return []
-    if (isEditor) return []
-    return pickArr.map(([id, { title, value, type }]) => {
-      let text = value.map((v) => v.text).join(type === "select" ? " , " : " ~ ")
+    if (!selected?.length) return []
+    return selected.map(({ value, type, title }, i) => {
+      let text = value
+        .map((v) => (type === "calendar" ? stringToDate(v.text, pageLang ?? undefined) : v.text))
+        .join(type === "select" ? " , " : " ~ ")
       if (!hasString(text)) text = "empty"
       return {
         title,
@@ -31,7 +32,7 @@ function PageConfirm({ section, isEditor }: { section: SectionType; isEditor?: b
         type: section.type,
       }
     })
-  }, [userPick])
+  }, [selected])
 
   return (
     <div className={cx("layout")}>

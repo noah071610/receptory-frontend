@@ -51,7 +51,6 @@ const Profile = ({ user }: { user: UserType }) => {
   return (
     <>
       <div className={cx("profile")}>
-        <div className={cx("background")}></div>
         <picture>
           <Image width={120} height={120} src={user.userImage} alt={`${user.userName}_profile`} />
         </picture>

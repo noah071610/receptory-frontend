@@ -58,21 +58,21 @@ export const usePageValidator = ({
         alert("잘못된 접근입니다.")
         return back()
       }
-    }
 
-    if (isFetchedUserQuery) {
-      // 로그인 요청을 이미 보냄. 이제부터 판별 시작
+      if (isFetchedUserQuery) {
+        // 로그인 요청을 이미 보냄. 이제부터 판별 시작
 
-      // 로그인 안했네?
-      if (!user) {
-        alert("로그인을 해주세요")
-        push("/login")
-      }
+        // 로그인 안했네?
+        if (!user) {
+          alert("로그인을 해주세요")
+          push("/login")
+        }
 
-      // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
-      if (user?.userId !== userId) {
-        alert("잘못된 접근입니다.")
-        back()
+        // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
+        if (user?.userId !== userId) {
+          alert("잘못된 접근입니다.")
+          back()
+        }
       }
     }
   }, [user, userId, isAuth, isFetchedUserQuery])

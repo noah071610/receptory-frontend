@@ -16,14 +16,14 @@ const cx = cs.bind(style)
 
 function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
-  const { setUserPickText, userPick } = useMainStore()
+  const { setSelectedText, selected } = useMainStore()
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
   const text = value ? value[0].text : ""
 
   const onChangeInput = (e: any) => {
-    setUserPickText({ section, text: e.target.value })
+    setSelectedText({ section, text: e.target.value })
   }
 
   const onFocus = () => {
@@ -32,7 +32,7 @@ function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode
     }
   }
   const reset = () => {
-    setUserPickText({ section, text: "" })
+    setSelectedText({ section, text: "" })
     onFocus()
   }
 

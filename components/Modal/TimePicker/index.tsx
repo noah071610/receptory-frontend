@@ -14,7 +14,7 @@ const cx = cs.bind(style)
 
 export const TimePicker = ({ section }: { section: SectionType }) => {
   const { t } = useTranslation()
-  const { setModal, setUserPick } = useMainStore()
+  const { setModal, setSelected } = useMainStore()
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const [startTime, setStartTime] = useState<null | string>(null)
@@ -59,7 +59,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
           // 오후 5시 ~ 오후 3시를 같이 선택하면 바꿔준다.
 
           if (isMoreLateTime(startTime, calcValue)) {
-            setUserPick({
+            setSelected({
               section,
               value: [
                 { key: "startTime", text: calcValue },
@@ -67,7 +67,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
               ],
             })
           } else {
-            setUserPick({
+            setSelected({
               section,
               value: [
                 { key: "startTime", text: startTime },
@@ -79,7 +79,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
         }
         if (!isRangeSelect) {
           // 하나의 시간만 선택함으로 분단위 까지 선택하면 모달 종료
-          setUserPick({
+          setSelected({
             section,
             value: [{ key: "startTime", text: calcValue }],
           })
@@ -94,7 +94,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
         }
         break
       case "any":
-        setUserPick({
+        setSelected({
           section,
           value: [{ key: "anytime", text: t("anytime") }],
         })
@@ -112,7 +112,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
     specificStartTime: any
     specificEndTime: any
   }) => {
-    setUserPick({
+    setSelected({
       section,
       value: specificEndTime
         ? [

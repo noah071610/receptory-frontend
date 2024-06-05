@@ -11,13 +11,13 @@ export type PageParams = {
     s: string
   }
 }
-export interface UserPickType {
+export interface SelectedType {
+  id: string
   title: string
-  value: UserPickValueType[]
-  index: number
   type: SectionListTypes
+  value: SelectedValueType[]
 }
-export interface UserPickValueType {
+export interface SelectedValueType {
   key: string
   text: string
   description?: string

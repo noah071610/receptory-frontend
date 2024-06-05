@@ -11,7 +11,7 @@ const sectionImportMap = {
   slider: () => import("@/components/Sections/Slider/index"),
   map: () => import("@/components/Sections/Map/index"),
   qna: () => import("@/components/Sections/QnA/PageQnA/index"),
-  calender: () => import("@/components/Sections/Calender/PageCalender/index"),
+  calendar: () => import("@/components/Sections/Calender/PageCalender/index"),
   thumbnail: () => import("@/components/Sections/Thumbnail/index"),
   textInput: () => import("@/components/Sections/FormInput/Text/PageText/index"),
   numberInput: () => import("@/components/Sections/FormInput/Number/PageNumber/index"),
@@ -24,6 +24,7 @@ const sectionImportMap = {
   checkList: () => import("@/components/Sections/CheckList/index"),
   linkBtn: () => import("@/components/Sections/LinkBtn/index"),
   confirm: () => import("@/components/Sections/Confirm/PageConfirm/index"),
+  nameInput: () => import("@/components/Sections/FormInput/Name/PageNameInput/index"),
 }
 
 const getSection = async (type: SectionListTypes) => {

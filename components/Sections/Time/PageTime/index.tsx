@@ -14,15 +14,15 @@ const cx = cs.bind(style)
 
 function Time({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { setModal, userPick, setUserPick } = useMainStore()
-  const { value } = userPick[section.id] ?? {}
+  const { setModal, selected, setSelected } = useMainStore()
+  const { value } = selected[section.index - 1] ?? {}
 
   const onClickOpenModal = () => {
     setModal({ type: "time", section })
   }
 
   const reset = () => {
-    setUserPick({
+    setSelected({
       section,
       value: [],
     })

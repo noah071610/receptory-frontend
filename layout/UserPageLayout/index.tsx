@@ -1,12 +1,13 @@
 "use client"
 
-import Profile from "@/containers/user-page/Profile"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { ReactNode } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function UserPageLayout({ children }: { children: ReactNode }) {
+  const { modal, setModal } = useMainStore()
   const onClickMain = (e: any) => {
     const closestElement = e.target.closest("[data-global-closer]")
 
@@ -15,9 +16,9 @@ export default function UserPageLayout({ children }: { children: ReactNode }) {
     }
   }
   return (
-    <div className={cx("main")}>
+    <div onClick={onClickMain} className={cx("main")}>
       <div className={cx("content")}>
-        <Profile user={user} />
+        <div className={cx("background")}></div>
         {children}
       </div>
     </div>

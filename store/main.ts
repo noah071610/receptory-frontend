@@ -1,5 +1,5 @@
 import { SectionType } from "@/types/Edit"
-import { Langs, ModalActiveType, UserPickType, UserPickValueType } from "@/types/Main"
+import { Langs, ModalActiveType, SelectedType, SelectedValueType } from "@/types/Main"
 import { UserType } from "@/types/User"
 
 import { create } from "zustand"
@@ -12,9 +12,7 @@ export interface EditStates {
     section: SectionType | null
     payload?: any
   }
-  userPick: {
-    [id: string]: UserPickType
-  }
+  selected: SelectedType[]
   curConfirmationId: string | null
   confirmDate: string | null
   pageLang: Langs | null
@@ -24,9 +22,9 @@ type Actions = {
   setUser: ({ user }: { user: UserType | null }) => void
   setPageLang: (lang: Langs) => void
   setModal: ({ section, type, payload }: { section: SectionType | null; type: ModalActiveType; payload?: any }) => void
-  setUserPick: ({ section, value }: { section: SectionType; value: UserPickValueType[] }) => void
-  loadUserPick: (data: { [id: string]: UserPickType }) => void
-  setUserPickText: ({ section, text }: { section: SectionType; text: string }) => void
+  setSelected: ({ section, value }: { section: SectionType; value: SelectedValueType[] }) => void
+  loadSelected: (data: SelectedType[]) => void
+  setSelectedText: ({ section, text }: { section: SectionType; text: string }) => void
   clearPage: () => void
   setConfirmation: ({
     curConfirmationId,
@@ -45,7 +43,7 @@ export const useMainStore = create<EditStates & Actions>()(
       section: null,
       payload: null,
     },
-    userPick: {},
+    selected: [],
     curConfirmationId: null,
     confirmDate: null,
     pageLang: null,
@@ -68,36 +66,38 @@ export const useMainStore = create<EditStates & Actions>()(
       set((origin) => {
         origin.modal = payload
       }),
-    setUserPick: ({ section, value }) =>
+    setSelected: ({ section, value }) =>
       set((origin) => {
-        origin.userPick[section.id] = {
-          title: section.data.title as string,
-          value,
-          index: section.index,
+        // index에 마이너스인 이유??? 썸네일 때문에
+        origin.selected[section.index - 1] = {
+          id: section.id,
+          title: section.data.title,
           type: section.type,
+          value,
         }
       }),
     clearPage: () =>
       set((origin) => {
-        origin.userPick = {}
+        origin.selected = []
         origin.curConfirmationId = null
         origin.confirmDate = null
       }),
-    loadUserPick: (data) =>
+    loadSelected: (data) =>
       set((origin) => {
-        origin.userPick = data
+        origin.selected = data
       }),
-    setUserPickText: ({ section, text }) =>
+    setSelectedText: ({ section, text }) =>
       set((origin) => {
-        if (!origin.userPick[section.id]) {
-          origin.userPick[section.id] = {
-            title: section.data.title as string,
-            value: [{ key: section.type, text: "" }],
-            index: section.index,
+        // index에 마이너스인 이유??? 썸네일 때문에
+        if (!origin.selected[section.index - 1]) {
+          origin.selected[section.index - 1] = {
+            id: section.id,
+            title: section.data.title,
             type: section.type,
+            value: [{ key: section.type, text: "" }],
           }
         }
-        origin.userPick[section.id].value[0].text = text
+        origin.selected[section.index - 1].value[0].text = text
       }),
   }))
 )

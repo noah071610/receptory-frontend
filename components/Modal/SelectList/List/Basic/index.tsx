@@ -4,7 +4,7 @@ import hasString from "@/utils/helpers/hasString"
 import Image from "next/image"
 import style from "./style.module.scss"
 
-import { UserPickValueType } from "@/types/Main"
+import { SelectedValueType } from "@/types/Main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -18,7 +18,7 @@ export const BasicList = ({
   v: SectionListType
   i: number
   design: DesignTypes
-  userSelectedList: UserPickValueType[]
+  userSelectedList: SelectedValueType[]
   onChangeSelect: (selectedList: SectionListType) => void
 }) => {
   const active = userSelectedList.findIndex(({ key }) => key === v.id) >= 0

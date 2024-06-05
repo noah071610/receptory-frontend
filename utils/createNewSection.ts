@@ -8,7 +8,7 @@ const title = {
 }
 
 const sectionMap: { [key: string]: any } = {
-  calender: () => {
+  calendar: () => {
     return {
       collection: [],
       options: {
@@ -101,6 +101,12 @@ const sectionMap: { [key: string]: any } = {
         min: 0,
         max: 50,
       },
+    }
+  },
+  nameInput: () => {
+    return {
+      data: title,
+      design: "basic",
     }
   },
   title: () => {

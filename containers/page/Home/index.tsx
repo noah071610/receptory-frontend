@@ -11,14 +11,14 @@ import { usePageValidator } from "@/hooks/usePageValidator"
 import { useMainStore } from "@/store/main"
 import { PageType } from "@/types/Page"
 import getConfirmationId from "@/utils/helpers/getConfirmationId"
-import setDateFormat from "@/utils/helpers/setDate"
+import { setDateFormat } from "@/utils/helpers/setDate"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 const cx = cs.bind(style)
 
@@ -40,11 +40,10 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
 })
 
 const PageHome = ({ initialParams, initialData }: { initialParams?: string; initialData: PageType }) => {
-  usePageValidator({ isPage: true, initialData })
-  const { pageId } = useParams()
+  const { pageId } = usePageValidator({ isPage: true, initialData })
   const pathname = usePathname()
   const { push, replace } = useRouter()
-  const { modal, setModal, userPick, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
+  const { modal, setModal, selected, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
     useMainStore()
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmit, setIsSubmit] = useState(false)
@@ -156,10 +155,10 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
   const isReadyToSubmit = useMemo(() => {
     return (
       initialParams === "form" &&
-      Object.values(userPick).filter((v) => v?.title && v?.value?.length > 0 && !!v?.value[0]?.text?.trim()).length ===
-        userFormLength
+      userFormLength ===
+        selected.filter((v) => v).filter((v) => v.value.length && v.value.every(({ text }) => text)).length
     )
-  }, [userPick, userFormLength, initialParams])
+  }, [selected, userFormLength, initialParams])
 
   const onClickSubmit = async () => {
     if (typeof pageId !== "string") return

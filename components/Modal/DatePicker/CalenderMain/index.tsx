@@ -15,7 +15,7 @@ import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
-import setDateFormat from "@/utils/helpers/setDate"
+import { dateToString } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 const cx = cs.bind(style)
@@ -74,7 +74,7 @@ function CalenderMain({
 }) {
   const { lang } = useParams()
   const { t } = useTranslation()
-  const { setUserPick, setModal } = useMainStore()
+  const { setSelected, setModal } = useMainStore()
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
   const { startDate, addAnyDate, isRangeSelect } = section.options
@@ -82,18 +82,19 @@ function CalenderMain({
 
   const onClickSubmit = () => {
     if (!selectedDates || selectedDates.length <= 0) return
+
     const arr = selectedDates.map((v, i) => ({
       key: i === 0 ? "startDate" : "endDate",
-      text: setDateFormat({ date: v, lang }),
+      text: dateToString(v),
     }))
-    setUserPick({
+    setSelected({
       section,
       value: arr,
     })
     setModal({ section: null, type: null })
   }
   const onClickAnyDate = () => {
-    setUserPick({
+    setSelected({
       section,
       value: [{ key: "anyDate", text: t("anyDate") }],
     })

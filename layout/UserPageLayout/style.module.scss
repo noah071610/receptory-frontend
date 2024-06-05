@@ -1,8 +1,29 @@
 @import "@/styles/variables.scss";
 
-.page {
-  width: 100%;
-  @include flex-x;
+.main {
   background-color: var(--bg-color);
+  width: 100%;
   position: relative;
+  .content {
+    background-color: var(--white);
+    width: 100%;
+    min-height: 100svh;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    padding-bottom: 100px;
+    @include medium {
+      padding-bottom: 50px;
+    }
+    background-color: #f2f3f7;
+  }
+
+  .background {
+    @include full;
+    height: 110px;
+    z-index: 10;
+    background-color: var(--blue-soft);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+  }
 }

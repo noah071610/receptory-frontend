@@ -56,7 +56,7 @@ const EditPage = () => {
   const { push, back } = useRouter()
   const { userId, pageId } = useParams()
   const queryUserId = userId as string
-  const { modal } = useMainStore()
+  const { modal, setPageLang } = useMainStore()
   const { data: user, isFetched: isFetchedUserQuery } = useQuery<UserType>({
     queryKey: queryKey.user,
     queryFn: getUser,
@@ -119,6 +119,13 @@ const EditPage = () => {
     if (isNaN(queryUserId)) return back()
     if (typeof pageId !== "string") return back()
   }, [userId, pageId, queryUserId])
+
+  useEffect(() => {
+    // 페이지 언어 설정
+    if (save?.lang) {
+      setPageLang(save.lang)
+    }
+  }, [save?.lang])
 
   // useEffect(() => {
   //   const handleBeforeUnloadCallback = async (e: any) => {

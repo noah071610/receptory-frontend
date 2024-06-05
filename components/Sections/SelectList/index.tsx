@@ -75,8 +75,8 @@ const ListEdit = ({
 function Select({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const { setActive, deleteList } = useEditorStore()
-  const { setModal, userPick, setUserPick } = useMainStore()
-  const { value } = userPick[section.id] ?? {}
+  const { setModal, selected, setSelected } = useMainStore()
+  const { value } = selected[section.index - 1] ?? {}
   const selectList = section.list
 
   const toggleSelect = () => {
@@ -90,7 +90,7 @@ function Select({ section }: { section: SectionType }) {
   }
 
   const reset = () => {
-    setUserPick({ section, value: [] })
+    setSelected({ section, value: [] })
   }
 
   const onDelete = (i: number) => {

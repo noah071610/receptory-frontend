@@ -21,20 +21,20 @@ const cx = cs.bind(style)
 function Choices({ section }: { section: SectionType }) {
   const { t } = useTranslation()
   const { setActive } = useEditorStore()
-  const { userPick, setUserPick } = useMainStore()
+  const { selected, setSelected } = useMainStore()
   const {
     data: { title, description },
     design,
     list,
   } = section
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
 
   const onClickThumbnailUpload = (index: number) => {
     setActive({ key: "modal", payload: { type: "choices-image", payload: index } })
   }
 
   const onClickBtn = (text: string, index: number) => {
-    setUserPick({
+    setSelected({
       section,
       value: [
         {
@@ -52,12 +52,12 @@ function Choices({ section }: { section: SectionType }) {
         <p>{description}</p>
       </label>
       <div className={cx("choices")}>
-        {list?.map(({ value: text, type, src }, i) => (
+        {list?.map(({ value: text, type, src, id }, i) => (
           <div
             onClick={() => onClickBtn(text, i)}
             key={`${type}-${i}`}
             className={cx("content", design, i === 0 ? "left" : "right", {
-              selected: value?.length > 0 && value[0].key === String(i),
+              selected: value?.length > 0 && value[0].key === id,
             })}
           >
             {design === "basic" && (

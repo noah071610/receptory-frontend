@@ -8,7 +8,7 @@ import { findReservation } from "@/actions/page"
 import { toastError } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
-import setDateFormat from "@/utils/helpers/setDate"
+import { setDateFormat } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -27,7 +27,7 @@ export const ConfirmReservation = ({
   const { replace } = useRouter()
   const { pageId } = useParams()
   const { t } = useTranslation()
-  const { setModal, loadUserPick, setConfirmation } = useMainStore()
+  const { setModal, loadSelected, setConfirmation } = useMainStore()
   const [input, setInput] = useState({
     confirmId: "",
     password: "",
@@ -48,14 +48,14 @@ export const ConfirmReservation = ({
       password: input.password,
     })
 
-    const { saveUserPick, createdAt } = data ?? {}
+    const { saveSelected, createdAt } = data ?? {}
 
-    if (saveUserPick && createdAt) {
+    if (saveSelected && createdAt) {
       setConfirmation({
         curConfirmationId: input.confirmId,
         confirmDate: setDateFormat({ date: createdAt, lang: pageLang, isTime: true }),
       })
-      loadUserPick(saveUserPick)
+      loadSelected(saveSelected)
       setTimeout(() => {
         setIsConfirming(false)
         setIsConfirm(true)

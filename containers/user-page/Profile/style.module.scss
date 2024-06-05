@@ -22,13 +22,6 @@
       @include shadow;
     }
   }
-  .background {
-    @include full;
-    height: 110px;
-    background-color: var(--blue-soft);
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-  }
   h1 {
     font-size: 22px;
     color: var(--black-soft);

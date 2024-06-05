@@ -6,7 +6,7 @@ import ModalLayout from ".."
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
-import { UserPickValueType } from "@/types/Main"
+import { SelectedValueType } from "@/types/Main"
 import cs from "classNames/bind"
 import { useState } from "react"
 import BasicList from "./List/Basic"
@@ -15,10 +15,10 @@ const cx = cs.bind(style)
 
 export const SelectList = ({ section }: { section: SectionType }) => {
   const { t } = useTranslation()
-  const { setModal, setUserPick } = useMainStore()
+  const { setModal, setSelected } = useMainStore()
   const selectList = section.list.filter((v) => hasString(v.data.title))
   const design = section.design ?? "basic"
-  const [userSelectedList, setUserSelectedList] = useState<UserPickValueType[]>([])
+  const [userSelectedList, setUserSelectedList] = useState<SelectedValueType[]>([])
   const { addSelectNone, isMultiple } = section.options
 
   const onChangeSelect = (selectedList: SectionListType) => {
@@ -40,12 +40,12 @@ export const SelectList = ({ section }: { section: SectionType }) => {
   }
 
   const onClickNone = () => {
-    setUserPick({ section, value: [{ key: "noneSelect", text: t("noneSelect") }] })
+    setSelected({ section, value: [{ key: "noneSelect", text: t("noneSelect") }] })
     setModal({ section: null, type: null })
   }
 
   const onClickSubmitMultiple = () => {
-    setUserPick({ section, value: userSelectedList })
+    setSelected({ section, value: userSelectedList })
     setModal({ section: null, type: null })
   }
 

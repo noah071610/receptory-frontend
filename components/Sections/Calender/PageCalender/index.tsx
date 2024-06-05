@@ -9,22 +9,21 @@ import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
 import { useMainStore } from "@/store/main"
+import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
 const cx = cs.bind(style)
 
 function PageCalender({ section }: { section: SectionType }) {
-  const { lang } = useParams()
   const { t } = useTranslation()
-  const { setUserPick, userPick, setModal } = useMainStore()
-  const { value } = userPick[section.id] ?? {}
+  const { setSelected, selected, setModal, pageLang } = useMainStore()
+  const { value } = selected[section.index - 1] ?? {}
 
   const onClickOpenModal = () => {
     setModal({ section, type: section.options.specificDate ? "dateSelect" : "date" })
   }
 
   const reset = () => {
-    setUserPick({
+    setSelected({
       section,
       value: [],
     })
@@ -40,7 +39,18 @@ function PageCalender({ section }: { section: SectionType }) {
         isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {value?.length > 0 ? <NumberRange start={value[0].text} end={value[1] && value[1].text} /> : t("none")}
+        {value?.length > 0 ? (
+          <NumberRange
+            start={value[0].text}
+            end={value[1] && value[1].text}
+            formatter={(date: string) => {
+              if (date === "anyDate") return "anyDate"
+              return stringToDate(date, pageLang ?? undefined)
+            }}
+          />
+        ) : (
+          t("none")
+        )}
       </FormUserInput>
     </div>
   )

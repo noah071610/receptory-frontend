@@ -14,17 +14,17 @@ import NumberRange from "@/components/NumberRange"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useMainStore } from "@/store/main"
-import setDateFormat from "@/utils/helpers/setDate"
+import { dateToString, stringToDate } from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Calender({ section }: { section: SectionType }) {
   const { t } = useTranslation()
-  const { setModal, setUserPick, userPick } = useMainStore()
+  const { setModal, setSelected, selected } = useMainStore()
   const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = useEditorStore()
   const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
 
   const [tempDateForSpecificDate, setTempDateForSpecificDate] = useState<Date[]>([])
   const [minMaxDate, setMinMaxDate] = useState<Date[]>([])
@@ -44,7 +44,7 @@ function Calender({ section }: { section: SectionType }) {
         // 싱글이면 걍 추가 EASY
         addCollection({
           payload: {
-            specificStartDate: d[0],
+            specificStartDate: dateToString(d[0]),
             specificEndDate: null,
           },
         })
@@ -53,8 +53,8 @@ function Calender({ section }: { section: SectionType }) {
           // 길이가 하나 이상? 즉 range가 끝나는 시점임. 콜렉션 추가
           addCollection({
             payload: {
-              specificStartDate: d[0],
-              specificEndDate: d[1],
+              specificStartDate: dateToString(d[0]),
+              specificEndDate: dateToString(d[1]),
             },
           })
           setTempDateForSpecificDate([])
@@ -93,7 +93,7 @@ function Calender({ section }: { section: SectionType }) {
   }, [startDate, endDate])
 
   const reset = () => {
-    setUserPick({
+    setSelected({
       section,
       value: [],
     })
@@ -109,7 +109,18 @@ function Calender({ section }: { section: SectionType }) {
         isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {value?.length > 0 ? <NumberRange start={value[0].text} end={value[1] && value[1].text} /> : t("none")}
+        {value?.length > 0 ? (
+          <NumberRange
+            start={value[0].text}
+            end={value[1] && value[1].text}
+            formatter={(date: string) => {
+              if (date === "anyDate") return "anyDate"
+              return stringToDate(date, pageOptions.lang)
+            }}
+          />
+        ) : (
+          t("none")
+        )}
       </FormUserInput>
       <div className={cx("options")}>
         <OptionTitleInputs section={section} />
@@ -142,11 +153,8 @@ function Calender({ section }: { section: SectionType }) {
                       <NumberRange
                         start={specificStartDate}
                         end={specificEndDate}
-                        formatter={(date: Date) => {
-                          return setDateFormat({
-                            date,
-                            lang: pageOptions.lang,
-                          })
+                        formatter={(date: string) => {
+                          return stringToDate(date, pageOptions.lang)
                         }}
                       />
                     </button>

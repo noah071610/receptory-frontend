@@ -32,13 +32,19 @@ export default function List({
     switch (type) {
       case "createSection":
         const newId = getId()
-        if (value === "calender" && formSections.find(({ type }) => type === "calender")) {
+        if (value === "calendar" && formSections.find(({ type }) => type === "calendar")) {
           return toastError("oneSection")
         }
         if (value === "time" && formSections.find(({ type }) => type === "time")) {
           return toastError("oneSection")
         }
         if (value === "email" && formSections.find(({ type }) => type === "email")) {
+          return toastError("oneSection")
+        }
+        if (value === "nameInput" && formSections.find(({ type }) => type === "nameInput")) {
+          return toastError("oneSection")
+        }
+        if (value === "phone" && formSections.find(({ type }) => type === "phone")) {
           return toastError("oneSection")
         }
         if (value === "qna" && homeSections.find(({ type }) => type === "qna")) {

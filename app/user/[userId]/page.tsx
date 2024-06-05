@@ -10,6 +10,7 @@ import PageCard from "@/containers/user-page/PageCard"
 import Profile from "@/containers/user-page/Profile"
 import style from "@/containers/user-page/style.module.scss"
 import { usePageValidator } from "@/hooks/usePageValidator"
+import UserPageLayout from "@/layout/UserPageLayout"
 import { useMainStore } from "@/store/main"
 import { SaveListType } from "@/types/Page"
 import { useQuery } from "@tanstack/react-query"
@@ -48,45 +49,36 @@ const UserPage = () => {
 
   return (
     user && (
-      <>
-        <div className={cx("main")}>
-          <div className={cx("content")}>
-            <Profile user={user} />
-            <ul className={cx("page-list")}>
-              {(!saves || saves.length <= 0) && (
-                <li className={cx("no-list")}>
-                  <img src="/images/icons/crying.png" alt="crying" />
-                  <span>만들어진 페이지가 없어요</span>
-                </li>
-              )}
-              {saves &&
-                saves.map((save, i) => <PageCard i={i} userId={user?.userId} save={save} key={`user-save-${i}`} />)}
+      <UserPageLayout>
+        <Profile user={user} />
+        <ul className={cx("page-list")}>
+          {(!saves || saves.length <= 0) && (
+            <li className={cx("no-list")}>
+              <img src="/images/icons/crying.png" alt="crying" />
+              <span>만들어진 페이지가 없어요</span>
+            </li>
+          )}
+          {saves && saves.map((save, i) => <PageCard i={i} userId={user?.userId} save={save} key={`user-save-${i}`} />)}
 
-              <div className={cx("add-list")}>
-                <button onClick={onClickAddSave} className={cx("add")}>
-                  <span>새로운 페이지 추가</span>
-                </button>
-              </div>
-            </ul>
+          <div className={cx("add-list")}>
+            <button onClick={onClickAddSave} className={cx("add")}>
+              <span>새로운 페이지 추가</span>
+            </button>
           </div>
-          <PageLoading isLoading={isLoading} />
-          {modal.type === "confirmHard" && modal.payload && (
-            <ConfirmHard
-              setIsLoading={setIsLoading}
-              confirmInitText={modal.payload.text}
-              value={modal.payload?.value}
-            />
-          )}
-          {modal.type === "selectLang" && (
-            <SelectLang
-              targetPageId={modal?.payload?.pageId}
-              initLang={modal?.payload?.lang}
-              user={user}
-              setIsLoading={setIsLoading}
-            />
-          )}
-        </div>
-      </>
+        </ul>
+        <PageLoading isLoading={isLoading} />
+        {modal.type === "confirmHard" && modal.payload && (
+          <ConfirmHard setIsLoading={setIsLoading} confirmInitText={modal.payload.text} value={modal.payload?.value} />
+        )}
+        {modal.type === "selectLang" && (
+          <SelectLang
+            targetPageId={modal?.payload?.pageId}
+            initLang={modal?.payload?.lang}
+            user={user}
+            setIsLoading={setIsLoading}
+          />
+        )}
+      </UserPageLayout>
     )
   )
 }

@@ -17,23 +17,23 @@ const cx = cs.bind(style)
 
 function PagePhone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setUserPickText, userPick } = useMainStore()
+  const { setSelectedText, selected } = useMainStore()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { phoneNumberCountry } = section.options
-  const { value } = userPick[section.id] ?? {}
+  const { value } = selected[section.index - 1] ?? {}
   const text = value ? value[0].text : ""
 
   const onChangePhoneInput = (e: any) => {
     const output = getPhoneNumber(e, phoneNumberCountry)
-    setUserPickText({ section, text: output })
+    setSelectedText({ section, text: output })
   }
 
   const onBlur = () => {
     if (phoneNumberCountry === "ko" || phoneNumberCountry === "ja") {
-      setUserPickText({ section, text: text.slice(0, 13) })
+      setSelectedText({ section, text: text.slice(0, 13) })
     }
     if (phoneNumberCountry === "th") {
-      setUserPickText({ section, text: text.slice(0, 12) })
+      setSelectedText({ section, text: text.slice(0, 12) })
     }
   }
 
@@ -43,7 +43,7 @@ function PagePhone({ section }: { section: SectionType }) {
     }
   }
   const reset = () => {
-    setUserPickText({ section, text: "" })
+    setSelectedText({ section, text: "" })
     onFocus()
   }
 

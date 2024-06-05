@@ -3,7 +3,7 @@ import { SectionListType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import style from "./style.module.scss"
 
-import { UserPickValueType } from "@/types/Main"
+import { SelectedValueType } from "@/types/Main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -19,7 +19,7 @@ export const ThumbList = ({
   v: SectionListType
   i: number
   onChangeSelect: (selectedList: SectionListType) => void
-  userSelectedList: UserPickValueType[]
+  userSelectedList: SelectedValueType[]
 }) => {
   const active = userSelectedList.findIndex(({ key }) => key === v.id) >= 0
   return (

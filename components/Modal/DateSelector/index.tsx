@@ -7,32 +7,36 @@ import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
-import setDateFormat from "@/utils/helpers/setDate"
+import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
 const cx = cs.bind(style)
 
 export const DateSelector = ({ section }: { section: SectionType }) => {
-  const { lang } = useParams()
   const { t } = useTranslation()
-  const { setModal, setUserPick } = useMainStore()
+  const { setModal, setSelected, pageLang } = useMainStore()
   const specificDates = section.collection
   const { addAnyDate } = section.options
-  const onClickDate = ({ specificStartDate, specificEndDate }: { specificStartDate: Date; specificEndDate?: Date }) => {
-    setUserPick({
+  const onClickDate = ({
+    specificStartDate,
+    specificEndDate,
+  }: {
+    specificStartDate: string
+    specificEndDate?: string
+  }) => {
+    setSelected({
       section,
       value: specificEndDate
         ? [
-            { key: "startDate", text: setDateFormat({ date: specificStartDate, lang }) },
-            { key: "endDate", text: setDateFormat({ date: specificEndDate, lang }) },
+            { key: "startDate", text: specificStartDate },
+            { key: "endDate", text: specificEndDate },
           ]
-        : [{ key: "startDate", text: setDateFormat({ date: specificStartDate, lang }) }],
+        : [{ key: "startDate", text: specificStartDate }],
     })
     setModal({ section: null, type: null })
   }
 
   const onClickAnyDate = () => {
-    setUserPick({
+    setSelected({
       section,
       value: [{ key: "anyDate", text: t("anyDate") }],
     })
@@ -48,8 +52,8 @@ export const DateSelector = ({ section }: { section: SectionType }) => {
               <NumberRange
                 start={specificStartDate}
                 end={specificEndDate}
-                formatter={(date: Date) => {
-                  return setDateFormat({ date, lang })
+                formatter={(stringDate: string) => {
+                  return stringToDate(stringDate, pageLang ?? undefined)
                 }}
               />
             </button>

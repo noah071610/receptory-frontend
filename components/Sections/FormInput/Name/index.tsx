@@ -2,44 +2,37 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import { SectionType } from "@/types/Edit"
-import { faPencil } from "@fortawesome/free-solid-svg-icons"
+import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
 import { memo, useRef } from "react"
 
-import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
+import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
-function PageText({ section }: { section: SectionType }) {
+function NameInput({ section }: { section: SectionType }) {
+  const { t } = useTranslation()
   const { lang } = useParams()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const { selected, setSelectedText } = useMainStore()
-  const { max } = section.options
-  const design = section.design
+  const { setSelectedText, selected } = useMainStore()
   const { value } = selected[section.index - 1] ?? {}
   const text = value ? value[0].text : ""
 
   const onChangeInput = (e: any) => {
-    if (e.target.value.length > max) {
+    if (e.target.value.length > 50) {
       return
     }
     setSelectedText({ section, text: e.target.value })
   }
 
   const onFocus = () => {
-    if (design === "textarea") {
-      if (textareaRef?.current) {
-        textareaRef.current.focus()
-      }
-    } else {
-      if (inputRef?.current) {
-        inputRef.current.focus()
-      }
+    if (inputRef?.current) {
+      inputRef.current.focus()
     }
   }
   const reset = () => {
@@ -51,30 +44,22 @@ function PageText({ section }: { section: SectionType }) {
     <div className={cx("layout")}>
       <div className={cx("input-wrapper")}>
         <FormUserInput
-          icon={faPencil}
+          icon={faUser}
           title={section.data.title}
           description={section.data.description}
-          inputStyle={design}
+          inputStyle={"nameInput"}
           onFocus={onFocus}
           isActive={hasString(text)}
           resetEvent={reset}
         >
-          {design === "text" ? (
-            <input ref={inputRef} className={cx("input")} type="text" value={text} onChange={onChangeInput} />
-          ) : (
-            <TextareaAutosize
-              className={cx("textarea")}
-              value={text}
-              maxRows={5}
-              maxLength={max}
-              ref={textareaRef}
-              onChange={onChangeInput}
-            />
-          )}
+          <input ref={inputRef} className={cx("input")} type="text" value={text} onChange={onChangeInput} />
         </FormUserInput>
+      </div>
+      <div className={cx("options")}>
+        <OptionTitleInputs section={section} />
       </div>
     </div>
   )
 }
 
-export default memo(PageText)
+export default memo(NameInput)

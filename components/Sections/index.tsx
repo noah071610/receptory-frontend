@@ -107,7 +107,7 @@ export default function SectionLayout({
           <button onClick={onClickMargin} className={cx("icon", "margin", { active: section.style?.paddingBottom })}>
             <FontAwesomeIcon icon={faArrowsDownToLine} />
           </button>
-          {section.type !== "calender" &&
+          {section.type !== "calendar" &&
             section.type !== "time" &&
             section.type !== "qna" &&
             section.type !== "map" && (
