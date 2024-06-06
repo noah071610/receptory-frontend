@@ -29,7 +29,7 @@ const SubmitChart = ({ data, lang, initialTarget }: { data: DateAnalyserType; la
       datasets: [
         {
           label: "접수 수",
-          data: targetArr.map(() => Math.floor(Math.random() * 100) + 1),
+          data: targetArr.map((v) => v),
           backgroundColor: "rgba(255, 99, 132, 0.5)",
         },
       ],

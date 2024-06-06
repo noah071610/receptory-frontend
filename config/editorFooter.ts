@@ -60,7 +60,7 @@ const initSectionList: EditorFooterList[] = [
   { value: "map", icon: faMap, actionType: "createSection" },
   { value: "qna", icon: faCommentAlt, actionType: "createSection" },
 ]
-const formSectionList: EditorFooterList[] = [
+export const formSectionList: EditorFooterList[] = [
   { value: "calendar", icon: faCalendar, actionType: "createSection" },
   { value: "time", icon: faClock, actionType: "createSection" },
   { value: "select", icon: faList, actionType: "createSection" },

@@ -19,20 +19,45 @@
 }
 
 .slider {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   .slide {
     width: auto;
-    button {
+    .count-btn {
       width: auto;
-      font-size: 15px;
-      border-radius: 6px;
+      min-width: 120px;
+      padding: 10px 12px;
+      border-radius: 5px;
       @include border;
-      padding: 8px 14px;
       &.active {
+        background-color: var(--blue-soft);
         border-color: var(--blue-soft);
-        color: var(--white);
-        background-color: var(--blue);
       }
     }
+  }
+}
+
+.count-btn {
+  width: 100%;
+  height: 100%;
+  .content {
+    width: 100%;
+    padding-bottom: 5px;
+    font-size: 15px;
+  }
+}
+
+.count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  .color {
+    width: 12px;
+    height: 12px;
+    border: 1px solid transparent;
+  }
+  span {
+    color: var(--black-soft);
+    font-size: 13px;
   }
 }

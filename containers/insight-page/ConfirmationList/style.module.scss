@@ -1,0 +1,177 @@
+@import "@/styles/variables.scss";
+
+.list {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + 550px / 2), calc(-50%));
+  width: var(--preview-width);
+  height: 100svh;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  background-color: var(--white);
+
+  h4 {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 7px;
+  }
+}
+
+.input {
+  width: 100%;
+  max-width: 400px;
+  cursor: pointer;
+  margin-bottom: 7px;
+
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    border-radius: 5px;
+    @include border;
+    transition: 300ms all;
+    input {
+      padding: 8px 0 8px 12px;
+      width: 100%;
+      display: flex;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+    .icon-wrapper {
+      padding: 8px;
+      width: 40px;
+      height: 40px;
+      position: relative;
+      border-radius: 100%;
+      .icon {
+        @include full;
+        @include flex;
+        svg {
+          transition:
+            400ms opacity,
+            300ms transform;
+          font-size: 18px;
+          color: var(--gray-hard);
+        }
+      }
+      .before {
+        svg {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      .after {
+        svg {
+          transform: translateX(-25px);
+          opacity: 0;
+        }
+      }
+
+      @include action {
+        background-color: var(--gray-soft);
+      }
+    }
+
+    &.active {
+      border-color: var(--green);
+      .icon-wrapper {
+        .before {
+          svg {
+            transform: translateX(25px);
+            opacity: 0;
+          }
+        }
+        .after {
+          svg {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+.slider {
+  &.sort {
+    margin-bottom: 7px;
+  }
+  .slide {
+    width: auto;
+  }
+}
+
+.btn {
+  width: auto;
+  font-size: 15px;
+  border-radius: 6px;
+  @include border;
+  padding: 8px 14px;
+  @include flex-y;
+  svg {
+    margin-right: 10px;
+    font-size: 14px;
+    color: var(--gray-hard);
+  }
+  &.active {
+    border-color: var(--blue-soft);
+    color: var(--white);
+    background-color: var(--blue);
+    svg {
+      color: var(--white);
+    }
+  }
+}
+
+.sort-wrapper {
+  @include flex-y;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.sort-select {
+  position: relative;
+  .btn {
+    width: auto;
+  }
+  .sort-list {
+    position: absolute;
+    width: fit-content;
+    top: 100%;
+    margin-top: 2px;
+    left: 0;
+    z-index: 20;
+    background-color: var(--white);
+    @include shadow;
+    overflow: hidden;
+    border-radius: 5px;
+    button {
+      width: 100%;
+      font-size: 15px;
+      padding: 10px 14px;
+      @include flex-y;
+      svg {
+        margin-right: 10px;
+        font-size: 14px;
+        color: var(--gray-hard);
+      }
+      &.active {
+        background-color: var(--blue-soft);
+      }
+      @include action {
+        background-color: var(--blue-soft);
+      }
+    }
+  }
+}
+
+.btn.orderby {
+  background-color: var(--white);
+  color: var(--blue-hard);
+  font-weight: 600;
+  svg {
+    color: var(--blue-hard);
+  }
+  border: none;
+}

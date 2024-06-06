@@ -1,6 +1,40 @@
 @import "@/styles/variables.scss";
 
-.list {
+.page {
+  background-color: var(--bg-color);
+  width: 100%;
+  @include flex;
+  position: relative;
+
+  .page-inner {
+    display: grid;
+    grid-template-columns: var(--editor-width) var(--preview-width);
+    margin: 0 auto;
+  }
+
+  .content {
+    position: relative;
+    background-color: var(--white);
+    width: 100%;
+    min-height: 100svh;
+    padding-bottom: 100px;
+    @include medium {
+      padding-bottom: 50px;
+    }
+    background-color: #f2f3f7;
+  }
+
+  .background {
+    @include full;
+    height: 110px;
+    z-index: 10;
+    background-color: var(--blue-soft);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+  }
+}
+
+.charts {
   padding: 50px 30px;
 
   h2 {
@@ -27,7 +61,9 @@
   }
 
   h3 {
-    font-size: 15px;
-    margin-bottom: 7px;
+    margin-bottom: 15px;
+    span {
+      font-size: 16px;
+    }
   }
 }

@@ -1,8 +1,10 @@
 "use client"
 
-import { SelectAnalyserType } from "@/types/Insight"
+import { backgroundColors, borderColors } from "@/config/colors"
+import { SelectChartLabel, SelectChartType } from "@/types/Insight"
 import { ArcElement, Chart as ChartJS, Tooltip } from "chart.js"
 import cs from "classNames/bind"
+import { produce } from "immer"
 import { useCallback, useMemo, useState } from "react"
 import { Pie } from "react-chartjs-2"
 import { FreeMode } from "swiper/modules"
@@ -12,71 +14,66 @@ const cx = cs.bind(style)
 
 ChartJS.register(ArcElement, Tooltip)
 
-const Chart = ({
-  obj,
-}: {
-  obj: {
-    [itemKey: string]: number
-  }
-}) => {
-  const [curTarget, setCurTarget] = useState<null | string>(null)
-  const onClickMenu = useCallback((itemKey: string) => {
-    setCurTarget(itemKey)
-  }, [])
-  const [labels, setLabels] = useState(
-    Object.keys(obj).map((v) => ({
-      key: v,
-      isActive: true,
-    }))
-  )
+const Chart = ({ labels, title }: { labels: SelectChartLabel[]; title: string }) => {
+  const [activeArr, setActiveArr] = useState(Array.from({ length: labels.length }, () => true))
 
-  const counts = Object.values(obj)
-
-  const chartData = useMemo(
-    () => ({
-      labels: labels.map(({ key }) => key),
+  const chartData = useMemo(() => {
+    const target = labels.filter((_, i) => activeArr[i])
+    return {
+      labels: target.map(({ title }) => title),
       datasets: [
         {
           label: "# of Votes",
-          data: counts,
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
-          ],
+          data: target.map(({ count }) => count),
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
           borderWidth: 1,
         },
       ],
-    }),
-    [labels, counts]
-  )
+    }
+  }, [labels, activeArr])
 
-  const onClickMenu = (i: number) => {
-    setLabels((arr) => {
-      arr[i].isActive = !arr[i].isActive
-      return arr
-    })
-  }
+  const onClickMenu = useCallback(
+    (i: number) => {
+      if (activeArr[i] && activeArr.filter((b) => b).length <= 1) return
+
+      setActiveArr(
+        produce((draft) => {
+          draft[i] = !draft[i]
+        })
+      )
+    },
+    [activeArr]
+  )
 
   return (
     <div>
+      <h3>
+        <span>{title}</span>
+      </h3>
       <Swiper className={cx("slider")} spaceBetween={5} slidesPerView={"auto"} modules={[FreeMode]}>
-        {labels.map(({ key, isActive }, i) => {
+        {labels.map(({ title, count }, i) => {
           return (
-            <SwiperSlide className={cx("slide")} key={`menu-${key}`}>
-              <button className={cx({ active: isActive })} onClick={() => onClickMenu(i)} key={`${key}`}>
-                <span>{key}</span>
+            <SwiperSlide className={cx("slide")} key={`menu-${i}`}>
+              <button className={cx("count-btn", { active: activeArr[i] })} onClick={() => onClickMenu(i)}>
+                <div
+                  className={cx("content", {
+                    active: activeArr[i],
+                  })}
+                >
+                  {title.slice(0, 10)}
+                </div>
+
+                <div className={cx("count", { active: count > 0 })}>
+                  <div
+                    style={{
+                      borderColor: borderColors[i],
+                      backgroundColor: backgroundColors[i],
+                    }}
+                    className={cx("color")}
+                  ></div>
+                  <span>{count}</span>
+                </div>
               </button>
             </SwiperSlide>
           )
@@ -97,16 +94,14 @@ const Chart = ({
   )
 }
 
-const SelectListChart = ({ data }: { data: SelectAnalyserType }) => {
-  const sectionSelectArr = Object.values(data)
-
+const SelectListChart = ({ selectChartArr }: { selectChartArr: SelectChartType[] }) => {
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
         <span>리스트</span>
       </h2>
-      {sectionSelectArr.map((obj, i) => (
-        <Chart obj={obj} key={`select-chart-${i}`} />
+      {selectChartArr.map(({ labels, title }, i) => (
+        <Chart labels={labels} title={title} key={`select-chart-${i}`} />
       ))}
     </div>
   )

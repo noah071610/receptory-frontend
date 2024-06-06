@@ -1,5 +1,17 @@
 import { PageType } from "./Page"
 
+export interface SelectChartLabel {
+  title: string
+  description?: string
+  src?: string
+  count: number
+}
+
+export interface SelectChartType {
+  title: string
+  labels: SelectChartLabel[]
+}
+
 export interface DateAnalyserType {
   [yearMonth: string]: number[]
 }
