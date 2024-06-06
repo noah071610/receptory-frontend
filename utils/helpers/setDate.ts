@@ -85,7 +85,17 @@ export function stringToDate(date: string, lang: Langs = "en") {
   }
 }
 
-export function setDateFormat({ date, lang = "en", isTime }: { date: Date; lang: any; isTime?: boolean }) {
+export function setDateFormat({
+  date,
+  lang = "en",
+  isTime,
+  noDate,
+}: {
+  date: Date
+  lang: any
+  isTime?: boolean
+  noDate?: boolean
+}) {
   date = typeof date === "string" ? new Date(date) : date
 
   const year = date.getFullYear() // 연도를 추출합니다.
@@ -96,19 +106,25 @@ export function setDateFormat({ date, lang = "en", isTime }: { date: Date; lang:
 
   switch (lang) {
     case "ko":
-      return `${year}년 ${month + 1}월 ${day}일` + (isTime ? ` ${hours}시 ${minutes}분` : "")
+      return `${year}년 ${month + 1}월` + (noDate ? "" : ` ${day}일`) + (isTime ? ` ${hours}시 ${minutes}분` : "")
 
     case "en":
-      return `${formatDateToEnglish(month + 1)} ${day}, ${year}` + (isTime ? ` ${hours}:${minutes}` : "")
+      return (
+        `${formatDateToEnglish(month + 1)}${noDate ? "" : " " + day}, ${year}` + (isTime ? ` ${hours}:${minutes}` : "")
+      )
 
     case "ja":
-      return `${getJapaneseEra(year)} ${month + 1}月 ${day}日` + (isTime ? ` ${hours}時${minutes}分` : "")
+      return (
+        `${getJapaneseEra(year)} ${month + 1}月` +
+        (noDate ? "" : ` ${day}日`) +
+        (isTime ? ` ${hours}時${minutes}分` : "")
+      )
 
     case "th":
-      return `พ.ศ. ${year + 543} ${month + 1}. ${day}.` + (isTime ? ` ${hours}:${minutes}` : "")
+      return `พ.ศ. ${year + 543} ${month + 1}.` + (noDate ? "" : " " + day) + (isTime ? ` ${hours}:${minutes}` : "")
 
     default:
-      return `${year}/${month + 1}/${day}` + (isTime ? ` ${hours}:${minutes}` : "")
+      return `${year}/${month + 1}` + (noDate ? "" : "/" + day) + (isTime ? ` ${hours}:${minutes}` : "")
   }
 }
 // พ.ศ. 2562

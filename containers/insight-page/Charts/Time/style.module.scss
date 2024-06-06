@@ -1,0 +1,75 @@
+@import "@/styles/variables.scss";
+
+.chart-wrapper {
+  padding: 30px 24px 40px 24px;
+  width: 100%;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(80, 46, 0, 0.1);
+  background-color: var(--white);
+}
+
+.chart-time-inner {
+  width: 100%;
+  height: 300px;
+  overflow-y: scroll;
+  .chart-time {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+.time-container {
+  padding-bottom: 20px;
+  .time-main {
+    @include flex(true);
+    gap: 8px;
+  }
+}
+
+.count-btn {
+  width: 100%;
+  height: 100%;
+  .content {
+    width: 100%;
+    padding: 10px 0 5px 0;
+    font-size: 15px;
+    margin-bottom: 13px;
+    &.active {
+      margin-bottom: 0;
+    }
+    &.time {
+      margin-bottom: 5px;
+    }
+    &.disabled {
+      color: var(--gray);
+      opacity: 0.5;
+    }
+  }
+}
+
+.count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  .circle {
+    width: 5px;
+    height: 5px;
+    background-color: var(--red);
+    border-radius: 100%;
+  }
+  span {
+    color: var(--black-soft);
+    font-size: 13px;
+  }
+
+  &.active {
+    .circle {
+      background-color: var(--green);
+    }
+  }
+}
