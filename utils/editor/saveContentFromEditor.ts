@@ -2,6 +2,7 @@ import { save } from "@/actions/save"
 import { toastSuccess } from "@/config/toast"
 import { Langs } from "@/types/Main"
 import { SaveContentType, SaveUpdateType } from "@/types/Page"
+import hasString from "../helpers/hasString"
 
 export const convertContent = ({
   content,
@@ -36,10 +37,14 @@ export const convertContent = ({
       pageId,
       format: content.pageOptions.format,
       lang,
-      customLink: content.pageOptions.customLink,
+      customLink: content.pageOptions.isNotUseCustomLink
+        ? pageId
+        : hasString(content.pageOptions.customLink)
+          ? content.pageOptions.customLink
+          : pageId,
       content: isDeploy ? { ...rest } : content,
     },
-    content.pageOptions.isUseThumbnailEmbed ? thumbnailEmbedContent : embedContent
+    content.pageOptions.isUseHomeThumbnail ? thumbnailEmbedContent : embedContent
   ) as SaveUpdateType
 }
 

@@ -47,7 +47,7 @@ export const initialStates: EditStates = {
   pageOptions: {
     format: "inactive",
     lang: "ko",
-    isUseThumbnailEmbed: true,
+    isUseHomeThumbnail: true,
     isNotUseCustomLink: true,
     customLink: "",
     embed: {
@@ -78,7 +78,7 @@ export interface EditStates {
     format: PageFormatType
     lang: Langs
     customLink: string
-    isUseThumbnailEmbed: boolean
+    isUseHomeThumbnail: boolean
     isNotUseCustomLink: boolean
     embed: {
       title: string
@@ -140,7 +140,7 @@ type Actions = {
     type,
     payload,
   }: {
-    type: "format" | "lang" | "customLink" | "isUseThumbnailEmbed" | "isNotUseCustomLink"
+    type: "format" | "lang" | "customLink" | "isUseHomeThumbnail" | "isNotUseCustomLink"
     payload: any
   }) => void
   setPageEmbedOption: ({ type, payload }: { type: "title" | "description" | "src"; payload: string }) => void

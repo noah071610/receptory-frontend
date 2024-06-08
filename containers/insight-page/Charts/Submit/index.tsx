@@ -1,12 +1,13 @@
 "use client"
 
+import { useInsightStore } from "@/store/insight"
 import { DateAnalyserType } from "@/types/Insight"
 import { Langs } from "@/types/Main"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js"
 import cs from "classNames/bind"
-import { useCallback, useMemo, useState } from "react"
-import { Bar } from "react-chartjs-2"
+import { useCallback, useMemo, useRef, useState } from "react"
+import { Bar, getElementAtEvent } from "react-chartjs-2"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
@@ -14,10 +15,19 @@ const cx = cs.bind(style)
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip)
 
-const SubmitChart = ({ data, lang, initialTarget }: { data: DateAnalyserType; lang: Langs; initialTarget: string }) => {
+const SubmitChart = ({
+  data,
+  lang,
+  initialTarget,
+}: {
+  data: DateAnalyserType
+  lang: Langs
+  initialTarget?: string
+}) => {
   const yearMonthArr = Object.keys(data)
-  const [curTarget, setCurTarget] = useState<null | string>(initialTarget)
-  const [targetArr, setTargetArr] = useState<number[]>(data[initialTarget])
+  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore()
+  const [curTarget, setCurTarget] = useState<null | string>(initialTarget ?? null)
+  const [targetArr, setTargetArr] = useState<number[]>(initialTarget ? data[initialTarget] : [])
   const onClickMenu = useCallback((date: string) => {
     setCurTarget(date)
     setTargetArr(data[date])
@@ -25,7 +35,7 @@ const SubmitChart = ({ data, lang, initialTarget }: { data: DateAnalyserType; la
 
   const chartData = useMemo(
     () => ({
-      labels: targetArr.map((_, i) => `${i + 1}일`),
+      labels: targetArr.slice(1).map((_, i) => `${i}일`),
       datasets: [
         {
           label: "접수 수",
@@ -37,55 +47,83 @@ const SubmitChart = ({ data, lang, initialTarget }: { data: DateAnalyserType; la
     [targetArr]
   )
 
+  const chartRef = useRef()
+  const onClickChart = (event: any) => {
+    if (chartRef?.current && curTarget) {
+      const target = getElementAtEvent(chartRef.current, event)
+      if (target[0]) {
+        const [year, month] = curTarget.split("-")
+        const filterDate = `${year}-${month.padStart(2, "0")}-${target[0].index.toString().padStart(2, "0")}`
+        setCurFilterAll({
+          startQuery: filterDate,
+          endQuery: filterDate,
+          type: "createdAt",
+        })
+        setIsFilterUpdate(true)
+      }
+    }
+  }
+
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
         <span>접수 현황</span>
       </h2>
-      <Swiper className={cx("slider")} spaceBetween={5} slidesPerView={"auto"} modules={[FreeMode]}>
-        {yearMonthArr.map((yearMonth) => {
-          return (
-            <SwiperSlide className={cx("slide")} key={`menu_${yearMonth}`}>
-              <button
-                className={cx({ active: curTarget === yearMonth })}
-                onClick={() => onClickMenu(yearMonth)}
-                key={`${yearMonth}`}
-              >
-                <span>{setDateFormat({ date: new Date(yearMonth), lang, noDate: true })}</span>
-              </button>
-            </SwiperSlide>
-          )
-        })}
-      </Swiper>
-      <div className={cx("chart-inner")}>
-        <div className={cx("chart")}>
-          <Bar
-            options={{
-              indexAxis: "x" as const,
-              responsive: true,
-              maintainAspectRatio: false,
-              elements: {
-                bar: {
-                  borderWidth: 1,
-                },
-              },
-              scales: {
-                y: {
-                  ticks: {
-                    stepSize: 1,
+      {initialTarget ? (
+        <>
+          <Swiper className={cx("slider")} spaceBetween={5} slidesPerView={"auto"} modules={[FreeMode]}>
+            {yearMonthArr.map((yearMonth) => {
+              return (
+                <SwiperSlide className={cx("slide")} key={`menu_${yearMonth}`}>
+                  <button
+                    className={cx({ active: curTarget === yearMonth })}
+                    onClick={() => onClickMenu(yearMonth)}
+                    key={`${yearMonth}`}
+                  >
+                    <span>{setDateFormat({ date: new Date(yearMonth), lang, noDate: true })}</span>
+                  </button>
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>
+          <div className={cx("chart-inner")}>
+            <div className={cx("chart")}>
+              <Bar
+                ref={chartRef}
+                onClick={onClickChart}
+                options={{
+                  indexAxis: "x" as const,
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  elements: {
+                    bar: {
+                      borderWidth: 1,
+                    },
                   },
-                },
-              },
-              plugins: {
-                legend: {
-                  display: false,
-                },
-              },
-            }}
-            data={chartData}
-          />
+                  scales: {
+                    y: {
+                      ticks: {
+                        stepSize: 1,
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                }}
+                data={chartData}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className={cx("no-list")}>
+          <img src="/images/icons/crying.png" alt="crying" />
+          <span>아직 아무런 제출도 없어요</span>
         </div>
-      </div>
+      )}
     </div>
   )
 }

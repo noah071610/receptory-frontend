@@ -6,7 +6,6 @@ import { UserType } from "@/types/User"
 import { faFire, faFlag, faGear } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import style from "./style.module.scss"
@@ -52,7 +51,7 @@ const Profile = ({ user }: { user: UserType }) => {
     <>
       <div className={cx("profile")}>
         <picture>
-          <Image width={120} height={120} src={user.userImage} alt={`${user.userName}_profile`} />
+          <img width={120} height={120} src={user.userImage} alt={`${user.userName}_profile`} />
         </picture>
         <h1>{user.userName}</h1>
         <span className={cx("plan")}>{userPlan[user.plan]}</span>

@@ -65,13 +65,6 @@
       }
     }
 
-    .info {
-      margin-top: 10px;
-      li {
-        display: flex;
-      }
-    }
-
     .list {
       h2 {
         padding-right: 10px;
@@ -80,6 +73,13 @@
       width: 100%;
       display: grid;
       grid-template-columns: 130px 1fr;
+    }
+
+    .info {
+      margin-top: 10px;
+      li {
+        display: flex;
+      }
     }
   }
 }

@@ -10,6 +10,35 @@
     display: grid;
     grid-template-columns: var(--editor-width) var(--preview-width);
     margin: 0 auto;
+
+    @include medium {
+      display: block;
+      width: 100%;
+      max-width: var(--editor-width);
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 21px;
+      margin-bottom: 20px;
+      position: relative;
+
+      span {
+        position: relative;
+        padding-right: 20px;
+        background-color: var(--white);
+        z-index: 10;
+      }
+      &::after {
+        content: "";
+        width: 100%;
+        position: absolute;
+        height: 1px;
+        top: 50%;
+        left: 0;
+        background-color: var(--border);
+      }
+    }
   }
 
   .content {
@@ -18,9 +47,6 @@
     width: 100%;
     min-height: 100svh;
     padding-bottom: 100px;
-    @include medium {
-      padding-bottom: 50px;
-    }
     background-color: #f2f3f7;
   }
 
@@ -37,33 +63,18 @@
 .charts {
   padding: 50px 30px;
 
-  h2 {
-    font-weight: 600;
-    font-size: 21px;
-    margin-bottom: 20px;
-    position: relative;
-
-    span {
-      position: relative;
-      padding-right: 20px;
-      background-color: var(--white);
-      z-index: 10;
-    }
-    &::after {
-      content: "";
-      width: 100%;
-      position: absolute;
-      height: 1px;
-      top: 50%;
-      left: 0;
-      background-color: var(--border);
-    }
-  }
-
   h3 {
     margin-bottom: 15px;
     span {
       font-size: 16px;
     }
   }
+
+  @include mobile {
+    padding: 50px 16px;
+  }
+}
+
+.no-list {
+  @include no-list;
 }

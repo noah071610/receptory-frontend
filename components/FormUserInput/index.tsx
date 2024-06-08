@@ -19,6 +19,7 @@ function FormUserInput({
   isActive,
   resetEvent,
   onFocus,
+  noTitle,
 }: {
   title: string
   description: string
@@ -30,13 +31,16 @@ function FormUserInput({
   isMultiple?: boolean
   isActive?: boolean
   onFocus?: () => void
+  noTitle?: boolean
 }) {
   return (
     <div className={cx("input-wrapper")}>
-      <label className={cx("title")}>
-        <h2>{title}</h2>
-        <p>{description}</p>
-      </label>
+      {!noTitle && (
+        <label className={cx("title")}>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </label>
+      )}
       <div className={cx("input")}>
         <div className={cx("content", { active: isActive })}>
           {inputStyle ? (

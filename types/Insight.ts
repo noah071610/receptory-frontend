@@ -1,6 +1,7 @@
 import { PageType } from "./Page"
 
 export interface SelectChartLabel {
+  id: string
   title: string
   description?: string
   src?: string
@@ -31,6 +32,13 @@ export interface AnalyserType {
   time: TimeAnalyserType
   select: SelectAnalyserType
   choices: SelectAnalyserType
+}
+
+export interface AnalyserConfirmation {
+  confirmId: string
+  content: string
+  createdAt: Date
+  isConfirm: number
 }
 
 export interface InsightPageType extends PageType {

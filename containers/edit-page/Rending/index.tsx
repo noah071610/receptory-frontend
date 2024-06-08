@@ -43,7 +43,7 @@ export default function Rending({
     setRevert,
     setPageEmbedOption,
   } = useEditorStore()
-  const { format, customLink, embed, isUseThumbnailEmbed, isNotUseCustomLink } = pageOptions
+  const { format, customLink, embed, isUseHomeThumbnail, isNotUseCustomLink } = pageOptions
   const isActive = format === "active"
   const thumbnailEmbedContent: { title: string; description: string; src: string } = {
     title: homeSections[0].data.title ?? "",
@@ -136,7 +136,7 @@ export default function Rending({
   const onClickSlider = (type: "embed" | "customLink") => {
     switch (type) {
       case "embed":
-        setPageOptions({ type: "isUseThumbnailEmbed", payload: !isUseThumbnailEmbed })
+        setPageOptions({ type: "isUseHomeThumbnail", payload: !isUseHomeThumbnail })
         break
       case "customLink":
         setPageOptions({ type: "isNotUseCustomLink", payload: !isNotUseCustomLink })
@@ -144,7 +144,7 @@ export default function Rending({
     }
   }
 
-  const embedContent = isUseThumbnailEmbed ? thumbnailEmbedContent : embed
+  const embedContent = isUseHomeThumbnail ? thumbnailEmbedContent : embed
 
   return (
     <div className={cx("layout")}>
@@ -159,7 +159,7 @@ export default function Rending({
           <div className={cx("section-content-main")}>
             <button
               onClick={() => onClickSlider("embed")}
-              className={cx("bar-layout", { active: !!isUseThumbnailEmbed })}
+              className={cx("bar-layout", { active: !!isUseHomeThumbnail })}
             >
               <div className={cx("content")}>
                 <div className={cx("bar")}>
@@ -171,14 +171,14 @@ export default function Rending({
             <h4>썸네일</h4>
             <div
               style={{ background: getImageUrl({ url: embedContent.src ?? "" }) }}
-              className={cx("embed-thumbnail", { disabled: isUseThumbnailEmbed })}
+              className={cx("embed-thumbnail", { disabled: isUseHomeThumbnail })}
             >
-              {hasString(embedContent.src) && !isUseThumbnailEmbed && <DeleteBtn srcKey={"embed"} />}
+              {hasString(embedContent.src) && !isUseHomeThumbnail && <DeleteBtn srcKey={"embed"} />}
               <button
                 data-closer="rending"
                 className={cx("drop-zone", { hidden: !!embedContent.src })}
                 onClick={onClickThumbnailUpload}
-                disabled={isUseThumbnailEmbed}
+                disabled={isUseHomeThumbnail}
               >
                 <FontAwesomeIcon icon={faPlus} />
               </button>
@@ -192,7 +192,7 @@ export default function Rending({
               onChange={(inputValue: string) => {
                 onChangeInput(inputValue, "title")
               }}
-              disabled={isUseThumbnailEmbed}
+              disabled={isUseHomeThumbnail}
               value={embedContent.title}
             />
             <h4>설명</h4>
@@ -204,7 +204,7 @@ export default function Rending({
               onChange={(inputValue: string) => {
                 onChangeInput(inputValue, "description")
               }}
-              disabled={isUseThumbnailEmbed}
+              disabled={isUseHomeThumbnail}
               value={embedContent.description}
             />
           </div>

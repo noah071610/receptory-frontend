@@ -1,5 +1,7 @@
 "use client"
 
+import { useInsightStore } from "@/store/insight"
+import { dateToString } from "@/utils/helpers/setDate"
 import { useContextCalendars, useContextDaysPropGetters } from "@rehookify/datepicker"
 import cs from "classNames/bind"
 import { FC, useMemo } from "react"
@@ -18,6 +20,7 @@ export function CalenderMain({
   calendarChartArr: number[]
 }) {
   const { calendars } = useContextCalendars()
+  console.log(calendarChartArr)
 
   const calender = useMemo(
     () => ({
@@ -34,7 +37,19 @@ export function CalenderMain({
 export const CalenderComponent: FC<CalendarProps> = ({ calendar }) => {
   const { weekDays } = useContextCalendars()
   const { dayButton } = useContextDaysPropGetters()
+  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore()
   const { days, month } = calendar
+
+  const onClickDate = (date: Date, isPossible: boolean) => {
+    if (isPossible) {
+      setCurFilterAll({
+        startQuery: dateToString(date),
+        endQuery: dateToString(date),
+        type: "calendar",
+      })
+      setIsFilterUpdate(true)
+    }
+  }
 
   return (
     <div className={cx("date-picker")}>
@@ -49,7 +64,11 @@ export const CalenderComponent: FC<CalendarProps> = ({ calendar }) => {
       <div className={cx("main")}>
         {days.map((d: any) => {
           return (
-            <button className={cx("count-btn")} key={d.$date.toString()}>
+            <button
+              onClick={() => onClickDate(d.$date, d.count > 0 && d.inCurrentMonth)}
+              className={cx("count-btn")}
+              key={d.$date.toString()}
+            >
               <div
                 className={cx("content", {
                   active: d.count > 0,

@@ -37,6 +37,7 @@ export const usePageValidator = ({
         alert("현재 비공개 상태인 페이지입니다.")
         return back()
       }
+      // todo: error 핸들링 진짜 조져야한다..!
     }
   }, [isPage, initialData])
 

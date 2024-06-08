@@ -58,14 +58,14 @@ function getJapaneseEra(year: number) {
 
 export function dateToString(date: Date) {
   const year = date.getFullYear() // 연도를 추출합니다.
-  const month = date.getMonth() // 월을 추출하고 2자리로 만듭니다.
-  const day = date.getDate() // 일을 추출하고 2자리로 만듭니다.
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
 
-  return `${year}/${month + 1}/${day}`
+  return `${year}-${month}-${day}`
 }
 
 export function stringToDate(date: string, lang: Langs = "en") {
-  const [year, month, day] = date.split("/").map((v) => +v)
+  const [year, month, day] = date.split("-").map((v) => +v)
 
   switch (lang) {
     case "ko":
@@ -81,7 +81,7 @@ export function stringToDate(date: string, lang: Langs = "en") {
       return `พ.ศ. ${year + 543} ${month}. ${day}.`
 
     default:
-      return `${year}/${month}/${day}`
+      return `${year}-${month}-${day}`
   }
 }
 

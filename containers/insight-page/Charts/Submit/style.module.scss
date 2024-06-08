@@ -37,3 +37,7 @@
     }
   }
 }
+
+.no-list {
+  @include no-list;
+}

@@ -94,15 +94,31 @@ const Chart = ({ labels, title }: { labels: SelectChartLabel[]; title: string })
   )
 }
 
-const SelectListChart = ({ selectChartArr }: { selectChartArr: SelectChartType[] }) => {
+const SelectListChart = ({
+  sectionName,
+  selectChartArr,
+}: {
+  sectionName: string
+  selectChartArr: SelectChartType[]
+}) => {
+  const isEmpty = selectChartArr.flat().reduce((acc, cur) => cur.labels.length + acc, 0) === 0
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
-        <span>리스트</span>
+        <span>{sectionName}</span>
       </h2>
-      {selectChartArr.map(({ labels, title }, i) => (
-        <Chart labels={labels} title={title} key={`select-chart-${i}`} />
-      ))}
+      {!isEmpty ? (
+        <>
+          {selectChartArr.map(({ labels, title }, i) => (
+            <Chart labels={labels} title={title} key={`select-chart-${i}`} />
+          ))}
+        </>
+      ) : (
+        <div className={cx("no-list")}>
+          <img src="/images/icons/crying.png" alt="crying" />
+          <span>아직 아무런 제출도 없어요</span>
+        </div>
+      )}
     </div>
   )
 }

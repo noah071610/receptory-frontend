@@ -19,11 +19,11 @@ const CalendarChart = ({
 }: {
   data: DateAnalyserType
   lang: Langs
-  initialTarget: string
+  initialTarget?: string
 }) => {
   const yearMonthArr = Object.keys(data)
-  const [curTarget, setCurTarget] = useState<null | string>(initialTarget)
-  const [targetArr, setTargetArr] = useState<number[]>(data[initialTarget])
+  const [curTarget, setCurTarget] = useState<null | string>(initialTarget ?? null)
+  const [targetArr, setTargetArr] = useState<number[]>(initialTarget ? data[initialTarget] : [])
   const onClickMenu = useCallback((date: string) => {
     setCurTarget(date)
     setTargetArr(data[date])
@@ -34,34 +34,43 @@ const CalendarChart = ({
       <h2>
         <span>캘린더</span>
       </h2>
-      <Swiper className={cx("slider")} spaceBetween={5} slidesPerView={"auto"} modules={[FreeMode]}>
-        {yearMonthArr.map((yearMonth) => {
-          return (
-            <SwiperSlide className={cx("slide")} key={`menu_${yearMonth}`}>
-              <button
-                className={cx({ active: curTarget === yearMonth })}
-                onClick={() => onClickMenu(yearMonth)}
-                key={`${yearMonth}`}
+      {initialTarget ? (
+        <>
+          <Swiper className={cx("slider")} spaceBetween={5} slidesPerView={"auto"} modules={[FreeMode]}>
+            {yearMonthArr.map((yearMonth) => {
+              return (
+                <SwiperSlide className={cx("slide")} key={`menu_${yearMonth}`}>
+                  <button
+                    className={cx({ active: curTarget === yearMonth })}
+                    onClick={() => onClickMenu(yearMonth)}
+                    key={`${yearMonth}`}
+                  >
+                    <span>{setDateFormat({ date: new Date(yearMonth), lang, noDate: true })}</span>
+                  </button>
+                </SwiperSlide>
+              )
+            })}
+          </Swiper>
+          <div className={cx("calendar-inner")}>
+            <div className={cx("calendar")}>
+              <DatePickerStateProvider
+                config={{
+                  offsetDate: curTarget ? new Date(curTarget) : undefined,
+                  selectedDates: [],
+                  onDatesChange: () => {},
+                }}
               >
-                <span>{setDateFormat({ date: new Date(yearMonth), lang, noDate: true })}</span>
-              </button>
-            </SwiperSlide>
-          )
-        })}
-      </Swiper>
-      <div className={cx("calendar-inner")}>
-        <div className={cx("calendar")}>
-          <DatePickerStateProvider
-            config={{
-              offsetDate: curTarget ? new Date(curTarget) : undefined,
-              selectedDates: [],
-              onDatesChange: () => {},
-            }}
-          >
-            <CalenderMain curCalendarDate={curTarget} calendarChartArr={targetArr} />
-          </DatePickerStateProvider>
+                <CalenderMain curCalendarDate={curTarget} calendarChartArr={targetArr} />
+              </DatePickerStateProvider>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className={cx("no-list")}>
+          <img src="/images/icons/crying.png" alt="crying" />
+          <span>아직 아무런 제출도 없어요</span>
         </div>
-      </div>
+      )}
     </div>
   )
 }

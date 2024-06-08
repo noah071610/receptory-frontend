@@ -30,6 +30,7 @@ const getChartArr = (type: "choices" | "select", pageData: InsightPageType) =>
         acc.push({
           title: cur.data.title,
           labels: cur.list.map((k) => ({
+            id: k.id,
             title: type === "choices" ? k.value : k.data.title,
             description: k.data?.description,
             src: k?.src,
@@ -58,18 +59,20 @@ const InsightPage = () => {
     enabled: !!user?.userId,
   })
 
-  const { isSelectDisplay, isCalendarDisplay, isTimeDisplay, isChoicesDisplay, formSectionTypes } = useMemo(() => {
+  const { isSelectDisplay, isCalendarDisplay, isTimeDisplay, isChoicesDisplay, formSections } = useMemo(() => {
     if (!pageData?.content?.formSections) return {}
-    const formSectionTypes = pageData.content.formSections
-      .filter((v) => ["calendar", "select", "choices", "time", "nameInput", "phone", "email"].includes(v.type))
-      .map((v) => v.type)
+    const formSections = pageData.content.formSections.filter((v) =>
+      ["calendar", "select", "choices", "time"].includes(v.type)
+    )
+
+    const types = formSections.map((v) => v.type)
 
     return {
-      isSelectDisplay: formSectionTypes.includes("select"),
-      isCalendarDisplay: formSectionTypes.includes("calendar"),
-      isTimeDisplay: formSectionTypes.includes("time"),
-      isChoicesDisplay: formSectionTypes.includes("choices"),
-      formSectionTypes: formSectionTypes ?? [],
+      isSelectDisplay: types.includes("select"),
+      isCalendarDisplay: types.includes("calendar"),
+      isTimeDisplay: types.includes("time"),
+      isChoicesDisplay: types.includes("choices"),
+      formSections: formSections ?? [],
     }
   }, [pageData?.content?.formSections])
 
@@ -77,13 +80,13 @@ const InsightPage = () => {
     if (!pageData) return {}
     const analyser = pageData.analyser
     return {
-      submitInitialTarget: Object.keys(analyser.submit)[0],
-      calenderInitialTarget: Object.keys(analyser.calendar)[0],
+      submitInitialTarget: analyser?.submit ? Object.keys(analyser.submit)[0] : undefined,
+      calenderInitialTarget: analyser?.calendar ? Object.keys(analyser.calendar)[0] : undefined,
     }
   }, [pageData?.analyser])
 
   const selectChartArr: SelectChartType[] = useMemo(() => {
-    if (isSelectDisplay && !!pageData?.analyser) {
+    if (isSelectDisplay && !!pageData?.analyser?.select) {
       return getChartArr("select", pageData)
     } else {
       return []
@@ -91,7 +94,7 @@ const InsightPage = () => {
   }, [isSelectDisplay, pageData?.analyser])
 
   const choicesChartArr: SelectChartType[] = useMemo(() => {
-    if (isChoicesDisplay && !!pageData?.analyser) {
+    if (isChoicesDisplay && !!pageData?.analyser?.choices) {
       return getChartArr("choices", pageData)
     } else {
       return []
@@ -106,27 +109,32 @@ const InsightPage = () => {
             <div className={cx("content")}>
               <div className={cx("background")}></div>
               <PageInfo pageData={pageData} user={user} />
-              <div className={cx("charts")}>
-                {submitInitialTarget && (
+              {
+                <div className={cx("charts")}>
                   <SubmitChart
                     data={pageData.analyser.submit}
                     initialTarget={submitInitialTarget}
                     lang={pageData.lang}
                   />
-                )}
-                {calenderInitialTarget && isCalendarDisplay && (
-                  <CalendarChart
-                    data={pageData.analyser.calendar}
-                    initialTarget={calenderInitialTarget}
-                    lang={pageData.lang}
-                  />
-                )}
-                {isTimeDisplay && <TimeChart data={pageData.analyser.time} />}
-                {isSelectDisplay && <SelectListChart selectChartArr={selectChartArr} />}
-                {isChoicesDisplay && <SelectListChart selectChartArr={choicesChartArr} />}
-              </div>
+                  {isCalendarDisplay && (
+                    <CalendarChart
+                      data={pageData.analyser.calendar}
+                      initialTarget={calenderInitialTarget}
+                      lang={pageData.lang}
+                    />
+                  )}
+                  {isTimeDisplay && <TimeChart data={pageData.analyser.time} />}
+                  {isSelectDisplay && <SelectListChart sectionName="select" selectChartArr={selectChartArr} />}
+                  {isChoicesDisplay && <SelectListChart sectionName="choices" selectChartArr={choicesChartArr} />}
+                </div>
+              }
             </div>
-            <ConfirmationList formSectionTypes={formSectionTypes} list={pageData.confirmation} />
+            <ConfirmationList
+              selectChartArr={selectChartArr.map((v) => v.labels).flat()}
+              choicesChartArr={choicesChartArr.map((v) => v.labels).flat()}
+              formSections={formSections}
+              list={pageData.confirmation}
+            />
           </div>
         ) : (
           <PageLoading isLoading={true} />
