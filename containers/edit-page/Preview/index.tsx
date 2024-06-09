@@ -1,7 +1,7 @@
 "use client"
 
 import SectionLayout from "@/components/Sections/display"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -11,7 +11,7 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function Preview() {
-  const { homeSections, formSections, confirmSections, stage, active, setActive } = useEditorStore()
+  const { homeSections, formSections, confirmSections, stage, active, setActive } = _useEditorStore()
 
   const sections = useMemo(() => {
     switch (stage) {

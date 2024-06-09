@@ -7,7 +7,7 @@ import Thumbnail from "@/components/Sections/Thumbnail"
 import { SectionListTypes, SectionType } from "@/types/Edit"
 import dynamic from "next/dynamic"
 
-const Calender = dynamic(() => import("@/components/Sections/Calender/index"), {
+const Calender = dynamic(() => import("@/components/Sections/Calendar/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
 })
@@ -27,7 +27,7 @@ const Album = dynamic(() => import("@/components/Sections/Album/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
 })
-const PageCalender = dynamic(() => import("@/components/Sections/Calender/PageCalender/index"), {
+const PageCalender = dynamic(() => import("@/components/Sections/Calendar/PageCalender/index"), {
   ssr: true,
   loading: () => <SectionLoading />,
 })

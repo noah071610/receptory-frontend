@@ -9,7 +9,7 @@ import { memo, useRef } from "react"
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
@@ -18,7 +18,7 @@ function PageText({ section }: { section: SectionType }) {
   const { lang } = useParams()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const { selected, setSelectedText } = useMainStore()
+  const { selected, setSelectedText } = _useMainStore()
   const { max } = section.options
   const design = section.design
   const { value } = selected[section.index - 1] ?? {}

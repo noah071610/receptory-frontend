@@ -1,7 +1,7 @@
 "use client"
 
 import Input from "@/components/Input"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
@@ -10,7 +10,7 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function LinkBtn({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { setActive } = useEditorStore()
+  const { setActive } = _useEditorStore()
   const text = section.value
   const { backgroundColor } = section.style
   const { link } = section.data
@@ -34,7 +34,7 @@ function LinkBtn({ section, isDisplayMode }: { section: SectionType; isDisplayMo
       {!isDisplayMode && (
         <div className={cx("options")}>
           <h4>
-            <span>링크 설정</span>
+            <span>{t("linkSetting")}</span>
           </h4>
           <Input
             type="input"

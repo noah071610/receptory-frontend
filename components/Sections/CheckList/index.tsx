@@ -4,7 +4,7 @@ import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import {
@@ -31,7 +31,7 @@ function List({
   index: number
   isDisplayMode?: boolean
 }) {
-  const { setList, deleteList } = useEditorStore()
+  const { setList, deleteList } = _useEditorStore()
   const [design, animation] = [list.design, section.style.animation]
   const getDesign = (str: string) => {
     switch (str) {

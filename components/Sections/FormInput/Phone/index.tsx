@@ -2,7 +2,7 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faPhone } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
@@ -10,7 +10,7 @@ import { memo, useEffect, useRef } from "react"
 import style from "./style.module.scss"
 
 import OptionRatio from "@/components/Options/OptionRatio"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { getPhoneNumber } from "@/utils/helpers/getPhoneNumber"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
@@ -19,8 +19,8 @@ const cx = cs.bind(style)
 
 function Phone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { selectedSection, setSelectedSection, setOptions } = useEditorStore()
-  const { setSelectedText, selected } = useMainStore()
+  const { selectedSection, setSelectedSection, setOptions } = _useEditorStore()
+  const { setSelectedText, selected } = _useMainStore()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { phoneNumberCountry } = section.options
   const { value } = selected[section.index - 1] ?? {}

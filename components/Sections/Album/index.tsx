@@ -6,12 +6,12 @@ import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import cs from "classNames/bind"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -59,8 +59,8 @@ const ImageComponent = ({
 }
 
 function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation()
-  const { deleteList } = useEditorStore()
+  const { t } = useTranslation("ko")
+  const { deleteList } = _useEditorStore()
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {

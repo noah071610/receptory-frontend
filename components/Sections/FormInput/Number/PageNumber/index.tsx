@@ -9,13 +9,13 @@ import { memo, useRef } from "react"
 
 import style from "./style.module.scss"
 
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageNumber({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setSelectedText, selected } = useMainStore()
+  const { setSelectedText, selected } = _useMainStore()
   const { min, max } = section.options
   const inputRef = useRef<HTMLInputElement | null>(null)
 

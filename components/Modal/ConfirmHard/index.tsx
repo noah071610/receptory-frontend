@@ -1,6 +1,5 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
@@ -8,12 +7,12 @@ import { deleteSave } from "@/actions/save"
 import { deleteUser } from "@/actions/user"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
-import { useMainStore } from "@/store/main"
+import { useTranslation } from "@/i18n/client"
+import { _useMainStore } from "@/store/main"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { Trans } from "react-i18next"
 const cx = cs.bind(style)
 
 const optionArr = [
@@ -38,11 +37,11 @@ export const ConfirmHard = ({
   value?: string
   setIsLoading: (b: boolean) => void
 }) => {
-  const { lang } = useParams()
+  // todo:
+  const { t } = useTranslation("ko", ["modal"])
   const { push } = useRouter()
   const queryClient = useQueryClient()
-  const { t } = useTranslation()
-  const { setModal } = useMainStore()
+  const { setModal } = _useMainStore()
   const [selectedOption, setSelectedOption] = useState("")
   const [confirmText, setConfirmText] = useState("")
   const onChangeInput = (e: any) => {
@@ -105,26 +104,18 @@ export const ConfirmHard = ({
 
   return (
     <ModalLayout modalStyle={style["confirm-hard-content"]}>
-      <h1>정말로 삭제하시겠어요?</h1>
+      <h1>{t("confirmDeleteTitle")}</h1>
       <div className={cx("description")}>
-        <p>
-          삭제를 진행하면 다시 되돌릴 수 없습니다. <br /> 괜찮으시다면 아래의 글자를 그대로 적고 확인을 눌러주세요.{" "}
-          <br />
-        </p>
-        {confirmInitText === "deleteAccount" && (
-          <p>
-            <Trans i18nKey="deleteAccount"></Trans>
-          </p>
-        )}
+        <p dangerouslySetInnerHTML={{ __html: t("confirmDeleteDescription") }}></p>
       </div>
 
       <p>
         <span className={cx("confirm-text")}>
           {"* "}
-          {confirmInitText}
+          {t(confirmInitText)}
         </span>
       </p>
-      <input placeholder={confirmInitText} value={confirmText} onChange={onChangeInput} type="text"></input>
+      <input placeholder={t(confirmInitText)} value={confirmText} onChange={onChangeInput} type="text"></input>
       {confirmInitText === "deleteAccount" && (
         <select value={selectedOption} onChange={handleSelectChange}>
           <option value="" disabled>
@@ -139,9 +130,9 @@ export const ConfirmHard = ({
       )}
       <div className={cx("btn-wrapper")}>
         <button
-          disabled={confirmText !== confirmInitText || (confirmInitText === "deleteAccount" && !selectedOption)}
+          disabled={confirmText !== t(confirmInitText) || (confirmInitText === "deleteAccount" && !selectedOption)}
           className={cx({
-            inactive: confirmText !== confirmInitText || (confirmInitText === "deleteAccount" && !selectedOption),
+            inactive: confirmText !== t(confirmInitText) || (confirmInitText === "deleteAccount" && !selectedOption),
           })}
           onClick={onClickDelete}
         >

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -10,7 +10,7 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function AddBtn({ type, section }: { type: string; section: SectionType }) {
-  const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore()
+  const { setActive, addList, selectedSection, setSelectedSection } = _useEditorStore()
 
   const onClickAddList = () => {
     if (!selectedSection || selectedSection?.id !== section.id) {
@@ -19,7 +19,7 @@ function AddBtn({ type, section }: { type: string; section: SectionType }) {
 
     switch (type) {
       case "qna":
-      // qna의 new list 의 추가 ojb { isActive: true, data: { title: "타이틀 입력" } }
+      // qna의 new list 의 추가 ojb { isActive: true, data: { title: "title.." } }
       // 는 createNewSectionList에서 자동으로 추가한다
       case "select":
       case "checkList":

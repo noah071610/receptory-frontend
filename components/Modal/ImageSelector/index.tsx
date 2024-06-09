@@ -1,9 +1,10 @@
 "use client"
 
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
+import { Langs } from "@/types/Main"
 import cs from "classNames/bind"
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import EmojiStage from "./EmojiStage"
 import ImageStage from "./ImageStage"
@@ -12,15 +13,17 @@ const cx = cs.bind(style)
 
 export default function ImageSelector({
   setIsLoading,
+  lang,
   IsUseEmoji,
 }: {
   setIsLoading: (b: boolean) => void
   IsUseEmoji?: boolean
+  lang: Langs
 }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(lang, ["modal"])
   const [curStage, setCurStage] = useState<"emoji" | "image">(IsUseEmoji ? "emoji" : "image")
 
-  const { active } = useEditorStore()
+  const { active } = _useEditorStore()
 
   const type = active.modal.type?.replace("-image", "")
 
@@ -35,10 +38,10 @@ export default function ImageSelector({
       {IsUseEmoji && (
         <div className={cx("menu")}>
           <button className={cx({ active: curStage === "emoji" })} onClick={() => onClickStage("emoji")}>
-            <span>이모티콘</span>
+            <span>{t("emoji")}</span>
           </button>
           <button className={cx({ active: curStage === "image" })} onClick={() => onClickStage("image")}>
-            <span>이미지</span>
+            <span>{t("image")}</span>
           </button>
         </div>
       )}
@@ -46,7 +49,7 @@ export default function ImageSelector({
         {curStage === "emoji" ? (
           <EmojiStage type={type} />
         ) : (
-          <ImageStage isMultiple={isMultiple} setIsLoading={setIsLoading} type={type} />
+          <ImageStage lang={lang} isMultiple={isMultiple} setIsLoading={setIsLoading} type={type} />
         )}
       </div>
     </ModalLayout>

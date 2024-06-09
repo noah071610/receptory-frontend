@@ -1,89 +1,85 @@
 "use client"
 
 import { toastError } from "@/config/toast"
+import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
+import { Langs } from "@/types/Main"
 import getId from "@/utils/helpers/getId"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import { useParams, usePathname, useRouter } from "next/navigation"
-import { useTranslation } from "react-i18next"
+import { usePathname, useRouter } from "next/navigation"
+import { useCallback } from "react"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
 const cx = cs.bind(style)
 
+const oneSectionTypes = ["calendar", "time", "email", "nameInput", "phone", "map", "qna"]
+
 export default function List({
   list,
-  isSectionList,
+  lang,
   isOpenAllList,
 }: {
   list: EditorFooterList[]
   isSectionList: boolean
   isOpenAllList: boolean
+  lang: Langs
 }) {
+  const { t } = useTranslation(lang, ["edit-page"])
   const { replace } = useRouter()
   const pathname = usePathname()
-  const { lang } = useParams()
-  const { addSection, formSections, homeSections, setActive, active, stage, confirmSections } = useEditorStore()
-  const { t } = useTranslation()
+  const { stage, addSection, formSections, homeSections, setActive, active, confirmSections } = useEditorStore([
+    "stage",
+    "addSection",
+    "formSections",
+    "homeSections",
+    "setActive",
+    "active",
+    "confirmSections",
+  ])
 
-  const onClickList = (value: string, type: EditorFooterListActions) => {
-    switch (type) {
-      case "createSection":
-        const newId = getId()
-        if (value === "calendar" && formSections.find(({ type }) => type === "calendar")) {
-          return toastError("oneSection")
-        }
-        if (value === "time" && formSections.find(({ type }) => type === "time")) {
-          return toastError("oneSection")
-        }
-        if (value === "email" && formSections.find(({ type }) => type === "email")) {
-          return toastError("oneSection")
-        }
-        if (value === "nameInput" && formSections.find(({ type }) => type === "nameInput")) {
-          return toastError("oneSection")
-        }
-        if (value === "phone" && formSections.find(({ type }) => type === "phone")) {
-          return toastError("oneSection")
-        }
-        if (value === "qna" && homeSections.find(({ type }) => type === "qna")) {
-          return toastError("oneSection")
-        }
-        if (value === "map" && homeSections.find(({ type }) => type === "map")) {
-          return toastError("oneSection")
-        }
+  const onClickList = useCallback(
+    (value: string, type: EditorFooterListActions) => {
+      switch (type) {
+        case "createSection":
+          const newId = getId()
+          if (oneSectionTypes.includes(value)) {
+            if (value === "qna") {
+              if (
+                (homeSections.filter((v) => v.type === "qna").length > 0 && stage === "home") ||
+                (confirmSections.filter((v) => v.type === "qna").length > 0 && stage === "confirm")
+              ) {
+                return toastError("oneSection")
+              }
+            } else {
+              if ([...homeSections, ...formSections].find(({ type }) => type === value)) return toastError("oneSection")
+            }
+          }
+          if (homeSections.length >= 20 || formSections.length >= 20 || confirmSections.length >= 20) {
+            return toastError("lessThan20sections")
+          }
 
-        if (stage === "home" && homeSections.length >= 20) {
-          return toastError("lessThan20sections")
-        }
-        if (stage === "form" && formSections.length >= 20) {
-          return toastError("lessThan20sections")
-        }
-        if (stage === "confirm" && confirmSections.length >= 20) {
-          return toastError("lessThan20sections")
-        }
-
-        addSection({ type: value as SectionListTypes, newId })
-        replace(`${pathname}#${newId}`)
-        break
-      case "imageSelector":
-        setActive({ key: "modal", payload: { type: `${value}-image` } })
-        setActive({ key: "tooltip", payload: { type: null } })
-        break
-      case "colorSelector":
-        setActive({ key: "submenu", payload: { type: null } })
-        setActive({ key: "tooltip", payload: { type: value } })
-        break
-      case "submenu":
-        setActive({ key: "tooltip", payload: { type: null } })
-        setActive({ key: "submenu", payload: { type: value } })
-        break
-
-      default:
-        break
-    }
-  }
+          addSection({ type: value as SectionListTypes, newId })
+          replace(`${pathname}#${newId}`)
+          break
+        case "imageSelector":
+          setActive({ key: "modal", payload: { type: `${value}-image` } })
+          break
+        case "colorSelector":
+          setActive({ key: "tooltip", payload: { type: value } })
+          break
+        case "submenu":
+          setActive({ key: "submenu", payload: { type: value } })
+          break
+        default:
+          alert("server error")
+          break
+      }
+    },
+    [addSection, confirmSections, formSections, homeSections, pathname, replace, setActive, stage]
+  )
 
   return (
     <div className={cx("list")}>
@@ -92,13 +88,15 @@ export default function List({
           return (
             <div className={cx("li")} key={`list_${i}`}>
               <button
-                onClick={() => onClickList(list.value, list.actionType)}
+                onClick={() => {
+                  onClickList(list.value, list.actionType)
+                }}
                 className={cx("btn", { active: active.submenu.type === list.value })}
               >
                 <div className={cx("icon")}>
                   <FontAwesomeIcon icon={list.icon} />
                 </div>
-                <span>{t(list.value)}</span>
+                <span>{t(`footer.${list.value}`)}</span>
               </button>
             </div>
           )
@@ -115,7 +113,7 @@ export default function List({
                   <div className={cx("icon")}>
                     <FontAwesomeIcon icon={list.icon} />
                   </div>
-                  <span>{t(list.value)}</span>
+                  <span>{t(`footer.${list.value}`)}</span>
                 </button>
               </SwiperSlide>
             )

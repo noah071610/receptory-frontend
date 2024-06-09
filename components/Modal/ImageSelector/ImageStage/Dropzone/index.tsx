@@ -1,14 +1,14 @@
 "use client"
 
 import { toastError } from "@/config/toast"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
 import { ImageUpload } from "@/types/Edit"
+import { Langs } from "@/types/Main"
 import { faImages } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { Dispatch, SetStateAction, memo, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -16,13 +16,14 @@ function Dropzone({
   className,
   setSelectedImages,
   isMultiple,
+  lang,
 }: {
   className?: string
   setSelectedImages: Dispatch<SetStateAction<ImageUpload[]>>
   isMultiple: boolean
+  lang: Langs
 }) {
-  const { t } = useTranslation()
-  const { selectedSection } = useEditorStore()
+  const { t } = useTranslation(lang, ["modal"])
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -41,7 +42,7 @@ function Dropzone({
         }
       })
     },
-    [selectedSection, isMultiple]
+    [setSelectedImages, isMultiple]
   )
 
   const { getRootProps, getInputProps } = useDropzone({

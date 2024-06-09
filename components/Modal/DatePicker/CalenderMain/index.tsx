@@ -2,6 +2,7 @@
 
 import { FC, ReactNode, useEffect } from "react"
 
+import { useTranslation } from "@/i18n/client"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -10,10 +11,9 @@ import {
   useContextDatePickerOffsetPropGetters,
   useContextDaysPropGetters,
 } from "@rehookify/datepicker"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { dateToString } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
@@ -73,8 +73,8 @@ function CalenderMain({
   selectedDates?: Date[]
 }) {
   const { lang } = useParams()
-  const { t } = useTranslation()
-  const { setSelected, setModal } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setSelected, setModal } = _useMainStore()
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
   const { startDate, addAnyDate, isRangeSelect } = section.options

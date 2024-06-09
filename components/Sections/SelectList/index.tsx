@@ -5,18 +5,18 @@ import FormUserInput from "@/components/FormUserInput"
 import Input from "@/components/Input"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
 import { toastError } from "@/config/toast"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -73,9 +73,9 @@ const ListEdit = ({
 }
 
 function Select({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { setActive, deleteList } = useEditorStore()
-  const { setModal, selected, setSelected } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setActive, deleteList } = _useEditorStore()
+  const { setModal, selected, setSelected } = _useMainStore()
   const { value } = selected[section.index - 1] ?? {}
   const selectList = section.list
 

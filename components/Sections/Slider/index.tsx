@@ -7,14 +7,14 @@ import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
 import { memo, useMemo } from "react"
-import { useTranslation } from "react-i18next"
 import "swiper/css/thumbs"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -105,7 +105,7 @@ const Card = ({
 }
 
 const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) => {
-  const { deleteList } = useEditorStore()
+  const { deleteList } = _useEditorStore()
 
   const textColor = useMemo(
     () =>
@@ -150,7 +150,7 @@ const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDispl
 }
 
 function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation("ko")
   return (
     <div className={cx("layout", { isDisplayMode: isDisplayMode })}>
       {section.list.length > 0 && (

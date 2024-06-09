@@ -1,23 +1,22 @@
 "use client"
 
 import Input from "@/components/Input"
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "@/i18n/client"
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
-import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import { useState } from "react"
 const cx = cs.bind(style)
 
 export default function EmbedForm({ value, section }: { value: string; section: SectionType }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const { t } = useTranslation()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+
   return (
     <div className={cx("options")}>
       <h4 className={cx("input-title")}>
-        <span>{t("임베드 코드 입력")}</span>
+        <span>{t("putEmbedUrl")}</span>
       </h4>
       <Input
         type="input"
@@ -28,13 +27,8 @@ export default function EmbedForm({ value, section }: { value: string; section: 
         value={value}
         section={section}
       />
-      {/* <div
-        
-        
-      >
-      </div> */}
 
-      <div
+      {/* <div
         onClick={() => {
           setIsOpen((b) => !b)
         }}
@@ -55,7 +49,7 @@ export default function EmbedForm({ value, section }: { value: string; section: 
         <span>{t("2. 공유하기를 누르세요.")}</span>
         <img src="" alt="explain-3" />
         <span>{t("3. HTML 복사 버튼을 눌러 복사를 하고 코드를 넣어주세요.")}</span>
-      </div>
+      </div> */}
     </div>
   )
 }

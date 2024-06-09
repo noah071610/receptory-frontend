@@ -1,17 +1,18 @@
 "use client"
 
 import IconBtn from "@/components/IconBtn"
-import { queryKey } from "@/config"
+import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
 import { Langs } from "@/types/Main"
-import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
-import { faCheck, faHome, faRotateLeft, faRotateRight, faSave } from "@fortawesome/free-solid-svg-icons"
-import { useQueryClient } from "@tanstack/react-query"
+import { faHome } from "@fortawesome/free-solid-svg-icons"
 import cs from "classNames/bind"
 import { useParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { memo } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
+import HeaderLayout from "./HeaderLayout"
+import RevertBtn from "./RevertBtn"
+import SaveBtn from "./SaveBtn"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -30,83 +31,22 @@ const headers = [
   },
 ]
 
-export default function Header() {
-  const queryClient = useQueryClient()
+function Header({ lang }: { lang: Langs }) {
+  const { t } = useTranslation(lang, ["edit-page"])
   const { push } = useRouter()
-  const { lang, pageId, userId } = useParams()
-  const {
-    stage,
-    setStage,
-    setSelectedSection,
-    homeSections,
-    formSections,
-    currentUsedImages,
-    currentUsedColors,
-    setRevert,
-    revert,
-    revertIndex,
-    confirmSections,
-    pageOptions,
-  } = useEditorStore()
-  const [isSaving, setIsSaving] = useState(false)
-
-  const [prevScrollPos, setPrevScrollPos] = useState(0)
-  const [visible, setVisible] = useState(true)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.scrollY
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 100)
-      setPrevScrollPos(currentScrollPos)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [prevScrollPos, visible])
+  const { userId } = useParams()
+  const { stage, setStage, setSelectedSection } = useEditorStore(["stage", "setStage", "setSelectedSection"])
 
   const onClickStage = (v: EditStage) => {
     setSelectedSection({ payload: null })
     setStage(v)
   }
 
-  const onClickSave = async () => {
-    if (!isSaving) {
-      const isOk = await saveContentFromEditor({
-        content: {
-          stage,
-          homeSections,
-          formSections,
-          confirmSections,
-          currentUsedImages,
-          currentUsedColors,
-          pageOptions,
-        },
-        pageId,
-        lang: lang as Langs,
-      })
-
-      if (isOk) {
-        await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
-        setRevert("clear")
-      }
-
-      setIsSaving(true)
-      setTimeout(() => {
-        setIsSaving(false)
-      }, 3000)
-    }
-  }
-
-  const onClickRevert = (type: "do" | "undo") => {
-    setRevert(type)
-  }
+  console.log("ree")
 
   return (
     <>
-      <header className={cx("header", { visible: visible })}>
+      <HeaderLayout>
         <div className={cx("nav")}>
           <div></div>
           <div className={cx("inner")}>
@@ -116,7 +56,7 @@ export default function Header() {
                   onClick={() => onClickStage(v.value as EditStage)}
                   className={cx({ active: v.value === stage })}
                 >
-                  <span>{v.value}</span>
+                  <span>{t(v.value)}</span>
                 </button>
               </div>
             ))}
@@ -130,25 +70,8 @@ export default function Header() {
               iconClassName={style.rollback}
               icon={faHome}
             />
-            <IconBtn
-              disabled={revert.length <= 1 || revertIndex <= 0}
-              onclick={() => onClickRevert("undo")}
-              size={30}
-              iconClassName={style.rollback}
-              icon={faRotateLeft}
-            />
-            <IconBtn
-              disabled={revert.length - 1 === revertIndex}
-              onclick={() => onClickRevert("do")}
-              size={30}
-              iconClassName={style.rollback}
-              icon={faRotateRight}
-            />
-            {isSaving ? (
-              <IconBtn iconClassName={style.saving} size={30} icon={faCheck} />
-            ) : (
-              <IconBtn onclick={onClickSave} size={30} icon={faSave} />
-            )}
+            <RevertBtn />
+            <SaveBtn lang={lang} />
           </div>
           <div
             style={{ width: stage === "home" ? "25%" : stage === "form" ? "50%" : stage === "confirm" ? "75%" : "95%" }}
@@ -180,14 +103,16 @@ export default function Header() {
                   onClick={() => onClickStage(v.value as EditStage)}
                   className={cx({ active: v.value === stage })}
                 >
-                  <span>{v.value}</span>
+                  <span>{t(v.value)}</span>
                 </button>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
-      </header>
+      </HeaderLayout>
       <div className={cx("ghost")} />
     </>
   )
 }
+
+export default memo(Header)

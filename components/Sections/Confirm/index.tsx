@@ -6,15 +6,15 @@ import { memo } from "react"
 import style from "./style.module.scss"
 
 import Input from "@/components/Input"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
-import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 function Confirm({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { pageOptions } = useEditorStore()
+  const { t } = useTranslation("ko")
+  const { pageOptions } = _useEditorStore()
   const { title, description } = section.data
 
   return (

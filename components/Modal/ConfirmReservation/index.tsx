@@ -1,12 +1,12 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "@/i18n/client"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
 import { findReservation } from "@/actions/page"
 import { toastError } from "@/config/toast"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
@@ -26,8 +26,8 @@ export const ConfirmReservation = ({
   const pathname = usePathname()
   const { replace } = useRouter()
   const { pageId } = useParams()
-  const { t } = useTranslation()
-  const { setModal, loadSelected, setConfirmation } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setModal, loadSelected, setConfirmation } = _useMainStore()
   const [input, setInput] = useState({
     confirmId: "",
     password: "",

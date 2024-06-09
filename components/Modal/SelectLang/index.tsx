@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "@/i18n/client"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
@@ -8,7 +8,7 @@ import { changeLanguage } from "@/actions/page"
 import { addSave } from "@/actions/save"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
 import { useQueryClient } from "@tanstack/react-query"
@@ -31,9 +31,9 @@ export const SelectLang = ({
 }) => {
   const queryClient = useQueryClient()
   const { push, back } = useRouter()
-  const { setModal } = useMainStore()
+  const { setModal } = _useMainStore()
   const [selectedLang, setSelectedLang] = useState<null | Langs>(initLang ?? null)
-  const { t } = useTranslation()
+  const { t } = useTranslation("ko")
 
   const onClickRatio = (v: Langs) => {
     setSelectedLang(v)

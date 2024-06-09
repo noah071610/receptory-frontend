@@ -15,6 +15,7 @@ import getId from "@/utils/helpers/getId"
 import { cloneDeep } from "lodash"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
+import { useShallow } from "zustand/react/shallow"
 
 export const initialStates: EditStates = {
   isEditStart: false,
@@ -113,12 +114,13 @@ type Actions = {
     key,
     payload,
   }: {
-    key: "submenu" | "tooltip" | "modal" | "all"
+    key: "submenu" | "tooltip" | "modal"
     payload: {
       type: string | null
       payload?: any
     }
   }) => void
+  clearActive: () => void
   setCollection: ({ payload, index, key }: { payload: any; index: number; key: string }) => void
 
   addSection: ({ type, payload, newId }: { type: SectionListTypes; payload?: SectionType; newId?: string }) => void
@@ -182,7 +184,7 @@ const saveSectionHistoryCallback = ({ origin }: { origin: any }) => {
   }
 }
 
-export const useEditorStore = create<EditStates & Actions>()(
+export const _useEditorStore = create<EditStates & Actions>()(
   immer((set) => ({
     // STATE
     ...initialStates,
@@ -326,27 +328,41 @@ export const useEditorStore = create<EditStates & Actions>()(
           saveSectionHistoryCallback({ origin })
         }
       }),
+    clearActive: () =>
+      set((origin) => {
+        origin.active = {
+          modal: {
+            type: null,
+            payload: null,
+          },
+          tooltip: {
+            type: null,
+            payload: null,
+          },
+          submenu: {
+            type: null,
+            payload: null,
+          },
+        }
+      }),
     setActive: ({ key, payload }) =>
       set((origin) => {
-        if (key === "all") {
-          origin.active = {
-            modal: {
-              payload: null,
-              ...payload,
-            },
-            tooltip: {
-              payload: null,
-              ...payload,
-            },
-            submenu: {
-              payload: null,
-              ...payload,
-            },
-          }
-        } else {
-          const target = { payload: null, ...payload }
-          origin.active[key] = target
+        origin.active = {
+          modal: {
+            type: null,
+            payload: null,
+          },
+          tooltip: {
+            type: null,
+            payload: null,
+          },
+          submenu: {
+            type: null,
+            payload: null,
+          },
         }
+        const target = { payload: null, ...payload }
+        origin.active[key] = target
       }),
     setCollection: ({ payload, index, key }) =>
       set((origin) => {
@@ -545,3 +561,18 @@ export const useEditorStore = create<EditStates & Actions>()(
       }),
   }))
 )
+
+type CombinedStates = EditStates & Actions
+export const useEditorStore = <T extends keyof CombinedStates>(keys: T[]) => {
+  return _useEditorStore(
+    useShallow((state) =>
+      keys.reduce(
+        (acc, cur) => {
+          acc[cur] = state[cur]
+          return acc
+        },
+        {} as EditStates & Actions
+      )
+    )
+  )
+}

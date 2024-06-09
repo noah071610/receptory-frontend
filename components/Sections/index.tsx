@@ -3,7 +3,7 @@
 import { ReactNode } from "react"
 
 import { toastError } from "@/config/toast"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import getId from "@/utils/helpers/getId"
 import { faArrowsDownToLine, faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
@@ -41,7 +41,7 @@ export default function SectionLayout({
     setSelectedSection,
     deleteSection,
     setStyle,
-  } = useEditorStore()
+  } = _useEditorStore()
 
   const onClickSection = (e: any) => {
     const closestElement = e.target.closest("[data-closer]")

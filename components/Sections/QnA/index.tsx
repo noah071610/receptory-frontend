@@ -5,7 +5,7 @@ import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { colors } from "@/config/colors"
 import { toastError } from "@/config/toast"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { changeOpacity } from "@/utils/styles/changeOpacity"
 import { faChevronDown, faQ } from "@fortawesome/free-solid-svg-icons"
@@ -75,7 +75,7 @@ const List = ({
 }
 
 export default function QnA({ section }: { section: SectionType }) {
-  const { deleteList } = useEditorStore()
+  const { deleteList } = _useEditorStore()
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
       return toastError("atLeastOneList")

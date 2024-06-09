@@ -1,11 +1,11 @@
 "use client"
+import { useTranslation } from "@/i18n/client"
 import { SectionListType, SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
-import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { SelectedValueType } from "@/types/Main"
 import cs from "classNames/bind"
 import { useState } from "react"
@@ -14,8 +14,8 @@ import ThumbList from "./List/Thumb"
 const cx = cs.bind(style)
 
 export const SelectList = ({ section }: { section: SectionType }) => {
-  const { t } = useTranslation()
-  const { setModal, setSelected } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setModal, setSelected } = _useMainStore()
   const selectList = section.list.filter((v) => hasString(v.data.title))
   const design = section.design ?? "basic"
   const [userSelectedList, setUserSelectedList] = useState<SelectedValueType[]>([])

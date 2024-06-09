@@ -66,13 +66,13 @@ export const usePageValidator = ({
         // 로그인 안했네?
         if (!user) {
           alert("로그인을 해주세요")
-          push("/login")
+          return push("/login")
         }
 
         // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
         if (user?.userId !== userId) {
           alert("잘못된 접근입니다.")
-          back()
+          return back()
         }
       }
     }

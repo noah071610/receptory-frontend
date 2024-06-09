@@ -14,7 +14,6 @@ import {
   faClock,
   faCommentAlt,
   faEnvelope,
-  faFilm,
   faFont,
   faHandPointer,
   faHeading,
@@ -37,7 +36,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 
 const design = { value: "design", icon: faPaintRoller, actionType: "submenu" } as EditorFooterList
-const animation = { value: "animation", icon: faFilm, actionType: "submenu" } as EditorFooterList
 const basicSections = [
   { value: "text", icon: faFont, actionType: "createSection" },
   { value: "title", icon: faHeading, actionType: "createSection" },
@@ -45,12 +43,12 @@ const basicSections = [
   { value: "callout", icon: faIdCard, actionType: "createSection" },
   { value: "checkList", icon: faSquareCheck, actionType: "createSection" },
 ] as EditorFooterList[]
-const animations = [
-  { value: "none", icon: faCheck, actionType: "cta" },
-  { value: "fadeIn", icon: faCheck, actionType: "cta" },
-  { value: "fadeUp", icon: faCheck, actionType: "cta" },
-  { value: "flip", icon: faCheck, actionType: "cta" },
-] as EditorFooterList[]
+// const animations = [
+//   { value: "none", icon: faCheck, actionType: "cta" },
+//   { value: "fadeIn", icon: faCheck, actionType: "cta" },
+//   { value: "fadeUp", icon: faCheck, actionType: "cta" },
+//   { value: "flip", icon: faCheck, actionType: "cta" },
+// ] as EditorFooterList[]
 
 const initSectionList: EditorFooterList[] = [
   ...basicSections,
@@ -102,7 +100,7 @@ const footerListMap: Record<SectionListTypes, EditorFooterList[]> = {
   title: [
     { value: "textAlign", icon: faAlignJustify, actionType: "submenu" },
     { value: "labelColor", icon: faBrush, actionType: "colorSelector" },
-    { value: "select", icon: faHandPointer, actionType: "submenu" },
+    { value: "selectEle", icon: faHandPointer, actionType: "submenu" },
   ],
   empty: [],
   checkList: [],
@@ -133,7 +131,7 @@ const footerSubmenuMap: Record<SectionListTypes, { [key: string]: EditorFooterLi
       { value: "center", icon: faAlignCenter, actionType: "cta" },
       { value: "right", icon: faAlignRight, actionType: "cta" },
     ],
-    select: [
+    selectEle: [
       { value: "title", icon: faCheck, actionType: "cta" },
       { value: "description", icon: faCheck, actionType: "cta" },
       { value: "label", icon: faCheck, actionType: "cta" },

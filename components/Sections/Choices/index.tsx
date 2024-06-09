@@ -1,15 +1,15 @@
 "use client"
 
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import hasString from "@/utils/helpers/hasString"
 import { faCircle } from "@fortawesome/free-regular-svg-icons"
@@ -19,9 +19,9 @@ import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Choices({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { setActive } = useEditorStore()
-  const { selected, setSelected } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setActive } = _useEditorStore()
+  const { selected, setSelected } = _useMainStore()
   const {
     data: { title, description },
     design,

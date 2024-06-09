@@ -2,7 +2,7 @@
 import { memo, useState } from "react"
 
 import { textEditorFormats, textEditorModules } from "@/config/edit"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 import ReactQuill from "react-quill"
@@ -11,7 +11,7 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 const Text = ({ section, listIndex }: { section: SectionType; listIndex?: number }) => {
-  const { setValue, setList, selectedSection, setSelectedSection, saveSectionHistory } = useEditorStore()
+  const { setValue, setList, selectedSection, setSelectedSection, saveSectionHistory } = _useEditorStore()
   const targetValue = typeof listIndex === "number" ? section.list[listIndex]?.value : section?.value
   const [initLength, setInitLength] = useState(targetValue?.length ?? 0)
   const [isEdited, setIsEdited] = useState(false)

@@ -1,9 +1,9 @@
 "use client"
 
+import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { memo, useMemo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import cs from "classNames/bind"
@@ -15,7 +15,7 @@ const EmbedForm = dynamic(() => import("./EmbedForm/index"), {
 })
 
 function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation("ko")
 
   const mapCode = useMemo(() => {
     if (hasString(section.value) && section.value.includes('<iframe src="https://www.google.com/maps/embed?pb=')) {

@@ -8,7 +8,7 @@ import { _url } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import style from "@/containers/page/style.module.scss"
 import { usePageValidator } from "@/hooks/usePageValidator"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { PageType } from "@/types/Page"
 import getConfirmationId from "@/utils/helpers/getConfirmationId"
 import { setDateFormat } from "@/utils/helpers/setDate"
@@ -44,7 +44,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
   const pathname = usePathname()
   const { push, replace } = useRouter()
   const { modal, setModal, selected, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
-    useMainStore()
+    _useMainStore()
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmit, setIsSubmit] = useState(false)
   const [isConfirming, setIsConfirming] = useState(false)

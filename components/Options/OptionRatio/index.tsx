@@ -2,7 +2,9 @@
 
 import { SwiperNavigation } from "@/components/SwiperNavigation"
 import { toastError } from "@/config/toast"
+import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { IconDefinition, faCheckSquare } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -10,7 +12,6 @@ import cs from "classNames/bind"
 import Image from "next/image"
 import { memo } from "react"
 import { isMobile } from "react-device-detect"
-import { useTranslation } from "react-i18next"
 import { SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -36,8 +37,17 @@ function OptionRatio({
     setSelectedSection,
     setOptions,
     saveSectionHistory,
-  } = useEditorStore()
-  const { t } = useTranslation()
+  } = useEditorStore([
+    "selectedSection",
+    "setDesign",
+    "addCollection",
+    "deleteCollection",
+    "setSelectedSection",
+    "setOptions",
+    "saveSectionHistory",
+  ])
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const target = isDesign ? section.design : section.options[targetKey]
   const collection = section.collection
 
@@ -89,7 +99,7 @@ function OptionRatio({
                 </div>
               )}
               {src && <Image width={20} height={20} src={src} alt={value} />}
-              <span className={cx("name")}>{value}</span>
+              <span className={cx("name")}>{t(`options.${value}`)}</span>
             </button>
           </SwiperSlide>
         ))}

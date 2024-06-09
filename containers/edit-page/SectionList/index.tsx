@@ -1,5 +1,5 @@
 import SectionLayout from "@/components/Sections"
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { EditStage, SectionType } from "@/types/Edit"
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd"
 import cs from "classNames/bind"
@@ -10,7 +10,7 @@ const cx = cs.bind(style)
 
 export default function SectionList({ sections, stage }: { sections: SectionType[]; stage: EditStage }) {
   const pathname = usePathname()
-  const { moveSection } = useEditorStore()
+  const { moveSection } = _useEditorStore()
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result

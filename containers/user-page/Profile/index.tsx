@@ -1,7 +1,9 @@
 "use client"
 
 import { userPlan } from "@/config"
-import { useMainStore } from "@/store/main"
+import { useTranslation } from "@/i18n/client"
+import { _useMainStore } from "@/store/main"
+import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
 import { faFire, faFlag, faGear } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -13,21 +15,23 @@ const cx = cs.bind(style)
 
 const options = {
   settings: ["changeProfile", "deleteAccount"],
-  report: ["feedback", "report"],
+  inform: ["feedback", "report"],
 }
 
 const menu = [
   { value: "settings", icon: faGear },
-  { value: "report", icon: faFlag },
+  { value: "inform", icon: faFlag },
   { value: "upgrade", icon: faFire },
 ]
 
-const Profile = ({ user }: { user: UserType }) => {
+const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
+  // todo:
+  const { t } = useTranslation(lang, ["user-page"])
   const { push } = useRouter()
-  const { setModal } = useMainStore()
-  const [selectedOption, setSelectedOption] = useState<null | "settings" | "report">(null)
+  const { setModal } = _useMainStore()
+  const [selectedOption, setSelectedOption] = useState<null | "settings" | "inform">(null)
 
-  const onClickMenu = (value: "settings" | "report" | "upgrade") => {
+  const onClickMenu = (value: "settings" | "inform" | "upgrade") => {
     if (selectedOption === value) {
       return setSelectedOption(null)
     }
@@ -54,19 +58,19 @@ const Profile = ({ user }: { user: UserType }) => {
           <img width={120} height={120} src={user.userImage} alt={`${user.userName}_profile`} />
         </picture>
         <h1>{user.userName}</h1>
-        <span className={cx("plan")}>{userPlan[user.plan]}</span>
+        <span className={cx("plan")}>{t(`plan.${userPlan[user.plan]}`)}</span>
         <div className={cx("info-layout")}>
           <ul className={cx("info-menu")}>
             {menu.map(({ value, icon }) => (
               <li key={`user-info-${value}`}>
                 <button
                   className={cx({ active: selectedOption === value })}
-                  onClick={() => onClickMenu(value as "settings" | "report" | "upgrade")}
+                  onClick={() => onClickMenu(value as "settings" | "inform" | "upgrade")}
                 >
                   <div className={cx("icon")}>
                     <FontAwesomeIcon icon={icon} />
                   </div>
-                  <span>{value}</span>
+                  <span>{t(value)}</span>
                 </button>
               </li>
             ))}
@@ -76,7 +80,7 @@ const Profile = ({ user }: { user: UserType }) => {
               {options[selectedOption].map((v) => (
                 <li key={`submenu-${v}`}>
                   <button onClick={() => onClickSubmenu(v)}>
-                    <span>{v}</span>
+                    <span>{t(v)}</span>
                   </button>
                 </li>
               ))}

@@ -1,20 +1,20 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
+import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Time({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { setModal, selected, setSelected } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setModal, selected, setSelected } = _useMainStore()
   const { value } = selected[section.index - 1] ?? {}
 
   const onClickOpenModal = () => {

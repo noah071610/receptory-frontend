@@ -1,46 +1,50 @@
 "use client"
 
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { AnimationTypes, DesignTypes, EditorFooterList } from "@/types/Edit"
+import { Langs } from "@/types/Main"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
-import { useTranslation } from "react-i18next"
+import { useCallback } from "react"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
 const cx = cs.bind(style)
 
-export default function SubList({ list }: { list: EditorFooterList[] }) {
-  const { lang } = useParams()
-  const { active, selectedSection, setStyle, saveSectionHistory, setOptions, setList, setDesign } = useEditorStore()
-  const { t } = useTranslation()
+export default function SubList({ lang, list }: { lang: Langs; list: EditorFooterList[] }) {
+  const { t } = useTranslation(lang, ["edit-page"])
+  const { active, selectedSection, setStyle, saveSectionHistory, setOptions, setList, setDesign } = _useEditorStore()
   const submenuType = active.submenu.type
-  const onClickList = (value: string, i: number) => {
-    if (!selectedSection) return
 
-    switch (submenuType) {
-      case "design":
-        setDesign({ payload: value as DesignTypes })
-        break
-      case "animation":
-        setStyle({ key: submenuType, payload: value as AnimationTypes })
-        break
-      case "textAlign":
-        setStyle({ key: submenuType, payload: value })
-        break
-      case "select":
-        setList({ index: i, key: "isActive", payload: !selectedSection.list[i].isActive })
-        break
-      case "imageSize":
-        setOptions({ key: "imageSize", payload: value })
-        saveSectionHistory()
-        break
+  const onClickList = useCallback(
+    (value: string, i: number) => {
+      if (!selectedSection) return
 
-      default:
-        break
-    }
-  }
+      switch (submenuType) {
+        case "design":
+          setDesign({ payload: value as DesignTypes })
+          break
+        case "animation":
+          setStyle({ key: submenuType, payload: value as AnimationTypes })
+          break
+        case "textAlign":
+          setStyle({ key: submenuType, payload: value })
+          break
+        case "selectEle":
+          setList({ index: i, key: "isActive", payload: !selectedSection.list[i].isActive })
+          break
+        case "imageSize":
+          setOptions({ key: "imageSize", payload: value })
+          saveSectionHistory()
+          break
+
+        default:
+          break
+      }
+    },
+    [saveSectionHistory, selectedSection, setDesign, setList, setOptions, setStyle, submenuType]
+  )
 
   return (
     <div className={cx("list")}>
@@ -56,7 +60,7 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
                   : list.value === "none"
               case "design":
                 return selectedSection?.design === list.value
-              case "select":
+              case "selectEle":
                 return selectedSection?.list[i].isActive
               case "imageSize":
                 return selectedSection?.options.imageSize === list.value
@@ -72,7 +76,7 @@ export default function SubList({ list }: { list: EditorFooterList[] }) {
                 <div className={cx("icon")}>
                   <FontAwesomeIcon icon={list.icon} />
                 </div>
-                <span>{t(list.value)}</span>
+                <span>{t(`footer.${list.value}`)}</span>
               </button>
             </SwiperSlide>
           )

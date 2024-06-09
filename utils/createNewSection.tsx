@@ -2,9 +2,12 @@ import { colors } from "@/config/colors"
 import { DesignTypes, SectionListType, SectionListTypes, SectionType } from "@/types/Edit"
 import getId from "./helpers/getId"
 
-const title = {
-  title: "타이틀 입력",
-  description: "설명 입력",
+import i18n from "i18next"
+
+export function t(value: string) {
+  return i18n.t(value, {
+    ns: ["edit-page"],
+  })
 }
 
 const sectionMap: { [key: string]: any } = {
@@ -21,7 +24,10 @@ const sectionMap: { [key: string]: any } = {
         isRangeSelect: false,
         selectedSpecificDates: [],
       },
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
     }
   },
   time: () => {
@@ -37,7 +43,10 @@ const sectionMap: { [key: string]: any } = {
         isRangeSelect: false,
         selectedSpecificTimes: [],
       },
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
     }
   },
   slider: () => {
@@ -68,25 +77,37 @@ const sectionMap: { [key: string]: any } = {
   },
   email: () => {
     return {
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
     }
   },
   choices: () => {
     return {
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
       design: "gender",
-      list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: "타이틀 입력" })),
+      list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: t("description") })),
     }
   },
   phone: () => {
     return {
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
       options: { phoneNumberCountry: "ko" },
     }
   },
   numberInput: () => {
     return {
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
       options: {
         min: 0,
         max: 9999999,
@@ -95,7 +116,10 @@ const sectionMap: { [key: string]: any } = {
   },
   textInput: () => {
     return {
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
       design: "text",
       options: {
         min: 0,
@@ -105,7 +129,10 @@ const sectionMap: { [key: string]: any } = {
   },
   nameInput: () => {
     return {
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
       design: "basic",
     }
   },
@@ -161,15 +188,19 @@ const sectionMap: { [key: string]: any } = {
         isMultiple: false,
         addSelectNone: false,
       },
-      data: title,
+      data: {
+        title: t("title"),
+        description: t("description"),
+      },
     }
   },
   thumbnail: (designInit?: string) => {
     return {
       design: designInit ?? "simple",
       data: {
-        ...title,
-        cta: "폼으로 이동",
+        title: t("title"),
+        description: t("description"),
+        cta: t("goToForm"),
       },
       style: {
         src: "",
@@ -194,11 +225,11 @@ export const createNewSectionList = (subType: string, index: number, obj?: any):
   const defaultObj = () => {
     switch (subType) {
       case "select":
-        return { data: { title: "타이틀 입력", description: "" } }
+        return { data: { title: t("title"), description: "" } }
       case "checkList":
-        return { value: "내용 입력", design: "check" as DesignTypes }
+        return { value: t("description"), design: "check" as DesignTypes }
       case "qna":
-        return { data: { title: "타이틀 입력" } }
+        return { data: { title: t("title") } }
       default:
         return {}
     }

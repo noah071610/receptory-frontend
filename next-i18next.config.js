@@ -1,9 +1,8 @@
+const path = require("path")
+
 module.exports = {
-  react: {
-    useSuspense: true,
-  },
   i18n: {
     defaultLocale: "ko",
-    locales: ["ko", "en", "jp", "th"],
+    locales: ["en", "ko", "ja", "th"],
   },
 }

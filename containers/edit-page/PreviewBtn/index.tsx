@@ -1,6 +1,6 @@
 "use client"
 
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { faPlay } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -8,7 +8,7 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function PreviewBtn() {
-  const { setActive } = useEditorStore()
+  const { setActive } = _useEditorStore()
   const onClickPreview = () => {
     setActive({
       key: "modal",

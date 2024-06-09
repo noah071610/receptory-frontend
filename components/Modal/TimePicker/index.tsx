@@ -1,20 +1,20 @@
 "use client"
 
 import NumberRange from "@/components/NumberRange"
+import { useTranslation } from "@/i18n/client"
 import { generateHourSlots, generateSecondSlots, isMoreLateTime } from "@/utils/time"
 import { useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 export const TimePicker = ({ section }: { section: SectionType }) => {
-  const { t } = useTranslation()
-  const { setModal, setSelected } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setModal, setSelected } = _useMainStore()
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const [startTime, setStartTime] = useState<null | string>(null)

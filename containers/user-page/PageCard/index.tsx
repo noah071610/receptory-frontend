@@ -4,7 +4,8 @@ import { inactivePage } from "@/actions/page"
 import { queryKey } from "@/config"
 import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
-import { useMainStore } from "@/store/main"
+import { useTranslation } from "@/i18n/client"
+import { _useMainStore } from "@/store/main"
 import { SaveListType } from "@/types/Page"
 import hasString from "@/utils/helpers/hasString"
 import { setDateFormat } from "@/utils/helpers/setDate"
@@ -23,7 +24,6 @@ import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -43,9 +43,9 @@ const PageCard = ({
   userId: string
 }) => {
   const queryClient = useQueryClient()
-  const { t } = useTranslation()
+  const { t } = useTranslation("ko")
   const { push, replace } = useRouter()
-  const { setModal } = useMainStore()
+  const { setModal } = _useMainStore()
   const [isActive, setIsActive] = useState(format === "active")
   const [isOpen, setIsOpen] = useState(false)
   const onClickList = async (e: any) => {

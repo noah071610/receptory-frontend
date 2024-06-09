@@ -6,7 +6,8 @@ import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
@@ -16,7 +17,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -29,7 +29,7 @@ export default function Rending({
 }) {
   const queryClient = useQueryClient()
   const { pageId } = useParams()
-  const { t } = useTranslation()
+  const { t } = useTranslation("ko")
   const {
     stage,
     homeSections,
@@ -42,7 +42,7 @@ export default function Rending({
     setActive,
     setRevert,
     setPageEmbedOption,
-  } = useEditorStore()
+  } = _useEditorStore()
   const { format, customLink, embed, isUseHomeThumbnail, isNotUseCustomLink } = pageOptions
   const isActive = format === "active"
   const thumbnailEmbedContent: { title: string; description: string; src: string } = {
@@ -213,7 +213,7 @@ export default function Rending({
       <section>
         <div className={cx("title")}>
           <h1>
-            <span>커스텀 링크 설정</span>
+            <span>{t("linkSetting")}</span>
           </h1>
           <p>공유되는 url에 문자열을 바꿀 수 있어요.</p>
         </div>

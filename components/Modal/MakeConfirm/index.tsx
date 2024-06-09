@@ -1,12 +1,12 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "@/i18n/client"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
 import { submit } from "@/actions/page"
 import { toastError } from "@/config/toast"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -24,8 +24,8 @@ export const MakePassword = ({
   const pathname = usePathname()
   const { replace } = useRouter()
   const { pageId } = useParams()
-  const { t } = useTranslation()
-  const { setModal, selected } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setModal, selected } = _useMainStore()
   const [password, setPassword] = useState({
     password: "",
     confirmPassword: "",

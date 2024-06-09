@@ -2,27 +2,28 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import CalenderMain from "@/components/Modal/DatePicker/CalenderMain"
 import NumberRange from "@/components/NumberRange"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useMainStore } from "@/store/main"
+import { _useMainStore, useMainStore } from "@/store/main"
 import { dateToString, stringToDate } from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Calender({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { setModal, setSelected, selected } = useMainStore()
-  const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = useEditorStore()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { setModal, setSelected, selected } = _useMainStore()
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = _useEditorStore()
   const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options
   const { value } = selected[section.index - 1] ?? {}
 
@@ -82,7 +83,7 @@ function Calender({ section }: { section: SectionType }) {
       setOptions({ payload: undefined, key: "startDate" })
       setOptions({ payload: undefined, key: "endDate" })
     }
-  }, [isAlways])
+  }, [isAlways, setOptions])
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -126,7 +127,7 @@ function Calender({ section }: { section: SectionType }) {
         <OptionTitleInputs section={section} />
         <div className={cx("options-bars")}>
           <h4>
-            <span>{t("세부 설정")}</span>
+            <span>{t("editDetail")}</span>
           </h4>
           <OptionBar section={section} value="specificDate" />
           {specificDate && (

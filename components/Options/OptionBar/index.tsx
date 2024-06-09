@@ -1,16 +1,18 @@
 "use client"
 
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function OptionBar({ value, section }: { value: string; section: SectionType }) {
-  const { selectedSection, setSelectedSection, setOptions, saveSectionHistory } = useEditorStore()
-  const { t } = useTranslation()
+  const { selectedSection, setSelectedSection, setOptions, saveSectionHistory } = _useEditorStore()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const isActive = section.options[value]
 
   const onClickSlider = () => {
@@ -29,7 +31,7 @@ function OptionBar({ value, section }: { value: string; section: SectionType }) 
           <div className={cx("circle")}></div>
         </div>
       </div>
-      <span>{t(value)}</span>
+      <span>{t(`options.${value}`)}</span>
     </button>
   )
 }

@@ -1,13 +1,13 @@
 "use client"
 
 import { useError } from "@/hooks/useError"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { SectionType, StyleProperties } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
 import { memo, useRef, useState } from "react"
-import { useTranslation } from "react-i18next"
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -50,11 +50,13 @@ function Input({
   if (type === "textarea") {
     maxLength = 100
   }
+
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+
   const { isError, errorMessage, setErrorClear, errorStyle, onError } = useError({ type: "noEmptyText" })
   const inputRef = useRef(null)
-  const { lang } = useParams()
-  const { t } = useTranslation(lang, ["new-post-page"])
-  const { setValue, setList, setData, saveSectionHistory, selectedSection, setSelectedSection } = useEditorStore()
+  const { setValue, setList, setData, saveSectionHistory, selectedSection, setSelectedSection } = _useEditorStore()
   const [initLength, setInitLength] = useState(value?.length ?? 0)
   const [isEdited, setIsEdited] = useState(false)
   const [snapshot, setSnapshot] = useState<string | null>(value ?? null)

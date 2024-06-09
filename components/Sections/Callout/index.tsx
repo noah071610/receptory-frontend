@@ -2,7 +2,7 @@
 
 import DeleteBtn from "@/components/DeleteBtn"
 
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { changeOpacity } from "@/utils/styles/changeOpacity"
@@ -23,7 +23,7 @@ const Text = dynamic(() => import("../Text"), {
 })
 
 function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { setActive } = useEditorStore()
+  const { setActive } = _useEditorStore()
   const { color } = section.style
   const design = section.design
 

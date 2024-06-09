@@ -1,9 +1,10 @@
 import { SectionType } from "@/types/Edit"
 import { Langs, ModalActiveType, SelectedType, SelectedValueType } from "@/types/Main"
 import { UserType } from "@/types/User"
-
 import { create } from "zustand"
+
 import { immer } from "zustand/middleware/immer"
+import { useShallow } from "zustand/react/shallow"
 
 export interface EditStates {
   user: UserType | null
@@ -15,7 +16,7 @@ export interface EditStates {
   selected: SelectedType[]
   curConfirmationId: string | null
   confirmDate: string | null
-  pageLang: Langs | null
+  pageLang: Langs
 }
 
 type Actions = {
@@ -35,7 +36,7 @@ type Actions = {
   }) => void
 }
 
-export const useMainStore = create<EditStates & Actions>()(
+export const _useMainStore = create<EditStates & Actions>()(
   immer((set) => ({
     user: null,
     modal: {
@@ -46,7 +47,7 @@ export const useMainStore = create<EditStates & Actions>()(
     selected: [],
     curConfirmationId: null,
     confirmDate: null,
-    pageLang: null,
+    pageLang: "ko",
 
     // SET
     setUser: ({ user }) =>
@@ -101,3 +102,18 @@ export const useMainStore = create<EditStates & Actions>()(
       }),
   }))
 )
+
+type CombinedStates = EditStates & Actions
+export const useMainStore = <T extends keyof CombinedStates>(keys: T[]) => {
+  return _useMainStore(
+    useShallow((state) =>
+      keys.reduce(
+        (acc, cur) => {
+          acc[cur] = state[cur]
+          return acc
+        },
+        {} as EditStates & Actions
+      )
+    )
+  )
+}

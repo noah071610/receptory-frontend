@@ -1,14 +1,16 @@
 import PageHome from "@/containers/page/Home"
+import { useTranslation } from "@/i18n"
 import { PageParams } from "@/types/Main"
 import { PageType } from "@/types/Page"
 import hasString from "@/utils/helpers/hasString"
 
 export async function generateMetadata({ params: { pageId }, searchParams: { s } }: Readonly<PageParams>) {
   const data = await getData(pageId)
+  const { t } = await useTranslation(data.lang, ["translation"])
 
   return {
     // todo: 번역 필요
-    title: data.title + (s === "form" ? " | form" : s === "confirm" ? " | confirm" : " | home"),
+    title: data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
     icons: {
       icon: `/images/favicon.png`, // /public path
     },
@@ -28,7 +30,8 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
     },
     twitter: {
       card: "summary_large_image",
-      title: data.title + (s === "form" ? " | form" : s === "confirm" ? " | confirm" : " | home"),
+      title:
+        data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
       description: data.description ?? "",
       images: [
         {

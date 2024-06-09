@@ -28,7 +28,7 @@ export function CalenderMain({
       days: calendars[0].days.map((v) => ({ ...v, count: v.inCurrentMonth ? calendarChartArr[parseInt(v.day)] : 0 })),
       year: calendars[0].year,
     }),
-    [calendars[0], calendarChartArr]
+    [calendarChartArr, calendars]
   )
 
   return <CalenderComponent calendar={calender} />

@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef } from "react"
 
-import { useEditorStore } from "@/store/editor"
+import { _useEditorStore } from "@/store/editor"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import cs from "classNames/bind"
 import style from "./style.module.scss"
@@ -24,7 +24,7 @@ export default function SectionLayout({
   index: number
 }) {
   const observerRef = useRef<HTMLDivElement | null>(null)
-  const { selectedSection } = useEditorStore()
+  const { selectedSection } = _useEditorStore()
 
   useEffect(() => {
     if (typeof window === "object" && selectedSection?.id === id && observerRef?.current) {

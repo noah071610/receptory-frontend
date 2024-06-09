@@ -2,6 +2,7 @@
 
 import { getConfirmations } from "@/actions/insight"
 import { formSectionList } from "@/config/editorFooter"
+import { useTranslation } from "@/i18n/client"
 import { useInsightStore } from "@/store/insight"
 import { SectionType } from "@/types/Edit"
 import { AnalyserConfirmation, SelectChartLabel } from "@/types/Insight"
@@ -18,7 +19,6 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { useTranslation } from "react-i18next"
 import Confirmation from "./ConfirmationList copy"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -36,7 +36,7 @@ const ConfirmationList = ({
 }) => {
   const { curFilter, setCurFilter, setCurFilterAll, isFilterUpdate, setIsFilterUpdate } = useInsightStore()
   const { pageId } = useParams()
-  const { t } = useTranslation()
+  const { t } = useTranslation("ko")
 
   const [searchInput, setSearchInput] = useState({
     temp: "",

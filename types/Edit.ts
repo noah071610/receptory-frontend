@@ -33,7 +33,7 @@ export type TargetSectionListTypes =
   | "design"
   | "animation"
   | "textAlign"
-  | "select"
+  | "selectEle"
   | "labelColor"
 
 export type AlignTypes = "left" | "center" | "right"

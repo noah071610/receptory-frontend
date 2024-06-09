@@ -1,11 +1,11 @@
 "use client"
 
+import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "../style.module.scss"
 
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import { faCircle } from "@fortawesome/free-regular-svg-icons"
 import { faClose, faMars, faVenus } from "@fortawesome/free-solid-svg-icons"
@@ -14,8 +14,8 @@ import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageChoices({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { selected, setSelected } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { selected, setSelected } = _useMainStore()
   const {
     data: { title, description },
     design,

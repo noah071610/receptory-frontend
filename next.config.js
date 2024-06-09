@@ -1,4 +1,5 @@
-const { prependListener } = require("process")
+/** @type {import('next').NextConfig} */
+const { i18n } = require("./next-i18next.config")
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: false, // todo:
@@ -11,6 +12,7 @@ module.exports = withBundleAnalyzer({
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  i18n,
   reactStrictMode: true,
   images: {
     remotePatterns: [

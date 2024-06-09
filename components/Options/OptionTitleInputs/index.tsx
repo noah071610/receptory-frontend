@@ -1,20 +1,22 @@
 "use client"
 
 import Input from "@/components/Input"
+import { useTranslation } from "@/i18n/client"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
 
   return (
     <div className={cx("edit-inputs")}>
       <h4>
-        <span>{t("타이틀 수정")}</span>
+        <span>{t("editTitle")}</span>
       </h4>
       <Input
         type="input"

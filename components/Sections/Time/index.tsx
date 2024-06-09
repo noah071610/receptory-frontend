@@ -4,23 +4,24 @@ import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
-import { useMainStore } from "@/store/main"
+import { _useMainStore, useMainStore } from "@/store/main"
 import { convertStrToTimeSet } from "@/utils/time"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Time({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { setModal, selected, setSelected } = useMainStore()
-  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { setModal, selected, setSelected } = _useMainStore()
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = _useEditorStore()
   const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 
   const [tempStartTime, setTempStartTime] = useState<string>("00:00")
@@ -125,7 +126,7 @@ function Time({ section }: { section: SectionType }) {
         <OptionTitleInputs section={section} />
         <div className={cx("time-bars")}>
           <h4>
-            <span>{t("세부 설정")}</span>
+            <span>{t("editDetail")}</span>
           </h4>
           <OptionBar section={section} value="specificTime" />
           {specificTime && (

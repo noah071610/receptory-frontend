@@ -128,33 +128,9 @@
   gap: 10px;
 }
 
-.rollback {
-  &:disabled {
-    svg {
-      color: var(--gray-soft);
-    }
-    @include action {
-      background-color: transparent;
-    }
-  }
-}
-
 .ghost {
   height: calc(50px);
   @include medium {
     height: 90px;
-  }
-}
-
-.saving {
-  background-color: var(--green);
-  svg {
-    color: var(--white);
-  }
-  @include action {
-    background-color: var(--green);
-    svg {
-      color: var(--white);
-    }
   }
 }

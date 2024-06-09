@@ -9,14 +9,14 @@ import { memo, useRef } from "react"
 
 import style from "./style.module.scss"
 
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Email({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   const { lang } = useParams()
-  const { setSelectedText, selected } = useMainStore()
+  const { setSelectedText, selected } = _useMainStore()
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const { value } = selected[section.index - 1] ?? {}

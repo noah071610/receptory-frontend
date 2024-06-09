@@ -2,29 +2,28 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
-import { useParams } from "next/navigation"
 import { memo, useEffect, useRef } from "react"
 
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
+import { useTranslation } from "@/i18n/client"
+import { useEditorStore } from "@/store/editor"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
-import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 function Text({ section }: { section: SectionType }) {
-  const { lang } = useParams()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const { t } = useTranslation()
-  const { setSelectedText, selected } = useMainStore()
-  const { setOptions, saveSectionHistory } = useEditorStore()
+  const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected"])
+  const { setOptions, saveSectionHistory } = useEditorStore(["setOptions", "saveSectionHistory"])
   const { max } = section.options
   const design = section.design
   const globalMax = design === "text" ? 50 : 500
@@ -44,11 +43,11 @@ function Text({ section }: { section: SectionType }) {
 
   useEffect(() => {
     setSelectedText({ section, text: "" })
-  }, [section.design, max])
+  }, [section.design, max, setSelectedText, section])
 
   useEffect(() => {
     setOptions({ payload: globalMax, key: "max" })
-  }, [section.design])
+  }, [globalMax, section.design, setOptions])
 
   const onBlurMinMax = () => {
     if (!max || max < 10) {

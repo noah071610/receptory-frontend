@@ -1,21 +1,21 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
+import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { memo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
-import { useMainStore } from "@/store/main"
+import { _useMainStore } from "@/store/main"
 import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageCalender({ section }: { section: SectionType }) {
-  const { t } = useTranslation()
-  const { setSelected, selected, setModal, pageLang } = useMainStore()
+  const { t } = useTranslation("ko")
+  const { setSelected, selected, setModal, pageLang } = _useMainStore()
   const { value } = selected[section.index - 1] ?? {}
 
   const onClickOpenModal = () => {

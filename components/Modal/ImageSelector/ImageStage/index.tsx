@@ -3,12 +3,13 @@
 import { uploadImages } from "@/actions/upload"
 import DeleteBtn from "@/components/DeleteBtn"
 import { SwiperNavigation } from "@/components/SwiperNavigation"
+import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload, SectionListType, SectionListTypes } from "@/types/Edit"
+import { Langs } from "@/types/Main"
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import cs from "classNames/bind"
 import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { SwiperSlide } from "swiper/react"
 import Dropzone from "./Dropzone"
@@ -19,15 +20,17 @@ export default function ImageStage({
   type,
   isMultiple,
   setIsLoading,
+  lang,
 }: {
   type?: string
   isMultiple: boolean
   setIsLoading: (b: boolean) => void
+  lang: Langs
 }) {
   const [selectedImages, setSelectedImages] = useState<Array<ImageUpload>>([])
   const [listForRending, setListForRending] = useState<SectionListType[]>([])
 
-  const { t } = useTranslation()
+  const { t } = useTranslation(lang, ["modal"])
   const {
     active,
     setActive,
@@ -42,7 +45,21 @@ export default function ImageStage({
     setOptions,
     currentUsedImages,
     saveSectionHistory,
-  } = useEditorStore()
+  } = useEditorStore([
+    "active",
+    "setActive",
+    "addSection",
+    "setStyle",
+    "setPageEmbedOption",
+    "homeSections",
+    "setSrc",
+    "setList",
+    "addList",
+    "addUsed",
+    "setOptions",
+    "currentUsedImages",
+    "saveSectionHistory",
+  ])
   const [currentUsedImagesArr, setCurrentUsedImagesArr] = useState(
     currentUsedImages?.map((v) => ({ src: v, isAdd: false })) ?? []
   )
@@ -180,7 +197,18 @@ export default function ImageStage({
       setIsLoading(false)
       setActive({ payload: { type: null, payload: null }, key: "modal" })
     }
-  }, [listForRending.length, selectedImages.length, type, homeSections.length])
+  }, [
+    listForRending.length,
+    selectedImages.length,
+    type,
+    homeSections.length,
+    listForRending,
+    active.modal.payload,
+    setIsLoading,
+    setActive,
+    addList,
+    addSection,
+  ])
 
   return (
     <>
@@ -205,7 +233,7 @@ export default function ImageStage({
           })}
         </SwiperNavigation>
       ) : (
-        <Dropzone isMultiple={isMultiple} setSelectedImages={setSelectedImages} />
+        <Dropzone lang={lang} isMultiple={isMultiple} setSelectedImages={setSelectedImages} />
       )}
       {currentUsedImagesArr.length > 0 && (
         <>
@@ -236,7 +264,7 @@ export default function ImageStage({
       )}
       {selectedImages.length > 0 && (
         <button onClick={onClickUpload} className={cx("upload")}>
-          <span>{t("total {{number}} pic upload", { number: selectedImages.length })}</span>
+          <span>{t("totalUpload", { number: selectedImages.length })}</span>
         </button>
       )}
     </>
