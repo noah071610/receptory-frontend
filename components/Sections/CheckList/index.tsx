@@ -4,9 +4,7 @@ import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { _useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import {
@@ -19,6 +17,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -33,8 +32,7 @@ function List({
   index: number
   isDisplayMode?: boolean
 }) {
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { t } = useTranslation(["edit-page"])
   const { setList, deleteList } = _useEditorStore()
   const [design, animation] = [list.design, section.style.animation]
   const getDesign = (str: string) => {
@@ -64,7 +62,7 @@ function List({
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError(t("error.atLeastOneList", { ns: "messages" }))
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }

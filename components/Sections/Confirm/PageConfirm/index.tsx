@@ -5,11 +5,11 @@ import { memo, useMemo } from "react"
 
 import style from "../style.module.scss"
 
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 function PageConfirm({ section }: { section: SectionType }) {
@@ -19,7 +19,7 @@ function PageConfirm({ section }: { section: SectionType }) {
     "curConfirmationId",
     "confirmDate",
   ])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { title, description } = section.data
 
   const confirmationArr = useMemo(() => {
@@ -80,8 +80,8 @@ function PageConfirm({ section }: { section: SectionType }) {
             </ul>
           ) : (
             <div className={cx("no-list")}>
-              <img src="/images/icons/hello.png" alt="hello" />
-              <span>유저가 제출하면 예시처럼 표시돼요</span>
+              <img src="/images/icons/disappointed.png" alt="disappointed" />
+              <span>{t("confirmFailToLoadData")}</span>
             </div>
           )}
         </div>

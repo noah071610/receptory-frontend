@@ -1,10 +1,10 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
 import { _useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import cs from "classNames/bind"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import EmojiStage from "./EmojiStage"
 import ImageStage from "./ImageStage"
@@ -20,7 +20,7 @@ export default function ImageSelector({
   IsUseEmoji?: boolean
   lang: Langs
 }) {
-  const { t } = useTranslation(lang, ["modal"])
+  const { t } = useTranslation(["modal"])
   const [curStage, setCurStage] = useState<"emoji" | "image">(IsUseEmoji ? "emoji" : "image")
 
   const { active } = _useEditorStore()

@@ -2,14 +2,13 @@
 
 import Input from "@/components/Input"
 import OptionRatio from "@/components/Options/OptionRatio"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import cs from "classNames/bind"
 import Image from "next/image"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -36,8 +35,7 @@ function Contact({
   isDisplayMode?: boolean
   isEditor?: boolean
 }) {
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { setCollection } = useEditorStore(["setCollection"])
 
   const list = section.collection

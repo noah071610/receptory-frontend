@@ -4,11 +4,11 @@ import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useTranslation } from "@/i18n/client"
 import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
@@ -24,7 +24,7 @@ function Time({ section }: { section: SectionType }) {
     "selected",
     "setSelected",
   ])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { setOptions, addCollection, deleteCollection, saveSectionHistory } = _useEditorStore()
   const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 
@@ -104,7 +104,7 @@ function Time({ section }: { section: SectionType }) {
         saveSectionHistory() // 옵션이 업데이트되면 섹션 스냅샷을 찍기위해 비동기
       }, 100)
     }
-  }, [isAlways])
+  }, [isAlways, saveSectionHistory, setOptions])
 
   const reset = () => {
     setSelected({

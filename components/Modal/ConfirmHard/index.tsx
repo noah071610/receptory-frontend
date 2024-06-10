@@ -7,12 +7,12 @@ import { deleteSave } from "@/actions/save"
 import { deleteUser } from "@/actions/user"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const optionArr = [
@@ -40,7 +40,7 @@ export const ConfirmHard = ({
   // todo:
   const { push } = useRouter()
   const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
-  const { t } = useTranslation(pageLang, ["modal", "messages"])
+  const { t } = useTranslation(["modal"])
   const queryClient = useQueryClient()
   const [selectedOption, setSelectedOption] = useState("")
   const [confirmText, setConfirmText] = useState("")
@@ -54,16 +54,16 @@ export const ConfirmHard = ({
         if (!setSelectedOption) {
           setIsLoading(false)
           // mustPickFeedback
-          return toastError(t("error.mustPickFeedback", { ns: "messages" }))
+          return toastError("mustPickFeedback")
         }
         if (confirmInitText !== confirmText) {
           setIsLoading(false)
           // invalidDeleteConfirmText
-          return toastError(t("error.invalidDeleteConfirmText", { ns: "messages" }))
+          return toastError("invalidDeleteConfirmText")
         }
         const isOk = await deleteUser(selectedOption)
         if (isOk) {
-          alert("이용해주셔서 감사합니다.")
+          alert(t("thankForUsing"))
           setModal({
             section: null,
             type: null,
@@ -74,7 +74,7 @@ export const ConfirmHard = ({
 
       case "deletePage":
         if (!value) {
-          toastError(t("error.unknown", { ns: "messages" }))
+          toastError("unknown")
           setIsLoading(false)
           return setModal({
             section: null,
@@ -87,7 +87,7 @@ export const ConfirmHard = ({
             queryClient.invalidateQueries({ queryKey: queryKey.save.list })
             queryClient.invalidateQueries({ queryKey: queryKey.page(value) })
             setIsLoading(false)
-            toastSuccess("페이지를 삭제했어요.")
+            toastSuccess("deploy")
             setModal({
               section: null,
               type: null,

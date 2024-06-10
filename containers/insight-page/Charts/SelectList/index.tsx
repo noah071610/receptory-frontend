@@ -7,6 +7,7 @@ import cs from "classNames/bind"
 import { produce } from "immer"
 import { useCallback, useMemo, useState } from "react"
 import { Pie } from "react-chartjs-2"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
@@ -23,7 +24,7 @@ const Chart = ({ labels, title }: { labels: SelectChartLabel[]; title: string })
       labels: target.map(({ title }) => title),
       datasets: [
         {
-          label: "# of Votes",
+          label: "# number",
           data: target.map(({ count }) => count),
           backgroundColor: backgroundColors,
           borderColor: borderColors,
@@ -101,11 +102,13 @@ const SelectListChart = ({
   sectionName: string
   selectChartArr: SelectChartType[]
 }) => {
+  const { t } = useTranslation(["insight-page"])
+
   const isEmpty = selectChartArr.flat().reduce((acc, cur) => cur.labels.length + acc, 0) === 0
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
-        <span>{sectionName}</span>
+        <span>{t(sectionName)}</span>
       </h2>
       {!isEmpty ? (
         <>
@@ -116,7 +119,7 @@ const SelectListChart = ({
       ) : (
         <div className={cx("no-list")}>
           <img src="/images/icons/crying.png" alt="crying" />
-          <span>아직 아무런 제출도 없어요</span>
+          <span>{t("emptySubmitted")}</span>
         </div>
       )}
     </div>

@@ -17,5 +17,20 @@
   "image": "이미지",
   "imageDragAndDrop": "이미지 업로드",
   "currentUsedImages": "최근 사용한 이미지",
-  "totalUpload": "총 {{number}}장의 사진 업로드"
+  "totalUpload": "총 {{number}}장의 사진 업로드",
+  "thankForUsing": "이용해주셔서 감사합니다.",
+
+  "checkReservation": "예약확인",
+  "reservationDescription": "예약을 확인하기 위한 접수번호와 비밀번호를 작성해주세요",
+  "confirmationNumber": "접수번호",
+  "password": "비밀번호",
+  "enterPasswordPlaceholder": "비밀번호 입력",
+  "checkReservationButton": "예약 확인",
+
+  "enterPassword": "패스워드를 작성해주세요",
+  "confirmPasswordDescription": "제출한 정보를 확인하기 위한 비밀번호가 필요해요.<br/>확인번호는 나중에 예약 확인에 꼭 필요하니 따로 기억해주세요.",
+  "confirmationNumberDescription": "예약확인을 위해 필요합니다.",
+  "setPassword": "비밀번호 설정",
+  "confirmPasswordPlaceholder": "비밀번호 확인",
+  "submitSetting": "설정 완료"
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import NumberRange from "@/components/NumberRange"
-import { useTranslation } from "@/i18n/client"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
@@ -13,7 +13,7 @@ const cx = cs.bind(style)
 
 export const DateSelector = ({ section }: { section: SectionType }) => {
   const { setModal, setSelected, pageLang } = useMainStore(["pageLang", "setSelected", "setModal"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const specificDates = section.collection
   const { addAnyDate } = section.options
   const onClickDate = ({

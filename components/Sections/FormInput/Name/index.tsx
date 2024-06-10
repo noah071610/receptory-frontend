@@ -9,15 +9,15 @@ import { memo, useRef } from "react"
 import style from "./style.module.scss"
 
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 function NameInput({ section }: { section: SectionType }) {
   const { pageLang, setSelectedText, selected } = useMainStore(["pageLang", "setSelectedText", "selected"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { lang } = useParams()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { value } = selected[section.index - 1] ?? {}

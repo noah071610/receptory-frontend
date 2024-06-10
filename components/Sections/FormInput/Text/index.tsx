@@ -10,16 +10,16 @@ import { memo, useEffect, useRef } from "react"
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 function Text({ section }: { section: SectionType }) {
   const { setSelectedText, selected, pageLang } = useMainStore(["setSelectedText", "selected", "pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const { setOptions, saveSectionHistory } = useEditorStore(["setOptions", "saveSectionHistory"])

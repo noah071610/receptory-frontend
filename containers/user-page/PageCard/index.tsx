@@ -4,7 +4,6 @@ import { inactivePage } from "@/actions/page"
 import { queryKey } from "@/config"
 import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import { SaveListType } from "@/types/Page"
 import hasString from "@/utils/helpers/hasString"
@@ -24,6 +23,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -44,7 +44,7 @@ const PageCard = ({
 }) => {
   const queryClient = useQueryClient()
   const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { push, replace } = useRouter()
   const [isActive, setIsActive] = useState(format === "active")
   const [isOpen, setIsOpen] = useState(false)
@@ -64,7 +64,7 @@ const PageCard = ({
           {
             const isOk = await inactivePage({ pageId })
             if (isOk) {
-              toastSuccess("페이지를 비활성화 했어요")
+              toastSuccess("inactive")
               setIsActive(false)
               queryClient.invalidateQueries({ queryKey: queryKey.page(pageId) })
             }

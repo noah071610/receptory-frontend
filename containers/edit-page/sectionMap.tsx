@@ -155,7 +155,7 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   empty: () => <Empty />,
   checkList: (section, isDisplayMode = false) => <CheckList section={section} isDisplayMode={isDisplayMode} />,
   linkBtn: (section, isDisplayMode = false) => <LinkBtn section={section} isDisplayMode={isDisplayMode} />,
-  confirm: (section, isDisplayMode = false) => <Confirm section={section} />,
+  confirm: (section, isDisplayMode = false) => <Confirm section={section} isDisplayMode={isDisplayMode} />,
   nameInput: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageNameInput section={section} /> : <NameInput section={section} />,
 }

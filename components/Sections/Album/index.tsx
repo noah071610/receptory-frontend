@@ -6,13 +6,12 @@ import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import cs from "classNames/bind"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -60,13 +59,12 @@ const ImageComponent = ({
 }
 
 function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { t } = useTranslation(["edit-page"])
   const { deleteList } = useEditorStore(["deleteList"])
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError(t("error.atLeastOneList", { ns: "messages" }))
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
@@ -25,7 +25,7 @@ export const MakePassword = ({
   const { replace } = useRouter()
   const { pageId } = useParams()
   const { setModal, selected, pageLang } = useMainStore(["pageLang", "setModal", "selected"])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { t } = useTranslation(["modal"])
   const [password, setPassword] = useState({
     password: "",
     confirmPassword: "",
@@ -37,16 +37,16 @@ export const MakePassword = ({
   const onClickConfirm = async () => {
     if (typeof pageId !== "string") {
       // 잘못된 접근입니다.
-      return toastError(t("error.InvalidAccess", { ns: "messages" }))
+      return toastError("InvalidAccess")
     }
     if (password.password !== password.confirmPassword) {
       // 비밀번호가 일치하지 않습니다.
-      return toastError(t("error.notSamePassword", { ns: "messages" }))
+      return toastError("notSamePassword")
     }
 
     if (password.password.length < 5) {
       // 패스워드는 최소 5글자 이상을 입력해주세요.
-      return toastError(t("error.safeConfirmPassword", { ns: "messages" }))
+      return toastError("safeConfirmPassword")
     }
     setIsConfirming(true)
 
@@ -68,28 +68,25 @@ export const MakePassword = ({
 
   return (
     <ModalLayout modalStyle={style["confirm-hard-content"]}>
-      <h1>패스워드를 작성해주세요</h1>
-      <p className={cx("desc")}>
-        제출한 정보를 확인하기 위한 비밀번호가 필요해요 <br /> 확인번호는 나중에 예약 확인에 꼭 필요하니 따로
-        기억해주세요.
-      </p>
+      <h1>{t("enterPassword")}</h1>
+      <p dangerouslySetInnerHTML={{ __html: t("confirmPasswordDescription") }} className={cx("desc")}></p>
       <label className={cx("title")}>
-        <h2>접수번호</h2>
-        <p>예약확인을 위해 필요합니다.</p>
+        <h2>{t("confirmationNumber")}</h2>
+        <p>{t("confirmationNumberDescription")}</p>
       </label>
       <input className={cx("confirmId")} disabled={true} value={confirmId} type="text"></input>
       <label className={cx("title")}>
-        <h2>비밀번호 설정</h2>
+        <h2>{t("setPassword")}</h2>
       </label>
       <input
-        placeholder={"비밀번호 입력"}
+        placeholder={t("enterPasswordPlaceholder")}
         value={password.password}
         onChange={(e) => onChangeInput(e, "password")}
         type="password"
       ></input>
       <input
         className={cx("confirmPassword")}
-        placeholder={"비밀번호 확인"}
+        placeholder={t("confirmPasswordPlaceholder")}
         value={password.confirmPassword}
         onChange={(e) => onChangeInput(e, "confirmPassword")}
         type="password"
@@ -102,7 +99,7 @@ export const MakePassword = ({
           })}
           onClick={onClickConfirm}
         >
-          {t("설정 완료")}
+          {t("submitSetting")}
         </button>
       </div>
     </ModalLayout>

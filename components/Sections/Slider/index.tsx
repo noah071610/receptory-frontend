@@ -7,15 +7,14 @@ import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { SectionListType, SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
 import { memo, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import "swiper/css/thumbs"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -107,8 +106,8 @@ const Card = ({
 
 const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) => {
   const { deleteList } = useEditorStore(["deleteList"])
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+
+  const { t } = useTranslation(["edit-page"])
 
   const textColor = useMemo(
     () =>
@@ -121,7 +120,7 @@ const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDispl
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
       // atLeastOneList
-      return toastError(t("error.atLeastOneList", { ns: "messages" }))
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }
@@ -154,8 +153,7 @@ const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDispl
 }
 
 function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   return (
     <div className={cx("layout", { isDisplayMode: isDisplayMode })}>
       {section.list.length > 0 && (

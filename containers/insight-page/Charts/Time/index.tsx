@@ -4,12 +4,15 @@ import NumberRange from "@/components/NumberRange"
 import { useInsightStore } from "@/store/insight"
 import { TimeAnalyserType } from "@/types/Insight"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
+  const { t } = useTranslation(["insight-page"])
+
   const isEmpty = [...data.AM, ...data.PM].reduce((acc, cur) => acc + cur, 0) === 0
-  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore()
+  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore(["setCurFilterAll", "setIsFilterUpdate"])
   const onClickTime = (start: string, end: string) => {
     setCurFilterAll({
       type: "time",
@@ -21,7 +24,7 @@ const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
-        <span>시간대별</span>
+        <span>{t("timeTitle")}</span>
       </h2>
       {!isEmpty ? (
         <>
@@ -73,7 +76,7 @@ const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
       ) : (
         <div className={cx("no-list")}>
           <img src="/images/icons/crying.png" alt="crying" />
-          <span>아직 아무런 제출도 없어요</span>
+          <span>{t("emptySubmitted")}</span>
         </div>
       )}
     </div>

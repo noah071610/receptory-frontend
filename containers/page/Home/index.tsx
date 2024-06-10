@@ -16,6 +16,7 @@ import { getAnimation } from "@/utils/styles/getAnimation"
 import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
+import i18next from "i18next"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -94,6 +95,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
     // 페이지 언어 설정
     if (initialData) {
       setPageLang(initialData.lang)
+      i18next.changeLanguage(initialData.lang)
     }
   }, [initialData, setPageLang])
 

@@ -1,13 +1,12 @@
 "use client"
 
 import { useError } from "@/hooks/useError"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { SectionType, StyleProperties } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 import { memo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -51,8 +50,7 @@ function Input({
     maxLength = 100
   }
 
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { t } = useTranslation(["edit-page"])
 
   const { isError, errorMessage, setErrorClear, errorStyle, onError } = useError({ type: "noEmptyText" })
   const inputRef = useRef(null)
@@ -178,11 +176,7 @@ function Input({
   return (
     <div className={cx("input-wrapper")}>
       <div className={cx("tooltip", { isError, isBottomError })}>
-        <div className={cx("error")}>
-          {t(`error.${errorMessage}`, {
-            ns: "messages",
-          })}
-        </div>
+        <div className={cx("error")}>{t(`error.${errorMessage}`)}</div>
       </div>
       {displayMode ? (
         <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>

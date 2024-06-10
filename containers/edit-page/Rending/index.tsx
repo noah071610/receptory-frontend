@@ -6,9 +6,7 @@ import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
@@ -18,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -30,8 +29,8 @@ export default function Rending({
 }) {
   const queryClient = useQueryClient()
   const { pageId } = useParams()
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+
+  const { t } = useTranslation(["edit-page"])
   const {
     stage,
     homeSections,
@@ -71,27 +70,27 @@ export default function Rending({
     if (typeof pageId !== "string") return setIsLoading(false)
     if (formSections.length <= 1) {
       // 폼에 적어도 한개 이상의 섹션이 필요합니다
-      toastError(t("error.mustHaveFormSection", { ns: "messages" }))
+      toastError("mustHaveFormSection")
       return setIsLoading(false)
     }
     if (!isNotUseCustomLink) {
       if (customLink.trim().length !== customLink.length) {
         setIsLoading(false)
         // 링크에 공백은 포함 될 수 없습니다.
-        return toastError(t("error.noEmptyCustomLink", { ns: "messages" }))
+        return toastError("noEmptyCustomLink")
       }
       if (customLink.length > 0) {
         const temp = customLink.match(/[^A-Za-z0-9\-\_]/g)
         if (temp) {
           setIsLoading(false)
           // 링크에 영문자가 아닌 문자 또는 특수문자, 공백은 포함 될 수 없습니다.
-          return toastError(t("error.invalidCustomLink", { ns: "messages" }))
+          return toastError("invalidCustomLink")
         }
         const msg = await checkCustomLink(customLink)
         if (msg === "no") {
           setIsLoading(false)
           // 다른 사람이 사용 중인 커스텀 링크에요
-          toastError(t("error.alreadyUsedCustomLink", { ns: "messages" }))
+          toastError("alreadyUsedCustomLink")
           return
         }
       }
@@ -125,9 +124,7 @@ export default function Rending({
 
     if (status === "ok") {
       setTimeout(() => {
-        toastSuccess(
-          value === "save" ? "저장 후 적용했어요!" : value === "active" ? "포스팅 성공!" : "페이지를 비활성화 했어요."
-        )
+        toastSuccess(value === "save" ? "deploy" : value === "active" ? "deploy" : "inactive")
         setPageOptions({ type: "format", payload: payload.content.pageOptions.format })
         setRevert("clear")
         setIsLoading(false)

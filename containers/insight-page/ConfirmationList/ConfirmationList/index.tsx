@@ -1,5 +1,6 @@
 "use client"
 
+import { useInsightStore } from "@/store/insight"
 import { AnalyserConfirmation } from "@/types/Insight"
 import { SelectedType } from "@/types/Main"
 import hasString from "@/utils/helpers/hasString"
@@ -7,11 +8,12 @@ import { setDateFormat, stringToDate } from "@/utils/helpers/setDate"
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const Confirmation = ({ searchInput, v }: { searchInput: string; v: AnalyserConfirmation }) => {
+const Confirmation = ({ confirmation }: { confirmation: AnalyserConfirmation }) => {
+  const { searchInput } = useInsightStore(["searchInput"])
   const [isOpen, setIsOpen] = useState(false)
   const [content, setContent] = useState<null | any>(null)
   const onClickOpen = () => {
@@ -20,13 +22,12 @@ const Confirmation = ({ searchInput, v }: { searchInput: string; v: AnalyserConf
 
   useEffect(() => {
     if (isOpen && !content) {
-      setContent(JSON.parse(v.content))
+      setContent(JSON.parse(confirmation.content))
     }
-  }, [isOpen])
+  }, [content, isOpen, confirmation.content])
 
   const confirmationArr = useMemo(() => {
-    const selected: SelectedType[] = JSON.parse(v.content)
-    console.log(selected)
+    const selected: SelectedType[] = JSON.parse(confirmation.content)
 
     if (!selected?.length) return []
     return selected.map(({ value, type, title }, i) => {
@@ -40,21 +41,24 @@ const Confirmation = ({ searchInput, v }: { searchInput: string; v: AnalyserConf
         type,
       }
     })
-  }, [v.content])
+  }, [confirmation.content])
 
-  const highlightText = (text: string) => {
-    if (!hasString(searchInput)) return text
-    const parts = text.split(new RegExp(`(${searchInput})`, "gi"))
-    return parts.map((part: string, index: number) =>
-      part === searchInput ? (
-        <span className={cx("point")} key={index}>
-          {part}
-        </span>
-      ) : (
-        part
+  const highlightText = useCallback(
+    (text: string) => {
+      if (!hasString(searchInput)) return text
+      const parts = text.split(new RegExp(`(${searchInput})`, "gi"))
+      return parts.map((part: string, index: number) =>
+        part === searchInput ? (
+          <span className={cx("point")} key={index}>
+            {part}
+          </span>
+        ) : (
+          part
+        )
       )
-    )
-  }
+    },
+    [searchInput]
+  )
 
   return (
     <div className={cx("list")}>
@@ -63,10 +67,10 @@ const Confirmation = ({ searchInput, v }: { searchInput: string; v: AnalyserConf
           <FontAwesomeIcon icon={faChevronDown} />
         </button>
         <p>
-          <span>{highlightText(v.confirmId)}</span>
+          <span>{highlightText(confirmation.confirmId)}</span>
           {/* <div style={{ backgroundColor: v.isConfirmed ? colors.green : colors.red }} className={cx("circle")}></div> */}
         </p>
-        <span>{setDateFormat({ date: v.createdAt, lang: "ko", isTime: true })}</span>
+        <span>{setDateFormat({ date: confirmation.createdAt, lang: "ko", isTime: true })}</span>
       </div>
       {isOpen && (
         <div className={cx("main")}>

@@ -5,15 +5,14 @@ import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { colors } from "@/config/colors"
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { changeOpacity } from "@/utils/styles/changeOpacity"
 import { faChevronDown, faQ } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import Text from "../Text"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -78,11 +77,11 @@ const List = ({
 
 export default function QnA({ section }: { section: SectionType }) {
   const { deleteList } = useEditorStore(["deleteList"])
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+
+  const { t } = useTranslation(["edit-page"])
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError(t("error.atLeastOneList", { ns: "messages" }))
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }

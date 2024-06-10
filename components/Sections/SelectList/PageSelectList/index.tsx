@@ -1,10 +1,10 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
-import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { faList } from "@fortawesome/free-solid-svg-icons"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
@@ -18,7 +18,7 @@ function PageSelectList({ section }: { section: SectionType }) {
     "selected",
     "setSelected",
   ])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { value } = selected[section.index - 1] ?? {}
 
   const toggleSelect = () => {

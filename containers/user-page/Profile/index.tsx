@@ -1,7 +1,6 @@
 "use client"
 
 import { userPlan } from "@/config"
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
@@ -10,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -26,7 +26,7 @@ const menu = [
 
 const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
   // todo:
-  const { t } = useTranslation(lang, ["user-page"])
+  const { t } = useTranslation(["user-page"])
   const { push } = useRouter()
   const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
   const [selectedOption, setSelectedOption] = useState<null | "settings" | "inform">(null)

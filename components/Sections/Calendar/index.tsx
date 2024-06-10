@@ -2,11 +2,11 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
-import { useTranslation } from "@/i18n/client"
 import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import CalenderMain from "@/components/Modal/DatePicker/CalenderMain"
@@ -26,7 +26,7 @@ function Calender({ section }: { section: SectionType }) {
     "setSelected",
     "selected",
   ])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
 
   const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = _useEditorStore()
   const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options

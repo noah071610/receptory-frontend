@@ -41,6 +41,7 @@ export const queryKey = {
   user: ["user"],
   page: (pageId: string) => ["page", pageId],
   insight: (pageId: string) => ["insight", pageId],
+  insightSearch: (pageId: string) => ["insightSearch", pageId],
   save: {
     list: ["save", "list"],
   },

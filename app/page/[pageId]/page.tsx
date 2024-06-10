@@ -6,7 +6,7 @@ import hasString from "@/utils/helpers/hasString"
 
 export async function generateMetadata({ params: { pageId }, searchParams: { s } }: Readonly<PageParams>) {
   const data = await getData(pageId)
-  const { t } = await useTranslation(data.lang, ["translation"])
+  const { t } = await useTranslation(data.lang, ["meta"])
 
   return {
     // todo: 번역 필요

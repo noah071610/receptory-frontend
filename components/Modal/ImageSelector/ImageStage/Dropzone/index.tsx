@@ -1,7 +1,6 @@
 "use client"
 
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { ImageUpload } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { faImages } from "@fortawesome/free-solid-svg-icons"
@@ -9,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { Dispatch, SetStateAction, memo, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -23,7 +23,7 @@ function Dropzone({
   isMultiple: boolean
   lang: Langs
 }) {
-  const { t } = useTranslation(lang, ["modal", "messages"])
+  const { t } = useTranslation(["modal"])
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -50,7 +50,7 @@ function Dropzone({
     onDropRejected: (files) => {
       if (files.length > 10) {
         // 10개 이하의 이미지를 업로드 해주세요
-        return toastError(t("error.underThen10Images", { ns: "messages" }))
+        return toastError("underThen10Images")
       }
       for (let i = 0; i < files.length; i++) {
         return toastError(files[i].errors[0].code)

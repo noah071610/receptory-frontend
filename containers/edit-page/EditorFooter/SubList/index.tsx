@@ -1,19 +1,19 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
 import { _useEditorStore } from "@/store/editor"
 import { AnimationTypes, DesignTypes, EditorFooterList } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
 const cx = cs.bind(style)
 
 export default function SubList({ lang, list }: { lang: Langs; list: EditorFooterList[] }) {
-  const { t } = useTranslation(lang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { active, selectedSection, setStyle, saveSectionHistory, setOptions, setList, setDesign } = _useEditorStore()
   const submenuType = active.submenu.type
 

@@ -25,6 +25,7 @@ import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
 import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import dynamic from "next/dynamic"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const DatePicker = dynamic(() => import("@/components/Modal/DatePicker"), {
@@ -45,6 +46,7 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
 })
 
 const EditPage = ({ lang }: { lang: Langs }) => {
+  const {} = useTranslation(lang, ["edit-page", "messages"])
   const { pageId, user } = usePageValidator({ isAuth: true, isEdit: true })
 
   const pathname = usePathname()

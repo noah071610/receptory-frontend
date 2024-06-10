@@ -36,17 +36,21 @@
     "noEmptyCustomLink": "링크에 공백은 포함 될 수 없습니다.",
     "invalidCustomLink": "링크에 영문자가 아닌 문자 또는 특수문자, 공백은 포함 될 수 없습니다.",
     "alreadyUsedCustomLink": "다른 사람이 사용 중인 커스텀 링크에요",
-    "maximumPage": "페이지는 최대 {{number}}개까지 만들 수 있어요"
+    "maximumPage": "페이지는 최대 2개까지 만들 수 있어요"
   },
   "success": {
     "voted": "이미 투표 하셨어요 😎",
     "login": "어서오세요! 👋🏻",
     "register": "이제 즐겨볼까요? 👋🏻",
     "loginNewPost": "로그인만 하면 끝나요! 다 왔어요! 🚀",
-    "posting": "포스팅 완료! 🚀",
     "commenting": "댓글을 작성했어요! 🚀",
     "copyLink": "링크를 복사했어요! 🎉",
-    "delete": "콘텐츠를 삭제했어요.",
-    "editing": "콘텐츠를 수정했어요! 😎"
+    "editing": "콘텐츠를 수정했어요! 😎",
+
+    "deploy": "배포 완료! 🚀",
+    "saved": "콘텐츠를 저장했어요 🚀",
+    "changeLang": "언어를 변경했어요 😎",
+    "delete": "페이지를 삭제했어요.",
+    "inactive": "페이지를 비활성화 했어요."
   }
 }

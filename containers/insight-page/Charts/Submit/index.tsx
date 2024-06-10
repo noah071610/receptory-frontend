@@ -1,13 +1,14 @@
 "use client"
 
 import { useInsightStore } from "@/store/insight"
+import { useMainStore } from "@/store/main"
 import { DateAnalyserType } from "@/types/Insight"
-import { Langs } from "@/types/Main"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js"
 import cs from "classNames/bind"
 import { useCallback, useMemo, useRef, useState } from "react"
 import { Bar, getElementAtEvent } from "react-chartjs-2"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "./style.module.scss"
@@ -15,23 +16,22 @@ const cx = cs.bind(style)
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip)
 
-const SubmitChart = ({
-  data,
-  lang,
-  initialTarget,
-}: {
-  data: DateAnalyserType
-  lang: Langs
-  initialTarget?: string
-}) => {
+const SubmitChart = ({ data, initialTarget }: { data: DateAnalyserType; initialTarget?: string }) => {
+  const { t } = useTranslation(["insight-page"])
   const yearMonthArr = Object.keys(data)
-  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore(["setCurFilterAll", "setIsFilterUpdate"])
+
   const [curTarget, setCurTarget] = useState<null | string>(initialTarget ?? null)
   const [targetArr, setTargetArr] = useState<number[]>(initialTarget ? data[initialTarget] : [])
-  const onClickMenu = useCallback((date: string) => {
-    setCurTarget(date)
-    setTargetArr(data[date])
-  }, [])
+
+  const onClickMenu = useCallback(
+    (date: string) => {
+      setCurTarget(date)
+      setTargetArr(data[date])
+    },
+    [data]
+  )
 
   const chartData = useMemo(
     () => ({
@@ -67,7 +67,7 @@ const SubmitChart = ({
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
-        <span>접수 현황</span>
+        <span>{t("submitTitle")}</span>
       </h2>
       {initialTarget ? (
         <>
@@ -80,7 +80,7 @@ const SubmitChart = ({
                     onClick={() => onClickMenu(yearMonth)}
                     key={`${yearMonth}`}
                   >
-                    <span>{setDateFormat({ date: new Date(yearMonth), lang, noDate: true })}</span>
+                    <span>{setDateFormat({ date: new Date(yearMonth), lang: pageLang, noDate: true })}</span>
                   </button>
                 </SwiperSlide>
               )
@@ -121,7 +121,7 @@ const SubmitChart = ({
       ) : (
         <div className={cx("no-list")}>
           <img src="/images/icons/crying.png" alt="crying" />
-          <span>아직 아무런 제출도 없어요</span>
+          <span>{t("emptySubmitted")}</span>
         </div>
       )}
     </div>

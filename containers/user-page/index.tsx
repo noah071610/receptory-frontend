@@ -10,7 +10,6 @@ import PageCard from "@/containers/user-page/PageCard"
 import Profile from "@/containers/user-page/Profile"
 import style from "@/containers/user-page/style.module.scss"
 import { usePageValidator } from "@/hooks/usePageValidator"
-import { useTranslation } from "@/i18n/client"
 import UserPageLayout from "@/layout/UserPageLayout"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
@@ -19,10 +18,11 @@ import { useQuery } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const UserPage = ({ lang }: { lang: Langs }) => {
-  const { t } = useTranslation(lang, ["user-page"])
+  const { t } = useTranslation(["user-page", "messages"])
   const { user } = usePageValidator({ isAuth: true })
   const { modal, setModal } = useMainStore(["modal", "setModal"])
   const { userId } = useParams()
@@ -38,7 +38,7 @@ const UserPage = ({ lang }: { lang: Langs }) => {
   useEffect(() => {
     if (isError) {
       // 예상치 못한 에러가 발생했어요
-      toastError(t("error.unknown", { ns: "messages" }))
+      toastError("unknown")
     }
   }, [isError, t])
 
@@ -46,7 +46,7 @@ const UserPage = ({ lang }: { lang: Langs }) => {
     if (user?.userId) {
       if (saves && saves.length >= 2) {
         // 페이지는 최대 {{number}}개까지 만들 수 있어요
-        toastError(t("error.maximumPage", { ns: "messages", number: 2 }))
+        toastError("maximumPage")
       }
       setModal({ section: null, type: "selectLang" })
     }

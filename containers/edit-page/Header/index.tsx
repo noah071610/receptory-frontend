@@ -1,7 +1,6 @@
 "use client"
 
 import IconBtn from "@/components/IconBtn"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
 import { Langs } from "@/types/Main"
@@ -9,6 +8,7 @@ import { faHome } from "@fortawesome/free-solid-svg-icons"
 import cs from "classNames/bind"
 import { useParams, useRouter } from "next/navigation"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import { Swiper, SwiperSlide } from "swiper/react"
 import HeaderLayout from "./HeaderLayout"
 import RevertBtn from "./RevertBtn"
@@ -32,7 +32,7 @@ const headers = [
 ]
 
 function Header({ lang }: { lang: Langs }) {
-  const { t } = useTranslation(lang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { push } = useRouter()
   const { userId } = useParams()
   const { stage, setStage, setSelectedSection } = useEditorStore(["stage", "setStage", "setSelectedSection"])

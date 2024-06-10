@@ -1,10 +1,10 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
-import { useTranslation } from "@/i18n/client"
 import { SectionType } from "@/types/Edit"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
@@ -19,7 +19,7 @@ function Time({ section }: { section: SectionType }) {
     "selected",
     "setSelected",
   ])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { value } = selected[section.index - 1] ?? {}
 
   const onClickOpenModal = () => {

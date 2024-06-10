@@ -10,16 +10,16 @@ import { memo, useEffect, useRef } from "react"
 
 import style from "./style.module.scss"
 
-import { useTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const globalMax = 9999999
 
 function Number({ section }: { section: SectionType }) {
   const { setSelectedText, selected, pageLang } = useMainStore(["setSelectedText", "selected", "pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { setSelectedSection, setOptions, saveSectionHistory, selectedSection } = _useEditorStore()
   const { min, max } = section.options

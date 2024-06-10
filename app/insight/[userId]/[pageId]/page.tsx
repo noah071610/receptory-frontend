@@ -1,146 +1,21 @@
-"use client"
+import InsightPage from "@/containers/insight-page"
+import { useTranslation } from "@/i18n"
+import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 
-import cs from "classNames/bind"
-import style from "./style.module.scss"
+async function getLang() {
+  return await getPreferredLanguage()
+}
+export async function generateMetadata() {
+  const lang = await getLang()
+  const { t } = await useTranslation(lang, ["meta"])
 
-import { getInsight } from "@/actions/insight"
-import PageLoading from "@/components/Loading/LoadingPage"
-import { queryKey } from "@/config"
-import CalendarChart from "@/containers/insight-page/Charts/Calendar"
-import SelectListChart from "@/containers/insight-page/Charts/SelectList"
-import SubmitChart from "@/containers/insight-page/Charts/Submit"
-import TimeChart from "@/containers/insight-page/Charts/Time"
-import ConfirmationList from "@/containers/insight-page/ConfirmationList"
-import PageInfo from "@/containers/insight-page/PageInfo"
-import { usePageValidator } from "@/hooks/usePageValidator"
-import { InsightPageType, SelectChartType } from "@/types/Insight"
-import { useQuery } from "@tanstack/react-query"
-import { useMemo } from "react"
-const cx = cs.bind(style)
-
-const getChartArr = (type: "choices" | "select", pageData: InsightPageType) =>
-  pageData.content.formSections
-    .filter((v) => v.type === type)
-    .reduce((acc, cur) => {
-      // 애널라이저에 섹션이, 실제 폼에 있는가
-      const target = pageData.analyser[type][cur.id]
-
-      if (target) {
-        acc.push({
-          title: cur.data.title,
-          labels: cur.list.map((k) => ({
-            id: k.id,
-            title: type === "choices" ? k.value : k.data.title,
-            description: k.data?.description,
-            src: k?.src,
-            count: target[k.id] ?? 0,
-          })),
-        })
-      }
-      return acc
-    }, [] as SelectChartType[])
-
-const InsightPage = () => {
-  const { pageId, user } = usePageValidator({ isAuth: true })
-
-  const { modal, setModal } = useMainStore(["modal", "setModal"])
-  const onClickMain = (e: any) => {
-    const closestElement = e.target.closest("[data-global-closer]")
-
-    if (!closestElement && modal.type) {
-      setModal({ section: null, type: null }) // main store (유저용)
-    }
+  return {
+    title: t("insight") + " | " + "Receptory",
   }
-
-  const { data: pageData, isSuccess } = useQuery<InsightPageType>({
-    queryKey: queryKey.insight(pageId),
-    queryFn: () => getInsight(pageId),
-    enabled: !!user?.userId,
-  })
-
-  const { isSelectDisplay, isCalendarDisplay, isTimeDisplay, isChoicesDisplay, formSections } = useMemo(() => {
-    if (!pageData?.content?.formSections) return {}
-    const formSections = pageData.content.formSections.filter((v) =>
-      ["calendar", "select", "choices", "time"].includes(v.type)
-    )
-
-    const types = formSections.map((v) => v.type)
-
-    return {
-      isSelectDisplay: types.includes("select"),
-      isCalendarDisplay: types.includes("calendar"),
-      isTimeDisplay: types.includes("time"),
-      isChoicesDisplay: types.includes("choices"),
-      formSections: formSections ?? [],
-    }
-  }, [pageData?.content?.formSections])
-
-  const { submitInitialTarget, calenderInitialTarget } = useMemo(() => {
-    if (!pageData) return {}
-    const analyser = pageData.analyser
-    return {
-      submitInitialTarget: analyser?.submit ? Object.keys(analyser.submit)[0] : undefined,
-      calenderInitialTarget: analyser?.calendar ? Object.keys(analyser.calendar)[0] : undefined,
-    }
-  }, [pageData?.analyser])
-
-  const selectChartArr: SelectChartType[] = useMemo(() => {
-    if (isSelectDisplay && !!pageData?.analyser?.select) {
-      return getChartArr("select", pageData)
-    } else {
-      return []
-    }
-  }, [isSelectDisplay, pageData?.analyser])
-
-  const choicesChartArr: SelectChartType[] = useMemo(() => {
-    if (isChoicesDisplay && !!pageData?.analyser?.choices) {
-      return getChartArr("choices", pageData)
-    } else {
-      return []
-    }
-  }, [isChoicesDisplay, pageData?.analyser])
-
-  return (
-    user && (
-      <div onClick={onClickMain} className={cx("page")}>
-        {isSuccess && pageData ? (
-          <div className={cx("page-inner")}>
-            <div className={cx("content")}>
-              <div className={cx("background")}></div>
-              <PageInfo pageData={pageData} user={user} />
-              {
-                <div className={cx("charts")}>
-                  <SubmitChart
-                    data={pageData.analyser.submit}
-                    initialTarget={submitInitialTarget}
-                    lang={pageData.lang}
-                  />
-                  {isCalendarDisplay && (
-                    <CalendarChart
-                      data={pageData.analyser.calendar}
-                      initialTarget={calenderInitialTarget}
-                      lang={pageData.lang}
-                    />
-                  )}
-                  {isTimeDisplay && <TimeChart data={pageData.analyser.time} />}
-                  {isSelectDisplay && <SelectListChart sectionName="select" selectChartArr={selectChartArr} />}
-                  {isChoicesDisplay && <SelectListChart sectionName="choices" selectChartArr={choicesChartArr} />}
-                </div>
-              }
-            </div>
-            <ConfirmationList
-              selectChartArr={selectChartArr.map((v) => v.labels).flat()}
-              choicesChartArr={choicesChartArr.map((v) => v.labels).flat()}
-              formSections={formSections}
-              list={pageData.confirmation}
-            />
-          </div>
-        ) : (
-          <PageLoading isLoading={true} />
-        )}
-      </div>
-    )
-  )
 }
 
-export default InsightPage
+export default async function InsightPageLayout() {
+  const lang = await getLang()
+
+  return <InsightPage lang={lang} />
+}

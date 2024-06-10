@@ -1,0 +1,45 @@
+@import "@/styles/variables.scss";
+
+.input {
+  width: 100%;
+  max-width: 400px;
+  cursor: pointer;
+  margin-bottom: 7px;
+
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    border-radius: 5px;
+    @include border;
+    transition: 300ms all;
+    input {
+      padding: 8px 0 8px 12px;
+      width: 100%;
+      display: flex;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+    .icon-wrapper {
+      padding: 8px;
+      width: 40px;
+      height: 40px;
+      position: relative;
+      border-radius: 100%;
+      .icon {
+        @include flex;
+        svg {
+          font-size: 18px;
+          color: var(--gray-hard);
+        }
+      }
+
+      @include action {
+        background-color: var(--gray-soft);
+      }
+    }
+
+    &.active {
+      border-color: var(--green);
+    }
+  }
+}

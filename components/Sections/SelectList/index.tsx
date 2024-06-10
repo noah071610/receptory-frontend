@@ -5,13 +5,13 @@ import FormUserInput from "@/components/FormUserInput"
 import Input from "@/components/Input"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
@@ -79,7 +79,7 @@ function Select({ section }: { section: SectionType }) {
     "selected",
     "setSelected",
   ])
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { t } = useTranslation(["edit-page"])
   const { setActive, deleteList } = useEditorStore(["deleteList", "setActive"])
   const { value } = selected[section.index - 1] ?? {}
   const selectList = section.list
@@ -100,7 +100,7 @@ function Select({ section }: { section: SectionType }) {
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError(t("error.atLeastOneList", { ns: "messages" }))
+      return toastError("atLeastOneList")
     }
     deleteList({ targetIndex: i })
   }

@@ -1,0 +1,19 @@
+{
+  "submitTitle": "접수 통계",
+  "calendarTitle": "기간별 통계",
+  "timeTitle": "시간대별 통계",
+  "emptySubmitted": "아직 아무런 제출도 없어요",
+  "searchConfirmation": "예약 번호 및 키워드로 찾기",
+  "adjustFilter": "적용하기",
+  "emptySearch": "검색 결과가 없어요",
+  "createdAt": "제출 날짜",
+  "startDate": "시작 날짜",
+  "startTime": "시작 시간",
+  "desc": "내림차순",
+  "asc": "올림차순",
+  "none": "선택 없음",
+  "calendar": "날짜별",
+  "time": "시간별",
+  "select": "dzdz",
+  "choices": "gewgewew"
+}

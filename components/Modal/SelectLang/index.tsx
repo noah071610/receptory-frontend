@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
@@ -33,7 +33,7 @@ export const SelectLang = ({
   const { push, back } = useRouter()
   const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
   const [selectedLang, setSelectedLang] = useState<null | Langs>(initLang ?? null)
-  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { t } = useTranslation(["edit-page"])
 
   const onClickRatio = (v: Langs) => {
     setSelectedLang(v)
@@ -53,13 +53,13 @@ export const SelectLang = ({
         await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
         await queryClient.invalidateQueries({ queryKey: queryKey.page(targetPageId) })
         setTimeout(() => {
-          toastSuccess("언어를 변경했어요")
+          toastSuccess("changeLang")
           setIsLoading(false)
           setModal({ section: null, type: null })
         }, 500)
       } else {
         // 에러가 발생했어요
-        toastError(t("error.unknown", { ns: "messages" }))
+        toastError("unknown")
         setIsLoading(false)
       }
     } else {
@@ -73,7 +73,7 @@ export const SelectLang = ({
         }, 500)
       } else {
         // 에러가 발생했어요
-        toastError(t("error.unknown", { ns: "messages" }))
+        toastError("unknown")
         setIsLoading(false)
       }
     }

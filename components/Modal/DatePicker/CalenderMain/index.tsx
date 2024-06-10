@@ -2,7 +2,6 @@
 
 import { FC, ReactNode, useEffect } from "react"
 
-import { useTranslation } from "@/i18n/client"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -11,6 +10,7 @@ import {
   useContextDatePickerOffsetPropGetters,
   useContextDaysPropGetters,
 } from "@rehookify/datepicker"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
@@ -74,7 +74,7 @@ function CalenderMain({
 }) {
   const { lang } = useParams()
   const { pageLang, setSelected, setModal } = useMainStore(["pageLang", "setModal", "setSelected"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
   const { startDate, addAnyDate, isRangeSelect } = section.options

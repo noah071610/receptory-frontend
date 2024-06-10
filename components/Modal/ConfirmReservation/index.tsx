@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
@@ -26,7 +26,7 @@ export const ConfirmReservation = ({
   const pathname = usePathname()
   const { replace } = useRouter()
   const { pageId } = useParams()
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const { setModal, loadSelected, setConfirmation } = useMainStore(["setModal", "loadSelected", "setConfirmation"])
   const [input, setInput] = useState({
     confirmId: "",
@@ -39,7 +39,7 @@ export const ConfirmReservation = ({
   const onClickConfirm = async () => {
     if (typeof pageId !== "string") {
       // 잘못된 접근입니다.
-      return toastError(t("error.InvalidAccess", { ns: "messages" }))
+      return toastError("InvalidAccess")
     }
     setIsConfirming(true)
 
@@ -75,10 +75,10 @@ export const ConfirmReservation = ({
 
   return (
     <ModalLayout modalStyle={style["content"]}>
-      <h1>예약확인</h1>
-      <p className={cx("desc")}>예약을 확인하기 위한 접수번호와 비밀번호를 작성해주세요</p>
+      <h1>{t("checkReservation")}</h1>
+      <p className={cx("desc")}>{t("reservationDescription")}</p>
       <label className={cx("title")}>
-        <h2>접수번호</h2>
+        <h2>{t("confirmationNumber")}</h2>
       </label>
       <input
         className={cx("confirmId")}
@@ -87,10 +87,10 @@ export const ConfirmReservation = ({
         type="text"
       ></input>
       <label className={cx("title")}>
-        <h2>비밀번호</h2>
+        <h2>{t("password")}</h2>
       </label>
       <input
-        placeholder={"비밀번호 입력"}
+        placeholder={t("enterPasswordPlaceholder")}
         value={input.password}
         onChange={(e) => onChangeInput(e, "password")}
         type="password"
@@ -103,7 +103,7 @@ export const ConfirmReservation = ({
           })}
           onClick={onClickConfirm}
         >
-          {t("예약 확인")}
+          {t("checkReservationButton")}
         </button>
       </div>
     </ModalLayout>

@@ -3,13 +3,13 @@
 import { uploadImages } from "@/actions/upload"
 import DeleteBtn from "@/components/DeleteBtn"
 import { SwiperNavigation } from "@/components/SwiperNavigation"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload, SectionListType, SectionListTypes } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import cs from "classNames/bind"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { SwiperSlide } from "swiper/react"
 import Dropzone from "./Dropzone"
@@ -30,7 +30,7 @@ export default function ImageStage({
   const [selectedImages, setSelectedImages] = useState<Array<ImageUpload>>([])
   const [listForRending, setListForRending] = useState<SectionListType[]>([])
 
-  const { t } = useTranslation(lang, ["modal"])
+  const { t } = useTranslation(["modal"])
   const {
     active,
     setActive,

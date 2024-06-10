@@ -37,7 +37,7 @@ export function CalenderMain({
 export const CalenderComponent: FC<CalendarProps> = ({ calendar }) => {
   const { weekDays } = useContextCalendars()
   const { dayButton } = useContextDaysPropGetters()
-  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore()
+  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore(["setCurFilterAll", "setIsFilterUpdate"])
   const { days, month } = calendar
 
   const onClickDate = (date: Date, isPossible: boolean) => {

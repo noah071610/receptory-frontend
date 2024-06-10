@@ -1,7 +1,6 @@
 "use client"
 
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/types/Edit"
 import { Langs } from "@/types/Main"
@@ -10,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import style from "../style.module.scss"
@@ -27,7 +27,7 @@ export default function List({
   isOpenAllList: boolean
   lang: Langs
 }) {
-  const { t } = useTranslation(lang, ["edit-page", "messages"])
+  const { t } = useTranslation(["edit-page"])
   const { replace } = useRouter()
   const pathname = usePathname()
   const { stage, addSection, formSections, homeSections, setActive, active, confirmSections } = useEditorStore([
@@ -51,15 +51,14 @@ export default function List({
                 (homeSections.filter((v) => v.type === "qna").length > 0 && stage === "home") ||
                 (confirmSections.filter((v) => v.type === "qna").length > 0 && stage === "confirm")
               ) {
-                return toastError(t("error.oneSection", { ns: "messages" }))
+                return toastError("oneSection")
               }
             } else {
-              if ([...homeSections, ...formSections].find(({ type }) => type === value))
-                return toastError(t("error.oneSection", { ns: "messages" }))
+              if ([...homeSections, ...formSections].find(({ type }) => type === value)) return toastError("oneSection")
             }
           }
           if (homeSections.length >= 20 || formSections.length >= 20 || confirmSections.length >= 20) {
-            return toastError(t("error.lessThan20sections", { ns: "messages" }))
+            return toastError("lessThan20sections")
           }
 
           addSection({ type: value as SectionListTypes, newId })
@@ -79,7 +78,7 @@ export default function List({
           break
       }
     },
-    [addSection, confirmSections, formSections, homeSections, pathname, replace, setActive, stage, t]
+    [addSection, confirmSections, formSections, homeSections, pathname, replace, setActive, stage]
   )
 
   return (

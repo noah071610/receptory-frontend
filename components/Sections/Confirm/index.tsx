@@ -1,23 +1,24 @@
 "use client"
 
 import { SectionType } from "@/types/Edit"
-import { memo } from "react"
+import { memo, useMemo } from "react"
 
 import style from "./style.module.scss"
 
 import Input from "@/components/Input"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
+import getConfirmationId from "@/utils/helpers/getConfirmationId"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
-function Confirm({ section }: { section: SectionType }) {
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+function Confirm({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+  const { t } = useTranslation(["edit-page"])
   const { pageOptions } = useEditorStore(["pageOptions"])
   const { title, description } = section.data
+
+  const exampleId = useMemo(() => getConfirmationId(), [])
 
   return (
     <div className={cx("layout")}>
@@ -31,6 +32,7 @@ function Confirm({ section }: { section: SectionType }) {
               isOptional={false}
               maxLength={18}
               dataKey={"title"}
+              displayMode={isDisplayMode && "h1"}
               value={title}
               section={section}
             />
@@ -42,6 +44,7 @@ function Confirm({ section }: { section: SectionType }) {
               maxLength={40}
               lineMax={3}
               dataKey={"description"}
+              displayMode={isDisplayMode && "p"}
               value={description}
               section={section}
             />
@@ -51,7 +54,7 @@ function Confirm({ section }: { section: SectionType }) {
                   <span>{"예약 번호"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{t("confirmationIdExample")}</span>
+                  <span>{exampleId + " (Example)"}</span>
                 </div>
               </li>
               <li>
@@ -67,7 +70,7 @@ function Confirm({ section }: { section: SectionType }) {
           <ul className={cx("picks")}>
             <div className={cx("no-list")}>
               <img src="/images/icons/hello.png" alt="hello" />
-              <span>유저가 제출하면 예시처럼 표시돼요</span>
+              <span>{t("confirmExampleDescription")}</span>
             </div>
           </ul>
         </div>

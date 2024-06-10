@@ -3,9 +3,7 @@
 import { ReactNode } from "react"
 
 import { toastError } from "@/config/toast"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
-import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import getId from "@/utils/helpers/getId"
 import { faArrowsDownToLine, faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
@@ -13,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { DraggableProvided } from "@hello-pangea/dnd"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -31,8 +30,7 @@ export default function SectionLayout({
   noPadding?: boolean
   pathname: string
 }) {
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["modal", "messages"])
+  const { t } = useTranslation(["modal"])
   const { replace } = useRouter()
   const {
     selectedSection,
@@ -78,15 +76,15 @@ export default function SectionLayout({
   const onClickCopy = () => {
     if (stage === "home" && homeSections.length >= 20) {
       // lessThan20sections
-      return toastError(t("error.lessThan20sections", { ns: "messages" }))
+      return toastError("lessThan20sections")
     }
     if (stage === "form" && formSections.length >= 20) {
       // lessThan20sections
-      return toastError(t("error.lessThan20sections", { ns: "messages" }))
+      return toastError("lessThan20sections")
     }
     if (stage === "confirm" && confirmSections.length >= 20) {
       // lessThan20sections
-      return toastError(t("error.lessThan20sections", { ns: "messages" }))
+      return toastError("lessThan20sections")
     }
 
     const newId = getId()

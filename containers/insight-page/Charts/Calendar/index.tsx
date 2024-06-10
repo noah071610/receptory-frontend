@@ -1,38 +1,35 @@
 "use client"
 
 import { DateAnalyserType } from "@/types/Insight"
-import { Langs } from "@/types/Main"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
 import cs from "classNames/bind"
 import { useCallback, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { CalenderMain } from "./DatePicker"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const CalendarChart = ({
-  data,
-  lang,
-  initialTarget,
-}: {
-  data: DateAnalyserType
-  lang: Langs
-  initialTarget?: string
-}) => {
+const CalendarChart = ({ data, initialTarget }: { data: DateAnalyserType; initialTarget?: string }) => {
+  const { t } = useTranslation(["insight-page"])
+
   const yearMonthArr = Object.keys(data)
   const [curTarget, setCurTarget] = useState<null | string>(initialTarget ?? null)
   const [targetArr, setTargetArr] = useState<number[]>(initialTarget ? data[initialTarget] : [])
-  const onClickMenu = useCallback((date: string) => {
-    setCurTarget(date)
-    setTargetArr(data[date])
-  }, [])
+  const onClickMenu = useCallback(
+    (date: string) => {
+      setCurTarget(date)
+      setTargetArr(data[date])
+    },
+    [data]
+  )
 
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
-        <span>캘린더</span>
+        <span>{t("calendarTitle")}</span>
       </h2>
       {initialTarget ? (
         <>
@@ -45,7 +42,7 @@ const CalendarChart = ({
                     onClick={() => onClickMenu(yearMonth)}
                     key={`${yearMonth}`}
                   >
-                    <span>{setDateFormat({ date: new Date(yearMonth), lang, noDate: true })}</span>
+                    <span>{setDateFormat({ date: new Date(yearMonth), lang: pageLang, noDate: true })}</span>
                   </button>
                 </SwiperSlide>
               )
@@ -68,7 +65,7 @@ const CalendarChart = ({
       ) : (
         <div className={cx("no-list")}>
           <img src="/images/icons/crying.png" alt="crying" />
-          <span>아직 아무런 제출도 없어요</span>
+          <span>{t("emptySubmitted")}</span>
         </div>
       )}
     </div>

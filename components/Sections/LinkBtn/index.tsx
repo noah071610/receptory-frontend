@@ -1,18 +1,16 @@
 "use client"
 
 import Input from "@/components/Input"
-import { useTranslation } from "@/i18n/client"
-import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
 import { memo, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function LinkBtn({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(["edit-page"])
   const text = section.value
   const { backgroundColor } = section.style
   const { link } = section.data
