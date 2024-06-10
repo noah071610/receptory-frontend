@@ -47,7 +47,7 @@ function OptionRatio({
     "saveSectionHistory",
   ])
   const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
   const target = isDesign ? section.design : section.options[targetKey]
   const collection = section.collection
 
@@ -58,7 +58,8 @@ function OptionRatio({
     if (isMultiple) {
       if (collection.findIndex((k) => k.key === v) >= 0) {
         if (collection.length - 1 <= 0) {
-          return toastError("atLeastOneList")
+          // atLeastOneList
+          return toastError(t("error.atLeastOneList", { ns: "messages" }))
         }
         deleteCollection({ targetKey: v })
       } else {

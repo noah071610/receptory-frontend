@@ -2,8 +2,7 @@
 
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import hasString from "@/utils/helpers/hasString"
@@ -34,11 +33,11 @@ export default function Card({
   imageStatus: "image" | "emoji"
 }) {
   const { lang } = useParams()
-  const { t } = useTranslation(lang, ["new-post-page"])
+
   const { title, description, cta } = section.data
   const { color, background, backgroundColor } = section.style
 
-  const { setActive } = _useEditorStore()
+  const { setActive } = useEditorStore(["setActive"])
 
   const onClickThumbnailUpload = () => {
     setActive({ key: "modal", payload: { type: "thumbnail-image" } })
@@ -63,7 +62,7 @@ export default function Card({
         )}
         <Input
           type="input"
-          inputType="title"
+          inputType="titleInput"
           className={cx(!isDisplayMode && "title-input")}
           displayMode={isDisplayMode && "h1"}
           isOptional={false}
@@ -74,7 +73,7 @@ export default function Card({
         />
         <Input
           type="textarea"
-          inputType="description"
+          inputType="descriptionInput"
           className={cx(!isDisplayMode && "description-input")}
           displayMode={isDisplayMode && "p"}
           isOptional={true}
@@ -89,7 +88,7 @@ export default function Card({
               <Input
                 type="input"
                 displayMode={isDisplayMode && "span"}
-                inputType="cta"
+                inputType="ctaInput"
                 dataKey={"cta"}
                 isOptional={false}
                 style={{ color: ctaTextColor }}

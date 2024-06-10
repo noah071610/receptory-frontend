@@ -18,11 +18,10 @@ import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Text({ section }: { section: SectionType }) {
-  const { pageLang } = useMainStore(["pageLang"])
+  const { setSelectedText, selected, pageLang } = useMainStore(["setSelectedText", "selected", "pageLang"])
   const { t } = useTranslation(pageLang, ["edit-page"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected"])
   const { setOptions, saveSectionHistory } = useEditorStore(["setOptions", "saveSectionHistory"])
   const { max } = section.options
   const design = section.design

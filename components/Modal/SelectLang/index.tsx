@@ -8,7 +8,7 @@ import { changeLanguage } from "@/actions/page"
 import { addSave } from "@/actions/save"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
 import { useQueryClient } from "@tanstack/react-query"
@@ -31,9 +31,9 @@ export const SelectLang = ({
 }) => {
   const queryClient = useQueryClient()
   const { push, back } = useRouter()
-  const { setModal } = _useMainStore()
+  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
   const [selectedLang, setSelectedLang] = useState<null | Langs>(initLang ?? null)
-  const { t } = useTranslation("ko")
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
 
   const onClickRatio = (v: Langs) => {
     setSelectedLang(v)
@@ -58,7 +58,8 @@ export const SelectLang = ({
           setModal({ section: null, type: null })
         }, 500)
       } else {
-        toastError("에러가 발생했어요")
+        // 에러가 발생했어요
+        toastError(t("error.unknown", { ns: "messages" }))
         setIsLoading(false)
       }
     } else {
@@ -71,7 +72,8 @@ export const SelectLang = ({
           push(`/edit/${user.userId}/${newSave.pageId}`)
         }, 500)
       } else {
-        toastError("에러가 발생했어요")
+        // 에러가 발생했어요
+        toastError(t("error.unknown", { ns: "messages" }))
         setIsLoading(false)
       }
     }

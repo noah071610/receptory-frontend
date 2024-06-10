@@ -2,7 +2,7 @@
 
 import { userPlan } from "@/config"
 import { useTranslation } from "@/i18n/client"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
 import { faFire, faFlag, faGear } from "@fortawesome/free-solid-svg-icons"
@@ -28,7 +28,7 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
   // todo:
   const { t } = useTranslation(lang, ["user-page"])
   const { push } = useRouter()
-  const { setModal } = _useMainStore()
+  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
   const [selectedOption, setSelectedOption] = useState<null | "settings" | "inform">(null)
 
   const onClickMenu = (value: "settings" | "inform" | "upgrade") => {

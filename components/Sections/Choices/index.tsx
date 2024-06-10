@@ -2,14 +2,14 @@
 
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { memo } from "react"
 import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import hasString from "@/utils/helpers/hasString"
 import { faCircle } from "@fortawesome/free-regular-svg-icons"
@@ -19,9 +19,9 @@ import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Choices({ section }: { section: SectionType }) {
-  const { t } = useTranslation("ko")
-  const { setActive } = _useEditorStore()
-  const { selected, setSelected } = _useMainStore()
+  const { pageLang, selected, setSelected } = useMainStore(["pageLang", "selected", "setSelected"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { setActive } = useEditorStore(["setActive"])
   const {
     data: { title, description },
     design,

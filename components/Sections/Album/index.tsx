@@ -7,7 +7,8 @@ import { toastError } from "@/config/toast"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
 import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import cs from "classNames/bind"
@@ -59,12 +60,13 @@ const ImageComponent = ({
 }
 
 function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation("ko")
-  const { deleteList } = _useEditorStore()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { deleteList } = useEditorStore(["deleteList"])
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError("atLeastOneList")
+      return toastError(t("error.atLeastOneList", { ns: "messages" }))
     }
     deleteList({ targetIndex: i })
   }

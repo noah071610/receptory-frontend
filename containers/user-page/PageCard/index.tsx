@@ -5,7 +5,7 @@ import { queryKey } from "@/config"
 import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { SaveListType } from "@/types/Page"
 import hasString from "@/utils/helpers/hasString"
 import { setDateFormat } from "@/utils/helpers/setDate"
@@ -43,9 +43,9 @@ const PageCard = ({
   userId: string
 }) => {
   const queryClient = useQueryClient()
-  const { t } = useTranslation("ko")
+  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const { push, replace } = useRouter()
-  const { setModal } = _useMainStore()
   const [isActive, setIsActive] = useState(format === "active")
   const [isOpen, setIsOpen] = useState(false)
   const onClickList = async (e: any) => {

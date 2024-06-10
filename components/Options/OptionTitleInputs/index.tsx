@@ -21,7 +21,7 @@ function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; i
       <Input
         type="input"
         className={cx("title")}
-        inputType="title"
+        inputType="titleInput"
         isOptional={false}
         value={section.data.title}
         dataKey="title"
@@ -30,7 +30,7 @@ function OptionTitleInputs({ section, isDisplayMode }: { section: SectionType; i
       <Input
         type="input"
         className={cx("description")}
-        inputType="description"
+        inputType="descriptionInput"
         isOptional={true}
         value={section.data.description}
         dataKey="description"

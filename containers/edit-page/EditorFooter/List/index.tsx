@@ -27,7 +27,7 @@ export default function List({
   isOpenAllList: boolean
   lang: Langs
 }) {
-  const { t } = useTranslation(lang, ["edit-page"])
+  const { t } = useTranslation(lang, ["edit-page", "messages"])
   const { replace } = useRouter()
   const pathname = usePathname()
   const { stage, addSection, formSections, homeSections, setActive, active, confirmSections } = useEditorStore([
@@ -51,14 +51,15 @@ export default function List({
                 (homeSections.filter((v) => v.type === "qna").length > 0 && stage === "home") ||
                 (confirmSections.filter((v) => v.type === "qna").length > 0 && stage === "confirm")
               ) {
-                return toastError("oneSection")
+                return toastError(t("error.oneSection", { ns: "messages" }))
               }
             } else {
-              if ([...homeSections, ...formSections].find(({ type }) => type === value)) return toastError("oneSection")
+              if ([...homeSections, ...formSections].find(({ type }) => type === value))
+                return toastError(t("error.oneSection", { ns: "messages" }))
             }
           }
           if (homeSections.length >= 20 || formSections.length >= 20 || confirmSections.length >= 20) {
-            return toastError("lessThan20sections")
+            return toastError(t("error.lessThan20sections", { ns: "messages" }))
           }
 
           addSection({ type: value as SectionListTypes, newId })
@@ -78,7 +79,7 @@ export default function List({
           break
       }
     },
-    [addSection, confirmSections, formSections, homeSections, pathname, replace, setActive, stage]
+    [addSection, confirmSections, formSections, homeSections, pathname, replace, setActive, stage, t]
   )
 
   return (

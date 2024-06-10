@@ -13,7 +13,6 @@ import TimeChart from "@/containers/insight-page/Charts/Time"
 import ConfirmationList from "@/containers/insight-page/ConfirmationList"
 import PageInfo from "@/containers/insight-page/PageInfo"
 import { usePageValidator } from "@/hooks/usePageValidator"
-import { _useMainStore } from "@/store/main"
 import { InsightPageType, SelectChartType } from "@/types/Insight"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
@@ -44,7 +43,7 @@ const getChartArr = (type: "choices" | "select", pageData: InsightPageType) =>
 const InsightPage = () => {
   const { pageId, user } = usePageValidator({ isAuth: true })
 
-  const { modal, setModal } = _useMainStore()
+  const { modal, setModal } = useMainStore(["modal", "setModal"])
   const onClickMain = (e: any) => {
     const closestElement = e.target.closest("[data-global-closer]")
 

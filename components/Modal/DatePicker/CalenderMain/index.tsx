@@ -13,7 +13,7 @@ import {
 } from "@rehookify/datepicker"
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { dateToString } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
@@ -73,8 +73,8 @@ function CalenderMain({
   selectedDates?: Date[]
 }) {
   const { lang } = useParams()
-  const { t } = useTranslation("ko")
-  const { setSelected, setModal } = _useMainStore()
+  const { pageLang, setSelected, setModal } = useMainStore(["pageLang", "setModal", "setSelected"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
   const { startDate, addAnyDate, isRangeSelect } = section.options

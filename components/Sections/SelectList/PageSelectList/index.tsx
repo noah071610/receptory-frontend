@@ -7,13 +7,18 @@ import { faList } from "@fortawesome/free-solid-svg-icons"
 import { memo } from "react"
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageSelectList({ section }: { section: SectionType }) {
-  const { t } = useTranslation("ko")
-  const { setModal, selected, setSelected } = _useMainStore()
+  const { setModal, selected, setSelected, pageLang } = useMainStore([
+    "pageLang",
+    "setModal",
+    "selected",
+    "setSelected",
+  ])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const { value } = selected[section.index - 1] ?? {}
 
   const toggleSelect = () => {

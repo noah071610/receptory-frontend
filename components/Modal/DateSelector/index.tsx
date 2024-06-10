@@ -5,15 +5,15 @@ import { useTranslation } from "@/i18n/client"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 export const DateSelector = ({ section }: { section: SectionType }) => {
-  const { t } = useTranslation("ko")
-  const { setModal, setSelected, pageLang } = _useMainStore()
+  const { setModal, setSelected, pageLang } = useMainStore(["pageLang", "setSelected", "setModal"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const specificDates = section.collection
   const { addAnyDate } = section.options
   const onClickDate = ({

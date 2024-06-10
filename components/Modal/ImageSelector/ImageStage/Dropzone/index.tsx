@@ -23,7 +23,7 @@ function Dropzone({
   isMultiple: boolean
   lang: Langs
 }) {
-  const { t } = useTranslation(lang, ["modal"])
+  const { t } = useTranslation(lang, ["modal", "messages"])
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -49,7 +49,8 @@ function Dropzone({
     onDrop,
     onDropRejected: (files) => {
       if (files.length > 10) {
-        return toastError("10개 이하의 이미지를 업로드 해주세요")
+        // 10개 이하의 이미지를 업로드 해주세요
+        return toastError(t("error.underThen10Images", { ns: "messages" }))
       }
       for (let i = 0; i < files.length; i++) {
         return toastError(files[i].errors[0].code)

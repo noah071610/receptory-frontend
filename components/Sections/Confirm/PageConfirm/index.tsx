@@ -1,22 +1,25 @@
 "use client"
 
 import { SectionType } from "@/types/Edit"
-import { useRouter } from "next/navigation"
 import { memo, useMemo } from "react"
 
 import style from "../style.module.scss"
 
 import { useTranslation } from "@/i18n/client"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageConfirm({ section }: { section: SectionType }) {
-  const { t } = useTranslation("ko")
-  const { back } = useRouter()
-  const { selected, curConfirmationId, confirmDate, pageLang } = _useMainStore()
+  const { pageLang, selected, curConfirmationId, confirmDate } = useMainStore([
+    "pageLang",
+    "selected",
+    "curConfirmationId",
+    "confirmDate",
+  ])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const { title, description } = section.data
 
   const confirmationArr = useMemo(() => {

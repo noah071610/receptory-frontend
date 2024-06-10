@@ -6,6 +6,7 @@ import hasString from "@/utils/helpers/hasString"
 import { memo, useMemo } from "react"
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import dynamic from "next/dynamic"
 const cx = cs.bind(style)
@@ -15,7 +16,8 @@ const EmbedForm = dynamic(() => import("./EmbedForm/index"), {
 })
 
 function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation("ko")
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
 
   const mapCode = useMemo(() => {
     if (hasString(section.value) && section.value.includes('<iframe src="https://www.google.com/maps/embed?pb=')) {

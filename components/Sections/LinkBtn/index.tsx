@@ -1,7 +1,8 @@
 "use client"
 
 import Input from "@/components/Input"
-import { _useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
 import cs from "classNames/bind"
@@ -10,7 +11,8 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function LinkBtn({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { setActive } = _useEditorStore()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const text = section.value
   const { backgroundColor } = section.style
   const { link } = section.data

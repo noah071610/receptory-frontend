@@ -8,7 +8,7 @@ import { deleteUser } from "@/actions/user"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
@@ -38,10 +38,10 @@ export const ConfirmHard = ({
   setIsLoading: (b: boolean) => void
 }) => {
   // todo:
-  const { t } = useTranslation("ko", ["modal"])
   const { push } = useRouter()
+  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
+  const { t } = useTranslation(pageLang, ["modal", "messages"])
   const queryClient = useQueryClient()
-  const { setModal } = _useMainStore()
   const [selectedOption, setSelectedOption] = useState("")
   const [confirmText, setConfirmText] = useState("")
   const onChangeInput = (e: any) => {
@@ -53,11 +53,13 @@ export const ConfirmHard = ({
       case "deleteAccount": {
         if (!setSelectedOption) {
           setIsLoading(false)
-          return toastError("mustPickFeedback")
+          // mustPickFeedback
+          return toastError(t("error.mustPickFeedback", { ns: "messages" }))
         }
         if (confirmInitText !== confirmText) {
           setIsLoading(false)
-          return toastError("invalidConfirmText")
+          // invalidDeleteConfirmText
+          return toastError(t("error.invalidDeleteConfirmText", { ns: "messages" }))
         }
         const isOk = await deleteUser(selectedOption)
         if (isOk) {
@@ -72,7 +74,7 @@ export const ConfirmHard = ({
 
       case "deletePage":
         if (!value) {
-          toastError("에러가 발생했어요. 나중에 다시 시도해주세요.")
+          toastError(t("error.unknown", { ns: "messages" }))
           setIsLoading(false)
           return setModal({
             section: null,

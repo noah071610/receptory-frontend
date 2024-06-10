@@ -8,7 +8,7 @@ import { memo, useRef } from "react"
 
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { getPhoneNumber } from "@/utils/helpers/getPhoneNumber"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
@@ -17,7 +17,7 @@ const cx = cs.bind(style)
 
 function PagePhone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { setSelectedText, selected } = _useMainStore()
+  const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { phoneNumberCountry } = section.options
   const { value } = selected[section.index - 1] ?? {}

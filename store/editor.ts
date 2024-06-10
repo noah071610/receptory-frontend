@@ -120,7 +120,7 @@ type Actions = {
       payload?: any
     }
   }) => void
-  clearActive: () => void
+  clearActive: (exceptModal?: boolean) => void
   setCollection: ({ payload, index, key }: { payload: any; index: number; key: string }) => void
 
   addSection: ({ type, payload, newId }: { type: SectionListTypes; payload?: SectionType; newId?: string }) => void
@@ -328,21 +328,35 @@ export const _useEditorStore = create<EditStates & Actions>()(
           saveSectionHistoryCallback({ origin })
         }
       }),
-    clearActive: () =>
+    clearActive: (exceptModal) =>
       set((origin) => {
-        origin.active = {
-          modal: {
-            type: null,
-            payload: null,
-          },
-          tooltip: {
-            type: null,
-            payload: null,
-          },
-          submenu: {
-            type: null,
-            payload: null,
-          },
+        if (exceptModal) {
+          origin.active = {
+            ...origin.active,
+            tooltip: {
+              type: null,
+              payload: null,
+            },
+            submenu: {
+              type: null,
+              payload: null,
+            },
+          }
+        } else {
+          origin.active = {
+            modal: {
+              type: null,
+              payload: null,
+            },
+            tooltip: {
+              type: null,
+              payload: null,
+            },
+            submenu: {
+              type: null,
+              payload: null,
+            },
+          }
         }
       }),
     setActive: ({ key, payload }) =>

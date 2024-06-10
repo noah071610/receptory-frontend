@@ -6,7 +6,7 @@ import Input from "@/components/Input"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
@@ -16,7 +16,7 @@ import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
 import { toastError } from "@/config/toast"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -48,7 +48,7 @@ const ListEdit = ({
             type="input"
             isBottomError={true}
             className={cx("title")}
-            inputType="title"
+            inputType="titleInput"
             isOptional={false}
             value={list.data.title}
             listIndex={listIndex}
@@ -58,7 +58,7 @@ const ListEdit = ({
           <Input
             type="input"
             className={cx("description")}
-            inputType="description"
+            inputType="descriptionInput"
             isOptional={true}
             value={list.data.description}
             listIndex={listIndex}
@@ -73,9 +73,14 @@ const ListEdit = ({
 }
 
 function Select({ section }: { section: SectionType }) {
-  const { t } = useTranslation("ko")
-  const { setActive, deleteList } = _useEditorStore()
-  const { setModal, selected, setSelected } = _useMainStore()
+  const { setModal, selected, setSelected, pageLang } = useMainStore([
+    "pageLang",
+    "setModal",
+    "selected",
+    "setSelected",
+  ])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
+  const { setActive, deleteList } = useEditorStore(["deleteList", "setActive"])
   const { value } = selected[section.index - 1] ?? {}
   const selectList = section.list
 
@@ -95,7 +100,7 @@ function Select({ section }: { section: SectionType }) {
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError("atLeastOneList")
+      return toastError(t("error.atLeastOneList", { ns: "messages" }))
     }
     deleteList({ targetIndex: i })
   }

@@ -6,22 +6,22 @@ import { _useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faListOl } from "@fortawesome/free-solid-svg-icons"
-import { useParams } from "next/navigation"
 import { memo, useEffect, useRef } from "react"
 
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useTranslation } from "@/i18n/client"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 const globalMax = 9999999
 
 function Number({ section }: { section: SectionType }) {
-  const { lang } = useParams()
+  const { setSelectedText, selected, pageLang } = useMainStore(["setSelectedText", "selected", "pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { setSelectedSection, setOptions, saveSectionHistory, selectedSection } = _useEditorStore()
-  const { setSelectedText, selected } = _useMainStore()
   const { min, max } = section.options
 
   const { value } = selected[section.index - 1] ?? {}
@@ -57,7 +57,7 @@ function Number({ section }: { section: SectionType }) {
 
   useEffect(() => {
     setSelectedText({ section, text: "" })
-  }, [min, max])
+  }, [min, max, setSelectedText, section])
 
   const onBlur = (type: "min" | "max") => {
     if (type === "max") {
@@ -110,7 +110,7 @@ function Number({ section }: { section: SectionType }) {
         <OptionTitleInputs section={section} />
         <div>
           <h4>
-            <span>최대 숫자 조정</span>
+            <span>{t("maxNumber")}</span>
           </h4>
           <div className={cx("minMax-wrapper")}>
             <input

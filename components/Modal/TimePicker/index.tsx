@@ -7,14 +7,14 @@ import { useMemo, useState } from "react"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 export const TimePicker = ({ section }: { section: SectionType }) => {
-  const { t } = useTranslation("ko")
-  const { setModal, setSelected } = _useMainStore()
+  const { pageLang, setModal, setSelected } = useMainStore(["pageLang", "setSelected", "setModal"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const [selectedMeridiem, setSelectedMeridiem] = useState<null | string>(null)
   const [selectedHour, setSelectedHour] = useState<null | string>(null)
   const [startTime, setStartTime] = useState<null | string>(null)

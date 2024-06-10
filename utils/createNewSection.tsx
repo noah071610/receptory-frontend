@@ -213,8 +213,8 @@ const sectionMap: { [key: string]: any } = {
   confirm: () => {
     return {
       data: {
-        title: "정상적으로 제출했어요!",
-        description: "귀한 시간 내주셔서 감사합니다.",
+        title: t("confirmInitialTitle"),
+        description: t("confirmInitialDescription"),
       },
     }
   },

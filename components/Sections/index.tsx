@@ -3,7 +3,9 @@
 import { ReactNode } from "react"
 
 import { toastError } from "@/config/toast"
-import { _useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import getId from "@/utils/helpers/getId"
 import { faArrowsDownToLine, faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
@@ -29,6 +31,8 @@ export default function SectionLayout({
   noPadding?: boolean
   pathname: string
 }) {
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["modal", "messages"])
   const { replace } = useRouter()
   const {
     selectedSection,
@@ -37,11 +41,22 @@ export default function SectionLayout({
     homeSections,
     confirmSections,
     formSections,
-    setActive,
+    clearActive,
     setSelectedSection,
     deleteSection,
     setStyle,
-  } = _useEditorStore()
+  } = useEditorStore([
+    "selectedSection",
+    "copySection",
+    "stage",
+    "homeSections",
+    "confirmSections",
+    "formSections",
+    "clearActive",
+    "setSelectedSection",
+    "deleteSection",
+    "setStyle",
+  ])
 
   const onClickSection = (e: any) => {
     const closestElement = e.target.closest("[data-closer]")
@@ -55,21 +70,23 @@ export default function SectionLayout({
     }
 
     // modal은 건드리지 말 것
-    setActive({ payload: { type: null }, key: "tooltip" })
-    setActive({ payload: { type: null }, key: "submenu" })
+    clearActive(true)
   }
   const onClickDelete = () => {
     deleteSection(section.id)
   }
   const onClickCopy = () => {
     if (stage === "home" && homeSections.length >= 20) {
-      return toastError("lessThan20sections")
+      // lessThan20sections
+      return toastError(t("error.lessThan20sections", { ns: "messages" }))
     }
     if (stage === "form" && formSections.length >= 20) {
-      return toastError("lessThan20sections")
+      // lessThan20sections
+      return toastError(t("error.lessThan20sections", { ns: "messages" }))
     }
     if (stage === "confirm" && confirmSections.length >= 20) {
-      return toastError("lessThan20sections")
+      // lessThan20sections
+      return toastError(t("error.lessThan20sections", { ns: "messages" }))
     }
 
     const newId = getId()

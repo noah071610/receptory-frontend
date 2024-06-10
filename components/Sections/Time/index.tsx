@@ -12,15 +12,19 @@ import { memo, useEffect, useState } from "react"
 import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
-import { _useMainStore, useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { convertStrToTimeSet } from "@/utils/time"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Time({ section }: { section: SectionType }) {
-  const { pageLang } = useMainStore(["pageLang"])
+  const { setModal, selected, setSelected, pageLang } = useMainStore([
+    "pageLang",
+    "setModal",
+    "selected",
+    "setSelected",
+  ])
   const { t } = useTranslation(pageLang, ["edit-page"])
-  const { setModal, selected, setSelected } = _useMainStore()
   const { setOptions, addCollection, deleteCollection, saveSectionHistory } = _useEditorStore()
   const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 

@@ -6,7 +6,7 @@ import style from "./style.module.scss"
 
 import { findReservation } from "@/actions/page"
 import { toastError } from "@/config/toast"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
@@ -26,8 +26,8 @@ export const ConfirmReservation = ({
   const pathname = usePathname()
   const { replace } = useRouter()
   const { pageId } = useParams()
-  const { t } = useTranslation("ko")
-  const { setModal, loadSelected, setConfirmation } = _useMainStore()
+  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { setModal, loadSelected, setConfirmation } = useMainStore(["setModal", "loadSelected", "setConfirmation"])
   const [input, setInput] = useState({
     confirmId: "",
     password: "",
@@ -38,7 +38,8 @@ export const ConfirmReservation = ({
 
   const onClickConfirm = async () => {
     if (typeof pageId !== "string") {
-      return toastError("잘못된 접근입니다.")
+      // 잘못된 접근입니다.
+      return toastError(t("error.InvalidAccess", { ns: "messages" }))
     }
     setIsConfirming(true)
 

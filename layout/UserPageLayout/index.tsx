@@ -1,13 +1,13 @@
 "use client"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { ReactNode } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function UserPageLayout({ children }: { children: ReactNode }) {
-  const { modal, setModal } = _useMainStore()
+  const { modal, setModal } = useMainStore(["modal", "setModal"])
   const onClickMain = (e: any) => {
     const closestElement = e.target.closest("[data-global-closer]")
 

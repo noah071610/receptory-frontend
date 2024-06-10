@@ -3,22 +3,20 @@
 import FormUserInput from "@/components/FormUserInput"
 import { SectionType } from "@/types/Edit"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
-import { useParams } from "next/navigation"
 import { memo, useRef } from "react"
 
 import TextareaAutosize from "react-textarea-autosize"
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageText({ section }: { section: SectionType }) {
-  const { lang } = useParams()
+  const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const { selected, setSelectedText } = _useMainStore()
   const { max } = section.options
   const design = section.design
   const { value } = selected[section.index - 1] ?? {}

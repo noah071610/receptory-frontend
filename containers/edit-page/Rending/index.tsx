@@ -7,7 +7,8 @@ import Input from "@/components/Input"
 import { queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
 import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
@@ -29,7 +30,8 @@ export default function Rending({
 }) {
   const queryClient = useQueryClient()
   const { pageId } = useParams()
-  const { t } = useTranslation("ko")
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
   const {
     stage,
     homeSections,
@@ -42,7 +44,19 @@ export default function Rending({
     setActive,
     setRevert,
     setPageEmbedOption,
-  } = _useEditorStore()
+  } = useEditorStore([
+    "stage",
+    "homeSections",
+    "formSections",
+    "currentUsedImages",
+    "currentUsedColors",
+    "confirmSections",
+    "pageOptions",
+    "setPageOptions",
+    "setActive",
+    "setRevert",
+    "setPageEmbedOption",
+  ])
   const { format, customLink, embed, isUseHomeThumbnail, isNotUseCustomLink } = pageOptions
   const isActive = format === "active"
   const thumbnailEmbedContent: { title: string; description: string; src: string } = {
@@ -56,24 +70,28 @@ export default function Rending({
     setIsLoading(true)
     if (typeof pageId !== "string") return setIsLoading(false)
     if (formSections.length <= 1) {
-      toastError("폼에 적어도 한개 이상의 섹션이 필요합니다")
+      // 폼에 적어도 한개 이상의 섹션이 필요합니다
+      toastError(t("error.mustHaveFormSection", { ns: "messages" }))
       return setIsLoading(false)
     }
     if (!isNotUseCustomLink) {
       if (customLink.trim().length !== customLink.length) {
         setIsLoading(false)
-        return toastError("링크에 공백은 포함 될 수 없습니다.")
+        // 링크에 공백은 포함 될 수 없습니다.
+        return toastError(t("error.noEmptyCustomLink", { ns: "messages" }))
       }
       if (customLink.length > 0) {
         const temp = customLink.match(/[^A-Za-z0-9\-\_]/g)
         if (temp) {
           setIsLoading(false)
-          return toastError("링크에 영문자가 아닌 문자 또는 특수문자, 공백은 포함 될 수 없습니다.")
+          // 링크에 영문자가 아닌 문자 또는 특수문자, 공백은 포함 될 수 없습니다.
+          return toastError(t("error.invalidCustomLink", { ns: "messages" }))
         }
         const msg = await checkCustomLink(customLink)
         if (msg === "no") {
           setIsLoading(false)
-          toastError("alreadyUsedCustomLink")
+          // 다른 사람이 사용 중인 커스텀 링크에요
+          toastError(t("error.alreadyUsedCustomLink", { ns: "messages" }))
           return
         }
       }
@@ -151,9 +169,9 @@ export default function Rending({
       <section>
         <div className={cx("title")}>
           <h1>
-            <span>임베드 설정</span>
+            <span>{t("shareSettingTitle")}</span>
           </h1>
-          <p>링크 공유시 나오는 썸네일과 설명 등을 설정 할 수 있어요.</p>
+          <p>{t("shareSettingDescription")}</p>
         </div>
         <div className={cx("section-content", "embed")}>
           <div className={cx("section-content-main")}>
@@ -168,7 +186,7 @@ export default function Rending({
               </div>
               <span>{t("useHomeThumbnail")}</span>
             </button>
-            <h4>썸네일</h4>
+            <h4>{t("footer.thumbnail")}</h4>
             <div
               style={{ background: getImageUrl({ url: embedContent.src ?? "" }) }}
               className={cx("embed-thumbnail", { disabled: isUseHomeThumbnail })}
@@ -183,11 +201,11 @@ export default function Rending({
                 <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>
-            <h4>제목</h4>
+            <h4>{t("footer.title")}</h4>
             <Input
               type="input"
               className={cx("embed-title-input")}
-              inputType="embed-title"
+              inputType="titleInput"
               isOptional={false}
               onChange={(inputValue: string) => {
                 onChangeInput(inputValue, "title")
@@ -195,11 +213,11 @@ export default function Rending({
               disabled={isUseHomeThumbnail}
               value={embedContent.title}
             />
-            <h4>설명</h4>
+            <h4>{t("footer.description")}</h4>
             <Input
               type="input"
               className={cx("embed-description-input")}
-              inputType="embed-description"
+              inputType="descriptionInput"
               isOptional={true}
               onChange={(inputValue: string) => {
                 onChangeInput(inputValue, "description")
@@ -215,7 +233,7 @@ export default function Rending({
           <h1>
             <span>{t("linkSetting")}</span>
           </h1>
-          <p>공유되는 url에 문자열을 바꿀 수 있어요.</p>
+          <p>{t("linkSettingDescription")}</p>
         </div>
         <div className={cx("section-content", "customLink")}>
           <div className={cx("section-content-main")}>
@@ -232,11 +250,11 @@ export default function Rending({
             </button>
             {!isNotUseCustomLink && (
               <>
-                <h4>커스텀 링크</h4>
+                <h4>{t("customLink")}</h4>
                 <Input
                   type="input"
-                  inputType="customLink"
-                  isOptional={true}
+                  inputType="customLinkInput"
+                  isOptional={false}
                   onChange={(inputValue: string) => {
                     onChangeInput(inputValue, "customLink")
                   }}
@@ -249,15 +267,15 @@ export default function Rending({
       </section>
       <div className={cx("deploy-wrapper")}>
         <div className={cx("float-message", { active: isActive })}>
-          <p>{isActive ? "현재 배포중이에요!" : "거의 다 왔어요!"}</p>
+          <p>{t(isActive ? "deployingNow" : "undeployNow")}</p>
         </div>
         <button onClick={() => onChangeFormat(isActive ? "save" : "active")} className={cx("deploy")}>
-          <span>{isActive ? "저장하고 적용하기" : "배포하기"}</span>
+          <span>{t(isActive ? "saveAndDeploy" : "deploy")}</span>
         </button>
       </div>
       {isActive && (
         <button onClick={() => onChangeFormat("inactive")} className={cx("undeploy")}>
-          <span>배포중지</span>
+          <span>{t("stopDeploy")}</span>
         </button>
       )}
     </div>

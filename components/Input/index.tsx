@@ -2,7 +2,7 @@
 
 import { useError } from "@/hooks/useError"
 import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { useMainStore } from "@/store/main"
 import { SectionType, StyleProperties } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
@@ -52,11 +52,18 @@ function Input({
   }
 
   const { pageLang } = useMainStore(["pageLang"])
-  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
 
   const { isError, errorMessage, setErrorClear, errorStyle, onError } = useError({ type: "noEmptyText" })
   const inputRef = useRef(null)
-  const { setValue, setList, setData, saveSectionHistory, selectedSection, setSelectedSection } = _useEditorStore()
+  const { setValue, setList, setData, saveSectionHistory, selectedSection, setSelectedSection } = useEditorStore([
+    "setValue",
+    "setList",
+    "setData",
+    "saveSectionHistory",
+    "selectedSection",
+    "setSelectedSection",
+  ])
   const [initLength, setInitLength] = useState(value?.length ?? 0)
   const [isEdited, setIsEdited] = useState(false)
   const [snapshot, setSnapshot] = useState<string | null>(value ?? null)
@@ -171,7 +178,11 @@ function Input({
   return (
     <div className={cx("input-wrapper")}>
       <div className={cx("tooltip", { isError, isBottomError })}>
-        <div className={cx("error")}>{errorMessage}</div>
+        <div className={cx("error")}>
+          {t(`error.${errorMessage}`, {
+            ns: "messages",
+          })}
+        </div>
       </div>
       {displayMode ? (
         <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>

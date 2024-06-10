@@ -10,16 +10,16 @@ import style from "./style.module.scss"
 
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useTranslation } from "@/i18n/client"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function NameInput({ section }: { section: SectionType }) {
-  const { t } = useTranslation("ko")
+  const { pageLang, setSelectedText, selected } = useMainStore(["pageLang", "setSelectedText", "selected"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const { lang } = useParams()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const { setSelectedText, selected } = _useMainStore()
   const { value } = selected[section.index - 1] ?? {}
   const text = value ? value[0].text : ""
 

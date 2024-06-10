@@ -3,6 +3,7 @@ import { RgbaColorPicker } from "react-colorful"
 
 import { useTranslation } from "@/i18n/client"
 import { _useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { useEffect, useMemo, useState } from "react"
 import style from "./style.module.scss"
@@ -31,7 +32,8 @@ export default function ColorPicker({
 }: {
   colorKey: "backgroundColor" | "color" | "ctaBackgroundColor" | "labelColor"
 }) {
-  const { t } = useTranslation("ko")
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   const { setStyle, selectedSection, setList, currentUsedColors, addUsed } = _useEditorStore()
   const listIndex = colorKey === "ctaBackgroundColor" || colorKey === "labelColor" ? 2 : 0
 

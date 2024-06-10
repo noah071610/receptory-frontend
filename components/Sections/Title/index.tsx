@@ -44,7 +44,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             <Input
               type="input"
               className={cx("label-input")}
-              inputType="label"
+              inputType="labelInput"
               isOptional={true}
               maxLength={20}
               listIndex={2}
@@ -64,7 +64,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             value={title.value}
             listIndex={0}
             className={cx("title-input")}
-            inputType="title"
+            inputType="titleInput"
             isOptional={true}
             style={{ textAlign }}
             section={section}
@@ -79,7 +79,7 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
             value={description.value}
             listIndex={1}
             className={cx("description-input")}
-            inputType="description"
+            inputType="descriptionInput"
             isOptional={true}
             style={{ textAlign }}
             section={section}

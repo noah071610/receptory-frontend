@@ -7,14 +7,16 @@ import style from "./style.module.scss"
 
 import Input from "@/components/Input"
 import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Confirm({ section }: { section: SectionType }) {
-  const { t } = useTranslation("ko")
-  const { pageOptions } = _useEditorStore()
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+  const { pageOptions } = useEditorStore(["pageOptions"])
   const { title, description } = section.data
 
   return (
@@ -24,7 +26,7 @@ function Confirm({ section }: { section: SectionType }) {
           <div className={cx("top")}>
             <Input
               type="input"
-              inputType="title"
+              inputType="titleInput"
               className={cx("title-input")}
               isOptional={false}
               maxLength={18}
@@ -34,7 +36,7 @@ function Confirm({ section }: { section: SectionType }) {
             />
             <Input
               type="textarea"
-              inputType="description"
+              inputType="descriptionInput"
               className={cx("description-input")}
               isOptional={true}
               maxLength={40}
@@ -49,7 +51,7 @@ function Confirm({ section }: { section: SectionType }) {
                   <span>{"예약 번호"}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{"confirmationIdExample"}</span>
+                  <span>{t("confirmationIdExample")}</span>
                 </div>
               </li>
               <li>

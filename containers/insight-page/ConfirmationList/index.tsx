@@ -36,7 +36,8 @@ const ConfirmationList = ({
 }) => {
   const { curFilter, setCurFilter, setCurFilterAll, isFilterUpdate, setIsFilterUpdate } = useInsightStore()
   const { pageId } = useParams()
-  const { t } = useTranslation("ko")
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
 
   const [searchInput, setSearchInput] = useState({
     temp: "",

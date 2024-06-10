@@ -8,14 +8,20 @@ import { memo } from "react"
 import style from "./style.module.scss"
 
 import NumberRange from "@/components/NumberRange"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageCalender({ section }: { section: SectionType }) {
-  const { t } = useTranslation("ko")
-  const { setSelected, selected, setModal, pageLang } = _useMainStore()
+  const { setSelected, selected, setModal, pageLang } = useMainStore([
+    "setSelected",
+    "selected",
+    "setModal",
+    "pageLang",
+  ])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+
   const { value } = selected[section.index - 1] ?? {}
 
   const onClickOpenModal = () => {

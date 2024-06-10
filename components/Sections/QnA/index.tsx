@@ -5,7 +5,9 @@ import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { colors } from "@/config/colors"
 import { toastError } from "@/config/toast"
-import { _useEditorStore } from "@/store/editor"
+import { useTranslation } from "@/i18n/client"
+import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { changeOpacity } from "@/utils/styles/changeOpacity"
 import { faChevronDown, faQ } from "@fortawesome/free-solid-svg-icons"
@@ -51,7 +53,7 @@ const List = ({
         <div className={cx("title-inner")}>
           <Input
             type="input"
-            inputType="title"
+            inputType="titleInput"
             listIndex={index}
             isOptional={false}
             maxLength={80}
@@ -75,10 +77,12 @@ const List = ({
 }
 
 export default function QnA({ section }: { section: SectionType }) {
-  const { deleteList } = _useEditorStore()
+  const { deleteList } = useEditorStore(["deleteList"])
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError("atLeastOneList")
+      return toastError(t("error.atLeastOneList", { ns: "messages" }))
     }
     deleteList({ targetIndex: i })
   }

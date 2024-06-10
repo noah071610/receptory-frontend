@@ -8,7 +8,8 @@ import { toastError } from "@/config/toast"
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver"
 import { useProgressiveImage } from "@/hooks/useProgressiveImage"
 import { useTranslation } from "@/i18n/client"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import { SectionListType, SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { getAnimation } from "@/utils/styles/getAnimation"
@@ -82,7 +83,7 @@ const Card = ({
               dataKey={"title"}
               className={cx("title-input")}
               listIndex={i}
-              inputType="title"
+              inputType="titleInput"
               value={list.data.title}
               section={section}
             />
@@ -92,7 +93,7 @@ const Card = ({
               listIndex={i}
               className={cx("description-input")}
               dataKey={"description"}
-              inputType="description"
+              inputType="descriptionInput"
               isOptional={true}
               value={list.data.description}
               section={section}
@@ -105,7 +106,9 @@ const Card = ({
 }
 
 const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) => {
-  const { deleteList } = _useEditorStore()
+  const { deleteList } = useEditorStore(["deleteList"])
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
 
   const textColor = useMemo(
     () =>
@@ -117,7 +120,8 @@ const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDispl
 
   const onDelete = (i: number) => {
     if (section.list.length <= 1) {
-      return toastError("atLeastOneList")
+      // atLeastOneList
+      return toastError(t("error.atLeastOneList", { ns: "messages" }))
     }
     deleteList({ targetIndex: i })
   }
@@ -150,7 +154,8 @@ const BasicSlider = ({ section, isDisplayMode }: { section: SectionType; isDispl
 }
 
 function Slider({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation("ko")
+  const { pageLang } = useMainStore(["pageLang"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
   return (
     <div className={cx("layout", { isDisplayMode: isDisplayMode })}>
       {section.list.length > 0 && (

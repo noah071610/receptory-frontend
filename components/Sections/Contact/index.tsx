@@ -83,7 +83,7 @@ function Contact({
                     <h5>{t("linkDescription")}</h5>
                     <Input
                       type="input"
-                      inputType={`${key}Placeholder`}
+                      inputType={"linkDescription"}
                       isOptional={true}
                       onChange={(value: string) => {
                         onChangeLink(value, i, "description")
@@ -94,7 +94,7 @@ function Contact({
                     <h5>{t("linkUrl")}</h5>
                     <Input
                       type="input"
-                      inputType={`${key}Placeholder`}
+                      inputType={`linkUrl`}
                       isOptional={false}
                       onChange={(value: string) => {
                         onChangeLink(value, i, "link")

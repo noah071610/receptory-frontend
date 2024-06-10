@@ -5,7 +5,7 @@ import hasString from "@/utils/helpers/hasString"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { SelectedValueType } from "@/types/Main"
 import cs from "classNames/bind"
 import { useState } from "react"
@@ -14,8 +14,9 @@ import ThumbList from "./List/Thumb"
 const cx = cs.bind(style)
 
 export const SelectList = ({ section }: { section: SectionType }) => {
-  const { t } = useTranslation("ko")
-  const { setModal, setSelected } = _useMainStore()
+  const { pageLang, setModal, setSelected } = useMainStore(["pageLang", "setSelected", "setModal"])
+  const { t } = useTranslation(pageLang, ["edit-page"])
+
   const selectList = section.list.filter((v) => hasString(v.data.title))
   const design = section.design ?? "basic"
   const [userSelectedList, setUserSelectedList] = useState<SelectedValueType[]>([])

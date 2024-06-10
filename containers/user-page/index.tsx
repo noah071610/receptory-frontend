@@ -12,7 +12,7 @@ import style from "@/containers/user-page/style.module.scss"
 import { usePageValidator } from "@/hooks/usePageValidator"
 import { useTranslation } from "@/i18n/client"
 import UserPageLayout from "@/layout/UserPageLayout"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { SaveListType } from "@/types/Page"
 import { useQuery } from "@tanstack/react-query"
@@ -24,7 +24,7 @@ const cx = cs.bind(style)
 const UserPage = ({ lang }: { lang: Langs }) => {
   const { t } = useTranslation(lang, ["user-page"])
   const { user } = usePageValidator({ isAuth: true })
-  const { modal, setModal } = _useMainStore()
+  const { modal, setModal } = useMainStore(["modal", "setModal"])
   const { userId } = useParams()
   const queryUserId = userId as string
   const [isLoading, setIsLoading] = useState(false)
@@ -37,14 +37,16 @@ const UserPage = ({ lang }: { lang: Langs }) => {
 
   useEffect(() => {
     if (isError) {
-      toastError("저장 데이터를 불러오는데에 에러가 발생했어요")
+      // 예상치 못한 에러가 발생했어요
+      toastError(t("error.unknown", { ns: "messages" }))
     }
-  }, [isError])
+  }, [isError, t])
 
   const onClickAddSave = async () => {
     if (user?.userId) {
       if (saves && saves.length >= 2) {
-        return toastError("페이지는 최대 2개까지 만들 수 있어요")
+        // 페이지는 최대 {{number}}개까지 만들 수 있어요
+        toastError(t("error.maximumPage", { ns: "messages", number: 2 }))
       }
       setModal({ section: null, type: "selectLang" })
     }

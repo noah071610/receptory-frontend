@@ -13,16 +13,21 @@ import CalenderMain from "@/components/Modal/DatePicker/CalenderMain"
 import NumberRange from "@/components/NumberRange"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { _useMainStore, useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { dateToString, stringToDate } from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Calender({ section }: { section: SectionType }) {
-  const { pageLang } = useMainStore(["pageLang"])
+  const { setModal, setSelected, selected, pageLang } = useMainStore([
+    "pageLang",
+    "setModal",
+    "setSelected",
+    "selected",
+  ])
   const { t } = useTranslation(pageLang, ["edit-page"])
-  const { setModal, setSelected, selected } = _useMainStore()
+
   const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = _useEditorStore()
   const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options
   const { value } = selected[section.index - 1] ?? {}

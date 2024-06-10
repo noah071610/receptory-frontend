@@ -6,7 +6,7 @@ import style from "./style.module.scss"
 
 import { submit } from "@/actions/page"
 import { toastError } from "@/config/toast"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -24,8 +24,8 @@ export const MakePassword = ({
   const pathname = usePathname()
   const { replace } = useRouter()
   const { pageId } = useParams()
-  const { t } = useTranslation("ko")
-  const { setModal, selected } = _useMainStore()
+  const { setModal, selected, pageLang } = useMainStore(["pageLang", "setModal", "selected"])
+  const { t } = useTranslation(pageLang, ["edit-page", "messages"])
   const [password, setPassword] = useState({
     password: "",
     confirmPassword: "",
@@ -36,14 +36,17 @@ export const MakePassword = ({
 
   const onClickConfirm = async () => {
     if (typeof pageId !== "string") {
-      return toastError("잘못된 접근입니다.")
+      // 잘못된 접근입니다.
+      return toastError(t("error.InvalidAccess", { ns: "messages" }))
     }
     if (password.password !== password.confirmPassword) {
-      return toastError("비밀번호가 일치하지 않습니다.")
+      // 비밀번호가 일치하지 않습니다.
+      return toastError(t("error.notSamePassword", { ns: "messages" }))
     }
 
     if (password.password.length < 5) {
-      return toastError("패스워드는 최소 5글자 이상을 입력해주세요.")
+      // 패스워드는 최소 5글자 이상을 입력해주세요.
+      return toastError(t("error.safeConfirmPassword", { ns: "messages" }))
     }
     setIsConfirming(true)
 

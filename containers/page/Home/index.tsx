@@ -8,7 +8,7 @@ import { _url } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import style from "@/containers/page/style.module.scss"
 import { usePageValidator } from "@/hooks/usePageValidator"
-import { _useMainStore } from "@/store/main"
+import { useMainStore } from "@/store/main"
 import { PageType } from "@/types/Page"
 import getConfirmationId from "@/utils/helpers/getConfirmationId"
 import { setDateFormat } from "@/utils/helpers/setDate"
@@ -19,7 +19,7 @@ import cs from "classNames/bind"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 const cx = cs.bind(style)
 
 const DatePicker = dynamic(() => import("@/components/Modal/DatePicker"), {
@@ -44,17 +44,26 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
   const pathname = usePathname()
   const { push, replace } = useRouter()
   const { modal, setModal, selected, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
-    _useMainStore()
+    useMainStore([
+      "modal",
+      "setModal",
+      "selected",
+      "setConfirmation",
+      "clearPage",
+      "pageLang",
+      "curConfirmationId",
+      "setPageLang",
+    ])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmit, setIsSubmit] = useState(false)
   const [isConfirming, setIsConfirming] = useState(false)
   const [isConfirm, setIsConfirm] = useState(false)
   const [components, setComponents] = useState<JSX.Element[]>([])
 
-  const onClickCTA = () => {
+  const onClickCTA = useCallback(() => {
     setIsLoading(true)
     push(`${pathname}?s=form`)
-  }
+  }, [pathname, push])
 
   const onClickPage = (e: any) => {
     const closestElement = e.target.closest("[data-global-closer]")
@@ -79,14 +88,14 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
     if (!isConfirm && initialParams === "confirm") {
       setModal({ section: null, type: "confirmReservation" })
     }
-  }, [isConfirm, initialParams])
+  }, [isConfirm, initialParams, setModal])
 
   useEffect(() => {
     // 페이지 언어 설정
     if (initialData) {
       setPageLang(initialData.lang)
     }
-  }, [initialData])
+  }, [initialData, setPageLang])
 
   useEffect(() => {
     if (initialData) {
@@ -132,7 +141,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
         })
       })()
     }
-  }, [initialParams, isConfirm])
+  }, [initialData, initialParams, isConfirm, onClickCTA, pathname, replace])
 
   const userFormLength = useMemo(
     () =>
@@ -143,14 +152,14 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
             ).length
           : 999999
         : 999999,
-    [initialParams]
+    [initialData, initialParams]
   )
 
   useEffect(() => {
     if (initialParams !== "confirm") {
       clearPage()
     }
-  }, [initialParams])
+  }, [clearPage, initialParams])
 
   const isReadyToSubmit = useMemo(() => {
     return (
