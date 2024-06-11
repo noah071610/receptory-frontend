@@ -35,7 +35,7 @@ function PageConfirm({ section }: { section: SectionType }) {
         type: section.type,
       }
     })
-  }, [selected])
+  }, [selected, pageLang, section.type])
 
   return (
     <div className={cx("layout")}>

@@ -2,7 +2,7 @@
 
 import { uploadImages } from "@/actions/upload"
 import DeleteBtn from "@/components/DeleteBtn"
-import { SwiperNavigation } from "@/components/SwiperNavigation"
+import SwiperNavigation from "@/components/SwiperNavigation"
 import { useEditorStore } from "@/store/editor"
 import { ImageUpload, SectionListType, SectionListTypes } from "@/types/Edit"
 import { Langs } from "@/types/Main"

@@ -1,6 +1,6 @@
 "use client"
 
-import { SwiperNavigation } from "@/components/SwiperNavigation"
+import SwiperNavigation from "@/components/SwiperNavigation"
 import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"

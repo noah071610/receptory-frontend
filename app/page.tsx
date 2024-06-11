@@ -7,7 +7,7 @@ export default function Home() {
   const { push } = useRouter()
   useEffect(() => {
     push("/login")
-  }, [])
+  }, [push])
 
   return <div></div>
 }

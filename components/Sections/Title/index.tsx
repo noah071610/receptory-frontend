@@ -7,7 +7,6 @@ import { memo, useMemo } from "react"
 import style from "./style.module.scss"
 
 import hasString from "@/utils/helpers/hasString"
-import { changeOpacity } from "@/utils/styles/changeOpacity"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -16,13 +15,12 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
   const textAlign = section.style.textAlign
 
   const { color } = label.style
-  const backgroundColor = useMemo(() => changeOpacity(color ?? "rgba(255,255,255,1)", 0.1), [color])
   const labelStyle = useMemo(
     () => ({
       textAlign,
       color,
     }),
-    [backgroundColor, color, textAlign]
+    [color, textAlign]
   )
 
   return (

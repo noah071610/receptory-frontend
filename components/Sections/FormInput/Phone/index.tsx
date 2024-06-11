@@ -63,11 +63,11 @@ function Phone({ section }: { section: SectionType }) {
 
   useEffect(() => {
     setOptions({ key: "phoneNumberCountry", payload: lang ?? "ko" })
-  }, [lang])
+  }, [lang, setOptions])
 
   useEffect(() => {
     setSelectedText({ section, text: "" })
-  }, [phoneNumberCountry])
+  }, [phoneNumberCountry, section, setSelectedText])
 
   return (
     <div className={cx("layout")}>
