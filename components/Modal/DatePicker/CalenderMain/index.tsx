@@ -17,7 +17,6 @@ import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { dateToString } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
 const cx = cs.bind(style)
 
 interface CalendarProps {
@@ -72,8 +71,7 @@ function CalenderMain({
   isOptionCalender?: boolean
   selectedDates?: Date[]
 }) {
-  const { lang } = useParams()
-  const { pageLang, setSelected, setModal } = useMainStore(["pageLang", "setModal", "setSelected"])
+  const { setSelected, setModal } = useMainStore(["pageLang", "setModal", "setSelected"])
   const { t } = useTranslation(["edit-page"])
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
@@ -103,7 +101,7 @@ function CalenderMain({
 
   useEffect(() => {
     if (!isOptionCalender) setOffset(startDate)
-  }, [startDate, isOptionCalender])
+  }, [startDate, isOptionCalender, setOffset])
 
   return (
     <div className={cx("date-picker-layout", { isOptionCalender: isOptionCalender })}>

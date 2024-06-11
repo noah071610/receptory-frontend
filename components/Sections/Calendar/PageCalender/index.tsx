@@ -50,12 +50,12 @@ function PageCalender({ section }: { section: SectionType }) {
             start={value[0].text}
             end={value[1] && value[1].text}
             formatter={(date: string) => {
-              if (date === "anyDate") return "anyDate"
+              if (!date.match(/-/g)) return t("anyDate")
               return stringToDate(date, pageLang ?? undefined)
             }}
           />
         ) : (
-          t("none")
+          ""
         )}
       </FormUserInput>
     </div>

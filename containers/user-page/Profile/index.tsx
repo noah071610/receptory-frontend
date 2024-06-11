@@ -1,10 +1,11 @@
 "use client"
 
-import { userPlan } from "@/config"
+import { _url, userPlan } from "@/config"
+import { toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
-import { faFire, faFlag, faGear } from "@fortawesome/free-solid-svg-icons"
+import { faFlag, faGear, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
@@ -14,22 +15,22 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 const options = {
-  settings: ["changeProfile", "deleteAccount"],
-  inform: ["feedback", "report"],
+  contents: ["template", "guide"],
+  settings: ["changeSiteLang", "deleteAccount"],
+  inform: ["upgrade", "terms-and-policy", "feedback", "report"],
 }
 
 const menu = [
+  { value: "contents", icon: faWandMagicSparkles },
   { value: "settings", icon: faGear },
   { value: "inform", icon: faFlag },
-  { value: "upgrade", icon: faFire },
 ]
 
 const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
-  // todo:
   const { t } = useTranslation(["user-page"])
   const { push } = useRouter()
-  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
-  const [selectedOption, setSelectedOption] = useState<null | "settings" | "inform">(null)
+  const { setModal } = useMainStore(["setModal"])
+  const [selectedOption, setSelectedOption] = useState<null | "settings" | "inform" | "contents">(null)
 
   const onClickMenu = (value: "settings" | "inform" | "upgrade") => {
     if (selectedOption === value) {
@@ -43,20 +44,47 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
   }
 
   const onClickSubmenu = (type: any) => {
-    if (type === "deleteAccount") {
-      setModal({
-        section: null,
-        type: "confirmHard",
-        payload: { text: type, value: undefined },
-      })
+    switch (type) {
+      case "deleteAccount":
+        setModal({
+          section: null,
+          type: "confirmHard",
+          payload: { text: type, value: undefined },
+        })
+        break
+      case "terms-and-policy":
+        if (typeof window === "object") {
+          window.open(`${_url.client}/terms-and-policy`, "_blank")
+        }
+        break
+
+      case "changeSiteLang":
+        setModal({
+          section: null,
+          type: "selectLang",
+          payload: {
+            lang,
+            isChangeSiteLang: true,
+          },
+        })
+        break
+      case "template":
+      case "guide":
+        toastSuccess("comingsoon")
+        break
+      default:
+        break
     }
   }
+
   return (
     <>
       <div className={cx("profile")}>
-        <picture>
-          <img width={120} height={120} src={user.userImage} alt={`${user.userName}_profile`} />
-        </picture>
+        <div className={cx("user-icon")}>
+          <div>
+            <span>{user.userName[0]}</span>
+          </div>
+        </div>
         <h1>{user.userName}</h1>
         <span className={cx("plan")}>{t(`plan.${userPlan[user.plan]}`)}</span>
         <div className={cx("info-layout")}>

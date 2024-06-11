@@ -12,7 +12,7 @@ const cx = cs.bind(style)
 
 export const DatePicker = ({ section }: { section: SectionType }) => {
   const { startDate, endDate, interval, specificDate, isRangeSelect } = section.options
-  const sd = section?.collection ?? []
+  const sd = useMemo(() => section?.collection ?? [], [section?.collection])
 
   // 특정 날짜를 선택하기 위한 달력, 엄연히 에디터 사용 유저들을 위한 로직
   // 실제 이용자들은 쓸일이 없다.

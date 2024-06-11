@@ -1,6 +1,6 @@
 "use client"
 
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import cs from "classNames/bind"
 import { useState } from "react"
@@ -23,7 +23,7 @@ export default function ImageSelector({
   const { t } = useTranslation(["modal"])
   const [curStage, setCurStage] = useState<"emoji" | "image">(IsUseEmoji ? "emoji" : "image")
 
-  const { active } = _useEditorStore()
+  const { active } = useEditorStore(["active"])
 
   const type = active.modal.type?.replace("-image", "")
 

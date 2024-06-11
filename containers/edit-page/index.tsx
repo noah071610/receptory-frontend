@@ -6,7 +6,7 @@ import SectionLayout from "@/components/Sections/index"
 import { initialStates, useEditorStore } from "@/store/editor"
 import cs from "classNames/bind"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useState } from "react"
 import style from "./style.module.scss"
 
 import { getSave } from "@/actions/save"
@@ -20,6 +20,7 @@ import Rending from "@/containers/edit-page/Rending"
 import SectionList from "@/containers/edit-page/SectionList"
 import { sectionMap } from "@/containers/edit-page/sectionMap"
 import { usePageValidator } from "@/hooks/usePageValidator"
+import i18next from "@/i18n/init"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
@@ -46,9 +47,10 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
 })
 
 const EditPage = ({ lang }: { lang: Langs }) => {
-  const {} = useTranslation(lang, ["edit-page", "messages"])
   const { pageId, user } = usePageValidator({ isAuth: true, isEdit: true })
-
+  const { t } = useTranslation(["messages"], {
+    lng: lang,
+  })
   const pathname = usePathname()
   const { back } = useRouter()
 
@@ -72,7 +74,11 @@ const EditPage = ({ lang }: { lang: Langs }) => {
       !(async function () {
         const data = await getSave(pageId)
         if (data === "notFound" || !data) {
-          alert("포스트가 존재하지 않습니다.")
+          alert(
+            t("error.noFound", {
+              ns: "messages",
+            })
+          )
           return back()
         }
 
@@ -104,9 +110,17 @@ const EditPage = ({ lang }: { lang: Langs }) => {
     [confirmSections, formSections, homeSections, stage]
   )
 
+  // page의 lang이 아니라 브라우저 언어로 보여주기
+  useLayoutEffect(() => {
+    if (i18next) {
+      i18next.changeLanguage(lang)
+    }
+    setPageLang(lang)
+  }, [lang, setPageLang])
+
   return (
     <>
-      <Header lang={lang} />
+      <Header />
       <PageLayout>
         <div className={cx("main", { isRending: stage === "rending" })}>
           <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading isFull={true} />}</div>

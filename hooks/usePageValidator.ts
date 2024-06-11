@@ -2,50 +2,26 @@ import { UserType } from "@/types/User"
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getUser } from "@/actions/user"
 import { queryKey } from "@/config"
-import { PageType } from "@/types/Page"
 import { useQuery } from "@tanstack/react-query"
 import { useParams, useRouter } from "next/navigation"
 import { useLayoutEffect } from "react"
+import { useTranslation } from "react-i18next"
 
-export const usePageValidator = ({
-  isAuth,
-  isPage,
-  isEdit,
-  initialData,
-}: {
-  isAuth?: boolean
-  isPage?: boolean
-  isEdit?: boolean
-  initialData?: PageType
-}) => {
+export const usePageValidator = ({ isAuth, isEdit }: { isAuth?: boolean; isEdit?: boolean }) => {
   const { push, back } = useRouter()
   const { userId, pageId } = useParams()
+  const { t } = useTranslation(["messages"])
   const { data: user, isFetched: isFetchedUserQuery } = useQuery<UserType>({
     queryKey: queryKey.user,
     queryFn: getUser,
     enabled: isAuth && typeof userId === "string",
   })
 
-  // PAGE
-  useLayoutEffect(() => {
-    if (isPage) {
-      if (!initialData) {
-        alert("페이지를 로드하지 못했습니다.")
-        return back()
-      }
-      if (initialData.format === "inactive") {
-        alert("현재 비공개 상태인 페이지입니다.")
-        return back()
-      }
-      // todo: error 핸들링 진짜 조져야한다..!
-    }
-  }, [isPage, initialData])
-
   // EDIT
   useLayoutEffect(() => {
     if (isEdit) {
       if (typeof pageId !== "string") {
-        alert("잘못된 접근입니다.")
+        alert(t("error.invalidAccess"))
         return back()
       }
     }
@@ -56,7 +32,7 @@ export const usePageValidator = ({
     // 잘못된 url 접근 차단
     if (isAuth) {
       if (typeof userId !== "string") {
-        alert("잘못된 접근입니다.")
+        alert(t("error.invalidAccess"))
         return back()
       }
 
@@ -65,13 +41,13 @@ export const usePageValidator = ({
 
         // 로그인 안했네?
         if (!user) {
-          alert("로그인을 해주세요")
+          alert(t("error.login"))
           return push("/login")
         }
 
         // 남의 페이지를 왜 들어가? 미친놈 아님? ㅡㅡ
         if (user?.userId !== userId) {
-          alert("잘못된 접근입니다.")
+          alert(t("error.invalidAccess"))
           return back()
         }
       }

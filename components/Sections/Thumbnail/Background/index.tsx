@@ -96,7 +96,7 @@ export default function Background({
                 type="input"
                 section={section}
                 displayMode={isDisplayMode && "span"}
-                inputType="ctaInput"
+                inputType="textInput"
                 dataKey={"cta"}
                 isOptional={false}
                 style={{ color: ctaTextColor }}

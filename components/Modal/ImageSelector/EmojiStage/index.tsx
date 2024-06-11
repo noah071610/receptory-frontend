@@ -1,13 +1,13 @@
 "use client"
 
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import cs from "classNames/bind"
 import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function EmojiStage({ type }: { type?: string }) {
-  const { setSrc, setActive, setOptions } = _useEditorStore()
+  const { setSrc, setActive, setOptions } = useEditorStore(["setSrc", "setActive", "setOptions"])
   const onEmojiClick = (data: EmojiClickData) => {
     switch (type) {
       case "thumbnail":

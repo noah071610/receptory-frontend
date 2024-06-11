@@ -35,7 +35,7 @@
       display: flex;
       gap: 5px;
       flex-wrap: wrap;
-      font-size: 15px;
+      font-size: 16px;
       line-height: 1.2;
       letter-spacing: 1px;
     }
@@ -43,7 +43,7 @@
     textarea {
       width: 100%;
       display: flex;
-      font-size: 15px;
+      font-size: 16px;
       line-height: 1.2;
     }
     input {
@@ -85,6 +85,11 @@
 
       @include action {
         background-color: var(--gray-soft);
+      }
+      @include mobile() {
+        &:active {
+          background-color: rgba($color: #000000, $alpha: 0.1);
+        }
       }
     }
 

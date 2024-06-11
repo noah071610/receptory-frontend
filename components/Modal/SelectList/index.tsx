@@ -14,7 +14,7 @@ import ThumbList from "./List/Thumb"
 const cx = cs.bind(style)
 
 export const SelectList = ({ section }: { section: SectionType }) => {
-  const { pageLang, setModal, setSelected } = useMainStore(["pageLang", "setSelected", "setModal"])
+  const { setModal, setSelected } = useMainStore(["pageLang", "setSelected", "setModal"])
   const { t } = useTranslation(["edit-page"])
 
   const selectList = section.list.filter((v) => hasString(v.data.title))
@@ -85,7 +85,7 @@ export const SelectList = ({ section }: { section: SectionType }) => {
       ) : (
         <div className={cx("no-list")}>
           <img src="/images/icons/crying.png" alt="crying" />
-          <span>리스트가 없어요</span>
+          <span>{t("noList")}</span>
         </div>
       )}
       <div className={cx("btn-wrapper")}>

@@ -1,17 +1,26 @@
 "use client"
 
 import SectionLayout from "@/components/Sections/display"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { sectionMap } from "../sectionMap"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function Preview() {
-  const { homeSections, formSections, confirmSections, stage, active, setActive } = _useEditorStore()
+  const { t } = useTranslation(["edit-page"])
+  const { homeSections, formSections, confirmSections, stage, active, setActive } = useEditorStore([
+    "homeSections",
+    "formSections",
+    "confirmSections",
+    "stage",
+    "active",
+    "setActive",
+  ])
 
   const sections = useMemo(() => {
     switch (stage) {
@@ -50,7 +59,7 @@ export default function Preview() {
           ))}
           {stage === "form" && (
             <div className={cx("submit")}>
-              <button>{"제출하기"}</button>
+              <button>{t("submit")}</button>
             </div>
           )}
         </div>

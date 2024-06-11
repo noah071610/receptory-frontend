@@ -51,7 +51,7 @@ function Confirm({ section, isDisplayMode }: { section: SectionType; isDisplayMo
             <ul className={cx("info")}>
               <li>
                 <h2>
-                  <span>{"예약 번호"}</span>
+                  <span>{t("confirmationId")}</span>
                 </h2>
                 <div className={cx("value")}>
                   <span>{exampleId + " (Example)"}</span>
@@ -59,7 +59,7 @@ function Confirm({ section, isDisplayMode }: { section: SectionType; isDisplayMo
               </li>
               <li>
                 <h2>
-                  <span>{"확정 일시"}</span>
+                  <span>{t("confirmationDate")}</span>
                 </h2>
                 <div className={cx("value")}>
                   <span>{setDateFormat({ date: new Date(), lang: pageOptions.lang, isTime: true })}</span>

@@ -5,6 +5,7 @@ import { queryKey } from "@/config"
 import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
+import { Langs } from "@/types/Main"
 import { SaveListType } from "@/types/Page"
 import hasString from "@/utils/helpers/hasString"
 import { setDateFormat } from "@/utils/helpers/setDate"
@@ -21,6 +22,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -36,18 +38,21 @@ const defaultList = [
 const PageCard = ({
   userId,
   i,
-  save: { title, description, thumbnail, format, pageId, updatedAt, lang },
+  lang,
+  save: { title, description, thumbnail, format, pageId, updatedAt, customLink, lang: pageLang },
 }: {
   save: SaveListType
   i: number
   userId: string
+  lang: Langs
 }) => {
   const queryClient = useQueryClient()
-  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
-  const { t } = useTranslation(["edit-page"])
-  const { push, replace } = useRouter()
+  const { setModal } = useMainStore(["setModal"])
+  const { t } = useTranslation(["user-page"])
+  const { push } = useRouter()
   const [isActive, setIsActive] = useState(format === "active")
   const [isOpen, setIsOpen] = useState(false)
+
   const onClickList = async (e: any) => {
     const closestElement = e.target.closest("[data-list]")
 
@@ -81,12 +86,12 @@ const PageCard = ({
             type: "selectLang",
             payload: {
               pageId,
-              lang,
+              lang: pageLang,
             },
           })
           break
         case "gotoPage":
-          window.open(`/page/${pageId}`, "_blank")
+          window.open(`/page/${customLink}`, "_blank")
           break
         case "delete": {
           setModal({
@@ -128,7 +133,11 @@ const PageCard = ({
     <li style={getAnimation({ type: "flip", delay: 180 * i })} onClick={onClickList} className={cx("card")}>
       <div className={cx("list-main")}>
         <div className={cx("label")}>
-          <span>Gather form</span>
+          <div className={cx("label-right")}>
+            <Image src={`/images/icons/${pageLang}.png`} width={20} height={20} alt="card-flag" />
+            <span>Gather form</span>
+          </div>
+
           <div className={cx("active")}>
             <div className={cx("circle")}>
               <div style={{ backgroundColor: isActive ? colors.green : colors.red }}></div>
@@ -136,16 +145,16 @@ const PageCard = ({
           </div>
         </div>
         <picture>
-          <img src={thumbnail ? thumbnail : "/images/noImage.png"} alt="thumbnail" />
+          <img className={cx("thumbnail")} src={thumbnail ? thumbnail : "/images/noImage.png"} alt="thumbnail" />
         </picture>
         <div className={cx("list-content")}>
           <div className={cx("title")}>
-            <h2>{hasString(title) ? title : "타이틀 입력"}</h2>
-            <p>{hasString(description) ? description : "타이틀 입력"}</p>
+            <h2>{hasString(title) ? title : t("defaultTitle")}</h2>
+            <p>{hasString(description) ? description : t("defaultDescription")}</p>
           </div>
           <div className={cx("bottom")}>
             <span className={cx("info")}>
-              {t("최근 수정일")}
+              {t("updatedAt")}
               {" : "}
               {setDateFormat({ date: new Date(updatedAt), lang, isTime: true })}
             </span>
@@ -162,7 +171,7 @@ const PageCard = ({
                   <FontAwesomeIcon icon={icon} />
                 </div>
                 <div className={cx("text")}>
-                  <span>{value}</span>
+                  <span>{t(`card.${value}`)}</span>
                 </div>
               </li>
             ))}

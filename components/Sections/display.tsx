@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef } from "react"
 
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import cs from "classNames/bind"
 import style from "./style.module.scss"
@@ -24,13 +24,13 @@ export default function SectionLayout({
   index: number
 }) {
   const observerRef = useRef<HTMLDivElement | null>(null)
-  const { selectedSection } = _useEditorStore()
+  const { selectedSection } = useEditorStore(["selectedSection"])
 
   useEffect(() => {
     if (typeof window === "object" && selectedSection?.id === id && observerRef?.current) {
       if (observerRef?.current) observerRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
     }
-  }, [selectedSection, observerRef?.current])
+  }, [selectedSection, id])
 
   const sectionStyle = { padding: noPadding ? "0px" : undefined, ...style }
   return (

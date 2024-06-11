@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "free": "แผนฟรี",
+    "semiPremium": "แผนเซมิพรีเมียม",
+    "premium": "แผนพรีเมียม"
+  },
+  "settings": "การตั้งค่า",
+  "inform": "ติดต่อ",
+  "upgrade": "อัพเกรด",
+  "changeSiteLang": "เปลี่ยนภาษาเว็บไซต์",
+  "changeProfile": "เปลี่ยนโปรไฟล์",
+  "deleteAccount": "ลบบัญชี",
+  "feedback": "คำติชม",
+  "report": "รายงาน",
+  "noPage": "ยังไม่มีหน้าที่สร้าง",
+  "addPage": "เพิ่มหน้าใหม่",
+  "updatedAt": "อัปเดตล่าสุด",
+  "defaultTitle": "ไม่มีชื่อ",
+  "defaultDescription": "ไม่มีคำอธิบาย",
+  "terms-and-policy": "ข้อตกลงและนโยบาย",
+  "contents": "เนื้อหา",
+  "template": "เทมเพลต",
+  "guide": "คู่มือ",
+
+  "card": {
+    "insight": "ข้อมูลสำคัญ",
+    "gotoPage": "ไปที่หน้า",
+    "stop": "หยุดการติดตั้ง",
+    "edit": "แก้ไขหน้า",
+    "changeLang": "เปลี่ยนภาษาหน้า",
+    "delete": "ลบหน้า"
+  }
+}

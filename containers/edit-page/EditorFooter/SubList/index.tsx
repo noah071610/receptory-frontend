@@ -1,6 +1,6 @@
 "use client"
 
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { AnimationTypes, DesignTypes, EditorFooterList } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -14,7 +14,15 @@ const cx = cs.bind(style)
 
 export default function SubList({ lang, list }: { lang: Langs; list: EditorFooterList[] }) {
   const { t } = useTranslation(["edit-page"])
-  const { active, selectedSection, setStyle, saveSectionHistory, setOptions, setList, setDesign } = _useEditorStore()
+  const { active, selectedSection, setStyle, saveSectionHistory, setOptions, setList, setDesign } = useEditorStore([
+    "active",
+    "selectedSection",
+    "setStyle",
+    "saveSectionHistory",
+    "setOptions",
+    "setList",
+    "setDesign",
+  ])
   const submenuType = active.submenu.type
 
   const onClickList = useCallback(

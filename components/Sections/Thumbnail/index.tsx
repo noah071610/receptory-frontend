@@ -1,7 +1,7 @@
 "use client"
 
 import { colors } from "@/config/colors"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { changeOpacity } from "@/utils/styles/changeOpacity"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
@@ -22,7 +22,7 @@ export default function Thumbnail({
   onClickCTA?: () => void
 }) {
   const search = useSearchParams()
-  const { stage } = _useEditorStore()
+  const { stage } = useEditorStore(["stage"])
   const userStage = search.get("s")
   const { color, backgroundColor } = section.style
   const design = section.design

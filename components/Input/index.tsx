@@ -50,7 +50,7 @@ function Input({
     maxLength = 100
   }
 
-  const { t } = useTranslation(["edit-page"])
+  const { t } = useTranslation(["edit-page", "messages"])
 
   const { isError, errorMessage, setErrorClear, errorStyle, onError } = useError({ type: "noEmptyText" })
   const inputRef = useRef(null)
@@ -176,7 +176,11 @@ function Input({
   return (
     <div className={cx("input-wrapper")}>
       <div className={cx("tooltip", { isError, isBottomError })}>
-        <div className={cx("error")}>{t(`error.${errorMessage}`)}</div>
+        <div className={cx("error")}>
+          {t(`error.${errorMessage}`, {
+            ns: "messages",
+          })}
+        </div>
       </div>
       {displayMode ? (
         <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>

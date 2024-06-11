@@ -1,4 +1,4 @@
-import { cookieName } from "@/i18n/settings"
+import { langCookieName } from "@/i18n/settings"
 import { cookies, headers } from "next/headers"
 import { Langs } from "./../../types/Main"
 
@@ -24,7 +24,8 @@ function getLang(acceptLanguage: string): string {
 export default async function getPreferredLanguage() {
   const headersList = headers()
   let lang = "ko"
-  const cookie = cookies().get(cookieName)?.value
+  const cookie = cookies().get(langCookieName)?.value
+
   if (cookie) {
     lang = cookie
   } else {

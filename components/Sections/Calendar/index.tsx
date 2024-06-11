@@ -2,7 +2,7 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faCalendar } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
@@ -20,15 +20,16 @@ import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Calender({ section }: { section: SectionType }) {
-  const { setModal, setSelected, selected, pageLang } = useMainStore([
-    "pageLang",
-    "setModal",
-    "setSelected",
-    "selected",
-  ])
+  const { setModal, setSelected, selected } = useMainStore(["pageLang", "setModal", "setSelected", "selected"])
   const { t } = useTranslation(["edit-page"])
 
-  const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = _useEditorStore()
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory, pageOptions } = useEditorStore([
+    "setOptions",
+    "addCollection",
+    "deleteCollection",
+    "saveSectionHistory",
+    "pageOptions",
+  ])
   const { isAlways, specificDate, isRangeSelect, startDate, endDate } = section.options
   const { value } = selected[section.index - 1] ?? {}
 
@@ -120,12 +121,12 @@ function Calender({ section }: { section: SectionType }) {
             start={value[0].text}
             end={value[1] && value[1].text}
             formatter={(date: string) => {
-              if (date === "anyDate") return "anyDate"
+              if (!date.match(/-/g)) return t("anyDate")
               return stringToDate(date, pageOptions.lang)
             }}
           />
         ) : (
-          t("none")
+          ""
         )}
       </FormUserInput>
       <div className={cx("options")}>

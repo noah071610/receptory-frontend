@@ -75,7 +75,7 @@ export function stringToDate(date: string, lang: Langs = "en") {
       return `${formatDateToEnglish(month)} ${day}, ${year}`
 
     case "ja":
-      return `${getJapaneseEra(year)} ${month}月 ${day}日`
+      return `${getJapaneseEra(year)}${month}月${day}日`
 
     case "th":
       return `พ.ศ. ${year + 543} ${month}. ${day}.`
@@ -115,9 +115,7 @@ export function setDateFormat({
 
     case "ja":
       return (
-        `${getJapaneseEra(year)} ${month + 1}月` +
-        (noDate ? "" : ` ${day}日`) +
-        (isTime ? ` ${hours}時${minutes}分` : "")
+        `${getJapaneseEra(year)}${month + 1}月` + (noDate ? "" : `${day}日`) + (isTime ? ` ${hours}時${minutes}分` : "")
       )
 
     case "th":

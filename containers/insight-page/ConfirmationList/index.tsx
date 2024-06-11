@@ -15,7 +15,7 @@ import Filter from "./Filter"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const ConfirmationList = ({ formSections }: { formSections?: SectionType[] }) => {
+const ConfirmationList = ({ isVisible, formSections }: { isVisible: boolean; formSections?: SectionType[] }) => {
   const { pageId } = useParams()
 
   const { t } = useTranslation(["insight-page"])
@@ -51,7 +51,7 @@ const ConfirmationList = ({ formSections }: { formSections?: SectionType[] }) =>
   const lists = data?.pages.flat()
 
   return (
-    <div className={cx("layout")}>
+    <div className={cx("layout", { isVisible })}>
       <Filter formSections={formSections} />
       <div className={cx("list-container")}>
         {lists && lists?.length > 0 ? (

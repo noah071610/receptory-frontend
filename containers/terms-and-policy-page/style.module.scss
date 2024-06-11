@@ -1,0 +1,32 @@
+@import "@/styles/variables.scss";
+
+.terms {
+  h1 {
+    font-weight: 600;
+    font-size: 30px;
+    margin: 20px 0;
+    position: relative;
+  }
+  h2 {
+    font-size: 25px;
+    margin: 30px 0 10px 0;
+  }
+
+  h3,
+  h4 {
+    font-size: 18px;
+    margin: 30px 0 10px 0;
+  }
+  p,
+  li {
+    font-size: 16px;
+    color: var(--black-soft);
+    margin-bottom: 10px;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+  li {
+    list-style: circle;
+    margin-left: 20px;
+  }
+}

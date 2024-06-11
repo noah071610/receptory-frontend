@@ -2,7 +2,7 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faPhone } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "next/navigation"
@@ -19,7 +19,11 @@ const cx = cs.bind(style)
 
 function Phone({ section }: { section: SectionType }) {
   const { lang } = useParams()
-  const { selectedSection, setSelectedSection, setOptions } = _useEditorStore()
+  const { selectedSection, setSelectedSection, setOptions } = useEditorStore([
+    "selectedSection",
+    "setSelectedSection",
+    "setOptions",
+  ])
   const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { phoneNumberCountry } = section.options

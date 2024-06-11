@@ -124,7 +124,7 @@ function Select({ section }: { section: SectionType }) {
             </span>
           ))
         ) : (
-          <span>{t("none")}</span>
+          <span>{""}</span>
         )}
       </FormUserInput>
       <div className={cx("options")}>
@@ -133,7 +133,7 @@ function Select({ section }: { section: SectionType }) {
         <OptionBar value="isMultiple" section={section} />
         <div className={cx("list-edit-wrapper")}>
           <h4>
-            <span>리스트 수정</span>
+            <span>{t("editList")}</span>
           </h4>
           <ul className={cx("list-edit")}>
             {selectList.map((list, i) => (

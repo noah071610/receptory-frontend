@@ -50,8 +50,6 @@ export default function EditorFooter({ lang }: { lang: Langs }) {
     if (selectedSection && isOpenAllList) setIsOpenAllList(false)
   }, [isOpenAllList, selectedSection])
 
-  console.log("rererere")
-
   return (
     <div data-closer="editor" className={cx("footer", { isOpenAllList })}>
       <PreviewBtn />

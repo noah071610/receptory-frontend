@@ -5,8 +5,11 @@ import ModalLayout from ".."
 import style from "./style.module.scss"
 
 import { submit } from "@/actions/page"
-import { toastError } from "@/config/toast"
+import IconBtn from "@/components/IconBtn"
+import { toastError, toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
+import { copyTextToClipboard } from "@/utils/copy"
+import { faClipboard } from "@fortawesome/free-solid-svg-icons"
 import cs from "classNames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -24,7 +27,7 @@ export const MakePassword = ({
   const pathname = usePathname()
   const { replace } = useRouter()
   const { pageId } = useParams()
-  const { setModal, selected, pageLang } = useMainStore(["pageLang", "setModal", "selected"])
+  const { setModal, selected } = useMainStore(["pageLang", "setModal", "selected"])
   const { t } = useTranslation(["modal"])
   const [password, setPassword] = useState({
     password: "",
@@ -34,10 +37,11 @@ export const MakePassword = ({
     setPassword((v) => ({ ...v, [type]: e.target.value }))
   }
 
-  const onClickConfirm = async () => {
+  const onSubmitForm = async (e: any) => {
+    e.preventDefault()
     if (typeof pageId !== "string") {
       // 잘못된 접근입니다.
-      return toastError("InvalidAccess")
+      return toastError("invalidAccess")
     }
     if (password.password !== password.confirmPassword) {
       // 비밀번호가 일치하지 않습니다.
@@ -63,45 +67,61 @@ export const MakePassword = ({
         setModal({ section: null, type: null })
         replace(`${pathname}?s=confirm`)
       }, 1000)
+    } else {
+      setIsConfirming(false)
     }
+  }
+
+  const onClickCopy = () => {
+    copyTextToClipboard(confirmId)
+    toastSuccess("copyConfirmId")
   }
 
   return (
     <ModalLayout modalStyle={style["confirm-hard-content"]}>
       <h1>{t("enterPassword")}</h1>
       <p dangerouslySetInnerHTML={{ __html: t("confirmPasswordDescription") }} className={cx("desc")}></p>
-      <label className={cx("title")}>
-        <h2>{t("confirmationNumber")}</h2>
-        <p>{t("confirmationNumberDescription")}</p>
-      </label>
-      <input className={cx("confirmId")} disabled={true} value={confirmId} type="text"></input>
-      <label className={cx("title")}>
-        <h2>{t("setPassword")}</h2>
-      </label>
-      <input
-        placeholder={t("enterPasswordPlaceholder")}
-        value={password.password}
-        onChange={(e) => onChangeInput(e, "password")}
-        type="password"
-      ></input>
-      <input
-        className={cx("confirmPassword")}
-        placeholder={t("confirmPasswordPlaceholder")}
-        value={password.confirmPassword}
-        onChange={(e) => onChangeInput(e, "confirmPassword")}
-        type="password"
-      ></input>
-      <div className={cx("btn-wrapper")}>
-        <button
-          disabled={!password.password || !password.confirmPassword}
-          className={cx({
-            inactive: !password.password || !password.confirmPassword,
-          })}
-          onClick={onClickConfirm}
-        >
-          {t("submitSetting")}
-        </button>
-      </div>
+      <form onSubmit={onSubmitForm}>
+        <label className={cx("title")}>
+          <h2>{t("confirmationNumber")}</h2>
+          <p>{t("confirmationNumberDescription")}</p>
+        </label>
+        <div className={cx("confirmId")}>
+          <div className={cx("input")}>{confirmId}</div>
+          <div className={cx("clip-board")}>
+            <IconBtn onclick={onClickCopy} icon={faClipboard} size={30} />
+          </div>
+        </div>
+        <label htmlFor="password" className={cx("title")}>
+          <h2>{t("setPassword")}</h2>
+        </label>
+        <input
+          placeholder={t("enterPasswordPlaceholder")}
+          value={password.password}
+          onChange={(e) => onChangeInput(e, "password")}
+          type="password"
+          autoComplete="new-password"
+        ></input>
+        <input
+          className={cx("confirmPassword")}
+          placeholder={t("confirmPasswordPlaceholder")}
+          value={password.confirmPassword}
+          onChange={(e) => onChangeInput(e, "confirmPassword")}
+          type="password"
+          autoComplete="new-password"
+        ></input>
+        <div className={cx("btn-wrapper")}>
+          <button
+            disabled={!password.password || !password.confirmPassword}
+            className={cx({
+              inactive: !password.password || !password.confirmPassword,
+            })}
+            type="submit"
+          >
+            {t("submitSetting")}
+          </button>
+        </div>
+      </form>
     </ModalLayout>
   )
 }

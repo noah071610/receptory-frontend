@@ -28,6 +28,7 @@ function IconBtn({
         style={{ width: `${size}px`, height: `${size}px` }}
         className={cx(iconClassName, "icon")}
         disabled={disabled}
+        type="button"
       >
         <FontAwesomeIcon icon={icon} />
       </button>

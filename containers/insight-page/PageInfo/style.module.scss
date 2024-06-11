@@ -3,7 +3,7 @@
 //profile
 .page-info {
   background-color: var(--white);
-  padding: 50px 0;
+  padding: 50px 0 30px 0;
   @include flex(true);
   position: relative;
   picture {
@@ -49,6 +49,67 @@
   }
 }
 
-.analytics {
+.info-layout {
+  width: 220px;
+  @include border;
+  border-radius: 20px;
+  background-color: var(--gray-softest);
+  border: 2px solid var(--blue-soft);
+  display: none;
+  @include medium {
+    display: block;
+  }
+}
+
+.info-menu {
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  li {
+    button {
+      @include flex(true);
+      gap: 12px;
+      width: 100%;
+      padding: 20px 15px;
+      .icon {
+        svg {
+          font-size: 18px;
+          color: var(--gray-hard);
+        }
+      }
+      span {
+        font-size: 13px;
+      }
+      @include action {
+        background-color: rgba($color: #a6a6a6, $alpha: 0.05);
+      }
+      &.active {
+        background-color: rgba($color: #a6a6a6, $alpha: 0.05);
+      }
+    }
+  }
+  li:first-of-type {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 2px;
+      height: 30%;
+      transform: translateY(-50%);
+      background-color: var(--border);
+    }
+    &::before {
+      right: 0;
+    }
+  }
+}
+
+.back {
+  width: auto;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
 }

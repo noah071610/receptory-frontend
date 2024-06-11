@@ -1,6 +1,6 @@
 "use client"
 
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { faClose, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
@@ -21,7 +21,14 @@ function DeleteBtn({
   listIndex?: number
   deleteEvent?: (listIndex: number) => void
 }) {
-  const { setSrc, setStyle, setOptions, setList, setPageEmbedOption, saveSectionHistory } = _useEditorStore()
+  const { setSrc, setStyle, setOptions, setList, setPageEmbedOption, saveSectionHistory } = useEditorStore([
+    "setSrc",
+    "setStyle",
+    "setOptions",
+    "setList",
+    "setPageEmbedOption",
+    "saveSectionHistory",
+  ])
   const onClickDelete = () => {
     setTimeout(() => {
       if (typeof listIndex === "number") {

@@ -1,0 +1,11 @@
+@import "@/styles/variables.scss";
+@import "@/styles/editor.scss";
+
+.btn-wrapper {
+  @include btn-layout-style;
+  margin-top: 100px;
+  padding-bottom: 150px;
+  button {
+    @include btn-submit-style;
+  }
+}

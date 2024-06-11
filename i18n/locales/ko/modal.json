@@ -2,6 +2,8 @@
   "confirmDeleteTitle": "정말로 삭제하시겠어요?",
   "confirmDeleteDescription": "삭제를 진행하면 다시 되돌릴 수 없습니다. <br /> 괜찮으시다면 아래의 글자를 그대로 적고 확인을 눌러주세요.",
   "deleteAccount": "계정 삭제",
+  "deletePage": "페이지 삭제",
+  "delete": "삭제하기",
   "dontLikeSite": "사이트가 마음에 들지 않음",
   "whyYouDelete": "이유를 알려주세요",
   "missingFeatures": "부족한 기능",
@@ -32,5 +34,13 @@
   "confirmationNumberDescription": "예약확인을 위해 필요합니다.",
   "setPassword": "비밀번호 설정",
   "confirmPasswordPlaceholder": "비밀번호 확인",
-  "submitSetting": "설정 완료"
+  "submitSetting": "설정 완료",
+
+  "ko": "대한민국",
+  "en": "미국",
+  "ja": "일본",
+  "th": "태국",
+  "selectLang": "페이지의 언어를 선택해주세요",
+  "changeLanguage": "언어 변경",
+  "addSave": "페이지 만들기"
 }

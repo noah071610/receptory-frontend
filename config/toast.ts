@@ -1,8 +1,8 @@
-import i18n from "i18next"
+import i18next from "@/i18n/init"
 import { toast } from "sonner"
 
 export function t(value: string) {
-  return i18n.t(value, {
+  return i18next.t(value, {
     ns: ["messages"],
   })
 }

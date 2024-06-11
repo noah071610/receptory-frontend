@@ -1,13 +1,18 @@
 {
-  "login": "Login",
-  "signup": "Sign Up",
-  "snsTitle": "Login in 3 Sec with SNS",
-  "userName": "Nickname",
+  "login": "Log in",
+  "signup": "Sign up",
+  "snsTitle": "Log in with SNS in 3 seconds",
+  "userName": "Username",
   "email": "Email",
-  "password": "Enter Password",
-  "passwordConfirm": "Confirm Password",
-  "findEmail": "Find Email",
-  "enterEmail": "Enter Email",
-  "enterPassword": "Enter Password",
-  "back": "Back"
+  "password": "Enter password",
+  "passwordConfirm": "Confirm password",
+  "findEmail": "Find email",
+  "enterEmail": "Enter email",
+  "enterPassword": "Enter password",
+  "back": "Go back",
+
+  "googleLogin": "Log in with Google",
+  "facebookLogin": "Log in with Facebook",
+  "title": "Simple yet Elegant Website Builder",
+  "description": "Log in now and create for free"
 }

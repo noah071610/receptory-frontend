@@ -12,15 +12,8 @@ interface CalendarProps {
   calendar: any
 }
 
-export function CalenderMain({
-  curCalendarDate,
-  calendarChartArr,
-}: {
-  curCalendarDate: string | null
-  calendarChartArr: number[]
-}) {
+export function CalenderMain({ calendarChartArr }: { calendarChartArr: number[] }) {
   const { calendars } = useContextCalendars()
-  console.log(calendarChartArr)
 
   const calender = useMemo(
     () => ({
@@ -44,7 +37,7 @@ export const CalenderComponent: FC<CalendarProps> = ({ calendar }) => {
     if (isPossible) {
       setCurFilterAll({
         startQuery: dateToString(date),
-        endQuery: dateToString(date),
+        endQuery: "",
         type: "calendar",
       })
       setIsFilterUpdate(true)

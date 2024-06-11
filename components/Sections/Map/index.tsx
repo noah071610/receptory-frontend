@@ -3,11 +3,11 @@
 import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { memo, useMemo } from "react"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import cs from "classNames/bind"
 import dynamic from "next/dynamic"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const EmbedForm = dynamic(() => import("./EmbedForm/index"), {
@@ -46,7 +46,10 @@ function Map({ section, isDisplayMode }: { section: SectionType; isDisplayMode?:
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       ) : !isDisplayMode ? (
-        <div className={cx("empty")}></div>
+        <div className={cx("no-list")}>
+          <img src="/images/icons/hello.png" alt="hello" />
+          <span>{t("putGoogleMapCode")}</span>
+        </div>
       ) : (
         <></>
       )}

@@ -1,5 +1,6 @@
 "use client"
 
+import { useMainStore } from "@/store/main"
 import { DateAnalyserType } from "@/types/Insight"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
@@ -14,6 +15,7 @@ const cx = cs.bind(style)
 
 const CalendarChart = ({ data, initialTarget }: { data: DateAnalyserType; initialTarget?: string }) => {
   const { t } = useTranslation(["insight-page"])
+  const { pageLang } = useMainStore(["pageLang"])
 
   const yearMonthArr = Object.keys(data)
   const [curTarget, setCurTarget] = useState<null | string>(initialTarget ?? null)
@@ -57,7 +59,7 @@ const CalendarChart = ({ data, initialTarget }: { data: DateAnalyserType; initia
                   onDatesChange: () => {},
                 }}
               >
-                <CalenderMain curCalendarDate={curTarget} calendarChartArr={targetArr} />
+                <CalenderMain calendarChartArr={targetArr} />
               </DatePickerStateProvider>
             </div>
           </div>

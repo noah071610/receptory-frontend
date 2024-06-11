@@ -4,7 +4,7 @@ import AddBtn from "@/components/AddBtn"
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
 import { toastError } from "@/config/toast"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import {
@@ -33,7 +33,7 @@ function List({
   isDisplayMode?: boolean
 }) {
   const { t } = useTranslation(["edit-page"])
-  const { setList, deleteList } = _useEditorStore()
+  const { setList, deleteList } = useEditorStore(["setList", "deleteList"])
   const [design, animation] = [list.design, section.style.animation]
   const getDesign = (str: string) => {
     switch (str) {
@@ -87,7 +87,7 @@ function List({
         ) : (
           <Input
             className={cx("input")}
-            inputType="text"
+            inputType="textInput"
             isOptional={false}
             listIndex={index}
             type="input"

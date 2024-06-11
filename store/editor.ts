@@ -12,10 +12,17 @@ import { Langs } from "@/types/Main"
 import { PageFormatType, SaveContentType } from "@/types/Page"
 import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import getId from "@/utils/helpers/getId"
+import i18n from "i18next"
 import { cloneDeep } from "lodash"
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 import { useShallow } from "zustand/react/shallow"
+
+export function t(value: string) {
+  return i18n.t(value, {
+    ns: ["edit-page"],
+  })
+}
 
 export const initialStates: EditStates = {
   isEditStart: false,
@@ -52,7 +59,7 @@ export const initialStates: EditStates = {
     isNotUseCustomLink: true,
     customLink: "",
     embed: {
-      title: "임베드 제목 입력",
+      title: t("embedInitialTitle"),
       description: "",
       src: "",
     },

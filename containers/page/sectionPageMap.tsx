@@ -29,8 +29,8 @@ const sectionImportMap = {
 
 const getSection = async (type: SectionListTypes) => {
   if (sectionImportMap[type]) {
-    const module = await sectionImportMap[type]()
-    return module.default
+    const section = await sectionImportMap[type]()
+    return section.default
   }
   return null
 }

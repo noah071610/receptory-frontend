@@ -6,8 +6,9 @@ import style from "./style.module.scss"
 
 import { changeLanguage } from "@/actions/page"
 import { addSave } from "@/actions/save"
-import { queryKey } from "@/config"
+import { langText, queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
+import { langCookieName } from "@/i18n/settings"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
@@ -16,6 +17,10 @@ import cs from "classNames/bind"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Cookies } from "react-cookie"
+
+const cookies = new Cookies()
+
 const cx = cs.bind(style)
 
 export const SelectLang = ({
@@ -23,17 +28,19 @@ export const SelectLang = ({
   setIsLoading,
   initLang,
   user,
+  isChangeSiteLang,
 }: {
   targetPageId?: string
   setIsLoading: (b: boolean) => void
   initLang?: Langs
   user: UserType
+  isChangeSiteLang?: boolean
 }) => {
   const queryClient = useQueryClient()
-  const { push, back } = useRouter()
-  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
+  const { push, refresh } = useRouter()
+  const { setModal } = useMainStore(["pageLang", "setModal"])
   const [selectedLang, setSelectedLang] = useState<null | Langs>(initLang ?? null)
-  const { t } = useTranslation(["edit-page"])
+  const { t } = useTranslation(["modal"])
 
   const onClickRatio = (v: Langs) => {
     setSelectedLang(v)
@@ -63,25 +70,39 @@ export const SelectLang = ({
         setIsLoading(false)
       }
     } else {
-      const newSave = await addSave(selectedLang as Langs)
-      if (newSave) {
-        await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
+      if (isChangeSiteLang) {
+        cookies.set(langCookieName, selectedLang ?? "ko", { path: "/" })
         setTimeout(() => {
+          refresh()
+          toastSuccess("changeLang")
           setIsLoading(false)
           setModal({ section: null, type: null })
-          push(`/edit/${user.userId}/${newSave.pageId}`)
+
+          if (typeof window === "object") {
+            window.location.reload()
+          }
         }, 500)
       } else {
-        // 에러가 발생했어요
-        toastError("unknown")
-        setIsLoading(false)
+        const newSave = await addSave(selectedLang as Langs)
+        if (newSave) {
+          await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
+          setTimeout(() => {
+            setIsLoading(false)
+            setModal({ section: null, type: null })
+            push(`/edit/${user.userId}/${newSave.pageId}`)
+          }, 500)
+        } else {
+          // 에러가 발생했어요
+          toastError("unknown")
+          setIsLoading(false)
+        }
       }
     }
   }
 
   return (
     <ModalLayout modalStyle={style["add-save-content"]}>
-      <h1>페이지의 언어를 선택해주세요</h1>
+      <h1>{t("selectLang")}</h1>
       <div className={cx("grid")}>
         {[
           { value: "ko", src: "/images/icons/ko.png" },
@@ -97,7 +118,7 @@ export const SelectLang = ({
             onClick={() => onClickRatio(value as Langs)}
           >
             <Image width={35} height={35} src={src} alt={value} />
-            <span className={cx("name")}>{value}</span>
+            <span className={cx("name")}>{langText[value as Langs]}</span>
           </button>
         ))}
       </div>

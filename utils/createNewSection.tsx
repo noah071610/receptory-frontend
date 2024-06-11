@@ -25,8 +25,8 @@ const sectionMap: { [key: string]: any } = {
         selectedSpecificDates: [],
       },
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
     }
   },
@@ -44,8 +44,8 @@ const sectionMap: { [key: string]: any } = {
         selectedSpecificTimes: [],
       },
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
     }
   },
@@ -78,26 +78,26 @@ const sectionMap: { [key: string]: any } = {
   email: () => {
     return {
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
     }
   },
   choices: () => {
     return {
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
       design: "gender",
-      list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: t("description") })),
+      list: ["left", "right"].map((v, i) => createNewSectionList(v, i, { value: t("descriptionInput") })),
     }
   },
   phone: () => {
     return {
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
       options: { phoneNumberCountry: "ko" },
     }
@@ -105,8 +105,8 @@ const sectionMap: { [key: string]: any } = {
   numberInput: () => {
     return {
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
       options: {
         min: 0,
@@ -117,8 +117,8 @@ const sectionMap: { [key: string]: any } = {
   textInput: () => {
     return {
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
       design: "text",
       options: {
@@ -130,8 +130,8 @@ const sectionMap: { [key: string]: any } = {
   nameInput: () => {
     return {
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
       design: "basic",
     }
@@ -189,8 +189,8 @@ const sectionMap: { [key: string]: any } = {
         addSelectNone: false,
       },
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
       },
     }
   },
@@ -198,8 +198,8 @@ const sectionMap: { [key: string]: any } = {
     return {
       design: designInit ?? "simple",
       data: {
-        title: t("title"),
-        description: t("description"),
+        title: t("titleInput"),
+        description: t("descriptionInput"),
         cta: t("goToForm"),
       },
       style: {
@@ -225,11 +225,11 @@ export const createNewSectionList = (subType: string, index: number, obj?: any):
   const defaultObj = () => {
     switch (subType) {
       case "select":
-        return { data: { title: t("title"), description: "" } }
+        return { data: { title: t("titleInput"), description: "" } }
       case "checkList":
-        return { value: t("description"), design: "check" as DesignTypes }
+        return { value: t("textInput"), design: "check" as DesignTypes }
       case "qna":
-        return { data: { title: t("title") } }
+        return { data: { title: t("titleInput") } }
       default:
         return {}
     }

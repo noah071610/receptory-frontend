@@ -1,4 +1,4 @@
-import { cookieName } from "@/i18n/settings"
+import { langCookieName } from "@/i18n/settings"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { cookies, headers } from "next/headers"
 
@@ -26,8 +26,8 @@ export default function GET(req: NextApiRequest, res: NextApiResponse) {
   const acceptLanguage = headersList.get("Accept-Language")
   const lang = acceptLanguage ? getPreferredLanguage(acceptLanguage) : "ko"
 
-  if (!cookies().get(cookieName)) {
-    cookies().set(cookieName, lang)
+  if (!cookies().get(langCookieName)) {
+    cookies().set(langCookieName, lang)
   }
   res.status(200).json({ language: acceptLanguage })
 }

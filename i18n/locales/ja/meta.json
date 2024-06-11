@@ -1,5 +1,9 @@
 {
-  "createNew": "コンテンツ作成",
-  "description": "分かって行く私達の一番お気に入り",
-  "dashboard": "ダッシュボード"
+  "dashboard": "ダッシュボード",
+  "edit": "編集",
+  "home": "ホーム",
+  "form": "フォーム",
+  "confirm": "受付完了",
+  "terms-and-policy": "利用規約",
+  "close": "閉じる"
 }

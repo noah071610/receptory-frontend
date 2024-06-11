@@ -47,7 +47,7 @@ function PageSelectList({ section }: { section: SectionType }) {
             </span>
           ))
         ) : (
-          <span>{t("none")}</span>
+          <span>{""}</span>
         )}
       </FormUserInput>
     </div>

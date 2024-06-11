@@ -1,6 +1,11 @@
 @import "@/styles/variables.scss";
 
 // list
+
+.page-list-wrapper {
+  width: 100%;
+}
+
 .page-list {
   @include flex(true);
   gap: 20px;

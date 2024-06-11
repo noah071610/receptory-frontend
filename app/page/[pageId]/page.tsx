@@ -1,15 +1,20 @@
+import { _url } from "@/config"
 import PageHome from "@/containers/page/Home"
-import { useTranslation } from "@/i18n"
+import { ssrTranslation } from "@/i18n"
 import { PageParams } from "@/types/Main"
 import { PageType } from "@/types/Page"
+import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import hasString from "@/utils/helpers/hasString"
+import PageError from "./error"
 
 export async function generateMetadata({ params: { pageId }, searchParams: { s } }: Readonly<PageParams>) {
   const data = await getData(pageId)
-  const { t } = await useTranslation(data.lang, ["meta"])
+  if (!data) {
+    return {}
+  }
+  const { t } = await ssrTranslation(data.lang, ["meta"])
 
   return {
-    // todo: 번역 필요
     title: data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
     icons: {
       icon: `/images/favicon.png`, // /public path
@@ -45,15 +50,24 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
   }
 }
 
-async function getData(pageId: string): Promise<PageType> {
-  const res = await fetch(`http://localhost:5555/api/page?pageId=${pageId}`, {
+async function getData(pageId: string): Promise<PageType | undefined> {
+  const res = await fetch(`${_url.server}/page?pageId=${pageId}`, {
     method: "GET",
   })
+
+  if (res.status === 404) return undefined
   return res.json()
 }
 
-export default async function PageLayout({ children, params: { pageId }, searchParams: { s } }: Readonly<PageParams>) {
+export default async function PageLayout({ params: { pageId }, searchParams: { s } }: Readonly<PageParams>) {
   const initialData = await getData(pageId)
+  const siteLang = await getPreferredLanguage()
 
-  return <PageHome initialParams={s} initialData={initialData} />
+  if (!initialData) return <PageError lang={siteLang} type="notfound" />
+  if (initialData.format === "inactive") return <PageError lang={siteLang} type="inactive" />
+
+  const { pageOptions, ...rest } = initialData.content
+  const sections = s === "form" ? rest.formSections : s === "confirm" ? rest.confirmSections : rest.homeSections
+
+  return <PageHome initialParams={!s?.trim() ? "home" : s} sections={sections} initialData={initialData} />
 }

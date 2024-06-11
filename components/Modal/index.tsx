@@ -1,7 +1,6 @@
 "use client"
 
 import { getAnimation } from "@/utils/styles/getAnimation"
-import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock"
 import cs from "classNames/bind"
 import { ReactNode, useEffect } from "react"
 import style from "./style.module.scss"
@@ -20,10 +19,10 @@ export default function ModalLayout({
     const body: HTMLBodyElement | null = document.querySelector("body")
 
     if (body) {
-      disableBodyScroll(body)
+      body.classList.add("disabled-scroll")
     }
     return () => {
-      body && clearAllBodyScrollLocks()
+      body && body.classList.remove("disabled-scroll")
     }
   }, [])
 

@@ -95,7 +95,7 @@ export default function Full({
               <Input
                 type="input"
                 displayMode={isDisplayMode && "span"}
-                inputType="ctaInput"
+                inputType="textInput"
                 dataKey="cta"
                 isOptional={false}
                 style={{ color: ctaTextColor }}

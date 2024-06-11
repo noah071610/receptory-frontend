@@ -3,7 +3,6 @@
 import IconBtn from "@/components/IconBtn"
 import { queryKey } from "@/config"
 import { useEditorStore } from "@/store/editor"
-import { Langs } from "@/types/Main"
 import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import { faCheck, faSave } from "@fortawesome/free-solid-svg-icons"
 import { useQueryClient } from "@tanstack/react-query"
@@ -11,7 +10,7 @@ import { useParams } from "next/navigation"
 import { useCallback, useState } from "react"
 import style from "./style.module.scss"
 
-function SaveBtn({ lang }: { lang: Langs }) {
+function SaveBtn() {
   const [isSaving, setIsSaving] = useState(false)
   const queryClient = useQueryClient()
   const { pageId } = useParams()
@@ -48,7 +47,7 @@ function SaveBtn({ lang }: { lang: Langs }) {
           pageOptions,
         },
         pageId,
-        lang,
+        lang: pageOptions.lang,
       })
 
       if (isOk) {
@@ -62,6 +61,7 @@ function SaveBtn({ lang }: { lang: Langs }) {
       }, 3000)
     }
   }, [
+    isSaving,
     stage,
     homeSections,
     formSections,
@@ -70,7 +70,8 @@ function SaveBtn({ lang }: { lang: Langs }) {
     currentUsedColors,
     pageOptions,
     pageId,
-    lang,
+    queryClient,
+    setRevert,
   ])
 
   return isSaving ? (

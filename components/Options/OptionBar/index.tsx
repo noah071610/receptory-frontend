@@ -1,6 +1,6 @@
 "use client"
 
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 import { memo } from "react"
@@ -9,8 +9,13 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function OptionBar({ value, section }: { value: string; section: SectionType }) {
-  const { selectedSection, setSelectedSection, setOptions, saveSectionHistory } = _useEditorStore()
-   
+  const { selectedSection, setSelectedSection, setOptions, saveSectionHistory } = useEditorStore([
+    "selectedSection",
+    "setSelectedSection",
+    "setOptions",
+    "saveSectionHistory",
+  ])
+
   const { t } = useTranslation(["edit-page"])
   const isActive = section.options[value]
 

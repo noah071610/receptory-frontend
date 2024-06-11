@@ -7,8 +7,8 @@ import SectionLayout from "@/components/Sections/display"
 import { _url } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import style from "@/containers/page/style.module.scss"
-import { usePageValidator } from "@/hooks/usePageValidator"
 import { useMainStore } from "@/store/main"
+import { SectionType } from "@/types/Edit"
 import { PageType } from "@/types/Page"
 import getConfirmationId from "@/utils/helpers/getConfirmationId"
 import { setDateFormat } from "@/utils/helpers/setDate"
@@ -19,8 +19,9 @@ import cs from "classNames/bind"
 import i18next from "i18next"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useParams, usePathname, useRouter } from "next/navigation"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const DatePicker = dynamic(() => import("@/components/Modal/DatePicker"), {
@@ -40,8 +41,17 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
   loading: () => <ModalLoading />,
 })
 
-const PageHome = ({ initialParams, initialData }: { initialParams?: string; initialData: PageType }) => {
-  const { pageId } = usePageValidator({ isPage: true, initialData })
+const PageHome = ({
+  initialParams,
+  sections,
+  initialData,
+}: {
+  initialParams?: string
+  sections: SectionType[]
+  initialData: PageType
+}) => {
+  const { t } = useTranslation(["page", "messages"])
+  const { pageId } = useParams()
   const pathname = usePathname()
   const { push, replace } = useRouter()
   const { modal, setModal, selected, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
@@ -91,7 +101,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
     }
   }, [isConfirm, initialParams, setModal])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // 페이지 언어 설정
     if (initialData) {
       setPageLang(initialData.lang)
@@ -100,7 +110,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
   }, [initialData, setPageLang])
 
   useEffect(() => {
-    if (initialData) {
+    if (sections?.length > 0) {
       setIsLoading(true)
 
       if (initialParams === "confirm" && !isConfirm) {
@@ -109,12 +119,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
 
       !(async function () {
         const arr = await Promise.all(
-          (initialParams === "form"
-            ? initialData.content.formSections
-            : initialParams === "confirm"
-              ? initialData.content.confirmSections
-              : initialData.content.homeSections
-          ).map(async (v, i) => {
+          sections.map(async (v, i) => {
             const AwesomeComponent: any = await getSection(v.type)
             return AwesomeComponent ? (
               <SectionLayout
@@ -143,7 +148,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
         })
       })()
     }
-  }, [initialData, initialParams, isConfirm, onClickCTA, pathname, replace])
+  }, [sections, initialParams, isConfirm, onClickCTA, pathname, replace])
 
   const userFormLength = useMemo(
     () =>
@@ -205,10 +210,10 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
                 onClick={onClickSubmit}
                 className={cx("submit", { inactive: !isReadyToSubmit })}
               >
-                <span>{"제출하기"}</span>
+                <span>{t("submit")}</span>
               </button>
               <Link href={pathname} className={cx("goback")}>
-                <span>메인 페이지로</span>
+                <span>{t("gotoMain")}</span>
               </Link>
             </div>
           )}
@@ -221,7 +226,7 @@ const PageHome = ({ initialParams, initialData }: { initialParams?: string; init
                 className={cx("submit-btn-wrapper")}
               >
                 <Link href={pathname} className={cx("gohome")}>
-                  <span>메인 페이지로</span>
+                  <span>{t("gotoMain")}</span>
                 </Link>
               </div>
             </>

@@ -39,7 +39,7 @@ export const ConfirmReservation = ({
   const onClickConfirm = async () => {
     if (typeof pageId !== "string") {
       // 잘못된 접근입니다.
-      return toastError("InvalidAccess")
+      return toastError("invalidAccess")
     }
     setIsConfirming(true)
 

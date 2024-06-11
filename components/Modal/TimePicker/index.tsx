@@ -197,7 +197,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
           )}
           {!startTime && addAnytime && (
             <button className={cx("anytime")} onClick={() => onClickTime("any", "anytime")}>
-              <span>{t("아무때나")}</span>
+              <span>{t("pickAnyDate")}</span>
             </button>
           )}
         </div>

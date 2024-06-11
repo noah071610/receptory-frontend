@@ -3,7 +3,6 @@
 import FormUserInput from "@/components/FormUserInput"
 import { SectionType } from "@/types/Edit"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
-import { useParams } from "next/navigation"
 import { memo, useRef } from "react"
 
 import style from "./style.module.scss"
@@ -14,7 +13,6 @@ import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function PageNameInput({ section }: { section: SectionType }) {
-  const { lang } = useParams()
   const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected"])
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { value } = selected[section.index - 1] ?? {}

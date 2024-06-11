@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "free": "Free Plan",
+    "semiPremium": "Semi-Premium Plan",
+    "premium": "Premium Plan"
+  },
+  "settings": "Settings",
+  "inform": "Contact",
+  "upgrade": "Upgrade",
+  "changeSiteLang": "Change Site Language",
+  "changeProfile": "Change Profile",
+  "deleteAccount": "Delete Account",
+  "feedback": "Feedback",
+  "report": "Report",
+  "noPage": "No pages created",
+  "addPage": "Add New Page",
+  "updatedAt": "Last Updated",
+  "defaultTitle": "No Title",
+  "defaultDescription": "No Description",
+  "terms-and-policy": "Terms and Policy",
+  "contents": "Contents",
+  "template": "Template",
+  "guide": "Guide",
+
+  "card": {
+    "insight": "Insight",
+    "gotoPage": "Go to Page",
+    "stop": "Stop Deployment",
+    "edit": "Edit Page",
+    "changeLang": "Change Page Language",
+    "delete": "Delete Page"
+  }
+}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEditorStore } from "@/store/editor"
+import { useMainStore } from "@/store/main"
 import cs from "classNames/bind"
 import { ReactNode, useCallback } from "react"
 import style from "./style.module.scss"
@@ -13,7 +14,7 @@ export default function PageLayout({ children }: { children: ReactNode }) {
     "clearActive",
     "setSelectedSection",
   ])
-  // const { modal, setModal } = useMainStore()
+  const { modal, setModal } = useMainStore(["modal", "setModal"])
   const onClickPage = useCallback(
     (e: any) => {
       const closestElement = e.target.closest("[data-closer]")
@@ -26,9 +27,9 @@ export default function PageLayout({ children }: { children: ReactNode }) {
         }
 
         if (dataType !== "editor") {
-          // if (modal.type) {
-          //   setModal({ section: null, type: null }) // main store (유저용)
-          // }
+          if (modal.type) {
+            setModal({ section: null, type: null }) // main store (유저용)
+          }
 
           if (dataType === "preview" && typeof window === "object") {
             if (window.innerWidth <= 800) return
@@ -43,16 +44,25 @@ export default function PageLayout({ children }: { children: ReactNode }) {
           }
         }
       } else {
-        // if (modal.type) {
-        //   setModal({ section: null, type: null }) // main store (유저용)
-        // }
+        if (modal.type) {
+          setModal({ section: null, type: null }) // main store (유저용)
+        }
         if (selectedSection) setSelectedSection({ payload: null })
         if (active.modal.type || active.submenu.type || active.tooltip.type) {
           clearActive()
         }
       }
     },
-    [active, selectedSection]
+    [
+      active.modal.type,
+      active.submenu.type,
+      active.tooltip.type,
+      clearActive,
+      modal.type,
+      selectedSection,
+      setModal,
+      setSelectedSection,
+    ]
   )
 
   return (

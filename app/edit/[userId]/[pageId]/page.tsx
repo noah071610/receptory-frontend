@@ -1,5 +1,5 @@
 import EditPage from "@/containers/edit-page"
-import { useTranslation } from "@/i18n"
+import { ssrTranslation } from "@/i18n"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 
 async function getLang() {
@@ -8,7 +8,9 @@ async function getLang() {
 
 export async function generateMetadata() {
   const lang = await getLang()
-  const { t } = await useTranslation(lang, ["meta"])
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = await ssrTranslation(lang, ["meta"])
 
   return {
     title: t("edit") + " | " + "Receptory",

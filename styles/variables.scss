@@ -25,7 +25,7 @@
   width: 100%;
   line-height: 1.4;
   @if ($isSmall) {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 400;
   } @else {
     font-size: 22px;
@@ -52,7 +52,7 @@
   @if ($isSmall) {
     font-size: 13px;
   } @else {
-    font-size: 15px;
+    font-size: 16px;
   }
 }
 
@@ -224,11 +224,11 @@ $z-index-map: (
       @content;
     }
   }
-  @include mobile() {
-    &:active {
-      @content;
-    }
-  }
+  // @include mobile() {
+  //   &:active {
+  //     @content;
+  //   }
+  // }
 }
 
 @mixin large {

@@ -13,12 +13,12 @@ import TimeChart from "@/containers/insight-page/Charts/Time"
 import ConfirmationList from "@/containers/insight-page/ConfirmationList"
 import PageInfo from "@/containers/insight-page/PageInfo"
 import { usePageValidator } from "@/hooks/usePageValidator"
+import i18next from "@/i18n/init"
 import { useMainStore } from "@/store/main"
 import { InsightPageType, SelectChartType } from "@/types/Insight"
 import { Langs } from "@/types/Main"
 import { useQuery } from "@tanstack/react-query"
-import i18next from "i18next"
-import { useLayoutEffect, useMemo } from "react"
+import { useLayoutEffect, useMemo, useState } from "react"
 const cx = cs.bind(style)
 
 const getChartArr = (type: "choices" | "select", pageData: InsightPageType) =>
@@ -47,6 +47,7 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
   const { pageId, user } = usePageValidator({ isAuth: true })
 
   const { modal, setModal, setPageLang } = useMainStore(["modal", "setModal", "setPageLang"])
+  const [selectedSection, setSelectedSection] = useState<"insight" | "list">("insight")
 
   const onClickMain = (e: any) => {
     const closestElement = e.target.closest("[data-global-closer]")
@@ -110,7 +111,7 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
       i18next.changeLanguage(lang)
     }
     setPageLang(lang)
-  }, [lang, i18next, setPageLang])
+  }, [lang, setPageLang])
 
   return (
     user && (
@@ -119,9 +120,9 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
           <div className={cx("page-inner")}>
             <div className={cx("content")}>
               <div className={cx("background")}></div>
-              <PageInfo pageData={pageData} user={user} />
+              <PageInfo selectedSection={selectedSection} setSelectedSection={setSelectedSection} pageData={pageData} />
               {
-                <div className={cx("charts")}>
+                <div className={cx("charts", { isHide: selectedSection !== "insight" })}>
                   <SubmitChart data={pageData.analyser.submit} initialTarget={submitInitialTarget} />
                   {isCalendarDisplay && (
                     <CalendarChart data={pageData.analyser.calendar} initialTarget={calenderInitialTarget} />
@@ -132,7 +133,7 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
                 </div>
               }
             </div>
-            <ConfirmationList formSections={formSections} />
+            <ConfirmationList isVisible={selectedSection === "list"} formSections={formSections} />
           </div>
         ) : (
           <PageLoading isLoading={true} />

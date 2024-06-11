@@ -4,7 +4,7 @@ import FormUserInput from "@/components/FormUserInput"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
@@ -18,14 +18,14 @@ import cs from "classNames/bind"
 const cx = cs.bind(style)
 
 function Time({ section }: { section: SectionType }) {
-  const { setModal, selected, setSelected, pageLang } = useMainStore([
-    "pageLang",
-    "setModal",
-    "selected",
-    "setSelected",
-  ])
+  const { setModal, selected, setSelected } = useMainStore(["pageLang", "setModal", "selected", "setSelected"])
   const { t } = useTranslation(["edit-page"])
-  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = _useEditorStore()
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore([
+    "setOptions",
+    "addCollection",
+    "deleteCollection",
+    "saveSectionHistory",
+  ])
   const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 
   const [tempStartTime, setTempStartTime] = useState<string>("00:00")
@@ -100,11 +100,8 @@ function Time({ section }: { section: SectionType }) {
     if (isAlways) {
       setOptions({ key: "startHour", payload: "00" })
       setOptions({ key: "endHour", payload: "00" })
-      setTimeout(() => {
-        saveSectionHistory() // 옵션이 업데이트되면 섹션 스냅샷을 찍기위해 비동기
-      }, 100)
     }
-  }, [isAlways, saveSectionHistory, setOptions])
+  }, [isAlways, setOptions])
 
   const reset = () => {
     setSelected({
@@ -123,7 +120,7 @@ function Time({ section }: { section: SectionType }) {
         isActive={value && value.length > 0}
         resetEvent={reset}
       >
-        {value?.length > 0 ? <NumberRange start={value[0].text} end={value[1] && value[1].text} /> : t("none")}
+        {value?.length > 0 ? <NumberRange start={value[0].text} end={value[1] && value[1].text} /> : ""}
       </FormUserInput>
 
       <div className={cx("options")}>

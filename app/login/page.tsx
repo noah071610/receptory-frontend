@@ -1,6 +1,6 @@
 import { _url } from "@/config"
 import style from "@/containers/login-page/style.module.scss"
-import { useTranslation } from "@/i18n"
+import { ssrTranslation } from "@/i18n"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import cs from "classNames/bind"
@@ -12,7 +12,7 @@ async function getLang() {
 }
 export async function generateMetadata() {
   const lang = await getLang()
-  const { t } = await useTranslation(lang, ["meta"])
+  const { t } = await ssrTranslation(lang, ["login"])
 
   return {
     title: t("login") + " | " + "Receptory",
@@ -21,7 +21,7 @@ export async function generateMetadata() {
 
 export default async function LoginPageLayout() {
   const lang = await getLang()
-  const { t } = await useTranslation(lang, ["login"])
+  const { t } = await ssrTranslation(lang, ["login"])
 
   return (
     <div className={cx("main")}>

@@ -2,7 +2,7 @@
 
 import FormUserInput from "@/components/FormUserInput"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { _useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { enforceMinMax, onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faListOl } from "@fortawesome/free-solid-svg-icons"
@@ -18,10 +18,15 @@ const cx = cs.bind(style)
 const globalMax = 9999999
 
 function Number({ section }: { section: SectionType }) {
-  const { setSelectedText, selected, pageLang } = useMainStore(["setSelectedText", "selected", "pageLang"])
+  const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected", "pageLang"])
   const { t } = useTranslation(["edit-page"])
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const { setSelectedSection, setOptions, saveSectionHistory, selectedSection } = _useEditorStore()
+  const { setSelectedSection, setOptions, saveSectionHistory, selectedSection } = useEditorStore([
+    "setSelectedSection",
+    "setOptions",
+    "saveSectionHistory",
+    "selectedSection",
+  ])
   const { min, max } = section.options
 
   const { value } = selected[section.index - 1] ?? {}

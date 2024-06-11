@@ -47,7 +47,7 @@ function PageConfirm({ section }: { section: SectionType }) {
             <ul className={cx("info")}>
               <li>
                 <h2>
-                  <span>{"예약 번호"}</span>
+                  <span>{t("confirmationId")}</span>
                 </h2>
                 <div className={cx("value")}>
                   <span>{curConfirmationId ?? "접수번호 없음"}</span>
@@ -55,7 +55,7 @@ function PageConfirm({ section }: { section: SectionType }) {
               </li>
               <li>
                 <h2>
-                  <span>{"확정 일시"}</span>
+                  <span>{t("confirmationDate")}</span>
                 </h2>
                 <div className={cx("value")}>
                   <span>{confirmDate ?? "날짜 없음"}</span>

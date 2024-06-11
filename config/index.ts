@@ -50,3 +50,10 @@ export const queryKey = {
 export const noImageUrl = "/images/noImage.png"
 
 export const userPlan = ["free", "semiPremium", "premium"]
+
+export const langText = {
+  ko: "한국어",
+  en: "English",
+  th: "ภาษาไทย",
+  ja: "日本語",
+}

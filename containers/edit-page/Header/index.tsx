@@ -3,7 +3,6 @@
 import IconBtn from "@/components/IconBtn"
 import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
-import { Langs } from "@/types/Main"
 import { faHome } from "@fortawesome/free-solid-svg-icons"
 import cs from "classNames/bind"
 import { useParams, useRouter } from "next/navigation"
@@ -31,7 +30,7 @@ const headers = [
   },
 ]
 
-function Header({ lang }: { lang: Langs }) {
+function Header() {
   const { t } = useTranslation(["edit-page"])
   const { push } = useRouter()
   const { userId } = useParams()
@@ -41,8 +40,6 @@ function Header({ lang }: { lang: Langs }) {
     setSelectedSection({ payload: null })
     setStage(v)
   }
-
-  console.log("ree")
 
   return (
     <>
@@ -71,7 +68,7 @@ function Header({ lang }: { lang: Langs }) {
               icon={faHome}
             />
             <RevertBtn />
-            <SaveBtn lang={lang} />
+            <SaveBtn />
           </div>
           <div
             style={{ width: stage === "home" ? "25%" : stage === "form" ? "50%" : stage === "confirm" ? "75%" : "95%" }}
