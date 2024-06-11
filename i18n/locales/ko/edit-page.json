@@ -111,6 +111,7 @@
   "confirmationId": "예약 번호",
   "confirmationDate": "예약 확정 날짜",
   "embedInitialTitle": "임베드 제목 입력",
+  "selectColor": "선택",
 
   "deployingNow": "현재 배포중이에요!",
   "undeployNow": "거의 다 왔어요!",

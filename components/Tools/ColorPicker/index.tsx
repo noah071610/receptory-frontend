@@ -89,7 +89,7 @@ export default function ColorPicker({
           </div>
         )}
         <button className={cx("pick")} onClick={selectColor}>
-          <span>{t("selectColor //todo :")}</span>
+          <span>{t("selectColor")}</span>
         </button>
       </div>
     )

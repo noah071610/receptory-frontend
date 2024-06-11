@@ -111,6 +111,7 @@
   "confirmationId": "Confirmation ID",
   "confirmationDate": "Confirmation Date",
   "embedInitialTitle": "Embed Title Input",
+  "selectColor": "Apply",
 
   "deployingNow": "Deploying now!",
   "undeployNow": "Almost there!",

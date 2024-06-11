@@ -37,9 +37,8 @@ export const ConfirmHard = ({
   value?: string
   setIsLoading: (b: boolean) => void
 }) => {
-  // todo:
   const { push } = useRouter()
-  const { setModal, pageLang } = useMainStore(["pageLang", "setModal"])
+  const { setModal } = useMainStore(["pageLang", "setModal"])
   const { t } = useTranslation(["modal"])
   const queryClient = useQueryClient()
   const [selectedOption, setSelectedOption] = useState("")

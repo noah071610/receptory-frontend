@@ -130,7 +130,6 @@ export default function Rending({
         setIsLoading(false)
       }, 1000)
 
-      // todo: refetchQueries를 써야할까 이건 된다.
       await queryClient.invalidateQueries({ queryKey: queryKey.page(pageId as string) })
       await queryClient.refetchQueries({ queryKey: queryKey.save.list })
     }

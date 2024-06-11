@@ -114,7 +114,6 @@ type Actions = {
     dataKey?: string
   }) => void
   setValue: ({ payload }: { payload: any }) => void
-  setText: ({ payload }: { payload: string }) => void
   setData: ({ payload, key }: { payload: any; key: string }) => void
   setOptions: ({ payload, key }: { payload: any; key: string }) => void
   setActive: ({
@@ -256,17 +255,6 @@ export const _useEditorStore = create<EditStates & Actions>()(
           if (typeof payload !== "undefined") {
             target.value = payload
             origin.selectedSection.value = payload
-          }
-        }
-      }),
-    setText: ({ payload }) =>
-      set((origin) => {
-        // todo: 안씀
-        if (origin.selectedSection) {
-          const target = getTarget(origin)
-          target.text = payload
-          if (origin.selectedSection) {
-            origin.selectedSection.text = payload
           }
         }
       }),
