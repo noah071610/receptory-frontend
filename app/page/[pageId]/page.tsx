@@ -7,7 +7,7 @@ import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import hasString from "@/utils/helpers/hasString"
 import PageError from "./error"
 
-export async function generateMetadata({ params: { pageId }, searchParams: { s } }: Readonly<PageParams>) {
+export async function generateMetadata({ params: { pageId }, searchParams: { s } }: PageParams) {
   const data = await getData(pageId)
   if (!data) {
     return {}
@@ -59,7 +59,7 @@ async function getData(pageId: string): Promise<PageType | undefined> {
   return res.json()
 }
 
-export default async function PageLayout({ params: { pageId }, searchParams: { s } }: Readonly<PageParams>) {
+export default async function PageLayout({ params: { pageId }, searchParams: { s } }: PageParams) {
   const initialData = await getData(pageId)
   const siteLang = await getPreferredLanguage()
 

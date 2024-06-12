@@ -12,6 +12,16 @@ export async function getPage({ pageId }: { pageId: string }) {
   return response.data
 }
 
+export async function getSitemapPages() {
+  try {
+    const response = await API.get(`/page/all`)
+    if (!response.data) return []
+    return response.data
+  } catch {
+    return []
+  }
+}
+
 export async function submit(data: { selected: SelectedType[]; confirmId: string; pageId: string; password: string }) {
   try {
     const response = await API.post(`/page/submit`, data)
