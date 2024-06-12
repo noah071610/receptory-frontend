@@ -2,7 +2,7 @@
 const { i18n } = require("./next-i18next.config")
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: true,
+  enabled: false,
   openAnalyzer: true,
   swcMinify: true,
 })

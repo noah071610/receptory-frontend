@@ -1,7 +1,4 @@
 "use client"
-import PageLoading from "@/components/Loading/LoadingPage"
-import ConfirmReservation from "@/components/Modal/ConfirmReservation"
-import MakePassword from "@/components/Modal/MakeConfirm"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import SectionLayout from "@/components/Sections/display"
 import { _url } from "@/config"
@@ -9,9 +6,7 @@ import getSection from "@/containers/page/sectionPageMap"
 import style from "@/containers/page/style.module.scss"
 import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
-import { PageType } from "@/types/Page"
-import getConfirmationId from "@/utils/helpers/getConfirmationId"
-import { setDateFormat } from "@/utils/helpers/setDate"
+import { TemplatePage } from "@/types/Template"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -19,7 +14,7 @@ import cs from "classNames/bind"
 import i18next from "i18next"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
@@ -41,34 +36,27 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
   loading: () => <ModalLoading />,
 })
 
-const PageHome = ({
+const TemplatePageHome = ({
   initialParams,
   sections,
   initialData,
 }: {
   initialParams?: string
   sections: SectionType[]
-  initialData: PageType
+  initialData: TemplatePage
 }) => {
   const { t } = useTranslation(["page", "messages"])
-  const { pageId } = useParams()
   const pathname = usePathname()
   const { push, replace } = useRouter()
-  const { modal, setModal, selected, setConfirmation, clearPage, pageLang, curConfirmationId, setPageLang } =
-    useMainStore([
-      "modal",
-      "setModal",
-      "selected",
-      "setConfirmation",
-      "clearPage",
-      "pageLang",
-      "curConfirmationId",
-      "setPageLang",
-    ])
+  const { modal, setModal, selected, clearPage, pageLang, setPageLang } = useMainStore([
+    "modal",
+    "setModal",
+    "selected",
+    "clearPage",
+    "pageLang",
+    "setPageLang",
+  ])
   const [isLoading, setIsLoading] = useState(true)
-  const [isSubmit, setIsSubmit] = useState(false)
-  const [isConfirming, setIsConfirming] = useState(false)
-  const [isConfirm, setIsConfirm] = useState(false)
   const [components, setComponents] = useState<JSX.Element[]>([])
 
   const onClickCTA = useCallback(() => {
@@ -94,13 +82,6 @@ const PageHome = ({
     }
   }
 
-  useEffect(() => {
-    // confirm으로 바로 넘어갔을때 확인 모달
-    if (!isConfirm && initialParams === "confirm") {
-      setModal({ section: null, type: "confirmReservation" })
-    }
-  }, [isConfirm, initialParams, setModal])
-
   useLayoutEffect(() => {
     // 페이지 언어 설정
     if (initialData) {
@@ -112,10 +93,6 @@ const PageHome = ({
   useEffect(() => {
     if (sections?.length > 0) {
       setIsLoading(true)
-
-      if (initialParams === "confirm" && !isConfirm) {
-        return replace(`${pathname}?s=home`)
-      }
 
       !(async function () {
         const arr = await Promise.all(
@@ -148,7 +125,7 @@ const PageHome = ({
         })
       })()
     }
-  }, [sections, initialParams, isConfirm, onClickCTA, pathname, replace])
+  }, [sections, initialParams, onClickCTA, pathname, replace])
 
   const userFormLength = useMemo(
     () =>
@@ -177,21 +154,11 @@ const PageHome = ({
   }, [selected, userFormLength, initialParams])
 
   const onClickSubmit = async () => {
-    if (typeof pageId !== "string") return
-
-    setIsSubmit(true)
-    setConfirmation({
-      confirmDate: setDateFormat({ date: new Date(), lang: pageLang, isTime: true }),
-      curConfirmationId: getConfirmationId(),
-    })
-    setModal({
-      section: null,
-      type: "makePassword",
-    })
+    return push(`${pathname}?s=confirm`)
   }
 
   return (
-    initialData?.format === "active" &&
+    initialData?.isSecret === 0 &&
     pageLang && (
       <div onClick={onClickPage} className={cx("body")}>
         <main className={cx("main")}>
@@ -218,7 +185,7 @@ const PageHome = ({
               </Link>
             </div>
           )}
-          {initialParams === "confirm" && isConfirm && (
+          {initialParams === "confirm" && (
             <>
               <div
                 style={
@@ -237,22 +204,16 @@ const PageHome = ({
           {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
           {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
           {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
-          {modal.type === "makePassword" && isSubmit && curConfirmationId && (
-            <MakePassword setIsConfirming={setIsConfirming} confirmId={curConfirmationId} setIsConfirm={setIsConfirm} />
-          )}
-          {modal.type === "confirmReservation" && (
-            <ConfirmReservation pageLang={pageLang} setIsConfirm={setIsConfirm} setIsConfirming={setIsConfirming} />
-          )}
+
           <Link className={cx("footer", { active: initialParams !== "form" })} href={_url.client + "/login"}>
             <p>
               <FontAwesomeIcon icon={faFire} /> <span>{"Powered by Receptory"}</span>
             </p>
           </Link>
-          <PageLoading isLoading={isConfirming} />
         </main>
       </div>
     )
   )
 }
 
-export default PageHome
+export default TemplatePageHome

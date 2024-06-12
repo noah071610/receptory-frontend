@@ -39,6 +39,7 @@ API.interceptors.response.use(
 
 export const queryKey = {
   user: ["user"],
+  admin: ["admin"],
   page: (pageId: string) => ["page", pageId],
   insight: (pageId: string) => ["insight", pageId],
   insightSearch: (pageId: string) => ["insightSearch", pageId],
