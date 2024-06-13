@@ -1,22 +1,22 @@
 "use client"
+import { getUser } from "@/actions/user"
+import { useTemplate } from "@/actions/website"
 import ModalLoading from "@/components/Modal/ModalLoading"
-import SectionLayout from "@/components/Sections/display"
-import { _url } from "@/config"
-import getSection from "@/containers/page/sectionPageMap"
-import style from "@/containers/page/style.module.scss"
+import { queryKey } from "@/config"
+import { toastError } from "@/config/toast"
+import { useInitTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
-import { SectionType } from "@/types/Edit"
+import { Langs, PageStage } from "@/types/Main"
 import { TemplatePage } from "@/types/Template"
-import { getAnimation } from "@/utils/styles/getAnimation"
-import { faFire } from "@fortawesome/free-solid-svg-icons"
+import { UserType } from "@/types/User"
+import { faHome, faPenToSquare, faStamp } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import cs from "classNames/bind"
-import i18next from "i18next"
 import dynamic from "next/dynamic"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { useRouter } from "next/navigation"
+import { useLayoutEffect, useState } from "react"
+import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 const DatePicker = dynamic(() => import("@/components/Modal/DatePicker"), {
@@ -40,29 +40,33 @@ const TemplatePageHome = ({
   initialParams,
   sections,
   initialData,
+  lang,
 }: {
-  initialParams?: string
-  sections: SectionType[]
+  initialParams: PageStage
+  sections: {
+    home: JSX.Element[]
+    form: JSX.Element[]
+    confirm: JSX.Element[]
+  }
   initialData: TemplatePage
+  lang: Langs
 }) => {
-  const { t } = useTranslation(["page", "messages"])
-  const pathname = usePathname()
-  const { push, replace } = useRouter()
-  const { modal, setModal, selected, clearPage, pageLang, setPageLang } = useMainStore([
+  const queryClient = useQueryClient()
+  const { data: user } = useQuery<UserType>({
+    queryKey: queryKey.user,
+    queryFn: getUser,
+  })
+  const { push } = useRouter()
+  const { t } = useInitTranslation(lang, ["page", "messages"])
+
+  const { modal, setModal, clearPage, pageLang, setPageLang } = useMainStore([
     "modal",
     "setModal",
-    "selected",
     "clearPage",
     "pageLang",
     "setPageLang",
   ])
-  const [isLoading, setIsLoading] = useState(true)
-  const [components, setComponents] = useState<JSX.Element[]>([])
-
-  const onClickCTA = useCallback(() => {
-    setIsLoading(true)
-    push(`${pathname}?s=form`)
-  }, [pathname, push])
+  const [pageStage, setPageStage] = useState<PageStage>(initialParams)
 
   const onClickPage = (e: any) => {
     const closestElement = e.target.closest("[data-global-closer]")
@@ -82,134 +86,73 @@ const TemplatePageHome = ({
     }
   }
 
-  useLayoutEffect(() => {
-    // 페이지 언어 설정
-    if (initialData) {
-      setPageLang(initialData.lang)
-      i18next.changeLanguage(initialData.lang)
+  const onClickSocialLogin = () => {
+    if (typeof window === "object") {
+      toastError("needToLogin") // todo :
+      push(`/login?templateId=${initialData.pageId}`)
     }
-  }, [initialData, setPageLang])
-
-  useEffect(() => {
-    if (sections?.length > 0) {
-      setIsLoading(true)
-
-      !(async function () {
-        const arr = await Promise.all(
-          sections.map(async (v, i) => {
-            const AwesomeComponent: any = await getSection(v.type)
-            return AwesomeComponent ? (
-              <SectionLayout
-                style={{ paddingBottom: v.style?.paddingBottom }}
-                id={v.id}
-                index={i}
-                isAnimation={true}
-                noPadding={v.type === "thumbnail" || v.type === "slider"}
-                key={`${v.id}`}
-              >
-                <AwesomeComponent
-                  section={v}
-                  text={v.value}
-                  onClickCTA={v.id === "thumbnail" ? onClickCTA : undefined}
-                  isDisplayMode={true}
-                />
-              </SectionLayout>
-            ) : (
-              <section></section>
-            )
-          })
-        )
-        setComponents(arr)
-        setTimeout(() => {
-          setIsLoading(false)
-        })
-      })()
-    }
-  }, [sections, initialParams, onClickCTA, pathname, replace])
-
-  const userFormLength = useMemo(
-    () =>
-      initialParams === "form"
-        ? initialData
-          ? initialData.content.formSections.filter(
-              (v: any) => !["text", "title", "callout", "checkList", "thumbnail"].includes(v.type)
-            ).length
-          : 999999
-        : 999999,
-    [initialData, initialParams]
-  )
-
-  useEffect(() => {
-    if (initialParams !== "confirm") {
-      clearPage()
-    }
-  }, [clearPage, initialParams])
-
-  const isReadyToSubmit = useMemo(() => {
-    return (
-      initialParams === "form" &&
-      userFormLength ===
-        selected.filter((v) => v).filter((v) => v.value.length && v.value.every(({ text }) => text)).length
-    )
-  }, [selected, userFormLength, initialParams])
-
-  const onClickSubmit = async () => {
-    return push(`${pathname}?s=confirm`)
   }
+  const onClickUseTemplate = async () => {
+    if (user) {
+      const newSave = await useTemplate(initialData.pageId)
+      if (newSave) {
+        await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
+        push(`/edit/${user.userId}/${newSave.pageId}`)
+      }
+    }
+  }
+
+  const onClickStage = (type: PageStage) => {
+    setPageStage(type)
+  }
+
+  useLayoutEffect(() => {
+    clearPage(initialParams)
+  }, [clearPage, initialParams])
 
   return (
     initialData?.isSecret === 0 &&
     pageLang && (
       <div onClick={onClickPage} className={cx("body")}>
         <main className={cx("main")}>
-          {components.map((v: any) => v)}
+          {sections[pageStage].map((v: JSX.Element) => {
+            if (v.props.children.props.section.id === "thumbnail") {
+              v.props.children.props.setPageStage = setPageStage
+            }
 
-          {initialParams === "form" && (
-            <div
-              style={isLoading ? { display: "none" } : getAnimation({ type: "fadeUp", delay: 180 * components.length })}
-              className={cx("submit-btn-wrapper")}
-            >
-              <div className={cx("float-message", { active: isReadyToSubmit })}>
-                {/* // todo:  */}
-                <p>{t(isReadyToSubmit ? "readyToSubmit" : "pleaseWriteContent")}</p>
-              </div>
-              <button
-                disabled={!isReadyToSubmit}
-                onClick={onClickSubmit}
-                className={cx("submit", { inactive: !isReadyToSubmit })}
-              >
-                <span>{t("submit")}</span>
-              </button>
-              <Link href={pathname} className={cx("goback")}>
-                <span>{t("gotoMain")}</span>
-              </Link>
-            </div>
-          )}
-          {initialParams === "confirm" && (
-            <>
-              <div
-                style={
-                  isLoading ? { display: "none" } : getAnimation({ type: "fadeUp", delay: 180 * components.length })
-                }
-                className={cx("submit-btn-wrapper")}
-              >
-                <Link href={pathname} className={cx("gohome")}>
-                  <span>{t("gotoMain")}</span>
-                </Link>
-              </div>
-            </>
-          )}
+            return v
+          })}
 
           {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
           {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
           {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
           {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
 
-          <Link className={cx("footer", { active: initialParams !== "form" })} href={_url.client + "/login"}>
-            <p>
-              <FontAwesomeIcon icon={faFire} /> <span>{"Powered by Receptory"}</span>
-            </p>
-          </Link>
+          <div className={cx("template-footer")}>
+            <div className={cx("top")}>
+              <button onClick={user ? onClickUseTemplate : onClickSocialLogin}>
+                <span>템플릿 사용하기</span>
+              </button>
+            </div>
+
+            <div className={cx("bottom")}>
+              <button
+                className={cx({ active: !pageStage || pageStage === "home" })}
+                onClick={() => onClickStage("home")}
+              >
+                <FontAwesomeIcon icon={faHome} />
+                <span>{t("home")}</span>
+              </button>
+              <button className={cx({ active: pageStage === "form" })} onClick={() => onClickStage("form")}>
+                <FontAwesomeIcon icon={faPenToSquare} />
+                <span>{t("form")}</span>
+              </button>
+              <button className={cx({ active: pageStage === "confirm" })} onClick={() => onClickStage("confirm")}>
+                <FontAwesomeIcon icon={faStamp} />
+                <span>{t("confirm")}</span>
+              </button>
+            </div>
+          </div>
         </main>
       </div>
     )

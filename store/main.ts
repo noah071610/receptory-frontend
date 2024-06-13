@@ -1,5 +1,5 @@
 import { SectionType } from "@/types/Edit"
-import { Langs, ModalActiveType, SelectedType, SelectedValueType } from "@/types/Main"
+import { Langs, ModalActiveType, PageStage, SelectedType, SelectedValueType } from "@/types/Main"
 import { UserType } from "@/types/User"
 import { create } from "zustand"
 
@@ -17,6 +17,7 @@ export interface EditStates {
   curConfirmationId: string | null
   confirmDate: string | null
   pageLang: Langs
+  pageStage: PageStage
 }
 
 type Actions = {
@@ -26,7 +27,8 @@ type Actions = {
   setSelected: ({ section, value }: { section: SectionType; value: SelectedValueType[] }) => void
   loadSelected: (data: SelectedType[]) => void
   setSelectedText: ({ section, text }: { section: SectionType; text: string }) => void
-  clearPage: () => void
+  clearPage: (initialStage: PageStage) => void
+  setPageStage: (initialStage: PageStage) => void
   setConfirmation: ({
     curConfirmationId,
     confirmDate,
@@ -48,6 +50,7 @@ export const _useMainStore = create<EditStates & Actions>()(
     curConfirmationId: null,
     confirmDate: null,
     pageLang: "ko",
+    pageStage: "home",
 
     // SET
     setUser: ({ user }) =>
@@ -77,11 +80,16 @@ export const _useMainStore = create<EditStates & Actions>()(
           value,
         }
       }),
-    clearPage: () =>
+    clearPage: (initialStage: PageStage) =>
       set((origin) => {
         origin.selected = []
         origin.curConfirmationId = null
         origin.confirmDate = null
+        origin.pageStage = initialStage
+      }),
+    setPageStage: (type: PageStage) =>
+      set((origin) => {
+        origin.pageStage = type
       }),
     loadSelected: (data) =>
       set((origin) => {

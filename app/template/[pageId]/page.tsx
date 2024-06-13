@@ -1,5 +1,8 @@
+import SectionLayout from "@/components/Sections/display"
 import { _url } from "@/config"
+import getSection from "@/containers/page/sectionPageMap"
 import TemplatePageHome from "@/containers/template-page/TemplatePage"
+import { SectionType } from "@/types/Edit"
 import { PageParams } from "@/types/Main"
 import { TemplatePage } from "@/types/Template"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
@@ -56,6 +59,31 @@ async function getData(pageId: string): Promise<TemplatePage | undefined> {
   return res.json()
 }
 
+const temp = (sections: SectionType[]) => {
+  return sections.map(async (v, i) => {
+    const AwesomeComponent: any = await getSection(v.type)
+    return AwesomeComponent ? (
+      <SectionLayout
+        style={{ paddingBottom: v.style?.paddingBottom }}
+        id={v.id}
+        index={i}
+        isAnimation={true}
+        noPadding={v.type === "thumbnail" || v.type === "slider"}
+        key={`${v.id}`}
+      >
+        <AwesomeComponent
+          section={v}
+          text={v.value}
+          isTemplate={v.type === "confirm" ? true : undefined}
+          isDisplayMode={true}
+        />
+      </SectionLayout>
+    ) : (
+      <section></section>
+    )
+  })
+}
+
 export default async function TemplatePageLayout({ params: { pageId }, searchParams: { s } }: PageParams) {
   const initialData = await getData(pageId)
   const siteLang = await getPreferredLanguage()
@@ -64,7 +92,16 @@ export default async function TemplatePageLayout({ params: { pageId }, searchPar
   if (initialData.isSecret === 1) return <PageError lang={siteLang} type="inactive" />
 
   const { pageOptions, ...rest } = initialData.content
-  const sections = s === "form" ? rest.formSections : s === "confirm" ? rest.confirmSections : rest.homeSections
 
-  return <TemplatePageHome initialParams={!s?.trim() ? "home" : s} sections={sections} initialData={initialData} />
+  const sections = {
+    home: await Promise.all(temp(rest.homeSections)),
+    form: await Promise.all(temp(rest.formSections)),
+    confirm: await Promise.all(temp(rest.confirmSections)),
+  }
+
+  const initialParams = !s?.trim() ? "home" : s !== "form" && s !== "confirm" ? "home" : s
+
+  return (
+    <TemplatePageHome lang={siteLang} initialParams={initialParams} sections={sections} initialData={initialData} />
+  )
 }

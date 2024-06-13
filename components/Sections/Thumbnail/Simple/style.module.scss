@@ -89,7 +89,7 @@
     input,
     span {
       width: auto;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.1;
       font-weight: 700;
     }
@@ -97,7 +97,7 @@
       @include input-style;
     }
     svg {
-      font-size: 15px;
+      font-size: 16px;
       margin-left: 5px;
     }
   }

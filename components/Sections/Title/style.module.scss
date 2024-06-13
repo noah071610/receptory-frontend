@@ -33,11 +33,15 @@
   }
   .label,
   .label-input {
-    font-size: 13px;
     margin-bottom: 13px;
     font-weight: 600;
   }
+
+  .label-input {
+    font-size: 16px;
+  }
   .label {
+    font-size: 13px;
     width: auto;
   }
 }

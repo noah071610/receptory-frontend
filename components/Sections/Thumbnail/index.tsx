@@ -3,9 +3,9 @@
 import { colors } from "@/config/colors"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
+import { PageStage } from "@/types/Main"
 import { changeOpacity } from "@/utils/styles/changeOpacity"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
-import { useSearchParams } from "next/navigation"
 import { useMemo } from "react"
 import Background from "./Background"
 import Card from "./Card"
@@ -14,20 +14,18 @@ import Simple from "./Simple"
 
 export default function Thumbnail({
   section,
-  onClickCTA,
   isDisplayMode,
+  setPageStage,
 }: {
   section: SectionType
   isDisplayMode?: boolean
-  onClickCTA?: () => void
+  setPageStage?: (type: PageStage) => void
 }) {
-  const search = useSearchParams()
   const { stage } = useEditorStore(["stage"])
-  const userStage = search.get("s")
   const { color, backgroundColor } = section.style
   const design = section.design
   const imageStatus = section.options.imageStatus
-  const isButtonVisible = stage === "home" && userStage !== "form" && userStage !== "confirm"
+  const isButtonVisible = isDisplayMode ? !!setPageStage : stage === "home"
 
   const ctaTextColor = useMemo(() => getContrastTextColor(color ?? colors.blackSoft), [color])
   const textColor = useMemo(
@@ -43,7 +41,7 @@ export default function Thumbnail({
     <>
       {design === "card" && (
         <Card
-          onClickCTA={onClickCTA}
+          setPageStage={setPageStage}
           borderColor={borderColor}
           ctaTextColor={ctaTextColor}
           section={section}
@@ -55,7 +53,7 @@ export default function Thumbnail({
       )}
       {design === "full" && (
         <Full
-          onClickCTA={onClickCTA}
+          setPageStage={setPageStage}
           ctaTextColor={ctaTextColor}
           section={section}
           textColor={textColor}
@@ -65,7 +63,7 @@ export default function Thumbnail({
       )}
       {design === "simple" && (
         <Simple
-          onClickCTA={onClickCTA}
+          setPageStage={setPageStage}
           section={section}
           isDisplayMode={isDisplayMode}
           isButtonVisible={isButtonVisible}
@@ -74,7 +72,7 @@ export default function Thumbnail({
       )}
       {design === "background" && (
         <Background
-          onClickCTA={onClickCTA}
+          setPageStage={setPageStage}
           textColor={textColor}
           ctaTextColor={ctaTextColor}
           section={section}

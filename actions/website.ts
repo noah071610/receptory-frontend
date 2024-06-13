@@ -41,3 +41,19 @@ export async function setTemplate(data: { text: string; lang: Langs }) {
     }
   }
 }
+
+export async function useTemplate(templateId: string) {
+  const cookie = cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME ?? "")
+
+  if (cookie) {
+    if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+      try {
+        const response = await API.post(`/website/template/use?templateId=${templateId}`)
+
+        return response.data
+      } catch (err) {
+        return err
+      }
+    }
+  }
+}

@@ -5,12 +5,13 @@ import Input from "@/components/Input"
 import { colors } from "@/config/colors"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
+import { PageStage } from "@/types/Main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import hasString from "@/utils/helpers/hasString"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import { useParams } from "next/navigation"
+import { useCallback } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -19,7 +20,7 @@ export default function Background({
   textColor,
   ctaTextColor,
   isDisplayMode,
-  onClickCTA,
+  setPageStage,
   isButtonVisible,
   imageStatus,
 }: {
@@ -27,11 +28,13 @@ export default function Background({
   ctaTextColor: string
   section: SectionType
   isDisplayMode?: boolean
-  onClickCTA?: () => void
+  setPageStage?: (type: PageStage) => void
   isButtonVisible: boolean
   imageStatus: "image" | "emoji"
 }) {
-  const { lang } = useParams()
+  const onClickCTA = useCallback(() => {
+    setPageStage && setPageStage("form")
+  }, [setPageStage])
 
   const { title, description, cta } = section.data
   const { color, background, backgroundColor } = section.style
@@ -91,7 +94,11 @@ export default function Background({
         />
         {isButtonVisible && (
           <div className={cx("cta-wrapper")}>
-            <button onClick={onClickCTA} style={{ backgroundColor: color }} className={cx("cta")}>
+            <button
+              onClick={setPageStage ? onClickCTA : undefined}
+              style={{ backgroundColor: color }}
+              className={cx("cta")}
+            >
               <Input
                 type="input"
                 section={section}

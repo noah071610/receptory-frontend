@@ -7,12 +7,12 @@ import style from "../style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
-import { stringToDate } from "@/utils/helpers/setDate"
+import { setDateFormat, stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
-function PageConfirm({ section }: { section: SectionType }) {
+function PageConfirm({ section, isTemplate }: { section: SectionType; isTemplate?: boolean }) {
   const { pageLang, selected, curConfirmationId, confirmDate } = useMainStore([
     "pageLang",
     "selected",
@@ -50,7 +50,7 @@ function PageConfirm({ section }: { section: SectionType }) {
                   <span>{t("confirmationId")}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{curConfirmationId ?? "접수번호 없음"}</span>
+                  <span>{isTemplate ? "RT-[CONFIRMATION ID]" : curConfirmationId ?? "접수번호 없음"}</span>
                 </div>
               </li>
               <li>
@@ -58,32 +58,43 @@ function PageConfirm({ section }: { section: SectionType }) {
                   <span>{t("confirmationDate")}</span>
                 </h2>
                 <div className={cx("value")}>
-                  <span>{confirmDate ?? "날짜 없음"}</span>
+                  <span>
+                    {confirmDate ??
+                      (isTemplate ? setDateFormat({ date: new Date(), lang: pageLang, isTime: true }) : "날짜 없음")}
+                  </span>
                 </div>
               </li>
             </ul>
           </div>
-          {confirmationArr?.length > 0 ? (
-            <ul className={cx("picks")}>
-              {confirmationArr.map(({ title, text, type }, i) => {
-                return (
-                  <li key={`pick-${type}-${i}`} className={cx("list")}>
-                    <h2>
-                      <span>{title}</span>
-                    </h2>
-                    <div className={cx("value")}>
-                      <span>{text}</span>
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
-          ) : (
-            <div className={cx("no-list")}>
-              <img src="/images/icons/disappointed.png" alt="disappointed" />
-              <span>{t("confirmFailToLoadData")}</span>
-            </div>
-          )}
+          <>
+            {isTemplate ? (
+              <div className={cx("no-list")}>
+                <img src="/images/icons/hello.png" alt="hello" />
+                {/* todo : */}
+                <span>{t("confirmDataExample")}</span>
+              </div>
+            ) : confirmationArr?.length > 0 ? (
+              <ul className={cx("picks")}>
+                {confirmationArr.map(({ title, text, type }, i) => {
+                  return (
+                    <li key={`pick-${type}-${i}`} className={cx("list")}>
+                      <h2>
+                        <span>{title}</span>
+                      </h2>
+                      <div className={cx("value")}>
+                        <span>{text}</span>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : (
+              <div className={cx("no-list")}>
+                <img src="/images/icons/disappointed.png" alt="disappointed" />
+                <span>{t("confirmFailToLoadData")}</span>
+              </div>
+            )}
+          </>
         </div>
       </div>
     </div>

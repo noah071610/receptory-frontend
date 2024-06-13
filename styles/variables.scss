@@ -50,7 +50,7 @@
   line-height: 1.4;
   color: var(--black-soft);
   @if ($isSmall) {
-    font-size: 13px;
+    font-size: 16px;
   } @else {
     font-size: 16px;
   }
@@ -338,12 +338,16 @@ $z-index-map: (
   margin-bottom: 10px;
   @include flex-y;
   gap: 10px;
-  padding: 10px 20px 10px 30px;
+  padding: 15px 20px 15px 30px;
   border-radius: 5px;
   background-color: var(--gray-softest);
   position: relative;
   overflow: hidden;
   // @include shadow;
+
+  @include mobile {
+    max-width: none;
+  }
   &::before {
     content: "";
     position: absolute;
@@ -355,7 +359,7 @@ $z-index-map: (
     transition: 300ms all;
   }
   span {
-    font-size: 13px;
+    font-size: 14px;
   }
   .content {
     @include flex;

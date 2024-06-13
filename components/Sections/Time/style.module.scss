@@ -21,18 +21,31 @@
   justify-content: space-around;
   gap: 7px;
   margin-bottom: 30px;
-  input[type="time"] {
+
+  @include mobile {
+    max-width: none;
+  }
+
+  .time-min-max {
+    flex-grow: 1;
     padding: 15px;
-    font-size: 14px;
-    background-color: var(--gray-softest);
     border-radius: 5px;
     border: 1px dashed var(--border);
+    background-color: var(--gray-softest);
+    input {
+      width: 100%;
+      font-size: 16px;
+    }
   }
 }
 
 .specific-time-picker {
   width: 100%;
   max-width: 300px;
+
+  @include mobile {
+    max-width: none;
+  }
 
   input[type="time"] {
     padding: 15px;
@@ -58,7 +71,7 @@
       background-color: var(--blue);
       padding: 8px 18px;
       span {
-        font-size: 13px;
+        font-size: 15px;
         color: var(--white);
       }
     }
@@ -73,9 +86,10 @@
   gap: 10px 5px;
   flex-wrap: wrap;
   button {
-    font-size: 13px;
-    padding: 8px 15px;
-    background-color: var(--gray-softest);
+    font-size: 15px;
+    padding: 10px 15px;
+    background-color: var(--white);
+    border: 1px solid var(--blue);
     border-radius: 5px;
   }
 }

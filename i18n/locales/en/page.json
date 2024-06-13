@@ -1,4 +1,7 @@
 {
   "submit": "Submit",
-  "gotoMain": "Go back to Home"
+  "gotoMain": "Go back to Home",
+  "home": "Home",
+  "form": "Form",
+  "confirm": "Confirm"
 }

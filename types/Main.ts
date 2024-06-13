@@ -1,5 +1,6 @@
 import { SectionListTypes } from "./Edit"
 
+export type PageStage = "home" | "form" | "confirm"
 export type Langs = "ko" | "en" | "ja" | "th"
 export type LangParams = { params: { lang: Langs } }
 export type PageParams = {

@@ -13,7 +13,6 @@ i18next
   .use(initReactI18next)
   .use(LanguageDetector)
   .use(resourcesToBackend((language: any, namespace: any) => import(`./locales/${language}/${namespace}.json`)))
-  // .use(LocizeBackend) // locize backend could be used on client side, but prefer to keep it in sync with server side
   .init({
     ...getOptions(),
     lng: undefined,
