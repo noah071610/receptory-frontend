@@ -38,7 +38,7 @@ function LinkBtn({ section, isDisplayMode }: { section: SectionType; isDisplayMo
           </h4>
           <Input
             type="input"
-            inputType={`LinkPlaceholder`}
+            inputType={t("LinkPlaceholder")}
             className={cx("link-input")}
             isOptional={false}
             maxLength={100}

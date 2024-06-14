@@ -7,6 +7,10 @@
   background-color: var(--white);
   border: 2px dashed transparent;
 
+  @include mobile {
+    border: 1px dashed transparent;
+  }
+
   .observer {
     position: absolute;
     top: -150px;

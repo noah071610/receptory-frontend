@@ -6,7 +6,7 @@
 .wrapper {
   width: 100%;
   position: relative;
-  height: 100svh;
+  height: 100vh; // check :
   max-height: 800px;
   overflow: hidden;
   @include flex($col: true);

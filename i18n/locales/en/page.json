@@ -3,5 +3,7 @@
   "gotoMain": "Go back to Home",
   "home": "Home",
   "form": "Form",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "readyToSubmit": "Click to submit",
+  "pleaseWriteContent": "Fill in all the content!"
 }

@@ -30,7 +30,11 @@ const UserPage = ({ lang }: { lang: Langs }) => {
   const queryUserId = userId as string
   const [isLoading, setIsLoading] = useState(false)
 
-  const { data: saves, isError } = useQuery<SaveListType[]>({
+  const {
+    data: saves,
+    isError,
+    isFetched,
+  } = useQuery<SaveListType[]>({
     queryKey: queryKey.save.list,
     queryFn: getSaves,
     enabled: user?.userId === queryUserId,
@@ -66,16 +70,20 @@ const UserPage = ({ lang }: { lang: Langs }) => {
         <Profile lang={lang} user={user} />
         <div className={cx("page-list-wrapper")}>
           <ul className={cx("page-list")}>
-            {(!saves || saves.length <= 0) && (
-              <li className={cx("no-list")}>
-                <img src="/images/icons/crying.png" alt="crying" />
-                <span>{t("noPage")}</span>
-              </li>
+            {isFetched && saves ? (
+              saves?.length <= 0 ? (
+                <li className={cx("no-list")}>
+                  <img src="/images/icons/crying.png" alt="crying" />
+                  <span>{t("noPage")}</span>
+                </li>
+              ) : (
+                saves.map((save, i) => (
+                  <PageCard lang={lang} i={i} userId={user?.userId} save={save} key={`user-save-${i}`} />
+                ))
+              )
+            ) : (
+              <></>
             )}
-            {saves &&
-              saves.map((save, i) => (
-                <PageCard lang={lang} i={i} userId={user?.userId} save={save} key={`user-save-${i}`} />
-              ))}
           </ul>
 
           <div className={cx("add-list")}>

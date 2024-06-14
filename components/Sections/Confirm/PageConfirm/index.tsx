@@ -70,7 +70,6 @@ function PageConfirm({ section, isTemplate }: { section: SectionType; isTemplate
             {isTemplate ? (
               <div className={cx("no-list")}>
                 <img src="/images/icons/hello.png" alt="hello" />
-                {/* todo : */}
                 <span>{t("confirmDataExample")}</span>
               </div>
             ) : confirmationArr?.length > 0 ? (

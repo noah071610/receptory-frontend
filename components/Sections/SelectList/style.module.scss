@@ -28,7 +28,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        max-width: 400px;
+        width: 100%;
       }
       .content {
         width: 100%;
@@ -36,8 +36,8 @@
 
       .image {
         cursor: pointer;
-        width: 110px;
-        height: 80px;
+        width: 140px;
+        height: 93px;
         border-radius: 5px;
         @include flex;
         border: 1px dashed var(--border);
@@ -48,10 +48,6 @@
           svg {
             color: var(--blue);
           }
-        }
-
-        @include mobile {
-          height: 70px;
         }
       }
     }

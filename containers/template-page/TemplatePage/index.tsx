@@ -3,7 +3,7 @@ import { getUser } from "@/actions/user"
 import { useTemplate } from "@/actions/website"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import { queryKey } from "@/config"
-import { toastError } from "@/config/toast"
+import { toastSuccess } from "@/config/toast"
 import { useInitTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import { Langs, PageStage } from "@/types/Main"
@@ -59,13 +59,7 @@ const TemplatePageHome = ({
   const { push } = useRouter()
   const { t } = useInitTranslation(lang, ["page", "messages"])
 
-  const { modal, setModal, clearPage, pageLang, setPageLang } = useMainStore([
-    "modal",
-    "setModal",
-    "clearPage",
-    "pageLang",
-    "setPageLang",
-  ])
+  const { modal, setModal, clearPage, pageLang } = useMainStore(["modal", "setModal", "clearPage", "pageLang"])
   const [pageStage, setPageStage] = useState<PageStage>(initialParams)
 
   const onClickPage = (e: any) => {
@@ -88,7 +82,7 @@ const TemplatePageHome = ({
 
   const onClickSocialLogin = () => {
     if (typeof window === "object") {
-      toastError("needToLogin") // todo :
+      toastSuccess("needToLogin")
       push(`/login?templateId=${initialData.pageId}`)
     }
   }

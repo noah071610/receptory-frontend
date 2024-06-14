@@ -1,11 +1,17 @@
+import SectionLayout from "@/components/Sections/display"
 import { _url } from "@/config"
 import PageHome from "@/containers/page/Home"
+import getSection from "@/containers/page/sectionPageMap"
 import { ssrTranslation } from "@/i18n"
+import { SectionType } from "@/types/Edit"
 import { PageParams } from "@/types/Main"
 import { PageType } from "@/types/Page"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import hasString from "@/utils/helpers/hasString"
 import PageError from "./error"
+async function getLang() {
+  return await getPreferredLanguage()
+}
 
 export async function generateMetadata({ params: { pageId }, searchParams: { s } }: PageParams) {
   const data = await getData(pageId)
@@ -59,7 +65,27 @@ async function getData(pageId: string): Promise<PageType | undefined> {
   return res.json()
 }
 
-export default async function PageLayout({ params: { pageId }, searchParams: { s } }: PageParams) {
+const getSections = (sections: SectionType[]) => {
+  return sections.map(async (v, i) => {
+    const AwesomeComponent: any = await getSection(v.type)
+    return AwesomeComponent ? (
+      <SectionLayout
+        style={{ paddingBottom: v.style?.paddingBottom }}
+        id={v.id}
+        index={i}
+        isAnimation={true}
+        noPadding={v.type === "thumbnail" || v.type === "slider"}
+        key={`${v.id}`}
+      >
+        <AwesomeComponent section={v} text={v.value} isDisplayMode={true} />
+      </SectionLayout>
+    ) : (
+      <section></section>
+    )
+  })
+}
+
+export default async function PageLayout({ params: { pageId }, searchParams: { s, confirmationId } }: PageParams) {
   const initialData = await getData(pageId)
   const siteLang = await getPreferredLanguage()
 
@@ -67,7 +93,22 @@ export default async function PageLayout({ params: { pageId }, searchParams: { s
   if (initialData.format === "inactive") return <PageError lang={siteLang} type="inactive" />
 
   const { pageOptions, ...rest } = initialData.content
-  const sections = s === "form" ? rest.formSections : s === "confirm" ? rest.confirmSections : rest.homeSections
 
-  return <PageHome initialParams={!s?.trim() ? "home" : s} sections={sections} initialData={initialData} />
+  const sections = {
+    home: await Promise.all(getSections(rest.homeSections)),
+    form: await Promise.all(getSections(rest.formSections)),
+    confirm: await Promise.all(getSections(rest.confirmSections)),
+  }
+
+  const initialParams = !s?.trim() ? "home" : s === "form" ? "form" : "home"
+
+  return (
+    <PageHome
+      lang={siteLang}
+      confirmationId={confirmationId}
+      initialParams={initialParams}
+      sections={sections}
+      initialData={initialData}
+    />
+  )
 }

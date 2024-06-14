@@ -42,7 +42,7 @@ function FormUserInput({
         </label>
       )}
       <div className={cx("input")}>
-        <div className={cx("content", { active: isActive })}>
+        <div className={cx("content", { active: isActive, isTextarea: inputStyle === "textarea" })}>
           {inputStyle ? (
             children
           ) : (

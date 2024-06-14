@@ -249,13 +249,17 @@ export default function Rending({
                 <h4>{t("customLink")}</h4>
                 <Input
                   type="input"
-                  inputType="customLinkInput"
+                  inputType="textInput"
                   isOptional={false}
                   onChange={(inputValue: string) => {
                     onChangeInput(inputValue, "customLink")
                   }}
                   value={customLink}
                 />
+                <p className={cx("link-description")}>
+                  <span>{"* "}</span>
+                  {t("customLinkInput")}
+                </p>
               </>
             )}
           </div>

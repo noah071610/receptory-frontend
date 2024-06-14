@@ -8,6 +8,7 @@ import { submit } from "@/actions/page"
 import IconBtn from "@/components/IconBtn"
 import { toastError, toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
+import { PageStage } from "@/types/Main"
 import { copyTextToClipboard } from "@/utils/copy"
 import { faClipboard } from "@fortawesome/free-solid-svg-icons"
 import cs from "classNames/bind"
@@ -19,10 +20,12 @@ export const MakePassword = ({
   confirmId,
   setIsConfirm,
   setIsConfirming,
+  setPageStage,
 }: {
   confirmId: string
   setIsConfirm: (b: boolean) => void
   setIsConfirming: (b: boolean) => void
+  setPageStage: (stage: PageStage) => void
 }) => {
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -65,7 +68,7 @@ export const MakePassword = ({
           confirmPassword: "",
         })
         setModal({ section: null, type: null })
-        replace(`${pathname}?s=confirm`)
+        setPageStage("confirm")
       }, 1000)
     } else {
       setIsConfirming(false)
@@ -118,7 +121,7 @@ export const MakePassword = ({
             })}
             type="submit"
           >
-            {t("submitSetting")}
+            <span>{t("submitSetting")}</span>
           </button>
         </div>
       </form>

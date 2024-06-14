@@ -43,6 +43,7 @@ const ListEdit = ({
         >
           <FontAwesomeIcon icon={faPlus} />
         </div>
+
         <div className={cx("content")}>
           <Input
             type="input"

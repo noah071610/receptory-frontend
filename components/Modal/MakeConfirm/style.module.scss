@@ -61,6 +61,10 @@
   @include btn-layout-style;
   button {
     @include btn-submit-style;
+    span {
+      font-size: 16px;
+      font-weight: 600;
+    }
   }
 }
 

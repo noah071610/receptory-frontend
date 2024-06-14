@@ -7,7 +7,7 @@
   left: 50%;
   transform: translate(calc(-50% + 550px / 2), calc(-50%));
   width: var(--preview-width);
-  height: 100svh;
+  height: 100vh; // check :
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
   background-color: #f2f3f7;

@@ -66,7 +66,7 @@ const sectionMap: { [key: string]: any } = {
   },
   linkBtn: () => {
     return {
-      value: "텍스트 입력",
+      value: t("textInput"),
       style: {
         backgroundColor: colors.ctaColor,
       },

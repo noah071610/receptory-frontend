@@ -29,6 +29,10 @@
     border-radius: 5px;
     @include border;
     transition: 300ms all;
+    &.isTextarea {
+      display: block;
+      padding: 14px;
+    }
     .text {
       padding: 14px 0 14px 12px;
       width: 100%;
@@ -50,8 +54,7 @@
       padding: 14px 0 14px 12px;
     }
     textarea {
-      padding: 14px;
-      line-height: 1.4;
+      line-height: 1.8;
     }
     .icon-wrapper {
       padding: 14px;

@@ -10,6 +10,7 @@ export type PageParams = {
   }
   searchParams: {
     s: string
+    confirmationId?: string
   }
 }
 export interface SelectedType {

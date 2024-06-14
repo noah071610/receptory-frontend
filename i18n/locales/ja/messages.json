@@ -35,6 +35,7 @@
     "delete": "ページを削除しました",
     "inactive": "ページを非公開にしました",
     "copyConfirmId": "コピーしました 🎉",
-    "comingsoon": "非公開のページです"
+    "comingsoon": "非公開のページです",
+    "needToLogin": "テンプレートを使用するにはログインが必要です！🚀"
   }
 }

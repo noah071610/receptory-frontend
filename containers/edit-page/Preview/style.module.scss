@@ -7,7 +7,7 @@
   @include flex;
   transform: translate(calc(-50% + 550px / 2), calc(-50%));
   width: var(--preview-width);
-  height: 100svh;
+  height: 100vh; // check :
   border: 2px dotted var(--border);
   padding: 16px;
   padding-top: 50px;

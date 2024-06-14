@@ -146,7 +146,8 @@
   @include btn-submit-style;
   margin: 0 auto;
   span {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
   }
 }
 
@@ -154,6 +155,14 @@
   margin-top: 15px;
   span {
     color: var(--gray-hard);
-    font-size: 14px;
+    font-size: 15px;
+  }
+}
+
+.link-description {
+  font-size: 14px;
+  color: var(--red);
+  span {
+    font-weight: 700;
   }
 }

@@ -14,7 +14,6 @@ const initI18next = async (lng, ns) => {
 }
 
 export async function ssrTranslation(lng, ns, options = {}) {
-  console.log("1번입디ㅏ", lng)
   const i18nextInstance = await initI18next(lng, ns)
   return {
     t: i18nextInstance.getFixedT(lng, Array.isArray(ns) ? ns[0] : ns, options.keyPrefix),

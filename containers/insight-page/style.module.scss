@@ -45,7 +45,8 @@
     position: relative;
     background-color: var(--white);
     width: 100%;
-    min-height: 100svh;
+    min-height: 100svh; // check :
+    min-height: 100vh; // check :
     padding-bottom: 100px;
     background-color: #f2f3f7;
 

@@ -122,9 +122,12 @@
   "anytime": "いつでも",
   "addTime": "時間を追加",
   "noList": "リストがありません",
-  "editList": "リストがありません",
+  "editList": "リスト",
   "putGoogleMapCode": "Google マップコードを入力",
   "selectColor": "カラー選択",
+
+  "confirmDataExample": "提出されたフォームはここに表示されます",
+  "LinkPlaceholder": "リンクを入力",
 
   "options": {
     "specificDate": "特定の日付を設定",

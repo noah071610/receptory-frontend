@@ -1,9 +1,9 @@
 {
   "submit": "제출하기",
   "gotoMain": "메인 페이지로",
-  "readyToSubmit": "클릭해서 제출",
-  "pleaseWriteContent": "내용을 전부 입력해주세요!",
   "home": "메인",
   "form": "양식",
-  "confirm": "제출확인"
+  "confirm": "제출확인",
+  "readyToSubmit": "클릭해서 제출",
+  "pleaseWriteContent": "내용을 전부 입력해주세요!"
 }

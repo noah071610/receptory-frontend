@@ -130,7 +130,7 @@ const PageCard = ({
   )
 
   return (
-    <li style={getAnimation({ type: "flip", delay: 180 * i })} onClick={onClickList} className={cx("card")}>
+    <li style={getAnimation({ type: "fadeUp", delay: 180 * i })} onClick={onClickList} className={cx("card")}>
       <div className={cx("list-main")}>
         <div className={cx("label")}>
           <div className={cx("label-right")}>

@@ -7,29 +7,31 @@ import style from "./style.module.scss"
 import { findReservation } from "@/actions/page"
 import { toastError } from "@/config/toast"
 import { useMainStore } from "@/store/main"
-import { Langs } from "@/types/Main"
+import { Langs, PageStage } from "@/types/Main"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useState } from "react"
 const cx = cs.bind(style)
 
 export const ConfirmReservation = ({
   setIsConfirming,
   setIsConfirm,
+  confirmationId,
   pageLang,
+  setPageStage,
 }: {
   setIsConfirming: (b: boolean) => void
   setIsConfirm: (b: boolean) => void
+  confirmationId: string
   pageLang: Langs
+  setPageStage: (stage: PageStage) => void
 }) => {
-  const pathname = usePathname()
-  const { replace } = useRouter()
   const { pageId } = useParams()
-  const { t } = useTranslation(["edit-page"])
+  const { t } = useTranslation(["modal"])
   const { setModal, loadSelected, setConfirmation } = useMainStore(["setModal", "loadSelected", "setConfirmation"])
   const [input, setInput] = useState({
-    confirmId: "",
+    confirmId: confirmationId ?? "",
     password: "",
   })
   const onChangeInput = (e: any, type: "password" | "confirmId") => {
@@ -64,8 +66,8 @@ export const ConfirmReservation = ({
           password: "",
           confirmId: "",
         })
-        replace(`${pathname}?s=confirm`)
         setModal({ section: null, type: null })
+        setPageStage("confirm")
       }, 1000)
     } else {
       toastError(msg)

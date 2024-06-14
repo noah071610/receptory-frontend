@@ -59,7 +59,7 @@ async function getData(pageId: string): Promise<TemplatePage | undefined> {
   return res.json()
 }
 
-const temp = (sections: SectionType[]) => {
+const getSections = (sections: SectionType[]) => {
   return sections.map(async (v, i) => {
     const AwesomeComponent: any = await getSection(v.type)
     return AwesomeComponent ? (
@@ -94,9 +94,9 @@ export default async function TemplatePageLayout({ params: { pageId }, searchPar
   const { pageOptions, ...rest } = initialData.content
 
   const sections = {
-    home: await Promise.all(temp(rest.homeSections)),
-    form: await Promise.all(temp(rest.formSections)),
-    confirm: await Promise.all(temp(rest.confirmSections)),
+    home: await Promise.all(getSections(rest.homeSections)),
+    form: await Promise.all(getSections(rest.formSections)),
+    confirm: await Promise.all(getSections(rest.confirmSections)),
   }
 
   const initialParams = !s?.trim() ? "home" : s !== "form" && s !== "confirm" ? "home" : s

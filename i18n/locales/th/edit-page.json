@@ -124,9 +124,12 @@
   "anytime": "เวลาใดก็ได้",
   "addTime": "เพิ่มเวลา",
   "noList": "ว่างเปล่า",
-  "editList": "ว่างเปล่า",
+  "editList": "เปล่า",
   "putGoogleMapCode": "ใส่รหัสฝัง Google Map",
   "selectColor": "ใช้สี",
+
+  "confirmDataExample": "ฟอร์มที่ส่งจะแสดงที่นี่",
+  "LinkPlaceholder": "ใส่ลิงก์",
 
   "options": {
     "specificDate": "ตั้งค่าวันที่เฉพาะเจาะจง",

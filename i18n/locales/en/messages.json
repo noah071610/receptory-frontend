@@ -35,6 +35,7 @@
     "delete": "Page deleted",
     "inactive": "Page deactivated",
     "copyConfirmId": "Reservation number copied 🎉",
-    "comingsoon": "Service under construction 🚀"
+    "comingsoon": "Service under construction 🚀",
+    "needToLogin": "Log in to use the template! 🚀"
   }
 }
