@@ -16,7 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    ,
     ...pages.map((page: any) => {
       return {
         url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/page/${page.customLink}`,

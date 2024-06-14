@@ -4,16 +4,12 @@ import PageHome from "@/containers/page/Home"
 import getSection from "@/containers/page/sectionPageMap"
 import { ssrTranslation } from "@/i18n"
 import { SectionType } from "@/types/Edit"
-import { PageParams } from "@/types/Main"
 import { PageType } from "@/types/Page"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import hasString from "@/utils/helpers/hasString"
 import PageError from "./error"
-async function getLang() {
-  return await getPreferredLanguage()
-}
 
-export async function generateMetadata({ params: { pageId }, searchParams: { s } }: PageParams) {
+export async function generateMetadata({ params: { pageId }, searchParams: { s } }: any) {
   const data = await getData(pageId)
   if (!data) {
     return {}
@@ -85,7 +81,7 @@ const getSections = (sections: SectionType[]) => {
   })
 }
 
-export default async function PageLayout({ params: { pageId }, searchParams: { s, confirmationId } }: PageParams) {
+export default async function PageLayout({ params: { pageId }, searchParams: { s, confirmationId } }: any) {
   const initialData = await getData(pageId)
   const siteLang = await getPreferredLanguage()
 

@@ -3,12 +3,11 @@ import { _url } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import TemplatePageHome from "@/containers/template-page/TemplatePage"
 import { SectionType } from "@/types/Edit"
-import { PageParams } from "@/types/Main"
 import { TemplatePage } from "@/types/Template"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import PageError from "./error"
 
-export async function generateMetadata({ params: { pageId }, searchParams: { s } }: PageParams) {
+export async function generateMetadata({ params: { pageId }, searchParams: { s } }: any) {
   const data = await getData(pageId)
   if (!data) {
     return {}
@@ -84,7 +83,7 @@ const getSections = (sections: SectionType[]) => {
   })
 }
 
-export default async function TemplatePageLayout({ params: { pageId }, searchParams: { s } }: PageParams) {
+export default async function TemplatePageLayout({ params: { pageId }, searchParams: { s } }: any) {
   const initialData = await getData(pageId)
   const siteLang = await getPreferredLanguage()
 
