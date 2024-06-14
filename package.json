@@ -1,11 +1,11 @@
 {
   "name": "receptory-frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "cross-env NODE_ENV=production next build",
+    "start": "cross-env NODE_ENV=production next start -p 3060",
     "lint": "next lint"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "nanoid": "5.0.7",
     "next": "14.2.3",
     "next-i18next": "15.3.0",
+    "pm2": "5.4.0",
     "react": "^18",
     "react-chartjs-2": "5.2.0",
     "react-colorful": "5.6.1",
