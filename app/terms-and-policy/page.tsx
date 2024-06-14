@@ -3,7 +3,7 @@ import EnTerms from "@/containers/terms-and-policy-page/en"
 import KoTerms from "@/containers/terms-and-policy-page/ko"
 import { ssrTranslation } from "@/i18n"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

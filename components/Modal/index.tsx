@@ -1,7 +1,7 @@
 "use client"
 
 import { getAnimation } from "@/utils/styles/getAnimation"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { ReactNode, useEffect } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

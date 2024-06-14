@@ -9,7 +9,7 @@ import { toastError } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import { Langs, PageStage } from "@/types/Main"
 import { setDateFormat } from "@/utils/helpers/setDate"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useParams } from "next/navigation"
 import { useState } from "react"
 const cx = cs.bind(style)

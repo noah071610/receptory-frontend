@@ -15,7 +15,7 @@ import hasString from "@/utils/helpers/hasString"
 import { faCircle } from "@fortawesome/free-regular-svg-icons"
 import { faClose, faMars, faPlus, faVenus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function Choices({ section }: { section: SectionType }) {

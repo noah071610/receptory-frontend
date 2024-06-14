@@ -3,7 +3,7 @@
 import Input from "@/components/Input"
 import { SectionType } from "@/types/Edit"
 import getContrastTextColor from "@/utils/styles/getContrastTextColor"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { memo, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"

@@ -2,7 +2,7 @@
 
 import Input from "@/components/Input"
 import { SectionType } from "@/types/Edit"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { memo } from "react"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"

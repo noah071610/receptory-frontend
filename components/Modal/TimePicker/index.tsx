@@ -9,7 +9,7 @@ import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 export const TimePicker = ({ section }: { section: SectionType }) => {

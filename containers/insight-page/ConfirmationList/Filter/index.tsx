@@ -1,7 +1,7 @@
 "use client"
 
 import { SectionType } from "@/types/Edit"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import AdjustFilterButton from "./AdjustFilterButton"
 import FilterList from "./FilterList"
 import SearchBar from "./SearchBar"

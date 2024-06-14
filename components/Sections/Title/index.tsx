@@ -7,7 +7,7 @@ import { memo, useMemo } from "react"
 import style from "./style.module.scss"
 
 import hasString from "@/utils/helpers/hasString"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {

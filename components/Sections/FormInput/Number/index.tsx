@@ -11,7 +11,7 @@ import { memo, useEffect, useRef } from "react"
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 

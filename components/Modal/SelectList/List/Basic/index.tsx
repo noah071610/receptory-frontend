@@ -5,7 +5,7 @@ import Image from "next/image"
 import style from "./style.module.scss"
 
 import { SelectedValueType } from "@/types/Main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 export const BasicList = ({

@@ -3,7 +3,7 @@
 import NumberRange from "@/components/NumberRange"
 import { useInsightStore } from "@/store/insight"
 import { TimeAnalyserType } from "@/types/Insight"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

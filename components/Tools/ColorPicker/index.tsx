@@ -2,7 +2,7 @@
 import { RgbaColorPicker } from "react-colorful"
 
 import { useEditorStore } from "@/store/editor"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"

@@ -11,7 +11,7 @@ import { useMainStore } from "@/store/main"
 import { PageStage } from "@/types/Main"
 import { copyTextToClipboard } from "@/utils/copy"
 import { faClipboard } from "@fortawesome/free-solid-svg-icons"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 const cx = cs.bind(style)

@@ -6,7 +6,7 @@ import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import { faAddressCard, faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

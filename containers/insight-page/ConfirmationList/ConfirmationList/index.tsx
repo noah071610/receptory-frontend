@@ -7,7 +7,7 @@ import hasString from "@/utils/helpers/hasString"
 import { setDateFormat, stringToDate } from "@/utils/helpers/setDate"
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

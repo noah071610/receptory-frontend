@@ -9,7 +9,7 @@ import Input from "@/components/Input"
 import { useEditorStore } from "@/store/editor"
 import getConfirmationId from "@/utils/helpers/getConfirmationId"
 import { setDateFormat } from "@/utils/helpers/setDate"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 

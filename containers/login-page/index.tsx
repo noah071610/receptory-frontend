@@ -9,7 +9,7 @@ import { Langs } from "@/types/Main"
 import { Providers } from "@/types/User"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import { useQueryClient } from "@tanstack/react-query"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 const cx = cs.bind(style)

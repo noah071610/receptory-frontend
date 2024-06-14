@@ -5,7 +5,7 @@ import { useInsightStore } from "@/store/insight"
 import { SectionType } from "@/types/Edit"
 import { faAddressCard, faArrowDownShortWide, faArrowUpShortWide } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

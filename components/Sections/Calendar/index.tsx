@@ -16,7 +16,7 @@ import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useMainStore } from "@/store/main"
 import { dateToString, stringToDate } from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function Calender({ section }: { section: SectionType }) {

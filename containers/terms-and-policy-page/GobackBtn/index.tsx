@@ -2,7 +2,7 @@
 
 import i18next from "@/i18n/init"
 import { Langs } from "@/types/Main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useLayoutEffect } from "react"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"

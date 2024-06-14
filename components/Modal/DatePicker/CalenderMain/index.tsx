@@ -5,10 +5,10 @@ import { FC, ReactNode, useEffect } from "react"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
-  DPCalendar,
-  useContextCalendars,
-  useContextDatePickerOffsetPropGetters,
-  useContextDaysPropGetters,
+    DPCalendar,
+    useContextCalendars,
+    useContextDatePickerOffsetPropGetters,
+    useContextDaysPropGetters,
 } from "@rehookify/datepicker"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
@@ -16,7 +16,7 @@ import style from "./style.module.scss"
 import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { dateToString } from "@/utils/helpers/setDate"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 interface CalendarProps {

@@ -11,7 +11,7 @@ import style from "./style.module.scss"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 

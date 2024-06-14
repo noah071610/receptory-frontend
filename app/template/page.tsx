@@ -3,7 +3,7 @@ import TemplateCards from "@/containers/template-page/TemplateCards"
 import { ssrTranslation } from "@/i18n"
 import { TemplateCategoryType } from "@/types/Template"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import PageError from "./error"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

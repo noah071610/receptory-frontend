@@ -7,7 +7,7 @@ import { SelectedValueType } from "@/types/Main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 export const ThumbList = ({

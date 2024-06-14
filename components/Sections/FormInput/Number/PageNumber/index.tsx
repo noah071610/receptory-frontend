@@ -10,7 +10,7 @@ import { memo, useRef } from "react"
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function PageNumber({ section }: { section: SectionType }) {

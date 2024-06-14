@@ -7,7 +7,7 @@ import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
 import { SelectedValueType } from "@/types/Main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useState } from "react"
 import BasicList from "./List/Basic"
 import ThumbList from "./List/Thumb"

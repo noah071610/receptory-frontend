@@ -3,7 +3,7 @@
 import { useInsightStore } from "@/store/insight"
 import { dateToString } from "@/utils/helpers/setDate"
 import { useContextCalendars, useContextDaysPropGetters } from "@rehookify/datepicker"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { FC, useMemo } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

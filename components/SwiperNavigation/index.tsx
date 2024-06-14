@@ -2,7 +2,7 @@
 
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { Swiper, SwiperProps, SwiperRef } from "swiper/react"
 import { Swiper as SwiperType } from "swiper/types"

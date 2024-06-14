@@ -3,7 +3,7 @@
 import { queryKey } from "@/config"
 import { useInsightStore } from "@/store/insight"
 import { useQueryClient } from "@tanstack/react-query"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useParams } from "next/navigation"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"

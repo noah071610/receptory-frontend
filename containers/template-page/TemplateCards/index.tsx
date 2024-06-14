@@ -3,7 +3,7 @@
 import { _url } from "@/config"
 import { TemplateCardType, TemplateCategoryType } from "@/types/Template"
 import { getAnimation } from "@/utils/styles/getAnimation"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import Image from "next/image"
 import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"

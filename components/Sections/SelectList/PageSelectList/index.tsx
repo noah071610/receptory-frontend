@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import { useMainStore } from "@/store/main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function PageSelectList({ section }: { section: SectionType }) {

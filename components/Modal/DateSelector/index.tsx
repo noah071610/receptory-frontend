@@ -8,7 +8,7 @@ import style from "./style.module.scss"
 import { useMainStore } from "@/store/main"
 import { SectionType } from "@/types/Edit"
 import { stringToDate } from "@/utils/helpers/setDate"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 export const DateSelector = ({ section }: { section: SectionType }) => {

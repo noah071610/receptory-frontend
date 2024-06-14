@@ -2,7 +2,7 @@
 
 import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import ModalLayout from ".."

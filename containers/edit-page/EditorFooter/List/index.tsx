@@ -6,7 +6,7 @@ import { EditorFooterList, EditorFooterListActions, SectionListTypes } from "@/t
 import { Langs } from "@/types/Main"
 import getId from "@/utils/helpers/getId"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"

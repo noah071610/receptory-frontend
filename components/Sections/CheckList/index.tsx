@@ -8,14 +8,14 @@ import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import {
-  faPenFancy,
-  faRotate,
-  faSquareCheck,
-  faSquareXmark,
-  faTriangleExclamation,
+    faPenFancy,
+    faRotate,
+    faSquareCheck,
+    faSquareXmark,
+    faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { memo } from "react"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"

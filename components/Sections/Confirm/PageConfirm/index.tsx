@@ -8,7 +8,7 @@ import style from "../style.module.scss"
 import { useMainStore } from "@/store/main"
 import hasString from "@/utils/helpers/hasString"
 import { setDateFormat, stringToDate } from "@/utils/helpers/setDate"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 

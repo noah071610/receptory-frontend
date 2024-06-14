@@ -1,6 +1,6 @@
 "use client"
 
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

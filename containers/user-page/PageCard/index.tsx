@@ -11,17 +11,17 @@ import hasString from "@/utils/helpers/hasString"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import {
-  faArrowUpRightFromSquare,
-  faChartLine,
-  faChevronDown,
-  faClose,
-  faGlobe,
-  faPen,
-  faTrash,
+    faArrowUpRightFromSquare,
+    faChartLine,
+    faChevronDown,
+    faClose,
+    faGlobe,
+    faPen,
+    faTrash,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQueryClient } from "@tanstack/react-query"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"

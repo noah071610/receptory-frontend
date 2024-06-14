@@ -3,7 +3,7 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import { faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { ReactNode, memo } from "react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

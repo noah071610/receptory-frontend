@@ -5,7 +5,7 @@ import hasString from "@/utils/helpers/hasString"
 import { memo, useMemo } from "react"
 import style from "./style.module.scss"
 
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import dynamic from "next/dynamic"
 import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)

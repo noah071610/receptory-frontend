@@ -1,7 +1,7 @@
 "use client"
 
 import { useEditorStore } from "@/store/editor"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react"
 import style from "./style.module.scss"
 const cx = cs.bind(style)

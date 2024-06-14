@@ -4,7 +4,7 @@ import { ReactNode, useEffect, useRef } from "react"
 
 import { useEditorStore } from "@/store/editor"
 import { getAnimation } from "@/utils/styles/getAnimation"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 

@@ -3,7 +3,7 @@
 import { backgroundColors, borderColors } from "@/config/colors"
 import { SelectChartLabel, SelectChartType } from "@/types/Insight"
 import { ArcElement, Chart as ChartJS, Tooltip } from "chart.js"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import { produce } from "immer"
 import { useCallback, useMemo, useState } from "react"
 import { Pie } from "react-chartjs-2"

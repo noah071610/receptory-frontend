@@ -1,7 +1,7 @@
-import Loading from ".."
-import style from "./style.module.scss"
+import Loading from "..";
+import style from "./style.module.scss";
 
-import cs from "classNames/bind"
+import cs from "classnames/bind";
 const cx = cs.bind(style)
 
 export default function PageLoading({ isLoading, isAbsolute }: { isLoading: boolean; isAbsolute?: boolean }) {

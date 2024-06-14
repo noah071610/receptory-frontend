@@ -11,7 +11,7 @@ import style from "./style.module.scss"
 import { useMainStore } from "@/store/main"
 import { getPhoneNumber } from "@/utils/helpers/getPhoneNumber"
 import hasString from "@/utils/helpers/hasString"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 import Image from "next/image"
 const cx = cs.bind(style)
 

@@ -17,7 +17,7 @@ import style from "./style.module.scss"
 import DeleteBtn from "@/components/DeleteBtn"
 import { toastError } from "@/config/toast"
 import { useMainStore } from "@/store/main"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 const ListEdit = ({

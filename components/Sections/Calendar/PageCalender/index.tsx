@@ -10,7 +10,7 @@ import style from "./style.module.scss"
 import NumberRange from "@/components/NumberRange"
 import { useMainStore } from "@/store/main"
 import { stringToDate } from "@/utils/helpers/setDate"
-import cs from "classNames/bind"
+import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function PageCalender({ section }: { section: SectionType }) {
