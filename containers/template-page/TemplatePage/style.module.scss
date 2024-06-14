@@ -1,0 +1,61 @@
+@import "@/styles/variables.scss";
+
+.body {
+  background-color: var(--bg-color);
+  width: 100%;
+  .main {
+    position: relative;
+    background-color: var(--white);
+    width: 100%;
+    min-height: 100svh; // check :
+    min-height: 100vh; // check :
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    padding-bottom: 200px;
+  }
+}
+
+.template-footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 500px;
+  transform: translateX(-50%);
+  .top {
+    width: 100%;
+    @include flex;
+    margin-bottom: 10px;
+    button {
+      @include btn-submit-style;
+    }
+  }
+  .bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: var(--white);
+    border-top: 1px solid var(--border);
+    button {
+      padding: 15px;
+      @include flex(true);
+      gap: 6px;
+
+      svg {
+        font-size: 15px;
+        color: var(--gray-hard);
+      }
+      span {
+        font-size: 15px;
+        color: var(--gray-hard);
+      }
+
+      &.active {
+        svg,
+        span {
+          color: var(--blue);
+        }
+      }
+    }
+  }
+}

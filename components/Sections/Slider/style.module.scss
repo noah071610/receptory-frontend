@@ -12,38 +12,41 @@
   textarea {
     @include input-style($isSmall: true);
   }
+
+  .title {
+    word-break: break-all;
+  }
+  .description {
+    white-space: pre-line;
+    word-break: break-all;
+  }
 }
 
 .slider {
-  padding: 30px 10px;
+  padding: 20px 10px;
 }
 
 .slide {
-  width: 210px;
-
   &.circle {
-    width: 150px;
-
     input,
     textarea,
     .title,
     .description {
       text-align: center;
     }
-    .card {
+    .slide-inner {
       width: 100%;
       padding: 20px 10px;
       background-color: var(--white);
       border-radius: 10px;
-      border: 1px solid var(--pink-soft);
-      box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+      border: 1px solid var(--blue-soft);
+      @include shadow;
       min-height: 190px;
 
       .card-image {
         margin-bottom: 10px;
         overflow: visible;
         @include flex;
-        height: 100%;
         .image {
           img {
             width: 80px;
@@ -68,11 +71,11 @@
   }
 
   &.card {
-    .card {
+    .slide-inner {
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid var(--border);
-      box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+      @include shadow;
       .card-image {
         border-radius: 0;
         border-bottom-left-radius: 30px;
@@ -85,7 +88,7 @@
         }
       }
       .content {
-        padding: 10px 20px 30px 10px;
+        padding: 10px 20px 20px 10px;
         min-height: 90px;
         border-top-right-radius: 30px;
         position: relative;
@@ -96,15 +99,18 @@
   }
 }
 
-.card {
+.slide-inner {
   width: 100%;
   height: 100%;
   position: relative;
-  width: 210px;
+
+  .card-background {
+    width: 100%;
+    background-color: var(--border);
+  }
 
   .card-image {
     width: 100%;
-    height: 140px;
     border-radius: 3px;
     .image {
       img {
@@ -113,6 +119,10 @@
         object-fit: cover;
       }
     }
+  }
+
+  .loading {
+    @include skeleton;
   }
   .content {
     padding: 5px 2px;
@@ -132,74 +142,5 @@
     .description {
       padding: 0;
     }
-
-    .title {
-      word-break: break-all;
-    }
-    .description {
-      white-space: pre-line;
-      word-break: break-all;
-    }
-  }
-}
-
-.thumb {
-  margin-bottom: 15px;
-  .photo {
-    width: 100%;
-    height: 100%;
-    min-height: 250px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-  }
-  input,
-  .title {
-    @include title-style();
-  }
-  textarea,
-  .description {
-    margin-top: 5px;
-    @include description-style();
-  }
-
-  .title {
-    word-break: break-all;
-  }
-  .description {
-    white-space: pre-line;
-    word-break: break-all;
-    margin-top: 0;
-  }
-}
-
-.thumb-slider {
-  padding: 20px 10px 0 10px;
-}
-.thumb-list {
-  height: 70px;
-  padding: 0 10px 20px 10px;
-  .thumb-list-slide {
-    height: 100%;
-    opacity: 0.5 !important;
-    .photo {
-      border-radius: 5px;
-      height: 100%;
-      width: 100%;
-    }
-  }
-  :global {
-    .swiper-slide-thumb-active {
-      opacity: 1 !important;
-    }
-  }
-}
-
-.noImage {
-  width: 100%;
-  height: 200px;
-  @include flex;
-  span {
-    color: var(--gray);
-    font-size: 20px;
   }
 }

@@ -1,116 +1,112 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
+import Input from "@/components/Input"
+import OptionRatio from "@/components/Options/OptionRatio"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import { getAnimation } from "@/utils/getAnimation"
-import { faCheck } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { getAnimation } from "@/utils/styles/getAnimation"
 import cs from "classNames/bind"
 import Image from "next/image"
-import { useParams } from "next/navigation"
-import { memo, useMemo } from "react"
+import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const Providers = ({ section }: { section: SectionType }) => {
-  const { t } = useTranslation()
-  const { setList, selectedSection, setSelectedSection, saveSectionHistory } = useEditorStore()
+// https://help.line.me/line/IOSSecondary/categoryId/20009675/3/pc?lang=ko&contentId=20022671
 
-  const onClickAddContact = (i: number) => {
-    if (selectedSection?.id !== section.id) {
-      setSelectedSection({ payload: section })
-    }
-    setList({ payload: !section.list[i].isActive, key: "isActive", index: i })
+const onClick = {}
+
+const contactArr = [
+  { value: "call", src: "/images/icons/call.png" },
+  { value: "email", src: "/images/icons/email.png" },
+  { value: "line", src: "/images/icons/line.png" },
+  { value: "instagram", src: "/images/icons/instagram.png" },
+  { value: "twitter", src: "/images/icons/twitter.png" },
+  { value: "facebook", src: "/images/icons/facebook.png" },
+  { value: "kakaoTalk", src: "/images/icons/kakaoTalk.png" },
+]
+
+function Contact({
+  section,
+  isDisplayMode,
+  isEditor,
+}: {
+  section: SectionType
+  isDisplayMode?: boolean
+  isEditor?: boolean
+}) {
+  const { t } = useTranslation(["edit-page"])
+  const { setCollection } = useEditorStore(["setCollection"])
+
+  const list = section.collection
+  const design = section.design
+
+  const onChangeLink = (value: string, i: number, key: "description" | "link") => {
+    setCollection({ payload: value, index: i, key })
   }
-
-  const onChangeListInput = (e: any, i: number) => {
-    setList({ payload: e.target.value, key: "value", index: i })
-  }
-  const onBlurInput = (i: number) => {
-    if (i === 0) {
-      const matchedText = section.list[0].value.match(/[0-9]/gi)
-      setList({ payload: (matchedText ?? []).join(""), key: "value", index: 0 })
-      if (matchedText?.length > 0) {
-        saveSectionHistory({ payload: section })
-      }
-      return
-    }
-    if (i === 1 && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(section.list[1].value)) {
-      return setList({ payload: "", key: "value", index: 1 })
-    }
-    return saveSectionHistory({ payload: section })
-  }
-  return (
-    <div className={cx("providers")}>
-      <ul>
-        {section.list.map((v, i) => (
-          <li key={`provider_${i}`}>
-            <div className={cx("list")}>
-              <div className={cx("left")}>
-                <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
-              </div>
-              <div className={cx("right")}>
-                <h4>{t(`${v.type}Link`)}</h4>
-                <input
-                  type={v.type === "email" ? "email" : undefined}
-                  placeholder={t(`${v.type}Placeholder`)}
-                  className={cx("input")}
-                  onBlurCapture={() => onBlurInput(i)}
-                  onChange={(e) => onChangeListInput(e, i)}
-                  value={v.value ?? ""}
-                />
-              </div>
-              <div className={cx("end")}>
-                <button onClick={() => onClickAddContact(i)} className={cx("checkbox", { active: v.isActive })}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-function Contact({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { lang } = useParams()
-  const { t } = useTranslation()
-
-  const btnList = useMemo(() => section.list.filter((v) => v.isActive), [section.list])
 
   return (
     <div className={cx("contact")}>
       <div className={cx("main")}>
-        <div className={cx("btn-list")}>
-          {btnList.map((v, i) => {
-            switch (v.type) {
-              case "call":
-                return (
-                  <a
-                    style={getAnimation({ type: section.style.animation, delay: i * 130 })}
-                    href={`tel:${v.value}`}
-                    key={`btn_${v.type}`}
-                  >
-                    <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
-                  </a>
-                )
-              default:
-                return (
-                  <button
-                    style={getAnimation({ type: section.style.animation, delay: i * 130 })}
-                    // onClick={() => v.onClick(v.value)} todo:
-                    key={`btn_${v.type}`}
-                  >
-                    <Image width={30} height={30} src={`/images/icons/${v.type}.png`} alt={v.type} />
-                  </button>
-                )
-            }
-          })}
-        </div>
+        <ul className={cx("btn-list", design)}>
+          {list.map(({ key, link, description }, i) => (
+            <li key={`btn_${key}`} style={getAnimation({ type: section.style.animation, delay: i * 130 })}>
+              {isEditor ? (
+                <div className={cx("preview-btn")}>
+                  <Image width={40} height={40} src={`/images/icons/${key}.png`} alt={key} />
+                  {design === "card" && <span>{description}</span>}
+                </div>
+              ) : (
+                <a href={key === "call" ? `tel:${link}` : link} target={"_blank"} rel="noreferrer">
+                  <Image width={40} height={40} src={`/images/icons/${key}.png`} alt={key} />
+                  {design === "card" && <span>{description}</span>}
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
-      {!isDisplayMode && <Providers section={section} />}
+      {!isDisplayMode && (
+        <div className={cx("options")}>
+          <OptionRatio optionsArr={contactArr} section={section} targetKey="contacts" isMultiple={true} />
+          <div className={cx("link-option")}>
+            <h4>
+              <span>{t("linkSetting")}</span>
+            </h4>
+            <ul className={cx("link-input-wrapper")}>
+              {list.map(({ key, link, description }, i) => (
+                <li key={`link-input-${key}`}>
+                  <Image width={30} height={30} src={`/images/icons/${key}.png`} alt={key} />
+                  <div className={cx("input-content")}>
+                    <h5>{t("linkDescription")}</h5>
+                    <Input
+                      type="input"
+                      inputType={"linkDescription"}
+                      isOptional={true}
+                      onChange={(value: string) => {
+                        onChangeLink(value, i, "description")
+                      }}
+                      value={description}
+                      section={section}
+                    />
+                    <h5>{t("linkUrl")}</h5>
+                    <Input
+                      type="input"
+                      inputType={`linkUrl`}
+                      isOptional={false}
+                      onChange={(value: string) => {
+                        onChangeLink(value, i, "link")
+                      }}
+                      value={link}
+                      section={section}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

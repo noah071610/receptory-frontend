@@ -1,0 +1,180 @@
+@import "@/styles/variables.scss";
+
+@keyframes comp-visible {
+  from {
+    visibility: hidden;
+    z-index: -1;
+  }
+  1% {
+    z-index: 100;
+    visibility: visible;
+  }
+
+  to {
+    z-index: 100;
+    visibility: visible;
+  }
+}
+@keyframes comp-hide {
+  from {
+    z-index: 100;
+    visibility: visible;
+  }
+
+  99% {
+    z-index: 100;
+    visibility: visible;
+  }
+  to {
+    z-index: -1;
+    visibility: hidden;
+  }
+}
+
+@keyframes shakeY {
+  from {
+    transform: translate3d(0, 4px, 0);
+  }
+
+  15% {
+    transform: translate3d(0, 0, 0);
+  }
+  30% {
+    transform: translate3d(0, 4px, 0);
+  }
+  to {
+    transform: translate3d(0, 4px, 0);
+  }
+}
+
+.body {
+  background-color: var(--bg-color);
+  width: 100%;
+  .main {
+    background-color: var(--white);
+    width: 100%;
+    min-height: 100svh; // check :
+    min-height: 100vh; // check :
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    padding-bottom: 100px;
+    @include medium {
+      padding-bottom: 50px;
+    }
+
+    .overlay {
+      @include full(absolute);
+      background-color: var(--white);
+      opacity: 0;
+      animation: comp-hide 450ms forwards;
+      transition: opacity 450ms;
+      &.isLoading {
+        opacity: 1;
+        animation: comp-visible 450ms forwards;
+      }
+    }
+  }
+}
+
+.submit-btn-wrapper {
+  width: 100%;
+  position: relative;
+  margin-top: 100px;
+  @include flex(true);
+  gap: 15px;
+  .float-message {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    p {
+      animation: shakeY 1700ms ease-in-out infinite;
+      font-size: 13px;
+      color: var(--red);
+      font-weight: 700;
+    }
+    &.active {
+      p {
+        color: var(--green-hard);
+      }
+    }
+  }
+
+  .submit {
+    @include btn-submit-style;
+    margin: 0 auto;
+    span {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  .goback {
+    span {
+      color: var(--gray-hard);
+      font-size: 15px;
+    }
+  }
+
+  .gohome {
+    @include btn-submit-style;
+    margin: 0 auto;
+    span {
+      font-size: 14px;
+    }
+  }
+}
+
+.cta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  a,
+  button {
+    img {
+      transition: 200ms all;
+    }
+    @include action {
+      img {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 500px;
+  transform: translate(-50%, 50px);
+  transition: transform 400ms;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding: 10px 0;
+  z-index: 10000;
+  @include flex;
+  &::before {
+    @include full(absolute);
+    content: "";
+    background-color: rgba($color: #ffffff, $alpha: 0.5);
+  }
+  p {
+    position: relative;
+    z-index: 10;
+    span {
+      font-size: 12px;
+      color: var(--gray-hard);
+    }
+    svg {
+      font-size: 11px;
+      color: var(--gray);
+      margin-right: 4px;
+    }
+  }
+  &.active {
+    transform: translate(-50%, 0);
+  }
+}

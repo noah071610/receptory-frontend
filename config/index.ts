@@ -1,9 +1,22 @@
 import axios, { AxiosError } from "axios"
-import { colors } from "./colors"
+
+const STALE_TIME = 1000 * 60 * 60 // 60 minutes
 
 export const _url = {
   client: process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_CLIENT_URL : "http://localhost:3000",
   server: process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_SERVER_URL : "http://localhost:5555/api",
+}
+
+export const queryClientConfig = {
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: STALE_TIME,
+      baseURL: _url.server,
+      retry: 0,
+      retryDelay: 1000,
+    },
+  },
 }
 
 export const API = axios.create({
@@ -24,21 +37,24 @@ API.interceptors.response.use(
   }
 )
 
-export const getImageUrl = ({ isCenter, url }: { url: string; isCenter?: boolean }) => {
-  if (isCenter) {
-    return `url('${url}') no-repeat center/cover`
-  } else {
-    return `url('${url}') no-repeat center/contain, ${colors.border}`
-  }
-}
-
 export const queryKey = {
   user: ["user"],
+  admin: ["admin"],
+  page: (pageId: string) => ["page", pageId],
+  insight: (pageId: string) => ["insight", pageId],
+  insightSearch: (pageId: string) => ["insightSearch", pageId],
   save: {
-    edit: ["save", "edit"],
     list: ["save", "list"],
   },
 }
 
-export const noImageUrl = "/images/post/no-image.png"
-export const noThumbnailUrl = "/images/post/noThumbnail.png"
+export const noImageUrl = "/images/noImage.png"
+
+export const userPlan = ["free", "semiPremium", "premium"]
+
+export const langText = {
+  ko: "한국어",
+  en: "English",
+  th: "ภาษาไทย",
+  ja: "日本語",
+}

@@ -1,56 +1,87 @@
 @import "@/styles/variables.scss";
 
-.display {
-  padding: 0 10px;
-}
-
 .callout {
   width: 100%;
   background-color: var(--gray-softest);
   @include border;
   border-radius: 5px;
-  padding: 5px;
+  padding: 10px;
   display: flex;
-  .image-container {
-    width: 60px;
-    height: 60px;
-    padding: 5px;
-    @include flex;
-    .image {
-      border-radius: 100%;
-      width: 50px;
-      height: 50px;
-      @include flex;
-      position: relative;
-      border-radius: 100%;
+  gap: 5px;
+  position: relative;
+
+  &.card {
+    margin-top: 35px;
+    .image-container {
+      position: absolute;
+      top: -35px;
+      left: 15px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
       overflow: hidden;
-      img {
-        object-fit: cover;
-      }
-      button {
-        @include full;
-        border-radius: 100%;
-        border: 1px dashed var(--border);
-        width: 100%;
-        height: 100%;
-        @include flex;
-        svg {
-          color: var(--gray);
-        }
-        &.has-image {
-          border: none;
-        }
-        @include action {
-          border-color: var(--pink);
-          svg {
-            color: var(--pink);
-          }
-        }
-      }
+      width: 70px;
+      height: 70px;
+    }
+    .main {
+      width: 100%;
+      padding-top: 35px;
     }
   }
-  .main {
-    width: 100%;
-    padding: 5px;
+}
+
+.image-container {
+  width: 60px;
+  height: 60px;
+  padding: 5px;
+  position: relative;
+
+  @include flex;
+
+  &.emoji {
+    width: 50px;
+    height: 50px;
+    .image {
+      width: 40px;
+      height: 40px;
+      border-radius: 0px;
+    }
+  }
+
+  .image {
+    width: 50px;
+    height: 50px;
+    @include flex;
+    position: relative;
+    border-radius: 100%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.main {
+  width: 100%;
+}
+
+.image-btn {
+  @include full;
+  border-radius: 100%;
+  border: 1px dashed var(--border);
+  @include flex;
+  svg {
+    color: var(--gray);
+  }
+  &.has-image {
+    border: none;
+  }
+  @include action {
+    border-color: var(--blue);
+    svg {
+      color: var(--blue);
+    }
   }
 }

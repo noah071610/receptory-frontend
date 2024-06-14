@@ -1,42 +1,38 @@
 "use client"
 
 import AddBtn from "@/components/AddBtn"
+import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
-import { changeOpacity, colors } from "@/config/colors"
+import { colors } from "@/config/colors"
+import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
+import { changeOpacity } from "@/utils/styles/changeOpacity"
 import { faChevronDown, faQ } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
-import { memo, useMemo } from "react"
+import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import Text from "../Text"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
-
-const Search = memo(({}: {}) => {
-  return <></>
-})
 
 const List = ({
   section,
   list,
   index,
-  isDisplayMode,
+  onDelete,
 }: {
   section: SectionType
   list: SectionListType
   index: number
-  isDisplayMode?: boolean
+  onDelete: (i: number) => void
 }) => {
   const { color } = section.style
-  const { setList, setSelectedSection, selectedSection } = useEditorStore()
-  const isActive = list.isActive
+  const [isActive, setIsActive] = useState(true)
   const titleBackgroundColor = useMemo(() => changeOpacity(color ?? "rgba(255,255,255,1)", 0.1), [color])
   const onClickTitle = (e: any) => {
-    if (!selectedSection) {
-      setSelectedSection({ payload: section })
-    }
-    setList({ key: "isActive", index, payload: e.target.closest(`input`) ? true : !list.isActive })
+    setIsActive((b) => (e.target.closest(`input`) ? true : !b))
   }
 
   return (
@@ -53,38 +49,51 @@ const List = ({
           <FontAwesomeIcon icon={faQ} />
           <span>{"."}</span>
         </div>
-        <Input
-          type="input"
-          inputType="title"
-          listIndex={index}
-          isOptional={false}
-          maxLength={80}
-          dataKey="title"
-          displayMode={isDisplayMode && "h2"}
-          value={list.data.title}
-          className={cx(isDisplayMode ? style.title : "title-input")}
-        />
+        <div className={cx("title-inner")}>
+          <Input
+            type="input"
+            inputType="titleInput"
+            listIndex={index}
+            isOptional={false}
+            maxLength={80}
+            dataKey="title"
+            value={list.data.title}
+            section={section}
+            className={cx("title-input")}
+          />
+        </div>
+
         <div style={{ color: isActive ? color : colors.black }} className={cx("icon", "arrow")}>
           <FontAwesomeIcon icon={faChevronDown} />
         </div>
       </div>
       <div className={cx("content-layout")}>
-        <Text isDisplayMode={isDisplayMode} listIndex={index} section={section} />
+        <Text listIndex={index} section={section} />
+        <DeleteBtn deleteEvent={onDelete} srcKey="list" listIndex={index} />
       </div>
     </li>
   )
 }
 
-export default function QnA({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
+export default function QnA({ section }: { section: SectionType }) {
+  const { deleteList } = useEditorStore(["deleteList"])
+
+  const { t } = useTranslation(["edit-page"])
+  const onDelete = (i: number) => {
+    if (section.list.length <= 1) {
+      return toastError("atLeastOneList")
+    }
+    deleteList({ targetIndex: i })
+  }
+
   return (
     <div className={cx("qna")}>
-      <Search />
       <ul className={cx("qna-list")}>
         {section.list.map((v, i) => (
-          <List isDisplayMode={isDisplayMode} index={i} key={v.id} list={v} section={section} />
+          <List onDelete={onDelete} index={i} key={v.id} list={v} section={section} />
         ))}
       </ul>
-      {!isDisplayMode && <AddBtn section={section} type="qna" />}
+      <AddBtn section={section} type="qna" />
     </div>
   )
 }

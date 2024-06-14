@@ -1,5 +1,4 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
-import { EditorState } from "draft-js"
 
 export type SectionListTypes =
   | "thumbnail"
@@ -12,11 +11,18 @@ export type SectionListTypes =
   | "map"
   | "qna"
   | "empty"
-  | "calender"
+  | "calendar"
   | "time"
   | "select"
-  | "input"
+  | "textInput"
+  | "numberInput"
+  | "phone"
+  | "email"
+  | "nameInput"
   | "checkList"
+  | "choices"
+  | "confirm"
+  | "linkBtn"
 
 export type TargetSectionListTypes =
   | "backgroundColor"
@@ -27,7 +33,7 @@ export type TargetSectionListTypes =
   | "design"
   | "animation"
   | "textAlign"
-  | "select"
+  | "selectEle"
   | "labelColor"
 
 export type AlignTypes = "left" | "center" | "right"
@@ -56,6 +62,11 @@ export type DesignTypes =
   | "caution"
   | "imageWithText"
   | "simple"
+  | "background"
+  | "gender"
+  | "yesOrNo"
+  | "none"
+  | "firstAndLast"
   | AlignTypes
 export type AnimationTypes =
   | "none"
@@ -65,10 +76,12 @@ export type AnimationTypes =
   | "bounce"
   | "scaleUp"
   | "fadeInRight"
+  | "fadeInLeft"
   | "heartBeat"
   | "fadeUpBig"
+  | "headShake"
 export type TitleSelectTypes = "title" | "description" | "label"
-export type StyleSelectTypes = "cover" | "contain"
+export type StyleSelectTypes = "imageSize" | "width" | "length"
 
 export type EditorFooterListTypes =
   | SectionListTypes
@@ -79,7 +92,9 @@ export type EditorFooterListTypes =
   | TitleSelectTypes
   | StyleSelectTypes
 
-export type EditStage = "init" | "form" | "rending"
+export type EditStage = "home" | "form" | "rending" | "confirm"
+
+export type SectionsKeys = "homeSections" | "formSections" | "confirmSections"
 
 export interface ActiveTypes {
   modal: {
@@ -112,13 +127,15 @@ export interface StyleProperties {
   animation?: AnimationTypes
   borderColor?: string
   backgroundSize?: "cover" | "contain"
+  paddingBottom?: string
+  src?: string
 }
 
 interface _SectionType {
   id: string
   index: number
   value: any
-  text: EditorState
+  text: string
   data: { [key: string]: any }
   collection: any[]
   src: string
@@ -135,7 +152,13 @@ export interface SectionListType extends _SectionType {
   type: string
 }
 
-export type EditorFooterListActions = "cta" | "colorSelector" | "submenu" | "imageSelector" | "createSection"
+export type EditorFooterListActions =
+  | "cta"
+  | "colorSelector"
+  | "submenu"
+  | "imageSelector"
+  | "createSection"
+  | "copySection"
 
 export interface EditorFooterList {
   value: EditorFooterListTypes

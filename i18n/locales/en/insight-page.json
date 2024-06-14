@@ -1,0 +1,19 @@
+{
+  "submitTitle": "Submission Statistics",
+  "calendarTitle": "Periodic Statistics",
+  "timeTitle": "Hourly Statistics",
+  "emptySubmitted": "No submissions yet",
+  "searchConfirmation": "Search by keyword",
+  "adjustFilter": "Apply",
+  "emptySearch": "No search results",
+  "createdAt": "Submission Date",
+  "startDate": "Start Date",
+  "startTime": "Start Time",
+  "desc": "Descending",
+  "asc": "Ascending",
+  "none": "None",
+  "calendar": "Date-based",
+  "time": "Hour-based",
+  "select": "Select List Statistics",
+  "choices": "Multiple Choice Statistics"
+}

@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "free": "무료 플랜",
+    "semiPremium": "세미프리미엄 플랜",
+    "premium": "프리미엄 플랜"
+  },
+  "settings": "설정",
+  "inform": "문의",
+  "upgrade": "업그레이드",
+  "changeSiteLang": "사이트 언어 변경",
+  "changeProfile": "프로필 변경",
+  "deleteAccount": "계정 삭제",
+  "feedback": "피드백",
+  "report": "신고하기",
+  "noPage": "만들어진 페이지가 없어요",
+  "addPage": "새로운 페이지 추가",
+  "updatedAt": "최근 수정일",
+  "defaultTitle": "타이틀 없음",
+  "defaultDescription": "설명 없음",
+  "terms-and-policy": "이용 약관",
+  "contents": "콘텐츠",
+  "template": "템플릿",
+  "guide": "가이드",
+
+  "card": {
+    "insight": "인사이트",
+    "gotoPage": "페이지 바로가기",
+    "stop": "배포 중지",
+    "edit": "페이지 수정",
+    "changeLang": "페이지 언어 변경",
+    "delete": "페이지 삭제"
+  }
+}

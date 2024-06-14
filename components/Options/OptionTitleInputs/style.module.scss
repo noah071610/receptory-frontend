@@ -2,18 +2,19 @@
 
 .edit-inputs {
   width: 100%;
-  @include flex;
-  flex-direction: column;
+  margin-bottom: 30px;
+
   input {
     width: 100%;
-    max-width: 300px;
     @include input-style;
+    max-width: 400px;
   }
   .title {
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 600;
     margin-bottom: 5px;
   }
   .description {
-    font-size: 13px;
+    font-size: 16px;
   }
 }

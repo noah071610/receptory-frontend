@@ -3,21 +3,29 @@
   height: 36px;
   display: grid;
   animation: spinner 4s infinite;
+  &.isFull {
+    width: 60px;
+    height: 60px;
+
+    .before,
+    .after {
+      border-width: 10px;
+    }
+  }
 }
 
-.spinner::before,
-.spinner::after {
-  content: "";
+.before,
+.after {
   grid-area: 1/1;
   border: 6px solid;
   border-radius: 50%;
-  border-color: var(--pink-hard) var(--pink-hard) #0000 #0000;
+  border-color: var(--blue-hard) var(--blue-hard) #0000 #0000;
   mix-blend-mode: darken;
   animation: spinner 1s infinite linear;
 }
 
-.spinner::after {
-  border-color: #0000 #0000 var(--pink-soft) var(--pink-soft);
+.after {
+  border-color: #0000 #0000 var(--blue-soft) var(--blue-soft);
   animation-direction: reverse;
 }
 

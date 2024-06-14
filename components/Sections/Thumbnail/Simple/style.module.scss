@@ -1,4 +1,7 @@
 @import "@/styles/variables.scss";
+@import "../thumbnail.module.scss";
+
+@include thumbnail-common-style;
 
 .wrapper {
   width: 100%;
@@ -6,8 +9,7 @@
   height: auto;
   max-height: 600px;
   min-height: auto;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
   padding-bottom: 25px;
 
   .background {
@@ -39,12 +41,15 @@
     @include description-style($isSmall: true);
   }
 
-  h1 {
-    word-wrap: break-word;
-  }
-  p {
-    white-space: pre-line;
-    word-break: break-all;
+  &.emoji {
+    grid-template-columns: 40px 1fr;
+
+    .thumbnail {
+      width: 50px;
+      height: 50px;
+      border-radius: 0px;
+      box-shadow: none;
+    }
   }
 }
 
@@ -60,7 +65,7 @@
   @include flex;
   border: 1px dashed var(--border);
   transform: translateY(-35px);
-  box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
+  @include shadow;
   &.isDisplayMode {
     border: none;
   }
@@ -70,24 +75,6 @@
     height: 100%;
     object-fit: cover;
   }
-
-  .drop-zone {
-    width: 100%;
-    height: 100%;
-    svg {
-      color: var(--gray);
-      font-size: 20px;
-    }
-
-    @include action {
-      svg {
-        color: var(--pink-soft);
-      }
-      &::before {
-        border-color: var(--pink-soft);
-      }
-    }
-  }
 }
 
 .cta-wrapper {
@@ -96,15 +83,22 @@
   display: flex;
   justify-content: flex-start;
   .cta {
-    padding: 7px 11px;
-    border-radius: 3px;
     display: flex;
-    justify-content: flex-start;
+    align-items: center;
+
     input,
     span {
       width: auto;
-      font-size: 13px;
+      font-size: 16px;
       line-height: 1.1;
+      font-weight: 700;
+    }
+    input {
+      @include input-style;
+    }
+    svg {
+      font-size: 16px;
+      margin-left: 5px;
     }
   }
 }

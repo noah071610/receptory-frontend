@@ -1,4 +1,7 @@
 @import "@/styles/variables.scss";
+@import "../thumbnail.module.scss";
+
+@include thumbnail-common-style;
 
 .wrapper {
   width: 100%;
@@ -6,31 +9,25 @@
   height: auto;
   max-height: 600px;
   min-height: auto;
-  @include flex;
-  flex-direction: column;
+  @include flex($col: true);
   padding-bottom: 25px;
 
   .background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    @include full;
     height: 150px;
-    border-bottom-left-radius: 60px;
   }
 }
 
 .main {
   width: calc(100% - 60px);
-  max-width: 350px;
-  display: flex;
-  align-items: center;
+  max-width: 300px;
+  @include flex-y;
   flex-direction: column;
   margin-top: 80px;
   z-index: 10;
   background-color: var(--white);
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 0 12px 23px rgba(0, 0, 0, 0.08);
 
   .title-input,
@@ -41,33 +38,33 @@
   h1,
   .title-input {
     @include title-style;
+    font-size: 18px;
     text-align: center;
   }
 
   .description-input,
   p {
-    margin-top: 7px;
-    @include description-style;
+    margin-top: 6px;
+    @include description-style($isSmall: true);
     text-align: center;
-  }
-
-  h1 {
-    word-wrap: break-word;
-  }
-  p {
-    white-space: pre-line;
-    word-break: break-all;
+    line-height: 1.2;
   }
 }
 
 .thumbnail {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 100%;
   overflow: hidden;
   margin-bottom: 10px;
   @include flex;
+  position: relative;
   border: 1px dashed var(--border);
+  &.emoji {
+    width: 50px;
+    height: 50px;
+    border-radius: 0px;
+  }
   &.display {
     border: none;
   }
@@ -77,41 +74,26 @@
     height: 100%;
     object-fit: cover;
   }
-
-  .drop-zone {
-    width: 100%;
-    height: 100%;
-    svg {
-      color: var(--gray);
-      font-size: 40px;
-    }
-
-    @include action {
-      svg {
-        color: var(--pink-soft);
-      }
-      &::before {
-        border-color: var(--pink-soft);
-      }
-    }
-  }
 }
 
 .cta-wrapper {
   width: 100%;
   @include flex;
   margin-top: 20px;
+  margin-bottom: 10px;
   .cta {
-    width: 220px;
-    border-radius: 100px;
-    background-color: white;
-    padding: 15px 20px;
+    @include btn-submit-style;
     input,
     span {
+      width: 100%;
       text-align: center;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       line-height: 1.3;
+    }
+    span {
+      white-space: pre-line;
+      word-break: break-all;
     }
   }
 }

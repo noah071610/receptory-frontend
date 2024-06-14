@@ -1,7 +1,7 @@
 export type Providers = "google" | "facebook" | "local"
 
 export interface UserType {
-  userId: number
+  userId: string
   userName: string
   userImage: string
   provider: Providers

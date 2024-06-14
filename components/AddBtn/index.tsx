@@ -10,18 +10,25 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function AddBtn({ type, section }: { type: string; section: SectionType }) {
-  const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore()
+  const { setActive, addList, selectedSection, setSelectedSection } = useEditorStore([
+    "setActive",
+    "addList",
+    "selectedSection",
+    "setSelectedSection",
+  ])
 
   const onClickAddList = () => {
-    if (selectedSection?.id !== section.id) {
+    if (!selectedSection || selectedSection?.id !== section.id) {
       setSelectedSection({ payload: section })
     }
+
     switch (type) {
       case "qna":
+      // qna의 new list 의 추가 ojb { isActive: true, data: { title: "title.." } }
+      // 는 createNewSectionList에서 자동으로 추가한다
       case "select":
-        return addList({ type })
       case "checkList":
-        return addList({ type, valueArrForNewList: [{ design: "check" }] })
+        return addList({ type })
 
       default:
         setActive({ payload: { type, payload: "add" }, key: "modal" })
@@ -31,7 +38,7 @@ function AddBtn({ type, section }: { type: string; section: SectionType }) {
 
   return (
     <div className={cx("btn-wrapper")}>
-      <button onClick={onClickAddList} className={cx("add", "add")}>
+      <button data-closer="add" onClick={onClickAddList} className={cx("add")}>
         <FontAwesomeIcon icon={faPlus} />
       </button>
     </div>

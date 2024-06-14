@@ -1,3 +1,4 @@
+@import "@/styles/editor.scss";
 @import "@/styles/variables.scss";
 
 .layout {
@@ -5,7 +6,7 @@
 }
 
 .content {
-  width: 95%;
+  @include modal-style;
   padding: 15px;
   ul {
     width: 100%;
@@ -32,9 +33,9 @@
 }
 
 .btn-wrapper {
-  @include form-btn-layout-style;
+  @include btn-layout-style;
   .anyDate {
-    @include form-sub-btn-style;
+    @include btn-sub-style;
     padding: 0 0 5px 0;
   }
 }

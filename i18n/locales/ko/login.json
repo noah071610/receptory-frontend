@@ -9,5 +9,10 @@
   "findEmail": "이메일 찾기",
   "enterEmail": "이메일 입력",
   "enterPassword": "비밀번호 입력",
-  "back": "뒤로가기"
+  "back": "뒤로가기",
+
+  "googleLogin": "구글로 로그인",
+  "facebookLogin": "페이스북으로 로그인",
+  "title": "간편하지만 우아한 홈페이지 제작툴",
+  "description": "지금 로그인하고 무료로 제작하세요"
 }

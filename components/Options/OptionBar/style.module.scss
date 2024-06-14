@@ -1,38 +1,5 @@
 @import "@/styles/variables.scss";
 
 .layout {
-  width: 100%;
-  @include flex;
-  .content {
-    @include flex;
-    flex-direction: column;
-    .bar {
-      width: 50px;
-      padding: 3px 6px;
-      background-color: var(--gray-soft);
-      display: flex;
-      align-items: center;
-      border-radius: 30px;
-      transition: 300ms all;
-      .circle {
-        width: 18px;
-        height: 18px;
-        border-radius: 100%;
-        background-color: var(--gray);
-        transition: 300ms all;
-      }
-    }
-    &.active {
-      h4 {
-        color: var(--pink-hard);
-      }
-      .bar {
-        background-color: var(--pink-soft);
-      }
-      .circle {
-        transform: translateX(21px);
-        background-color: var(--white);
-      }
-    }
-  }
+  @include option-bar;
 }

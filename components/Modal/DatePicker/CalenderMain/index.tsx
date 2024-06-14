@@ -2,8 +2,6 @@
 
 import { FC, ReactNode, useEffect } from "react"
 
-import { useTranslation } from "@/i18n/client"
-import { useEditorStore } from "@/store/editor"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -12,8 +10,12 @@ import {
   useContextDatePickerOffsetPropGetters,
   useContextDaysPropGetters,
 } from "@rehookify/datepicker"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
+import { SectionType } from "@/types/Edit"
+import { dateToString } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
@@ -60,38 +62,46 @@ const CalenderComponent: FC<CalendarProps> = ({ prevButton, nextButton, calendar
   )
 }
 
-function CalenderMain({ isOptionCalender, selectedDates }: { isOptionCalender?: boolean; selectedDates?: Date[] }) {
-  const { t } = useTranslation()
-  const { selectedSection, setValue, setActive } = useEditorStore()
+function CalenderMain({
+  section,
+  isOptionCalender,
+  selectedDates,
+}: {
+  section: SectionType
+  isOptionCalender?: boolean
+  selectedDates?: Date[]
+}) {
+  const { setSelected, setModal } = useMainStore(["pageLang", "setModal", "setSelected"])
+  const { t } = useTranslation(["edit-page"])
   const { calendars } = useContextCalendars()
   const { addOffset, subtractOffset, setOffset } = useContextDatePickerOffsetPropGetters()
-  const { options } = selectedSection ?? {}
-  const { startDate, addAnyDate, selectRange } = options ?? {}
-  const inactiveBtn = !selectedDates || selectedDates.length <= (selectRange === "range" ? 1 : 0)
+  const { startDate, addAnyDate, isRangeSelect } = section.options
+  const inactiveBtn = !selectedDates || selectedDates.length <= (isRangeSelect ? 1 : 0)
 
   const onClickSubmit = () => {
     if (!selectedDates || selectedDates.length <= 0) return
-    setValue({
-      payload: {
-        selectedStartDate: selectedDates[0],
-        selectedEndDate: selectedDates[1], // undefined 도 가능
-      },
+
+    const arr = selectedDates.map((v, i) => ({
+      key: i === 0 ? "startDate" : "endDate",
+      text: dateToString(v),
+    }))
+    setSelected({
+      section,
+      value: arr,
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
   const onClickAnyDate = () => {
-    setValue({
-      payload: {
-        selectedStartDate: "anyDate",
-        selectedEndDate: undefined,
-      },
+    setSelected({
+      section,
+      value: [{ key: "anyDate", text: t("anyDate") }],
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
 
   useEffect(() => {
     if (!isOptionCalender) setOffset(startDate)
-  }, [startDate, isOptionCalender])
+  }, [startDate, isOptionCalender, setOffset])
 
   return (
     <div className={cx("date-picker-layout", { isOptionCalender: isOptionCalender })}>

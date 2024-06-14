@@ -125,6 +125,15 @@ li,
 ol {
   list-style-type: none;
 }
+body.disabled-scroll {
+  overflow: hidden;
+  margin: 0;
+  touch-action: none;
+  -ms-touch-action: none;
+  /* position: fixed; we get rid of this line which resets the flow of the page */
+  /* height: 100%; we change 100% to 100vh */
+  height: 100vh;
+}
 
 table {
   border-collapse: collapse;
@@ -194,22 +203,37 @@ textarea {
   touch-action: manipulation;
 }
 
-.react-international-phone-input-container {
-  .react-international-phone-country-selector-button {
-    border: none;
-    height: auto !important;
-    &:hover {
-      background-color: transparent;
-    }
+.toast-error {
+  background: var(--white) !important;
+
+  padding: 20px;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+
+  button {
+    background-color: var(--red) !important;
+    color: var(--white) !important;
   }
-  .react-international-phone-input {
-    border: none !important;
-    font-size: 16px !important;
-    height: auto !important;
+  background: rgba(255, 241, 244, 1) !important;
+  svg {
+    color: var(--red);
   }
 }
-.react-international-phone-country-selector-dropdown {
-  border: none !important;
+.toast-success {
+  background: var(--white) !important;
+
+  padding: 20px;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+
+  button {
+    background-color: var(--green-hard) !important;
+    color: var(--white) !important;
+  }
+  background-color: rgb(227, 255, 234, 1) !important;
+  svg {
+    color: var(--green-hard);
+  }
 }
 
 :root {
@@ -221,9 +245,17 @@ textarea {
   --text-white: white;
   --black: black;
 
-  --pink-soft: rgba(255, 176, 176, 0.7);
-  --pink: rgba(255, 138, 138, 0.8);
-  --pink-hard: rgba(229, 106, 106, 0.9);
+  --gray-bg: rgb(220, 224, 255, 0.5);
+
+  --pink-soft: rgba(220, 224, 255, 0.5);
+  --pink: rgba(117, 130, 253, 1);
+  --pink-hard: rgba(77, 94, 255, 1);
+
+  --blue-soft: rgba(220, 224, 255, 0.5);
+  --blue: rgba(117, 130, 253, 1);
+  --blue-hard: rgba(77, 94, 255, 1);
+
+  --blue-desc: #0a59aeda;
 
   --gray-softest: rgba(225, 225, 225, 0.15);
   --gray-soft: rgba(235, 235, 235, 0.45);
@@ -244,8 +276,9 @@ textarea {
   --bg-color: rgba(249, 249, 249, 0.8);
   --shadow-color: rgba(0, 0, 0, 0.08);
 
-  --red: rgba(255, 74, 71, 0.85);
-  --red-soft: rgba(253, 172, 171, 0.6); // todo:
+  --red: rgba(255, 93, 90, 1);
+  --red-soft: rgba(255, 131, 129, 0.7);
+  --red-hard: rgba(198, 32, 29, 0.9);
 
   --input-color: rgba(234, 234, 234, 0.4);
   --radial-bg: radial-gradient(circle, rgba(255, 255, 255, 1) 70%, rgba(255, 241, 244, 1) 100%);
@@ -256,17 +289,13 @@ textarea {
   --green: rgba(78, 192, 78, 0.8);
   --green-hard: rgba(95, 173, 95, 0.9);
 
-  --blue-soft: rgba(143, 182, 254, 0.6);
-  --blue-hard: rgba(53, 91, 255, 0.9);
-  --blue: rgba(46, 58, 255, 0.9); //todo:
-
   --candidate-height: 94px;
   --nav-width: 100px;
   --image-candidate-height: 154px;
   --post-card-thumbnail-height: 150px;
 
   --editor-width: 550px;
-  --preview-width: 450px;
+  --preview-width: 400px;
 }
 
 body.dark {
@@ -362,27 +391,27 @@ body.dark {
 
 @keyframes flip {
   from {
-    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    transform: perspective(500px) rotate3d(0, 1, 0, 90deg);
     animation-timing-function: ease-in;
     opacity: 0;
   }
 
   40% {
-    transform: perspective(400px) rotate3d(0, 1, 0, -10deg);
+    transform: perspective(500px) rotate3d(0, 1, 0, -10deg);
     animation-timing-function: ease-in;
   }
 
   60% {
-    transform: perspective(400px) rotate3d(0, 1, 0, 5deg);
+    transform: perspective(500px) rotate3d(0, 1, 0, 5deg);
     opacity: 1;
   }
 
   80% {
-    transform: perspective(400px) rotate3d(0, 1, 0, -2deg);
+    transform: perspective(500px) rotate3d(0, 1, 0, -2deg);
   }
 
   to {
-    transform: perspective(400px);
+    transform: perspective(500px);
     opacity: 1;
   }
 }
@@ -391,6 +420,18 @@ body.dark {
   from {
     opacity: 0;
     transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
   }
 
   to {
@@ -468,5 +509,31 @@ body.dark {
 
   70% {
     transform: scale(1);
+  }
+}
+
+@keyframes headShake {
+  0% {
+    transform: translateX(0);
+  }
+
+  6.5% {
+    transform: translateX(-6px) rotateY(-9deg);
+  }
+
+  18.5% {
+    transform: translateX(5px) rotateY(7deg);
+  }
+
+  31.5% {
+    transform: translateX(-3px) rotateY(-5deg);
+  }
+
+  43.5% {
+    transform: translateX(2px) rotateY(3deg);
+  }
+
+  50% {
+    transform: translateX(0);
   }
 }

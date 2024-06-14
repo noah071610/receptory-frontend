@@ -1,5 +1,9 @@
 {
-  "createNew": "Create New",
-  "description": "My Favorite learned Through You",
-  "dashboard": "Dashboard"
+  "dashboard": "Dashboard",
+  "edit": "Editor",
+  "home": "Home",
+  "form": "Form",
+  "confirm": "Confirm",
+  "terms-and-policy": "Terms and Policy",
+  "close": "Close window"
 }

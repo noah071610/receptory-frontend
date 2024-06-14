@@ -21,7 +21,8 @@
   display: grid;
   grid-template-columns: var(--editor-width) var(--preview-width);
   background-color: var(--white);
-  min-height: 100svh;
+  min-height: 100svh; // check :
+  min-height: 100vh; // check :
   @include medium {
     display: block;
     width: 100%;
@@ -31,6 +32,13 @@
     position: relative;
     padding-bottom: 100px;
     margin-bottom: 50px;
+  }
+
+  &.isRending {
+    @include flex-x;
+    .editor {
+      width: var(--editor-width);
+    }
   }
 }
 

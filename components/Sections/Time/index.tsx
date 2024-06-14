@@ -1,49 +1,44 @@
 "use client"
 
 import FormUserInput from "@/components/FormUserInput"
-import NumberRange from "@/components/NumberRange"
 import OptionBar from "@/components/Options/OptionBar"
 import OptionRatio from "@/components/Options/OptionRatio"
 import OptionTitleInputs from "@/components/Options/OptionTitleInputs"
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import { faClock } from "@fortawesome/free-regular-svg-icons"
 import { memo, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
+import NumberRange from "@/components/NumberRange"
+import { useMainStore } from "@/store/main"
+import { convertStrToTimeSet } from "@/utils/time"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
-const convertStrToTimeSet = (str: string) => {
-  const [hour, minute] = str.split(":").map(Number)
-
-  let period = "AM"
-  let hour12 = hour
-
-  if (hour >= 12) {
-    period = "PM"
-    hour12 = hour === 12 ? 12 : hour - 12
-  } else if (hour === 0) {
-    hour12 = 12
-  }
-
-  return `${hour12.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${period}`
-}
-
-function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { t } = useTranslation()
-  const { setOptions, selectedSection, setSelectedSection, setActive, addCollection, deleteCollection } =
-    useEditorStore()
-  const { startHour, endHour, isAlways, specificTime, selectRange } = section.options
-  const { selectedStartTime, selectedEndTime } = section.value
+function Time({ section }: { section: SectionType }) {
+  const { setModal, selected, setSelected } = useMainStore(["pageLang", "setModal", "selected", "setSelected"])
+  const { t } = useTranslation(["edit-page"])
+  const { setOptions, addCollection, deleteCollection, saveSectionHistory } = useEditorStore([
+    "setOptions",
+    "addCollection",
+    "deleteCollection",
+    "saveSectionHistory",
+  ])
+  const { startHour, endHour, isAlways, specificTime, isRangeSelect } = section.options
 
   const [tempStartTime, setTempStartTime] = useState<string>("00:00")
   const [tempEndTime, setTempEndTime] = useState<string>("00:00")
 
+  const { value } = selected[section.index - 1] ?? {}
+
   const onChangeMinMaxHour = (e: any, type: string) => {
     const onlyHour = e.target.value.split(":")[0]
     setOptions({ payload: onlyHour, key: type })
+  }
+  const onBlurMinMax = () => {
+    saveSectionHistory()
   }
 
   const onChangeSpecificTime = (e: any, type: "specificStartTime" | "specificEndTime") => {
@@ -59,7 +54,7 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
     const endTimeResult = convertStrToTimeSet(tempEndTime)
 
     let isWrongTimeSet = false
-    if (selectRange === "range") {
+    if (isRangeSelect) {
       const start = parseInt(tempStartTime.split(":").join(""))
       const end = parseInt(tempEndTime.split(":").join(""))
       if (start > end) {
@@ -81,7 +76,7 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
             }
           : {
               specificStartTime: startTimeResult,
-              specificEndTime: selectRange === "range" ? endTimeResult : undefined,
+              specificEndTime: isRangeSelect ? endTimeResult : undefined,
             },
       })
     }, 0)
@@ -98,9 +93,7 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
   }
 
   const onClickOpenModal = () => {
-    setTimeout(() => {
-      setActive({ key: "modal", payload: { type: "time" } })
-    }, 0)
+    setModal({ type: "time", section })
   }
 
   useEffect(() => {
@@ -108,7 +101,14 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
       setOptions({ key: "startHour", payload: "00" })
       setOptions({ key: "endHour", payload: "00" })
     }
-  }, [isAlways])
+  }, [isAlways, setOptions])
+
+  const reset = () => {
+    setSelected({
+      section,
+      value: [],
+    })
+  }
 
   return (
     <div className={cx("layout")}>
@@ -117,55 +117,44 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
         onClick={onClickOpenModal}
         title={section.data.title}
         description={section.data.description}
+        isActive={value && value.length > 0}
+        resetEvent={reset}
       >
-        {!selectedStartTime && t("날짜 입력")}
-        {!!selectedStartTime && <span>{selectedStartTime === "anytime" ? t("anytime") : selectedStartTime}</span>}
-        {!!selectedEndTime && <span>{" ~ "}</span>}
-        {!!selectedEndTime && <span>{selectedEndTime}</span>}
+        {value?.length > 0 ? <NumberRange start={value[0].text} end={value[1] && value[1].text} /> : ""}
       </FormUserInput>
 
-      {!isDisplayMode && (
-        <div className={cx("options")}>
-          <OptionTitleInputs section={section} />
+      <div className={cx("options")}>
+        <OptionTitleInputs section={section} />
+        <div className={cx("time-bars")}>
+          <h4>
+            <span>{t("editDetail")}</span>
+          </h4>
           <OptionBar section={section} value="specificTime" />
-          <OptionBar section={section} value="addAnytime" />
-          <OptionRatio optionsArr={["single", "range"]} section={section} targetKey="selectRange" />
-          {!specificTime && (
-            <>
-              <OptionBar section={section} value="isAlways" />
-              {!isAlways &&
-                ["startHour", "endHour"].map((v) => (
-                  <div key={`time-min-max-${v}`} className={cx("time-min-max")}>
-                    <h4>{v}</h4>
-                    <input
-                      onChange={(e) => onChangeMinMaxHour(e, v)}
-                      value={`${v === "startHour" ? startHour : endHour}:00`}
-                      type="time"
-                    />
-                  </div>
-                ))}
-            </>
-          )}
           {specificTime && (
             <>
-              <div>
-                <h4>{t("specificStartTime")}</h4>
-                <input
-                  onChange={(e) => onChangeSpecificTime(e, "specificStartTime")}
-                  value={tempStartTime}
-                  type="time"
-                />
-              </div>
-              {selectRange === "range" && (
-                <div>
-                  <h4>{t("specificEndTime")}</h4>
-                  <input onChange={(e) => onChangeSpecificTime(e, "specificEndTime")} value={tempEndTime} type="time" />
+              <div className={cx("specific-time-picker")}>
+                <div className={cx("inner")}>
+                  <input
+                    onChange={(e) => onChangeSpecificTime(e, "specificStartTime")}
+                    value={tempStartTime}
+                    type="time"
+                  />
+                  {isRangeSelect && (
+                    <>
+                      <span>{"~"}</span>
+                      <input
+                        onChange={(e) => onChangeSpecificTime(e, "specificEndTime")}
+                        value={tempEndTime}
+                        type="time"
+                      />
+                    </>
+                  )}
                 </div>
-              )}
-              <div>
-                <button onClick={onSubmitSpecificTime} className={cx("time-submit")}>
-                  {t("addTime")}
-                </button>
+                <div className={cx("time-submit")}>
+                  <button onClick={onSubmitSpecificTime} className={cx("time-submit")}>
+                    <span> {t("addTime")}</span>
+                  </button>
+                </div>
               </div>
               <ul className={cx("times")}>
                 {section.collection.map(({ specificStartTime, specificEndTime }, i) => (
@@ -178,9 +167,48 @@ function Time({ section, isDisplayMode }: { section: SectionType; isDisplayMode?
               </ul>
             </>
           )}
-          {!specificTime && <OptionRatio optionsArr={[1, 15, 30, 60]} section={section} targetKey="interval" />}
+          <OptionBar section={section} value="isRangeSelect" />
+          <OptionBar section={section} value="addAnytime" />
+          {!specificTime && (
+            <>
+              <OptionBar section={section} value="isAlways" />
+              {!isAlways && (
+                <div className={cx("option-time-picker")}>
+                  <div key={`time-min-max-startHour`} className={cx("time-min-max")}>
+                    <input
+                      onBlur={onBlurMinMax}
+                      onChange={(e) => onChangeMinMaxHour(e, "startHour")}
+                      value={`${startHour}:00`}
+                      type="time"
+                    />
+                  </div>
+                  <span>{"~"}</span>
+                  <div key={`time-min-max-endHour`} className={cx("time-min-max")}>
+                    <input
+                      onBlur={onBlurMinMax}
+                      onChange={(e) => onChangeMinMaxHour(e, "endHour")}
+                      value={`${endHour}:00`}
+                      type="time"
+                    />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
-      )}
+        {!specificTime && (
+          <OptionRatio
+            optionsArr={[
+              { value: "1", icon: faClock },
+              { value: "15", icon: faClock },
+              { value: "30", icon: faClock },
+              { value: "60", icon: faClock },
+            ]}
+            section={section}
+            targetKey="interval"
+          />
+        )}
+      </div>
     </div>
   )
 }

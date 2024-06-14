@@ -1,0 +1,49 @@
+@import "@/styles/editor.scss";
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.options {
+  @include options-style;
+
+  .title {
+    @include title-style($isSmall: true);
+    @include input-style;
+
+    margin-bottom: 5px;
+  }
+  .description {
+    @include description-style($isSmall: true);
+
+    @include input-style;
+  }
+}
+
+.option-date-picker {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  @include shadow;
+}
+
+.options-bars {
+  margin-bottom: 30px;
+}
+
+.dates {
+  padding: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  gap: 10px 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+  button {
+    font-size: 13px;
+    padding: 8px 15px;
+    background-color: var(--gray-softest);
+    border-radius: 5px;
+  }
+}

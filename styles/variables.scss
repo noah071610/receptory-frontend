@@ -1,3 +1,236 @@
+@keyframes shine {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@mixin label-style {
+  width: 100%;
+  font-size: 11px;
+}
+
+@mixin input-style($isSmall: false) {
+  background-color: var(--gray-softest);
+  border: 1px dashed var(--border);
+  @if ($isSmall) {
+    border-radius: 2px;
+    padding: 4px;
+  } @else {
+    border-radius: 5px;
+    padding: 10px 15px;
+  }
+}
+
+@mixin title-style($isSmall: false) {
+  width: 100%;
+  line-height: 1.4;
+  @if ($isSmall) {
+    font-size: 16px;
+    font-weight: 400;
+  } @else {
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
+
+@mixin small-text-style($moreSmall: false) {
+  width: 100%;
+  line-height: 1.2;
+  @if ($moreSmall) {
+    font-size: 11px;
+    font-weight: 400;
+  } @else {
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+@mixin description-style($isSmall: false) {
+  width: 100%;
+  line-height: 1.4;
+  color: var(--black-soft);
+  @if ($isSmall) {
+    font-size: 16px;
+  } @else {
+    font-size: 16px;
+  }
+}
+
+@mixin swiper-arrow-style {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: rgba(20, 20, 20, 0.2);
+  z-index: 10;
+  &:disabled {
+    display: none;
+  }
+  svg {
+    font-size: 14px;
+    color: var(--white);
+  }
+  @include action {
+    background-color: rgba(20, 20, 20, 0.5);
+  }
+}
+
+@mixin btn-submit-style($isRed: false) {
+  width: 100%;
+  max-width: 200px;
+  padding: 15px 0;
+  border-radius: 40px;
+  @include flex;
+  transition: 200ms transform;
+  @if ($isRed) {
+    background-color: var(--red);
+  } @else {
+    background-color: var(--green);
+  }
+  color: var(--white);
+
+  // inactive
+  &:disabled,
+  &.inactive {
+    background-color: var(--gray);
+    color: var(--white);
+  }
+
+  // hover for pc
+  &:not(:disabled) {
+    @media (hover: hover) {
+      &:hover {
+        @if ($isRed) {
+          background-color: var(--red-hard);
+        } @else {
+          background-color: var(--green-hard);
+        }
+        color: var(--white);
+      }
+    }
+  }
+
+  // active
+  &:not(:disabled):active {
+    @if ($isRed) {
+      background-color: var(--red-hard);
+    } @else {
+      background-color: var(--green-hard);
+    }
+    color: var(--white);
+    transform: scale(0.97);
+  }
+}
+
+@mixin header-style {
+  margin: 0 20px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  @include flex-y;
+  position: relative;
+  img {
+    width: 25px;
+    height: 25px;
+    background-color: var(--white);
+    z-index: 10;
+  }
+  span {
+    padding-left: 10px;
+    padding-right: 20px;
+    background-color: var(--white);
+    z-index: 10;
+  }
+  &::after {
+    content: "";
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    top: 50%;
+    left: 0;
+    background-color: var(--border);
+  }
+}
+
+@mixin no-list {
+  width: 100%;
+  height: 250px;
+  background-color: var(--gray-softest);
+  @include flex($col: true);
+  gap: 10px;
+  img {
+    width: 40px;
+    height: 40px;
+  }
+  span {
+    font-size: 15px;
+    color: #042a52;
+  }
+}
+
+@mixin modal-style {
+  width: 95%;
+  max-width: 420px;
+  border-radius: 10px;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+  background-color: var(--white);
+}
+
+@mixin skeleton {
+  width: 100%;
+  position: relative;
+
+  &::before {
+    @include full;
+    content: "";
+    background: rgb(0, 0, 0);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 68%,
+      rgba(255, 255, 255, 0.7) 90%,
+      rgba(255, 255, 255, 0) 93%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 200%;
+    animation: shine 1200ms 1000ms infinite;
+  }
+}
+
+$z-index-map: (
+  edit-overlay: 100,
+  edit-content: 140,
+  edit-footer: 140,
+  loading-cover: 150,
+  header: 160,
+  overlay-aside: 180,
+  aside: 200,
+  overlay: 230,
+  modal: 250,
+);
+
+@mixin z-index($id) {
+  z-index: map-get($z-index-map, $id);
+}
+
+@mixin border {
+  border: 1px solid var(--border);
+}
+
+@mixin action() {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+  // @include mobile() {
+  //   &:active {
+  //     @content;
+  //   }
+  // }
+}
+
 @mixin large {
   @media (max-width: 950px) {
     @content;
@@ -24,14 +257,32 @@
   }
 }
 
-@mixin flex() {
+@mixin flex($col: false) {
   display: flex;
   justify-content: center;
   align-items: center;
+  @if ($col) {
+    flex-direction: column;
+  }
 }
 
-@mixin center() {
-  position: absolute;
+@mixin flex-x($isCenter: true) {
+  display: flex;
+  @if ($isCenter) {
+    justify-content: center;
+  }
+}
+@mixin flex-y($isCenter: true) {
+  display: flex;
+  @if ($isCenter) {
+    align-items: center;
+  } @else {
+    align-items: flex-start;
+  }
+}
+
+@mixin center($position: absolute) {
+  position: $position;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -45,176 +296,104 @@
   height: 100%;
 }
 
-@mixin label-style() {
-  width: 30%;
-  font-size: 11px;
+@mixin shadow {
+  box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
 }
-@mixin input-style($isSmall: false) {
-  background-color: var(--gray-softest);
-  border: 1px dashed var(--border);
-  @if ($isSmall) {
-    border-radius: 2px;
-    padding: 4px;
-  } @else {
-    border-radius: 5px;
-    padding: 7px 12px;
+@mixin shadow-hover {
+  box-shadow: 0 16px 15px rgba(147, 86, 1, 0.1);
+}
+
+@mixin getAnimation {
+  @at-root {
+    @keyframes comp-visible {
+      from {
+        visibility: hidden;
+      }
+      1% {
+        visibility: visible;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+    @keyframes comp-hide {
+      from {
+        visibility: visible;
+      }
+
+      99% {
+        visibility: visible;
+      }
+      to {
+        visibility: hidden;
+      }
+    }
   }
 }
 
-@mixin title-style($isSmall: false) {
+@mixin option-bar {
   width: 100%;
-  line-height: 1.4;
-  @if ($isSmall) {
-    font-size: 15px;
-    font-weight: 400;
-  } @else {
-    font-size: 22px;
-    font-weight: 700;
-  }
-}
-
-@mixin small-text-style($moreSmall: false) {
-  width: 100%;
-  line-height: 1.2;
-  @if ($moreSmall) {
-    font-size: 11px;
-    font-weight: 400;
-  } @else {
-    font-size: 13px;
-    font-weight: 600;
-  }
-}
-
-@mixin options-style() {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  padding: 25px 10px;
-  border: 1px dashed var(--border);
+  max-width: 300px;
+  margin-bottom: 10px;
+  @include flex-y;
+  gap: 10px;
+  padding: 15px 20px 15px 30px;
   border-radius: 5px;
-  h4 {
-    font-size: 15px;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-}
+  background-color: var(--gray-softest);
+  position: relative;
+  overflow: hidden;
+  // @include shadow;
 
-@mixin description-style($isSmall: false) {
-  width: 100%;
-  line-height: 1.4;
-  color: var(--black-soft);
-  @if ($isSmall) {
-    font-size: 13px;
-  } @else {
-    font-size: 15px;
+  @include mobile {
+    max-width: none;
   }
-}
-
-@mixin swiper-arrow-style {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  background-color: rgba(20, 20, 20, 0.2);
-  z-index: 10;
-  &:disabled {
-    display: none;
-  }
-  svg {
-    font-size: 14px;
-    color: var(--white);
-  }
-  @include action {
-    background-color: rgba(20, 20, 20, 0.5);
-  }
-}
-
-@mixin form-btn-layout-style {
-  width: 100%;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid var(--border);
-  @include flex;
-  flex-direction: column;
-}
-
-@mixin form-sub-btn-style {
-  padding: 10px 0;
-  color: var(--gray-hard);
-  font-size: 15px;
-  @include action {
-    color: var(--black);
-  }
-}
-
-@mixin form-btn-style {
-  width: 100%;
-  max-width: 200px;
-  padding: 15px 0;
-  border-radius: 40px;
-  @include flex;
-  transition: 200ms transform;
-  background-color: var(--green);
-  color: var(--white);
-
-  // inactive
-  &:disabled,
-  &.inactive {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 100%;
     background-color: var(--gray);
-    color: var(--white);
+    transition: 300ms all;
   }
-
-  // hover for pc
-  &:not(:disabled) {
-    @media (hover: hover) {
-      &:hover {
-        background-color: var(--green-hard);
-        color: var(--white);
+  span {
+    font-size: 14px;
+  }
+  .content {
+    @include flex;
+    .bar {
+      width: 50px;
+      padding: 3px 6px;
+      background-color: var(--gray-soft);
+      display: flex;
+      align-items: center;
+      border-radius: 30px;
+      transition: 300ms all;
+      .circle {
+        width: 18px;
+        height: 18px;
+        border-radius: 100%;
+        background-color: var(--gray);
+        transition: 300ms all;
       }
     }
   }
 
-  // active
-  &:not(:disabled):active {
-    background-color: var(--green-hard);
-    color: var(--white);
-    transform: scale(0.97);
-  }
-}
-
-$z-index-map: (
-  edit-overlay: 100,
-  edit-content: 140,
-  edit-footer: 140,
-  loading-cover: 150,
-  header: 160,
-  overlay-aside: 180,
-  aside: 200,
-  overlay: 230,
-  modal: 250,
-);
-
-@mixin z-index($id) {
-  z-index: map-get($z-index-map, $id);
-}
-
-@mixin border($color: var(--border)) {
-  border: 1px solid $color;
-}
-
-@mixin action() {
-  @media (hover: hover) {
-    &:hover {
-      @content;
+  &.active {
+    span {
+      color: var(--blue-hard);
     }
-  }
-  @include mobile() {
-    &:active {
-      @content;
+    &::before {
+      background-color: var(--blue);
+    }
+    .bar {
+      background-color: var(--blue);
+      .circle {
+        transform: translateX(21px);
+        background-color: var(--white);
+      }
     }
   }
 }

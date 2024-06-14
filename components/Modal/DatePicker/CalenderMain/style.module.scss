@@ -1,3 +1,4 @@
+@import "@/styles/editor.scss";
 @import "@/styles/variables.scss";
 
 .layout {
@@ -21,12 +22,12 @@
   width: 100%;
   padding: 15px;
   .btn-wrapper {
-    @include form-btn-layout-style;
+    @include btn-layout-style;
     .pickDate {
-      @include form-btn-style;
+      @include btn-submit-style;
     }
     .anyDate {
-      @include form-sub-btn-style;
+      @include btn-sub-style;
     }
   }
   &.isOptionCalender {
@@ -43,6 +44,7 @@
     padding: 10px;
     margin-bottom: 5px;
     p {
+      font-weight: 600;
       text-align: center;
     }
   }
@@ -53,6 +55,7 @@
     align-items: center;
     padding: 10px 0;
     p {
+      font-size: 15px;
       @include flex;
     }
   }
@@ -62,16 +65,17 @@
     gap: 5px 0;
     button {
       padding: 10px 0;
+      font-size: 15px;
       &:hover {
         background-color: var(--green);
         color: var(--white);
       }
       &:disabled {
         color: var(--gray) !important;
-        background-color: var(--white) !important;
+        background-color: transparent !important;
         opacity: 1 !important;
         &:hover {
-          background-color: var(--white) !important;
+          background-color: transparent !important;
           color: var(--gray) !important;
         }
       }

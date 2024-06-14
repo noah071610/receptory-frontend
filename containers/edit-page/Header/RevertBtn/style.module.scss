@@ -1,0 +1,12 @@
+@import "@/styles/variables.scss";
+
+.rollback {
+  &:disabled {
+    svg {
+      color: var(--gray-soft);
+    }
+    @include action {
+      background-color: transparent;
+    }
+  }
+}

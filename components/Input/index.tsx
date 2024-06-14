@@ -1,12 +1,15 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
+import { useError } from "@/hooks/useError"
 import { useEditorStore } from "@/store/editor"
-import { StyleProperties } from "@/types/Edit"
-import hasString from "@/utils/hasString"
-import { useParams } from "next/navigation"
+import { SectionType, StyleProperties } from "@/types/Edit"
+import hasString from "@/utils/helpers/hasString"
+import cs from "classNames/bind"
 import { memo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import TextareaAutosize from "react-textarea-autosize"
+import style from "./style.module.scss"
+const cx = cs.bind(style)
 
 function Input({
   className,
@@ -20,37 +23,51 @@ function Input({
   listIndex,
   isOptional,
   displayMode,
+  onChange,
+  section,
+  disabled,
+  isBottomError,
+  onBlur,
 }: {
   type: "input" | "textarea"
   className?: string
   inputType: string
   isOptional: boolean
+  isBottomError?: boolean
   listIndex?: number
   maxLength?: number
   lineMax?: number
   dataKey?: string
+  onChange?: any
   value: string
   style?: StyleProperties
   displayMode?: boolean | "h1" | "p" | "h2" | "span"
+  section?: SectionType
+  disabled?: boolean
+  onBlur?: any
 }) {
   if (type === "textarea") {
     maxLength = 100
   }
+
+  const { t } = useTranslation(["edit-page", "messages"])
+
+  const { isError, errorMessage, setErrorClear, errorStyle, onError } = useError({ type: "noEmptyText" })
   const inputRef = useRef(null)
-  const { lang } = useParams()
-  const { t } = useTranslation(lang, ["new-post-page"])
-  const { setValue, setList, setData, saveSectionHistory, selectedSection } = useEditorStore()
-  const [isEdit, setIsEdit] = useState(false)
+  const { setValue, setList, setData, saveSectionHistory, selectedSection, setSelectedSection } = useEditorStore([
+    "setValue",
+    "setList",
+    "setData",
+    "saveSectionHistory",
+    "selectedSection",
+    "setSelectedSection",
+  ])
+  const [initLength, setInitLength] = useState(value?.length ?? 0)
+  const [isEdited, setIsEdited] = useState(false)
+  const [snapshot, setSnapshot] = useState<string | null>(value ?? null)
 
-  const onChangeInput = (e: any) => {
-    const inputValue = e.target.value
-    const lines = inputValue.split("\n")
-    if (type === "input") {
-      if (inputValue.length > maxLength) return
-    } else if (type === "textarea") {
-      if (lines.length > lineMax) return
-    }
-
+  const setInput = (inputValue: string) => {
+    if (onChange) return onChange(inputValue)
     if (dataKey) {
       if (typeof listIndex === "number") {
         setList({ payload: inputValue, index: listIndex, key: "data", dataKey })
@@ -64,14 +81,46 @@ function Input({
         setValue({ payload: inputValue })
       }
     }
-    setIsEdit(true)
+  }
+
+  const onChangeInput = (e: any) => {
+    const inputValue = e.target.value
+
+    const lines = inputValue.split("\n")
+    if (section && !selectedSection) {
+      setSelectedSection({ payload: section })
+    }
+
+    if (inputValue.length > maxLength) return
+    if (type === "textarea") {
+      if (lines.length > lineMax) return
+    }
+
+    setInput(inputValue)
+    if (!isEdited && initLength !== e.target.value.length) {
+      setIsEdited(true)
+    }
   }
 
   const onBlurInput = () => {
-    if (isEdit && selectedSection) {
-      saveSectionHistory({ payload: selectedSection })
-      setIsEdit(false)
+    if (value?.length <= 0 && !isOptional && snapshot) {
+      onError()
+      setInput(snapshot)
+      return
     }
+    if (isEdited) {
+      setSnapshot(null)
+      saveSectionHistory()
+      setIsEdited(false)
+      setInitLength(value.length)
+    }
+  }
+
+  const onfocus = () => {
+    if (isError) {
+      setErrorClear()
+    }
+    setSnapshot(value)
   }
 
   const displayComponent = {
@@ -100,31 +149,45 @@ function Input({
   const inputComponent = {
     textarea: (
       <TextareaAutosize
+        disabled={disabled}
         className={className}
         placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
         value={value ?? ""}
         onChange={onChangeInput}
-        onBlur={onBlurInput}
-        style={style as any}
+        onBlur={onBlur ?? onBlurInput}
+        style={isError ? { ...style, ...errorStyle } : style}
       />
     ),
     input: (
       <input
+        disabled={disabled}
         ref={inputRef}
+        onFocus={onfocus}
         className={className}
         placeholder={t(inputType) + (isOptional ? ` ${t("optional")}` : "")}
         value={value ?? ""}
         onChange={onChangeInput}
-        onBlur={onBlurInput}
-        style={style as any}
+        onBlur={onBlur ?? onBlurInput}
+        style={isError ? { ...style, ...errorStyle } : style}
       />
     ),
   }
 
-  return displayMode ? (
-    <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>
-  ) : (
-    inputComponent[type]
+  return (
+    <div className={cx("input-wrapper")}>
+      <div className={cx("tooltip", { isError, isBottomError })}>
+        <div className={cx("error")}>
+          {t(`error.${errorMessage}`, {
+            ns: "messages",
+          })}
+        </div>
+      </div>
+      {displayMode ? (
+        <>{hasString(value) && displayComponent[displayMode === true ? "h1" : displayMode]}</>
+      ) : (
+        inputComponent[type]
+      )}
+    </div>
   )
 }
 

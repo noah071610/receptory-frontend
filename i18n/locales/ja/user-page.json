@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "free": "無料プラン",
+    "semiPremium": "セミプレミアムプラン",
+    "premium": "プレミアムプラン"
+  },
+  "settings": "設定",
+  "inform": "お問い合わせ",
+  "upgrade": "アップグレード",
+  "changeSiteLang": "サイト言語変更",
+  "changeProfile": "プロフィール変更",
+  "deleteAccount": "アカウント削除",
+  "feedback": "フィードバック",
+  "report": "報告",
+  "noPage": "作成されたページがありません",
+  "addPage": "新しいページを作る",
+  "updatedAt": "最終更新日",
+  "defaultTitle": "タイトルがありません",
+  "defaultDescription": "説明がありません",
+  "terms-and-policy": "利用規約",
+  "contents": "コンテンツ",
+  "template": "テンプレート",
+  "guide": "ガイド",
+
+  "card": {
+    "insight": "インサイト",
+    "gotoPage": "ページを見る",
+    "stop": "配備停止",
+    "edit": "エディター",
+    "changeLang": "ページ言語変更",
+    "delete": "ページ削除"
+  }
+}

@@ -1,6 +1,7 @@
 @import "@/styles/variables.scss";
 
 .layout {
+  width: 100%;
   &.isDisplay {
     padding: 0 10px;
   }
@@ -19,21 +20,28 @@
   }
   .description,
   .description-input {
-    margin-top: 1px;
     @include description-style;
+  }
+  .description-input {
+    margin-top: 5px;
   }
 
   .description {
+    margin-top: 2px;
     white-space: pre-line;
     word-break: break-all;
   }
   .label,
   .label-input {
-    font-size: 13px;
     margin-bottom: 13px;
     font-weight: 600;
   }
+
+  .label-input {
+    font-size: 16px;
+  }
   .label {
+    font-size: 13px;
     width: auto;
   }
 }

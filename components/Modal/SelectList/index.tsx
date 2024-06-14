@@ -1,94 +1,108 @@
 "use client"
-
-import { getImageUrl } from "@/config"
-import { useTranslation } from "@/i18n/client"
-import { useEditorStore } from "@/store/editor"
-import { SectionListType } from "@/types/Edit"
-import hasString from "@/utils/hasString"
-import Image from "next/image"
+import { SectionListType, SectionType } from "@/types/Edit"
+import hasString from "@/utils/helpers/hasString"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
+import { SelectedValueType } from "@/types/Main"
 import cs from "classNames/bind"
+import { useState } from "react"
+import BasicList from "./List/Basic"
+import ThumbList from "./List/Thumb"
 const cx = cs.bind(style)
 
-export const SelectList = () => {
-  const { t } = useTranslation()
-  const { setActive, setValue, selectedSection } = useEditorStore()
-  const selectList = selectedSection?.list.filter((v) => hasString(v.data.title))
-  const design = selectedSection?.design ?? "basic"
-  const addSelectNone = selectedSection?.options?.addSelectNone ?? false
+export const SelectList = ({ section }: { section: SectionType }) => {
+  const { setModal, setSelected } = useMainStore(["pageLang", "setSelected", "setModal"])
+  const { t } = useTranslation(["edit-page"])
 
-  const onChangeSelect = (selectedList: SectionListType | null) => {
-    setValue({ payload: selectedList })
-    setActive({ key: "modal", payload: { type: null } })
+  const selectList = section.list.filter((v) => hasString(v.data.title))
+  const design = section.design ?? "basic"
+  const [userSelectedList, setUserSelectedList] = useState<SelectedValueType[]>([])
+  const { addSelectNone, isMultiple } = section.options
+
+  const onChangeSelect = (selectedList: SectionListType) => {
+    const target = {
+      key: selectedList.id,
+      text: selectedList.data?.title ?? "",
+      description: selectedList.data.description,
+      src: selectedList.src,
+    }
+    if (isMultiple) {
+      if (userSelectedList.findIndex(({ key }) => key === target.key) >= 0) {
+        setUserSelectedList((prev) => prev.filter(({ key }) => key !== target.key))
+      } else {
+        setUserSelectedList((prev) => [...prev, target])
+      }
+    } else {
+      setUserSelectedList([target])
+    }
+  }
+
+  const onClickNone = () => {
+    setSelected({ section, value: [{ key: "noneSelect", text: t("noneSelect") }] })
+    setModal({ section: null, type: null })
+  }
+
+  const onClickSubmitMultiple = () => {
+    setSelected({ section, value: userSelectedList })
+    setModal({ section: null, type: null })
   }
 
   return (
-    selectList &&
-    selectList.length > 0 && (
-      <ModalLayout modalStyle={style.content}>
-        {design !== "thumbnail" && (
-          <ul className={cx("list-wrapper", "basic-list-wrapper")}>
-            {selectList.map((v, i) => (
-              <li className={cx("list")} onClick={() => onChangeSelect(v)} key={v.id}>
-                {design === "imageWithText" &&
-                  (v.src ? (
-                    <picture className={cx("image")}>
-                      <Image width={100} height={80} src={v.src} alt="image" />
-                    </picture>
-                  ) : (
-                    <div className={cx("list-number")}>
-                      <div className={cx("number")}>
-                        <span>{i + 1}</span>
-                      </div>
-                    </div>
-                  ))}
-                {design === "text" && (
-                  <div className={cx("number")}>
-                    <span>{i + 1}</span>
-                  </div>
-                )}
-                <div className={cx("list-content")}>
-                  {hasString(v.data.title) && <h3>{v.data.title}</h3>}
-                  {hasString(v.data.description) && <p>{v.data.description}</p>}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-        {design === "thumbnail" && (
-          <ul className={cx("list-wrapper", "thumb-list-wrapper")}>
-            {selectList.map((v) => (
-              <li onClick={() => onChangeSelect(v)} key={`thumb-list-${v.id}`}>
-                <div
-                  style={{
-                    background: getImageUrl({ isCenter: true, url: hasString(v.src) ? v.src : "/images/noImage.png" }),
-                  }}
-                  className={cx("list-content")}
-                >
-                  <div className={cx("text")}>
-                    {
-                      <>
-                        {hasString(v.data.title) && <h3>{v.data.title}</h3>}
-                        {hasString(v.data.description) && <p>{v.data.description}</p>}
-                      </>
-                    }
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+    <ModalLayout modalStyle={style.content}>
+      {selectList?.length > 0 ? (
+        <>
+          {design !== "thumbnail" && (
+            <ul className={cx("list-wrapper", "basic-list-wrapper")}>
+              {selectList.map((v, i) => (
+                <BasicList
+                  key={`basic-list-${v.id}`}
+                  userSelectedList={userSelectedList}
+                  v={v}
+                  i={i}
+                  design={design}
+                  onChangeSelect={onChangeSelect}
+                />
+              ))}
+            </ul>
+          )}
+          {design === "thumbnail" && (
+            <ul className={cx("list-wrapper", "thumb-list-wrapper")}>
+              {selectList.map((v, i) => (
+                <ThumbList
+                  key={`thumb-list-${v.id}`}
+                  userSelectedList={userSelectedList}
+                  v={v}
+                  i={i}
+                  onChangeSelect={onChangeSelect}
+                />
+              ))}
+            </ul>
+          )}
+        </>
+      ) : (
+        <div className={cx("no-list")}>
+          <img src="/images/icons/crying.png" alt="crying" />
+          <span>{t("noList")}</span>
+        </div>
+      )}
+      <div className={cx("btn-wrapper")}>
+        <button
+          disabled={userSelectedList.length <= 0}
+          className={cx("select-multiple")}
+          onClick={onClickSubmitMultiple}
+        >
+          <span>{t("선택 하기")}</span>
+        </button>
         {addSelectNone && (
-          <div className={cx("btn-wrapper")}>
-            <button onClick={() => onChangeSelect(null)}>
-              <span>{t("선택 없음")}</span>
-            </button>
-          </div>
+          <button className={cx("select-none")} onClick={onClickNone}>
+            <span>{t("선택 없음")}</span>
+          </button>
         )}
-      </ModalLayout>
-    )
+      </div>
+    </ModalLayout>
   )
 }
 

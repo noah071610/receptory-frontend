@@ -1,0 +1,182 @@
+@import "@/styles/editor.scss";
+@import "@/styles/variables.scss";
+
+.layout {
+  width: 100%;
+}
+
+.title {
+  width: auto;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  margin-bottom: 7px;
+  h2 {
+    font-size: 15px;
+  }
+  p {
+    font-size: 13px;
+  }
+}
+
+.choices {
+  width: 100%;
+  max-width: 400px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.content {
+  padding: 10px;
+  border-radius: 10px;
+  @include border;
+  cursor: pointer;
+  transition: box-shadow 300ms;
+
+  &.selected {
+    @include shadow;
+  }
+
+  .icon {
+    @include flex;
+    height: 60px;
+    margin-bottom: 10px;
+    svg {
+      font-size: 27px;
+      color: var(--gray-hard);
+    }
+  }
+
+  .text {
+    .list-title {
+      @include input-style;
+      @include description-style(true);
+      text-align: center;
+    }
+    p {
+      @include description-style(true);
+      white-space: pre-line;
+      word-break: break-all;
+      text-align: center;
+      padding: 10px;
+    }
+  }
+}
+
+.content.selected.basic {
+  &.left {
+    border-color: var(--green);
+    .icon {
+      svg {
+        color: var(--green-hard);
+      }
+    }
+    .text {
+      p {
+        color: var(--green-hard);
+      }
+    }
+  }
+  &.right {
+    border-color: var(--red);
+    .icon {
+      svg {
+        color: var(--red);
+      }
+    }
+    .text {
+      p {
+        color: var(--red);
+      }
+    }
+  }
+}
+
+.content.selected.gender {
+  &.left {
+    border-color: #0000ff;
+    .icon {
+      svg {
+        color: #9c9cfd;
+      }
+    }
+    .text {
+      p {
+        color: #0000ae;
+      }
+    }
+  }
+  &.right {
+    border-color: #f76981;
+    .icon {
+      svg {
+        color: #ffc0cb;
+      }
+    }
+    .text {
+      p {
+        color: #f76981;
+      }
+    }
+  }
+}
+
+.content.selected.thumbnail {
+  &.left,
+  &.right {
+    border-color: var(--green);
+    .icon {
+      svg {
+        color: var(--green-hard);
+      }
+    }
+    .text {
+      p {
+        color: var(--green-hard);
+      }
+    }
+  }
+}
+
+.card-thumbnail {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  margin-bottom: 5px;
+  @include flex;
+  position: relative;
+  border-radius: 10px;
+  border: 1px dashed var(--border);
+  &.display {
+    border: none;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .drop-zone {
+    width: 100%;
+    height: 100%;
+    svg {
+      color: var(--gray);
+      font-size: 20px;
+    }
+
+    @include action {
+      svg {
+        color: var(--blue-soft);
+      }
+      &::before {
+        border-color: var(--blue-soft);
+      }
+    }
+  }
+}
+
+.options {
+  @include options-style;
+}

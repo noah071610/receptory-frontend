@@ -1,0 +1,14 @@
+@import "@/styles/variables.scss";
+
+.saving {
+  background-color: var(--green);
+  svg {
+    color: var(--white);
+  }
+  @include action {
+    background-color: var(--green);
+    svg {
+      color: var(--white);
+    }
+  }
+}

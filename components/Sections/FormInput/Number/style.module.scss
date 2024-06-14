@@ -1,0 +1,12 @@
+@import "@/styles/editor.scss";
+
+.layout {
+  width: 100%;
+}
+
+.options {
+  @include options-style;
+  .minMax-wrapper {
+    @include options-minMax-style;
+  }
+}

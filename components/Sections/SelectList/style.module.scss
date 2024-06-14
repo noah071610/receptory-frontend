@@ -1,3 +1,4 @@
+@import "@/styles/editor.scss";
 @import "@/styles/variables.scss";
 
 .layout {
@@ -7,9 +8,11 @@
 .options {
   @include options-style;
 
+  .list-edit-wrapper {
+    margin-top: 30px;
+  }
   .list-edit {
     width: 100%;
-    max-width: 400px;
     max-height: 500px;
     overflow: scroll;
     display: flex;
@@ -17,14 +20,24 @@
     gap: 10px;
 
     li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       padding: 0;
+      position: relative;
+      width: 100%;
+
+      .inner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+      }
+      .content {
+        width: 100%;
+      }
+
       .image {
         cursor: pointer;
-        width: 110px;
-        height: 80px;
+        width: 140px;
+        height: 93px;
         border-radius: 5px;
         @include flex;
         border: 1px dashed var(--border);
@@ -33,21 +46,9 @@
         }
         @include action {
           svg {
-            color: var(--pink);
+            color: var(--blue);
           }
         }
-
-        @include mobile {
-          height: 70px;
-        }
-      }
-      h3 {
-        font-size: 15px;
-        font-weight: 600;
-        margin-bottom: 5px;
-      }
-      p {
-        font-size: 13px;
       }
     }
   }

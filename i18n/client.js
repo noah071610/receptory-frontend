@@ -1,13 +1,13 @@
 "use client"
 
 import i18next from "i18next"
-import { useEffect, useState } from "react"
-import { initReactI18next, useTranslation as useTranslationOrg } from "react-i18next"
-import { useCookies } from "react-cookie"
 import resourcesToBackend from "i18next-resources-to-backend"
+import { useEffect, useState } from "react"
+import { useCookies } from "react-cookie"
+import { initReactI18next, useTranslation as useTranslationOrg } from "react-i18next"
 // import LocizeBackend from 'i18next-locize-backend'
 import LanguageDetector from "i18next-browser-languagedetector"
-import { getOptions, languages, cookieName } from "./settings"
+import { getOptions, langCookieName, languages } from "./settings"
 
 const runsOnServerSide = typeof window === "undefined"
 
@@ -26,8 +26,8 @@ i18next
     preload: runsOnServerSide ? languages : [],
   })
 
-export function useTranslation(lng, ns, options) {
-  const [cookies, setCookie] = useCookies([cookieName])
+export function useInitTranslation(lng, ns, options) {
+  const [cookies, setCookie] = useCookies([langCookieName])
   const ret = useTranslationOrg(ns, options)
   const { i18n } = ret
   if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
@@ -48,7 +48,7 @@ export function useTranslation(lng, ns, options) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       if (cookies.i18next === lng) return
-      setCookie(cookieName, lng ?? "ko", { path: "/" })
+      setCookie(langCookieName, lng, { path: "/" })
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lng, cookies.i18next])
   }

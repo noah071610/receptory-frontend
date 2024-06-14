@@ -1,0 +1,116 @@
+@import "@/styles/variables.scss";
+
+//profile
+.page-info {
+  background-color: var(--white);
+  padding: 50px 0 30px 0;
+  @include flex(true);
+  position: relative;
+  picture {
+    img {
+      width: 100%;
+      max-width: 350px;
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      padding: 5px;
+      object-fit: cover;
+      margin-bottom: 25px;
+      z-index: 10;
+      position: relative;
+      background-color: var(--white);
+      @include border;
+      @include shadow;
+    }
+  }
+  h1 {
+    max-width: 350px;
+    font-size: 22px;
+    color: var(--black-soft);
+    margin-bottom: 10px;
+  }
+  .description {
+    max-width: 350px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--black-soft);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      min-width: 50px;
+      max-width: 100px;
+      height: 2px;
+      background-color: var(--border);
+    }
+  }
+}
+
+.info-layout {
+  width: 220px;
+  @include border;
+  border-radius: 20px;
+  background-color: var(--gray-softest);
+  border: 2px solid var(--blue-soft);
+  display: none;
+  @include medium {
+    display: block;
+  }
+}
+
+.info-menu {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  li {
+    button {
+      @include flex(true);
+      gap: 12px;
+      width: 100%;
+      padding: 20px 15px;
+      .icon {
+        svg {
+          font-size: 18px;
+          color: var(--gray-hard);
+        }
+      }
+      span {
+        font-size: 13px;
+      }
+      @include action {
+        background-color: rgba($color: #a6a6a6, $alpha: 0.05);
+      }
+      &.active {
+        background-color: rgba($color: #a6a6a6, $alpha: 0.05);
+      }
+    }
+  }
+  li:first-of-type {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 2px;
+      height: 30%;
+      transform: translateY(-50%);
+      background-color: var(--border);
+    }
+    &::before {
+      right: 0;
+    }
+  }
+}
+
+.back {
+  width: auto;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+}

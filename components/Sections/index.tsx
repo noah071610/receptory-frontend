@@ -2,14 +2,16 @@
 
 import { ReactNode } from "react"
 
+import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
-import getId from "@/utils/getId"
-import { faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
+import getId from "@/utils/helpers/getId"
+import { faArrowsDownToLine, faCopy, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { DraggableProvided } from "@hello-pangea/dnd"
 import cs from "classNames/bind"
 import { useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -17,58 +19,118 @@ export default function SectionLayout({
   children,
   section,
   draggableProvided,
+  isTopSection,
   noPadding,
   pathname,
 }: {
   children: ReactNode
   section: SectionType
   draggableProvided?: DraggableProvided
+  isTopSection?: boolean
   noPadding?: boolean
   pathname: string
 }) {
+  const { t } = useTranslation(["modal"])
   const { replace } = useRouter()
-  const { selectedSection, copySection, setActive, setSelectedSection, deleteSection } = useEditorStore()
+  const {
+    selectedSection,
+    copySection,
+    stage,
+    homeSections,
+    confirmSections,
+    formSections,
+    clearActive,
+    setSelectedSection,
+    deleteSection,
+    setStyle,
+  } = useEditorStore([
+    "selectedSection",
+    "copySection",
+    "stage",
+    "homeSections",
+    "confirmSections",
+    "formSections",
+    "clearActive",
+    "setSelectedSection",
+    "deleteSection",
+    "setStyle",
+  ])
+
   const onClickSection = (e: any) => {
-    if (e.target.closest(".delete")) {
-      setSelectedSection({ payload: null })
-    } else {
-      if (e.target.closest(".copy")) return
-      if (e.target.closest(".add")) return
+    const closestElement = e.target.closest("[data-closer]")
+
+    if (closestElement) {
+      const dataType = closestElement.getAttribute("data-closer")
+      if (dataType === "delete") {
+        return setSelectedSection({ payload: null })
+      }
       setSelectedSection({ payload: section })
     }
 
     // modal은 건드리지 말 것
-    setActive({ payload: { type: null }, key: "tooltip" })
-    setActive({ payload: { type: null }, key: "submenu" })
+    clearActive(true)
   }
   const onClickDelete = () => {
     deleteSection(section.id)
   }
   const onClickCopy = () => {
+    if (stage === "home" && homeSections.length >= 20) {
+      // lessThan20sections
+      return toastError("lessThan20sections")
+    }
+    if (stage === "form" && formSections.length >= 20) {
+      // lessThan20sections
+      return toastError("lessThan20sections")
+    }
+    if (stage === "confirm" && confirmSections.length >= 20) {
+      // lessThan20sections
+      return toastError("lessThan20sections")
+    }
+
     const newId = getId()
     copySection({ payload: section, newId })
 
     replace(`${pathname}#${newId}`)
   }
+  const onClickMargin = () => {
+    if (section.style.paddingBottom) {
+      setStyle({ key: "paddingBottom", payload: undefined })
+    } else {
+      setStyle({ key: "paddingBottom", payload: "40px" })
+    }
+  }
+
   return (
     <section
       {...draggableProvided?.draggableProps}
       ref={draggableProvided?.innerRef}
       onClick={onClickSection}
       data-editor={true}
-      style={{ ...draggableProvided?.draggableProps.style, padding: noPadding ? "0px" : undefined }}
-      className={cx("section", "editor", { active: selectedSection?.id === section.id })}
+      data-closer="editor"
+      style={{
+        ...draggableProvided?.draggableProps.style,
+        padding: section.type === "thumbnail" || noPadding ? "0px" : undefined,
+        paddingBottom: section.style.paddingBottom,
+      }}
+      className={cx("section", { active: selectedSection?.id === section.id })}
     >
       <div className={cx("observer")} id={section.id}></div>
       {children}
 
-      {section.type !== "thumbnail" && section.type !== "calender" && (
-        <div className={cx("editor", "tools", { active: selectedSection?.id === section.id })}>
-          <button onClick={onClickCopy} className={cx("copy", "copy")}>
-            {/* todo */}
-            <FontAwesomeIcon icon={faCopy} />
+      {!isTopSection && (
+        <div data-closer="editor" className={cx("tools", { active: selectedSection?.id === section.id })}>
+          <button onClick={onClickMargin} className={cx("icon", "margin", { active: section.style?.paddingBottom })}>
+            <FontAwesomeIcon icon={faArrowsDownToLine} />
           </button>
-          <button onClick={onClickDelete} className={cx("delete", "delete")}>
+          {section.type !== "calendar" &&
+            section.type !== "time" &&
+            section.type !== "qna" &&
+            section.type !== "map" && (
+              <button onClick={onClickCopy} data-closer="copy" className={cx("icon")}>
+                <FontAwesomeIcon icon={faCopy} />
+              </button>
+            )}
+          <button data-closer="delete" onClick={onClickDelete} className={cx("icon")}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
           <button {...draggableProvided?.dragHandleProps} className={cx("grab")}>

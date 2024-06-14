@@ -14,6 +14,7 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
     height: auto;
     .main {
       padding: 10px;
+      padding-right: 60px;
     }
     .list {
       align-items: flex-start;
@@ -82,8 +83,7 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
 
 .list {
   position: relative;
-  display: flex;
-  align-items: center;
+  @include flex-y;
   height: 100%;
 
   .slider {
@@ -125,18 +125,18 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
 
     @include action {
       .icon {
-        background-color: var(--pink);
+        background-color: var(--blue);
       }
       span {
-        color: var(--pink);
+        color: var(--blue);
       }
     }
     &.active {
       .icon {
-        background-color: var(--pink);
+        background-color: var(--blue);
       }
       span {
-        color: var(--pink);
+        color: var(--blue);
       }
     }
   }
@@ -168,7 +168,7 @@ $footer-width: calc(var(--editor-width) + var(--preview-width));
 
   @include action {
     .icon {
-      background-color: var(--pink);
+      background-color: var(--blue);
     }
   }
 }

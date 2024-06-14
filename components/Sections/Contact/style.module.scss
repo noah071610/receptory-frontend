@@ -1,4 +1,5 @@
 @import "@/styles/variables.scss";
+@import "@/styles/editor.scss";
 
 .contact {
   .main {
@@ -6,117 +7,96 @@
     align-items: center;
     flex-direction: column;
 
-    .title {
-      width: 80%;
-      background-color: var(--input-color);
-      color: var(--black-soft);
-      padding: 10px 15px;
-      border-radius: 5px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1.35;
-      margin-bottom: 20px;
-    }
     .btn-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      a,
-      button {
-        img {
-          transition: 200ms all;
-        }
-        @include action {
+      &.basic {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        a,
+        button,
+        .preview-btn {
           img {
-            transform: scale(1.1);
+            transition: 200ms all;
+          }
+          @include action {
+            img {
+              transform: scale(1.1);
+            }
           }
         }
       }
-    }
-    .card-style-title {
-      height: 32px;
-      @include flex;
-      h2 {
-        color: var(--gray-hard);
+      &.card {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+
+        li {
+          margin: 0 auto;
+          width: 100%;
+          max-width: 350px;
+          border-radius: 8px;
+          background-color: var(--gray-soft);
+          transition: all 300ms;
+          a,
+          button,
+          .preview-btn {
+            width: 100%;
+            padding: 15px;
+            @include flex-y;
+
+            span {
+              font-size: 14px;
+              margin-left: 10px;
+            }
+          }
+          @include action {
+            @include shadow;
+          }
+        }
       }
     }
   }
 }
 
-.providers {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  ul {
-    width: 280px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
+.options {
+  @include options-style;
+}
 
+.link-option {
+  margin-top: 30px;
+}
+
+.link-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   li {
     width: 100%;
-    .list {
-      padding: 10px 15px;
-      border-radius: 8px;
-      background-color: var(--gray-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .input-content {
       width: 100%;
-      display: grid;
-      grid-template-columns: 30px 1fr 20px;
-      gap: 10px;
-    }
-  }
-
-  .left {
-    @include flex;
-    height: 100%;
-  }
-  .right {
-    h4 {
-      font-weight: 400;
-      font-size: 15px;
-      text-align: start;
-      margin-bottom: 5px;
-    }
-    .input {
-      @include input-style;
-      @include description-style($isSmall: true);
-      padding: 4px;
-      background-color: white;
-      border-radius: 0;
-    }
-    /* Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    /* Firefox  */
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-  }
-  .end {
-    @include flex;
-    .checkbox {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-      @include border;
-      @include flex;
-      background-color: var(--white);
-      svg {
-        font-size: 13px;
-        color: var(--gray);
+      h5 {
+        font-size: 15px;
+        margin-bottom: 5px;
+        font-weight: 600;
       }
-      &.active {
-        border-color: var(--green);
-        background-color: var(--green);
-        svg {
-          color: var(--white);
-        }
+      input {
+        @include input-style;
+        @include description-style;
+        width: 100%;
+      }
+
+      input:first-of-type {
+        margin-bottom: 10px;
       }
     }
   }

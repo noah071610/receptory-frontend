@@ -1,0 +1,60 @@
+@import "@/styles/editor.scss";
+@import "@/styles/variables.scss";
+
+.content {
+  @include modal-style;
+  padding: 25px;
+  h1 {
+    @include title-style;
+    margin-bottom: 10px;
+  }
+  .desc {
+    @include description-style;
+    margin-bottom: 30px;
+  }
+
+  .title {
+    width: auto;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    margin-bottom: 7px;
+    h2 {
+      font-size: 15px;
+    }
+    p {
+      font-size: 13px;
+    }
+    &:last-of-type {
+      margin-top: 15px;
+    }
+  }
+
+  input {
+    width: 100%;
+    padding: 14px 0 14px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    @include border;
+
+    &::placeholder {
+      color: var(--gray);
+    }
+    &:focus {
+      border-color: var(--green);
+    }
+  }
+
+  .confirmPassword {
+    margin-top: 5px;
+  }
+}
+
+.btn-wrapper {
+  @include btn-layout-style;
+  button {
+    @include btn-submit-style;
+  }
+}

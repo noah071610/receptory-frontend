@@ -2,9 +2,47 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
   gap: 5px;
+
+  .title {
+    width: 100%;
+    margin-top: 3px;
+  }
+
+  .loading {
+    @include skeleton;
+  }
+  .photo-background {
+    width: 100%;
+    background-color: var(--border);
+  }
+
+  &.width {
+    .photo,
+    .loading {
+      height: 200px;
+    }
+    &.gridTwo {
+      .photo,
+      .loading {
+        height: 160px;
+      }
+    }
+    .title {
+      @include description-style;
+    }
+  }
+  &.length {
+    &.gridTwo {
+      .photo,
+      .loading {
+        height: 270px;
+      }
+    }
+    .title {
+      @include description-style(true);
+    }
+  }
 }
 
 .display {
@@ -12,11 +50,11 @@
 }
 
 .photo-wrapper {
+  height: 100%;
   .photo {
-    width: 100%;
     position: relative;
     @include flex;
-    background-color: var(--pink-soft);
+    background-color: var(--blue-soft);
     img {
       position: relative;
       z-index: 10;
@@ -26,27 +64,9 @@
     }
     .background {
       @include full;
-      filter: blur(2px) grayscale(30%);
+      filter: grayscale(30%);
     }
   }
-  input {
-    margin-top: 3px;
-    @include input-style;
-  }
-  .title {
-    @include description-style;
-    padding: 4px;
-    font-size: 13px;
-    white-space: pre-line;
-    word-break: break-all;
-  }
-}
-
-.album-loader {
-  width: 100%;
-  height: 100%;
-  @include flex;
-  background-color: var(--gray-soft);
 }
 
 .noImage {
@@ -57,4 +77,8 @@
     color: var(--gray);
     font-size: 20px;
   }
+}
+
+.input {
+  @include input-style;
 }

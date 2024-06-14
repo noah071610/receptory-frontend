@@ -1,16 +1,22 @@
 "use client"
 
-import { useTranslation } from "@/i18n/client"
 import { useEditorStore } from "@/store/editor"
 import { SectionType } from "@/types/Edit"
 import cs from "classNames/bind"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 function OptionBar({ value, section }: { value: string; section: SectionType }) {
-  const { selectedSection, setSelectedSection, setOptions } = useEditorStore()
-  const { t } = useTranslation()
+  const { selectedSection, setSelectedSection, setOptions, saveSectionHistory } = useEditorStore([
+    "selectedSection",
+    "setSelectedSection",
+    "setOptions",
+    "saveSectionHistory",
+  ])
+
+  const { t } = useTranslation(["edit-page"])
   const isActive = section.options[value]
 
   const onClickSlider = () => {
@@ -19,17 +25,18 @@ function OptionBar({ value, section }: { value: string; section: SectionType }) 
     }
 
     setOptions({ key: value, payload: !isActive })
+    saveSectionHistory()
   }
 
   return (
-    <div className={cx("layout")}>
-      <button onClick={onClickSlider} className={cx("content", { active: !!isActive })}>
-        <h4>{t(value)}</h4>
+    <button onClick={onClickSlider} className={cx("layout", { active: !!isActive })}>
+      <div className={cx("content")}>
         <div className={cx("bar")}>
           <div className={cx("circle")}></div>
         </div>
-      </button>
-    </div>
+      </div>
+      <span>{t(`options.${value}`)}</span>
+    </button>
   )
 }
 export default memo(OptionBar)

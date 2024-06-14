@@ -1,0 +1,54 @@
+@import "@/styles/variables.scss";
+
+.sort-wrapper {
+  &.divide {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sort-list {
+    width: 100%;
+    @include flex-y;
+    flex-wrap: wrap;
+    gap: 6px;
+    button {
+      padding: 5px 12px;
+      @include border;
+      @include flex-y;
+      span {
+        font-size: 13px;
+      }
+      svg {
+        font-size: 14px;
+        margin-right: 5px;
+        color: var(--gray-hard);
+      }
+      &.active {
+        border-color: var(--blue);
+        span,
+        svg {
+          color: var(--blue-hard);
+        }
+      }
+    }
+  }
+  .sort-list:first-of-type {
+    margin-bottom: 6px;
+  }
+}
+
+.date-time-filter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  input {
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.2;
+    border-radius: 3px;
+    @include border;
+    &:disabled {
+      background-color: var(--border);
+    }
+  }
+}

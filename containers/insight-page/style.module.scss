@@ -1,0 +1,93 @@
+@import "@/styles/variables.scss";
+
+.page {
+  background-color: var(--bg-color);
+  width: 100%;
+  @include flex;
+  position: relative;
+
+  .page-inner {
+    display: grid;
+    grid-template-columns: var(--editor-width) var(--preview-width);
+    margin: 0 auto;
+
+    @include medium {
+      display: block;
+      width: 100%;
+      max-width: var(--editor-width);
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 21px;
+      margin-bottom: 20px;
+      position: relative;
+
+      span {
+        position: relative;
+        padding-right: 20px;
+        background-color: var(--white);
+        z-index: 10;
+      }
+      &::after {
+        content: "";
+        width: 100%;
+        position: absolute;
+        height: 1px;
+        top: 50%;
+        left: 0;
+        background-color: var(--border);
+      }
+    }
+  }
+
+  .content {
+    position: relative;
+    background-color: var(--white);
+    width: 100%;
+    min-height: 100svh; // check :
+    min-height: 100vh; // check :
+    padding-bottom: 100px;
+    background-color: #f2f3f7;
+
+    @include medium {
+      min-height: auto;
+      padding-bottom: 0;
+    }
+  }
+
+  .background {
+    @include full;
+    height: 110px;
+    z-index: 10;
+    background-color: var(--blue-soft);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+  }
+}
+
+.charts {
+  padding: 50px 30px;
+
+  display: block;
+  @include medium {
+    &.isHide {
+      display: none;
+    }
+  }
+
+  h3 {
+    margin-bottom: 15px;
+    span {
+      font-size: 16px;
+    }
+  }
+
+  @include mobile {
+    padding: 50px 16px;
+  }
+}
+
+.no-list {
+  @include no-list;
+}

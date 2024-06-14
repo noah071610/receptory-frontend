@@ -1,38 +1,46 @@
 "use client"
 
 import NumberRange from "@/components/NumberRange"
-import { useTranslation } from "@/i18n/client"
-import { useEditorStore } from "@/store/editor"
-import setDate from "@/utils/setDate"
+import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import style from "./style.module.scss"
 
+import { useMainStore } from "@/store/main"
+import { SectionType } from "@/types/Edit"
+import { stringToDate } from "@/utils/helpers/setDate"
 import cs from "classNames/bind"
 const cx = cs.bind(style)
 
-export const DateSelector = () => {
-  const { t } = useTranslation()
-  const { selectedSection, setValue, setActive } = useEditorStore()
-  const specificDates = selectedSection?.collection ?? []
-  const { addAnyDate } = selectedSection?.options ?? {}
-  const onClickDate = ({ specificStartDate, specificEndDate }: { specificStartDate: Date; specificEndDate?: Date }) => {
-    setValue({
-      payload: {
-        selectedStartDate: specificStartDate,
-        selectedEndDate: specificEndDate,
-      },
+export const DateSelector = ({ section }: { section: SectionType }) => {
+  const { setModal, setSelected, pageLang } = useMainStore(["pageLang", "setSelected", "setModal"])
+  const { t } = useTranslation(["edit-page"])
+  const specificDates = section.collection
+  const { addAnyDate } = section.options
+  const onClickDate = ({
+    specificStartDate,
+    specificEndDate,
+  }: {
+    specificStartDate: string
+    specificEndDate?: string
+  }) => {
+    setSelected({
+      section,
+      value: specificEndDate
+        ? [
+            { key: "startDate", text: specificStartDate },
+            { key: "endDate", text: specificEndDate },
+          ]
+        : [{ key: "startDate", text: specificStartDate }],
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
 
   const onClickAnyDate = () => {
-    setValue({
-      payload: {
-        selectedStartDate: "anyDate",
-        selectedEndDate: undefined,
-      },
+    setSelected({
+      section,
+      value: [{ key: "anyDate", text: t("anyDate") }],
     })
-    setActive({ key: "modal", payload: { type: null } })
+    setModal({ section: null, type: null })
   }
 
   return (
@@ -41,7 +49,13 @@ export const DateSelector = () => {
         {specificDates.map(({ specificStartDate, specificEndDate }, i: number) => (
           <li key={`date_${i}`}>
             <button onClick={() => onClickDate({ specificStartDate, specificEndDate })}>
-              <NumberRange start={specificStartDate} end={specificEndDate} formatter={setDate} />
+              <NumberRange
+                start={specificStartDate}
+                end={specificEndDate}
+                formatter={(stringDate: string) => {
+                  return stringToDate(stringDate, pageLang ?? undefined)
+                }}
+              />
             </button>
           </li>
         ))}

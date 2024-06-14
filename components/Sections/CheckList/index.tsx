@@ -1,14 +1,23 @@
 "use client"
 
 import AddBtn from "@/components/AddBtn"
+import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
+import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionListType, SectionType } from "@/types/Edit"
-import { getAnimation } from "@/utils/getAnimation"
-import { faPenFancy, faSquareCheck, faSquareXmark, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
+import { getAnimation } from "@/utils/styles/getAnimation"
+import {
+  faPenFancy,
+  faRotate,
+  faSquareCheck,
+  faSquareXmark,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classNames/bind"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -23,7 +32,8 @@ function List({
   index: number
   isDisplayMode?: boolean
 }) {
-  const { setList } = useEditorStore()
+  const { t } = useTranslation(["edit-page"])
+  const { setList, deleteList } = useEditorStore(["setList", "deleteList"])
   const [design, animation] = [list.design, section.style.animation]
   const getDesign = (str: string) => {
     switch (str) {
@@ -50,6 +60,13 @@ function List({
     }, 0)
   }
 
+  const onDelete = (i: number) => {
+    if (section.list.length <= 1) {
+      return toastError("atLeastOneList")
+    }
+    deleteList({ targetIndex: i })
+  }
+
   return (
     <li
       style={getAnimation({
@@ -65,24 +82,37 @@ function List({
         {design === "caution" && <FontAwesomeIcon icon={faTriangleExclamation} />}
       </div>
       <div className={cx("content")}>
-        <Input
-          inputType="text"
-          isOptional={false}
-          listIndex={index}
-          type="input"
-          value={list.value}
-          displayMode={isDisplayMode && "span"}
-          maxLength={25}
-          className={isDisplayMode ? style.text : ""}
-        />
+        {isDisplayMode ? (
+          <span className={cx("text")}>{list.value}</span>
+        ) : (
+          <Input
+            className={cx("input")}
+            inputType="textInput"
+            isOptional={false}
+            listIndex={index}
+            type="input"
+            value={list.value}
+            maxLength={35}
+            section={section}
+          />
+        )}
+
+        {!isDisplayMode && (
+          <>
+            <div className={cx("icon-change")}>
+              <button onClick={onClickChangeDesign}>
+                <FontAwesomeIcon icon={faRotate} />
+              </button>
+            </div>
+            <DeleteBtn isSmall={true} deleteEvent={onDelete} listIndex={index} srcKey="checklist" isDeleteList={true} />
+          </>
+        )}
       </div>
     </li>
   )
 }
 
-function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
-  const { setActive } = useEditorStore()
-
+function CheckList({ section, isDisplayMode }: { section: SectionType; isDisplayMode?: boolean }) {
   return (
     <div className={cx("layout")}>
       <ul className={cx("check-list")}>
@@ -95,4 +125,4 @@ function Callout({ section, isDisplayMode }: { section: SectionType; isDisplayMo
   )
 }
 
-export default memo(Callout)
+export default memo(CheckList)

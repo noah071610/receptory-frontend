@@ -1,0 +1,11 @@
+@import "@/styles/variables.scss";
+
+.search {
+  position: relative;
+  padding: 16px;
+  padding-bottom: 30px;
+  background-color: var(--white);
+  margin-bottom: 30px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}

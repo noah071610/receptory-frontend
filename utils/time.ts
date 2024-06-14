@@ -59,3 +59,19 @@ export function isMoreLateTime(str1: string, str2: string) {
 
   return get24hoursFromTime(str1) > get24hoursFromTime(str2)
 }
+
+export const convertStrToTimeSet = (str: string) => {
+  const [hour, minute] = str.split(":").map(Number)
+
+  let period = "AM"
+  let hour12 = hour
+
+  if (hour >= 12) {
+    period = "PM"
+    hour12 = hour === 12 ? 12 : hour - 12
+  } else if (hour === 0) {
+    hour12 = 12
+  }
+
+  return `${hour12.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${period}`
+}

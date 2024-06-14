@@ -1,224 +1,46 @@
 @import "@/styles/variables.scss";
 
-.main {
-  background-color: var(--bg-color);
+// list
+
+.page-list-wrapper {
   width: 100%;
-  .content {
-    background-color: var(--white);
-    width: 100%;
-    min-height: 100svh;
-    max-width: 500px;
-    margin: 0 auto;
-    padding-top: 30px;
-    padding-bottom: 100px;
-    position: relative;
-    @include medium {
-      padding-bottom: 50px;
-    }
-  }
+}
 
-  //profile
-  .profile {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    padding: 20px;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-    picture {
-      width: 100%;
-      height: 80px;
-      img {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 100%;
-        @include border;
-        box-shadow: 0 7px 8px rgba(80, 46, 0, 0.1);
-      }
-    }
-    .profile-content {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 7px;
-      padding-left: 15px;
-      span {
-        width: 100%;
-        font-size: 14px;
-      }
-    }
-  }
-
-  h1 {
-    margin: 0 20px;
-    margin-bottom: 10px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    img {
-      width: 25px;
-      height: 25px;
-      background-color: var(--white);
-      z-index: 10;
-    }
-    span {
-      padding-left: 10px;
-      padding-right: 20px;
-      background-color: var(--white);
-      z-index: 10;
-    }
-    &::after {
-      content: "";
-      width: 100%;
-      position: absolute;
-      height: 1px;
-      top: 50%;
-      left: 0;
-      background-color: var(--border);
-    }
-  }
-
-  // list
-  .page-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    .list {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .list-main {
-      width: 100%;
-      height: 180px;
-      margin-bottom: 180px;
-      position: relative;
-    }
-
-    .list-content {
-      width: 80%;
-      max-width: 350px;
-      padding: 15px 10px;
-      position: absolute;
-      bottom: -180px;
-      right: 10px;
-      border-radius: 10px;
-      background-color: white;
-      box-shadow: 0 4px 15px rgba(80, 46, 0, 0.1);
-    }
-
-    // top
-
-    .top {
-      display: grid;
-      grid-template-columns: 1fr 25px;
-      padding: 0 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .title {
-      h2 {
-        font-size: 17px;
-        margin-bottom: 5px;
-      }
-      p {
-        font-size: 14px;
-        color: #042a52;
-      }
-    }
-
-    .active {
-      @include flex;
-      .circle {
-        width: 25px;
-        height: 25px;
-        border-radius: 100%;
-        background-color: var(--gray-soft);
-        @include flex;
-        div {
-          width: 15px;
-          height: 15px;
-          border-radius: 100%;
-          position: relative;
-          overflow: hidden;
-        }
-      }
-    }
-
-    // bottom
-    .bottom {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      margin-top: 10px;
-      button {
-        width: 100%;
-        padding: 15px 10px;
-        display: flex;
-        justify-content: space-between;
-        span {
-          font-size: 14px;
-        }
-        svg {
-          font-size: 16px;
-          color: var(--gray-hard);
-        }
-        @include action {
-          background-color: var(--gray-soft);
-        }
-      }
-    }
-  }
+.page-list {
+  @include flex(true);
+  gap: 20px;
+  padding: 40px 20px;
 }
 
 .add-list {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 20px;
   position: fixed;
   left: 0;
   bottom: 0;
+  @include flex-x;
+  padding-bottom: 20px;
+
+  .add {
+    width: 250px;
+    padding: 20px 0;
+    border-radius: 30px;
+    background-color: var(--blue);
+    @include flex;
+
+    span {
+      font-size: 17px;
+      color: var(--white);
+      font-weight: 700;
+    }
+    @include action {
+      background-color: var(--blue-hard);
+      svg {
+        color: var(--blue);
+      }
+    }
+  }
 }
 
 .no-list {
-  width: 100%;
-  height: 250px;
-  background-color: var(--gray-softest);
-  @include flex;
-  flex-direction: column;
-  gap: 10px;
-  img {
-    width: 40px;
-    height: 40px;
-  }
-  span {
-    font-size: 15px;
-    color: #042a52;
-  }
-}
-
-.add {
-  width: 250px;
-  padding: 20px 0;
-  border-radius: 30px;
-  background-color: #0a59aeda;
-  @include flex;
-  span {
-    font-size: 17px;
-    color: var(--white);
-    font-weight: 700;
-  }
-  @include action {
-    background-color: #042a52;
-    svg {
-      color: var(--pink);
-    }
-  }
+  @include no-list;
 }

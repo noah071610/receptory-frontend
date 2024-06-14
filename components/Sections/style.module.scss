@@ -7,6 +7,10 @@
   background-color: var(--white);
   border: 2px dashed transparent;
 
+  @include mobile {
+    border: 1px dashed transparent;
+  }
+
   .observer {
     position: absolute;
     top: -150px;
@@ -19,7 +23,7 @@
 
   &.active {
     @include z-index(edit-content);
-    border-color: var(--pink-soft);
+    border-color: var(--blue);
   }
   .tools {
     position: absolute;
@@ -49,8 +53,7 @@
         }
       }
     }
-    .delete,
-    .copy {
+    .icon {
       width: 22px;
       height: 22px;
       @include flex;
@@ -58,8 +61,13 @@
         font-size: 15px;
         color: var(--white);
         @include action {
-          color: var(--pink);
+          color: var(--blue);
         }
+      }
+    }
+    .margin.active {
+      svg {
+        transform: rotate(180deg);
       }
     }
   }

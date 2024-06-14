@@ -1,13 +1,17 @@
 {
   "login": "ログイン",
-  "signup": "新規登録",
+  "signup": "会員登録",
   "snsTitle": "SNSで3秒でログイン",
   "userName": "ニックネーム",
   "email": "メールアドレス",
-  "password": "パスワード入力",
+  "password": "パスワードを入力",
   "passwordConfirm": "パスワード確認",
-  "findEmail": "メールアドレス検索",
+  "findEmail": "メールアドレスを探す",
   "enterEmail": "メールアドレス入力",
   "enterPassword": "パスワード入力",
-  "back": "戻る"
+  "back": "戻る",
+  "googleLogin": "Googleでログイン",
+  "facebookLogin": "Facebookでログイン",
+  "title": "簡単でエレガントなウェブサイト作成ツール",
+  "description": "今すぐログインして無料で作成してください"
 }

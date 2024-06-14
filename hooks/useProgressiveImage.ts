@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export const useProgressiveImage = (src: string, isVisible: boolean) => {
+export const useProgressiveImage = (src: string, isVisible: boolean, delay: number = 400) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
 
   useEffect(() => {
@@ -8,10 +8,16 @@ export const useProgressiveImage = (src: string, isVisible: boolean) => {
       const img = new Image()
       img.src = src
       img.onload = () => {
-        if (img.naturalHeight > 0) setStatus("success")
+        if (img.naturalHeight > 0) {
+          setTimeout(() => {
+            setStatus("success")
+          }, delay)
+        }
       }
       img.onerror = () => {
-        setStatus("error")
+        setTimeout(() => {
+          setStatus("error")
+        }, delay)
       }
     }
   }, [src, isVisible])
