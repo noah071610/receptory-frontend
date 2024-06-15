@@ -6,7 +6,7 @@
     "dev": "next dev -p 3060",
     "build": "cross-env NODE_ENV=production next build",
     "start": "cross-env NODE_ENV=production next start -p 3060",
-    "start:prod":"pm2 start 'npm run start' --name receptori",
+    "start:prod":"cross-env NODE_ENV=production pm2 start 'npm run start' --name receptori",
     "lint": "next lint"
   },
   "author": "Noah",
