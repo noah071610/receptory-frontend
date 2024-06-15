@@ -33,7 +33,7 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
         },
       ],
       type: "website",
-      siteName: "receptory",
+      siteName: "receptori",
     },
     twitter: {
       card: "summary_large_image",

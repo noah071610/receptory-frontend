@@ -12,7 +12,7 @@ const EnTerms = () => {
       <h2>Article 1 (Purpose)</h2>
       <p>
         These terms of service (hereinafter referred to as 'Terms') are to stipulate the conditions and matters
-        regarding the usage of the internet website 'Receptory' (www.receptory.com) provided by Receptory (hereinafter
+        regarding the usage of the internet website 'Receptori' (www.receptori.com) provided by Receptory (hereinafter
         referred to as 'Company') and the customers (hereinafter referred to as 'Members').
       </p>
       <h2>Article 2 (Specification and Amendment of the Terms)</h2>
