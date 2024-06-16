@@ -10,26 +10,18 @@ function IconBtn({
   className,
   disabled = false,
   iconClassName,
-  size,
   icon,
   onclick,
 }: {
   className?: string
   iconClassName?: string
-  size: number
   icon: IconDefinition
   onclick?: any
   disabled?: boolean
 }) {
   return (
     <div className={cx("btn-wrapper", className)}>
-      <button
-        onClick={onclick}
-        style={{ width: `${size}px`, height: `${size}px` }}
-        className={cx(iconClassName, "icon")}
-        disabled={disabled}
-        type="button"
-      >
+      <button onClick={onclick} className={cx(iconClassName, "icon")} disabled={disabled} type="button">
         <FontAwesomeIcon icon={icon} />
       </button>
     </div>

@@ -19,11 +19,16 @@ function LinkBtn({ section, isDisplayMode }: { section: SectionType; isDisplayMo
   return (
     <div className={cx("layout")}>
       <div className={cx("btn-wrapper")}>
-        <a href={isDisplayMode ? link : undefined} style={{ backgroundColor }} className={cx("link")}>
+        <a
+          href={isDisplayMode ? link : undefined}
+          target={isDisplayMode ? "_blank" : undefined}
+          style={{ backgroundColor }}
+          className={cx("link")}
+        >
           <Input
             type="input"
             displayMode={isDisplayMode && "span"}
-            inputType="btn"
+            inputType="textInput"
             isOptional={false}
             style={{ color: textColor }}
             value={text}

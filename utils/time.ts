@@ -11,7 +11,8 @@ export function generateSecondSlots({ interval, min = 0 }: { interval: number; m
 }
 
 export function generateHourSlots({ startHour = 0, endHour = 0 }: { startHour?: number; endHour?: number }): {
-  [key: string]: string[]
+  amArr: string[]
+  pmArr: string[]
 } {
   if (startHour === 0 && endHour === 0) {
     return {

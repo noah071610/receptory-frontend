@@ -52,6 +52,10 @@
           color: var(--white);
         }
       }
+      @include mobile {
+        width: 30px;
+        height: 30px;
+      }
     }
     .icon {
       width: 22px;
@@ -62,6 +66,13 @@
         color: var(--white);
         @include action {
           color: var(--blue);
+        }
+      }
+      @include mobile {
+        width: 30px;
+        height: 30px;
+        svg {
+          font-size: 20px;
         }
       }
     }

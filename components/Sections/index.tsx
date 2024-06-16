@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { DraggableProvided } from "@hello-pangea/dnd"
 import cs from "classnames/bind"
 import { useRouter } from "next/navigation"
-import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
@@ -30,7 +29,6 @@ export default function SectionLayout({
   noPadding?: boolean
   pathname: string
 }) {
-  const { t } = useTranslation(["modal"])
   const { replace } = useRouter()
   const {
     selectedSection,

@@ -1,9 +1,9 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError } from "axios"
 
 const STALE_TIME = 1000 * 60 * 60 // 60 minutes
-export const domain = process.env.NEXT_PUBLIC_DOMAIN;
-export const port = process.env.NEXT_PUBLIC_PORT;
-export const serverPort = process.env.NEXT_PUBLIC_SERVER_PORT;
+export const domain = process.env.NEXT_PUBLIC_DOMAIN
+export const port = process.env.NEXT_PUBLIC_PORT
+export const serverPort = process.env.NEXT_PUBLIC_SERVER_PORT
 
 export const _url = {
   client: process.env.NODE_ENV === "production" ? `https://${domain}` : `http://localhost:${port}`,

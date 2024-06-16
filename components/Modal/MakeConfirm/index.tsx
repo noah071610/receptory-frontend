@@ -92,7 +92,7 @@ export const MakePassword = ({
         <div className={cx("confirmId")}>
           <div className={cx("input")}>{confirmId}</div>
           <div className={cx("clip-board")}>
-            <IconBtn onclick={onClickCopy} icon={faClipboard} size={30} />
+            <IconBtn onclick={onClickCopy} icon={faClipboard} />
           </div>
         </div>
         <label htmlFor="password" className={cx("title")}>

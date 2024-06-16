@@ -75,10 +75,10 @@
           font-size: 13px;
         }
         @include action {
-          background-color: rgba($color: #a6a6a6, $alpha: 0.05);
+          background-color: rgba($color: #858585, $alpha: 0.05);
         }
         &.active {
-          background-color: rgba($color: #a6a6a6, $alpha: 0.05);
+          background-color: rgba($color: #858585, $alpha: 0.05);
         }
       }
     }
@@ -115,7 +115,10 @@
       padding: 15px 10px;
       @include flex;
       @include action {
-        background-color: rgba($color: #a6a6a6, $alpha: 0.05);
+        background-color: rgba($color: #858585, $alpha: 0.05);
+      }
+      &:active {
+        background-color: rgba($color: #858585, $alpha: 0.05);
       }
     }
   }

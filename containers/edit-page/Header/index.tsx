@@ -6,9 +6,9 @@ import { EditStage } from "@/types/Edit"
 import { faHome } from "@fortawesome/free-solid-svg-icons"
 import cs from "classnames/bind"
 import { useParams, useRouter } from "next/navigation"
-import { memo } from "react"
+import { memo, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
-import { Swiper, SwiperSlide } from "swiper/react"
+import { Swiper, SwiperRef, SwiperSlide } from "swiper/react"
 import HeaderLayout from "./HeaderLayout"
 import RevertBtn from "./RevertBtn"
 import SaveBtn from "./SaveBtn"
@@ -31,6 +31,7 @@ const headers = [
 ]
 
 function Header() {
+  const swiperRef = useRef<SwiperRef | null>(null)
   const { t } = useTranslation(["edit-page"])
   const { push } = useRouter()
   const { userId } = useParams()
@@ -40,6 +41,12 @@ function Header() {
     setSelectedSection({ payload: null })
     setStage(v)
   }
+
+  useEffect(() => {
+    if (swiperRef?.current) {
+      swiperRef?.current.swiper.slideTo(headers.findIndex((v) => v.value === stage))
+    }
+  }, [stage])
 
   return (
     <>
@@ -63,7 +70,6 @@ function Header() {
               onclick={() => {
                 push(`/user/${userId}`)
               }}
-              size={30}
               iconClassName={style.rollback}
               icon={faHome}
             />
@@ -79,6 +85,7 @@ function Header() {
           <Swiper
             slidesPerView={3}
             spaceBetween={10}
+            ref={swiperRef}
             onClick={(swiper) => {
               swiper.slideTo(swiper.clickedIndex)
             }}

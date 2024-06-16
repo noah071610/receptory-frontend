@@ -17,14 +17,12 @@ function RevertBtn() {
       <IconBtn
         disabled={revert.length <= 1 || revertIndex <= 0}
         onclick={() => onClickRevert("undo")}
-        size={30}
         iconClassName={style.rollback}
         icon={faRotateLeft}
       />
       <IconBtn
         disabled={revert.length - 1 === revertIndex}
         onclick={() => onClickRevert("do")}
-        size={30}
         iconClassName={style.rollback}
         icon={faRotateRight}
       />

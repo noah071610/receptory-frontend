@@ -26,6 +26,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
     specificTime,
     isRangeSelect,
     addAnytime,
+    isAlways,
   } = section.options
   const [startHour, endHour] = useMemo(() => {
     const s = parseInt(_startHour ?? "00")
@@ -128,6 +129,21 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
   const seconds = generateSecondSlots({
     interval: parseInt(interval),
   })
+
+  const { lastHour, lastMeridiem } = useMemo(() => {
+    if (startHour === 0 && endHour === 0) return {}
+    if (!isAlways) {
+      if (pmArr.length > 0) {
+        return { lastHour: pmArr[pmArr.length - 1], lastMeridiem: "pm" }
+      }
+      if (amArr.length > 0) {
+        return { lastHour: amArr[amArr.length - 1], lastMeridiem: "am" }
+      }
+      return {}
+    }
+    return {}
+  }, [isAlways, amArr, pmArr, startHour, endHour])
+
   const displayHours = !selectedMeridiem
     ? amArr?.length > 0
       ? amArr
@@ -163,7 +179,7 @@ export const TimePicker = ({ section }: { section: SectionType }) => {
               ))}
             </ul>
             <ul className={cx("seconds", { disabled: !selectedHour })}>
-              {seconds.map((v) => (
+              {(lastHour === selectedHour && lastMeridiem === selectedMeridiem ? ["00"] : seconds).map((v) => (
                 <li key={`second-${v}`}>
                   <button disabled={!selectedHour} onClick={() => onClickTime("minute", v)}>
                     {v}

@@ -6,6 +6,7 @@
 .wrapper {
   width: 100%;
   position: relative;
+  overflow: hidden;
   @include flex-y;
   min-height: 160px;
   padding-bottom: 30px;

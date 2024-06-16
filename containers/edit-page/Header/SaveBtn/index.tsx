@@ -75,9 +75,9 @@ function SaveBtn() {
   ])
 
   return isSaving ? (
-    <IconBtn iconClassName={style.saving} size={30} icon={faCheck} />
+    <IconBtn iconClassName={style.saving} icon={faCheck} />
   ) : (
-    <IconBtn onclick={onClickSave} size={30} icon={faSave} />
+    <IconBtn onclick={onClickSave} icon={faSave} />
   )
 }
 

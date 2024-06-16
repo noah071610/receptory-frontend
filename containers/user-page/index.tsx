@@ -10,6 +10,7 @@ import PageCard from "@/containers/user-page/PageCard"
 import Profile from "@/containers/user-page/Profile"
 import style from "@/containers/user-page/style.module.scss"
 import { usePageValidator } from "@/hooks/usePageValidator"
+import { useInitTranslation } from "@/i18n/client"
 import i18next from "@/i18n/init"
 import UserPageLayout from "@/layout/UserPageLayout"
 import { useMainStore } from "@/store/main"
@@ -19,11 +20,10 @@ import { useQuery } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import { useParams } from "next/navigation"
 import { useEffect, useLayoutEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const UserPage = ({ lang }: { lang: Langs }) => {
-  const { t } = useTranslation(["user-page"])
+  const { t } = useInitTranslation(lang, ["user-page", "messages"])
   const { user } = usePageValidator({ isAuth: true })
   const { modal, setModal, setPageLang } = useMainStore(["modal", "setModal", "setPageLang"])
   const { userId } = useParams()

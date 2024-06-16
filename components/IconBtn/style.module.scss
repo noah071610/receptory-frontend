@@ -7,14 +7,31 @@
 .icon {
   border-radius: 100%;
   @include flex;
+  width: 30px;
+  height: 30px;
   svg {
     font-size: 17px;
     color: var(--gray);
+  }
+  @include mobile {
+    width: 35px;
+    height: 35px;
+    svg {
+      font-size: 22px;
+    }
   }
   @include action {
     background: var(--blue);
     svg {
       color: var(--white);
+    }
+  }
+  @include mobile {
+    &:active {
+      background: var(--blue);
+      svg {
+        color: var(--white);
+      }
     }
   }
 }

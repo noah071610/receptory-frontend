@@ -25,8 +25,12 @@
   }
   @include medium {
     height: auto;
+    transform: translateY(-96px);
     .inner {
       display: none;
+    }
+    .nav {
+      margin-bottom: 5px;
     }
   }
 }
@@ -131,6 +135,6 @@
 .ghost {
   height: calc(50px);
   @include medium {
-    height: 90px;
+    height: 96px;
   }
 }

@@ -86,7 +86,7 @@ export const ConfirmHard = ({
             queryClient.invalidateQueries({ queryKey: queryKey.save.list })
             queryClient.invalidateQueries({ queryKey: queryKey.page(value) })
             setIsLoading(false)
-            toastSuccess("deploy")
+            toastSuccess("delete")
             setModal({
               section: null,
               type: null,

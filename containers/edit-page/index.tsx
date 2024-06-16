@@ -20,13 +20,13 @@ import Rending from "@/containers/edit-page/Rending"
 import SectionList from "@/containers/edit-page/SectionList"
 import { sectionMap } from "@/containers/edit-page/sectionMap"
 import { usePageValidator } from "@/hooks/usePageValidator"
+import { useInitTranslation } from "@/i18n/client"
 import i18next from "@/i18n/init"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
 import { SaveType } from "@/types/Page"
 import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import dynamic from "next/dynamic"
-import { useTranslation } from "react-i18next"
 const cx = cs.bind(style)
 
 const DatePicker = dynamic(() => import("@/components/Modal/DatePicker"), {
@@ -48,9 +48,7 @@ const SelectList = dynamic(() => import("@/components/Modal/SelectList"), {
 
 const EditPage = ({ lang }: { lang: Langs }) => {
   const { pageId, user } = usePageValidator({ isAuth: true, isEdit: true })
-  const { t } = useTranslation(["messages"], {
-    lng: lang,
-  })
+  const { t } = useInitTranslation(lang, ["edit-page", "messages"])
   const pathname = usePathname()
   const { back } = useRouter()
 
@@ -103,7 +101,7 @@ const EditPage = ({ lang }: { lang: Langs }) => {
         }, 1000)
       })()
     }
-  }, [save, pageId, user, setPageLang, loadSections, back])
+  }, [save, pageId, user, setPageLang, loadSections, back, t])
 
   const topSections = useMemo(
     () => (stage === "confirm" ? confirmSections.slice(0, 2) : [(stage === "home" ? homeSections : formSections)[0]]),

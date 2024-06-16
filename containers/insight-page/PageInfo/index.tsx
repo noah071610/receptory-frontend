@@ -32,7 +32,7 @@ const PageInfo = ({
   return (
     <>
       <div className={cx("page-info")}>
-        <IconBtn onclick={() => push(`/user/${userId}`)} className={cx("back")} icon={faHome} size={30} />
+        <IconBtn onclick={() => push(`/user/${userId}`)} className={cx("back")} icon={faHome} />
         <picture>
           <img
             src={hasString(pageData.thumbnail) ? pageData.thumbnail : noImageUrl}
