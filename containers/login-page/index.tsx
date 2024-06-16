@@ -1,7 +1,7 @@
 "use client"
 
 import { refreshUser } from "@/actions/user"
-import { useTemplate } from "@/actions/website"
+import { selectTemplate } from "@/actions/website"
 import { _url, queryKey } from "@/config"
 import style from "@/containers/login-page/style.module.scss"
 import { useInitTranslation } from "@/i18n/client"
@@ -30,9 +30,9 @@ export default function LoginPage({ lang }: { lang: Langs }) {
         // B페이지에서 전달받은 정보를 처리하는 함수를 호출합니다.
 
         if (event.data.userId) {
+          await refreshUser()
           if (templateId) {
-            await refreshUser()
-            const newSave = await useTemplate(templateId)
+            const newSave = await selectTemplate(templateId)
             if (newSave) {
               await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
               push(`/edit/${event.data.userId}/${newSave.pageId}`)

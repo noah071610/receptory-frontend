@@ -4,17 +4,13 @@ import { Cookies } from "react-cookie"
 const cookies = new Cookies()
 
 export async function getInsight(pageId: string) {
-  const cookie = cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME ?? "")
+  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+    try {
+      const response = await API.get(`/insight?pageId=${pageId}`)
 
-  if (cookie) {
-    if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
-      try {
-        const response = await API.get(`/insight?pageId=${pageId}`)
-
-        return response.data
-      } catch {
-        // return "serverError"
-      }
+      return response.data
+    } catch {
+      // return "serverError"
     }
   }
 }
@@ -33,17 +29,13 @@ export async function getConfirmations(data: {
     sort: string
   }
 }) {
-  const cookie = cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME ?? "")
+  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+    try {
+      const response = await API.post(`/insight/confirmations`, data)
 
-  if (cookie) {
-    if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
-      try {
-        const response = await API.post(`/insight/confirmations`, data)
-
-        return response.data
-      } catch {
-        // return "serverError"
-      }
+      return response.data
+    } catch {
+      // return "serverError"
     }
   }
 }

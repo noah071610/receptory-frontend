@@ -1,6 +1,6 @@
 "use client"
 import { getUser } from "@/actions/user"
-import { useTemplate } from "@/actions/website"
+import { selectTemplate } from "@/actions/website"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import { queryKey } from "@/config"
 import { toastSuccess } from "@/config/toast"
@@ -88,7 +88,7 @@ const TemplatePageHome = ({
   }
   const onClickUseTemplate = async () => {
     if (user) {
-      const newSave = await useTemplate(initialData.pageId)
+      const newSave = await selectTemplate(initialData.pageId)
       if (newSave) {
         await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
         push(`/edit/${user.userId}/${newSave.pageId}`)
