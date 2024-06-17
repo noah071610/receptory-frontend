@@ -60,10 +60,10 @@ export async function deleteSave(pageId: string) {
   }
 }
 
-export async function checkCustomLink(customLink: string) {
+export async function checkCustomLink(pageId: string, customLink: string) {
   if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
     try {
-      const response = await API.get(`/save/check-link?customLink=${customLink}`)
+      const response = await API.get(`/page/check-link?pageId=${pageId}&customLink=${customLink}`)
 
       return response.data
     } catch {

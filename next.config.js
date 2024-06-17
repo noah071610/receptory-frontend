@@ -12,6 +12,34 @@ module.exports = withBundleAnalyzer({
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  async redirects() {
+    return [
+      {
+        source: "/en",
+        destination: "/login",
+        permanent: false,
+        locale: false,
+      },
+      {
+        source: "/ko",
+        destination: "/login",
+        permanent: false,
+        locale: false,
+      },
+      {
+        source: "/th",
+        destination: "/login",
+        permanent: false,
+        locale: false,
+      },
+      {
+        source: "/ja",
+        destination: "/login",
+        permanent: false,
+        locale: false,
+      },
+    ]
+  },
   i18n,
   reactStrictMode: true,
   images: {

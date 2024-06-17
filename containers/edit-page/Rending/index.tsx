@@ -58,10 +58,11 @@ export default function Rending({
   ])
   const { format, customLink, embed, isUseHomeThumbnail, isNotUseCustomLink } = pageOptions
   const isActive = format === "active"
+
   const thumbnailEmbedContent: { title: string; description: string; src: string } = {
     title: homeSections[0].data.title ?? "",
     description: homeSections[0].data.description ?? "",
-    src: homeSections[0].style?.background ?? homeSections[0]?.src ?? "",
+    src: homeSections[0].style?.background ? homeSections[0].style.background : "",
   }
 
   const onChangeFormat = async (value: "inactive" | "active" | "save") => {
@@ -86,7 +87,7 @@ export default function Rending({
           // 링크에 영문자가 아닌 문자 또는 특수문자, 공백은 포함 될 수 없습니다.
           return toastError("invalidCustomLink")
         }
-        const msg = await checkCustomLink(customLink)
+        const msg = await checkCustomLink(pageId, customLink)
         if (msg === "no") {
           setIsLoading(false)
           // 다른 사람이 사용 중인 커스텀 링크에요
@@ -160,6 +161,8 @@ export default function Rending({
 
   const embedContent = isUseHomeThumbnail ? thumbnailEmbedContent : embed
 
+  console.log("## ", thumbnailEmbedContent)
+
   return (
     <div className={cx("layout")}>
       <section>
@@ -183,20 +186,29 @@ export default function Rending({
               <span>{t("useHomeThumbnail")}</span>
             </button>
             <h4>{t("footer.thumbnail")}</h4>
-            <div
-              style={{ background: getImageUrl({ url: embedContent.src ?? "" }) }}
-              className={cx("embed-thumbnail", { disabled: isUseHomeThumbnail })}
-            >
-              {hasString(embedContent.src) && !isUseHomeThumbnail && <DeleteBtn srcKey={"embed"} />}
-              <button
-                data-closer="rending"
-                className={cx("drop-zone", { hidden: !!embedContent.src })}
-                onClick={onClickThumbnailUpload}
-                disabled={isUseHomeThumbnail}
+            {isUseHomeThumbnail ? (
+              <picture className={cx("embed-thumbnail")}>
+                <img
+                  src={hasString(embedContent.src) ? embedContent.src : "/images/noImage.png"}
+                  alt="home-thumbnail"
+                />
+              </picture>
+            ) : (
+              <div
+                style={{ background: getImageUrl({ url: embedContent.src ?? "" }) }}
+                className={cx("embed-thumbnail", { disabled: isUseHomeThumbnail })}
               >
-                <FontAwesomeIcon icon={faPlus} />
-              </button>
-            </div>
+                {hasString(embedContent.src) && !isUseHomeThumbnail && <DeleteBtn srcKey={"embed"} />}
+                <button
+                  data-closer="rending"
+                  className={cx("drop-zone", { hidden: !!embedContent.src })}
+                  onClick={onClickThumbnailUpload}
+                  disabled={isUseHomeThumbnail}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </div>
+            )}
             <h4>{t("footer.title")}</h4>
             <Input
               type="input"

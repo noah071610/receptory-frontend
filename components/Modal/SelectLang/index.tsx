@@ -74,7 +74,6 @@ export const SelectLang = ({
         cookies.set(langCookieName, selectedLang ?? "ko", { path: "/" })
         setTimeout(() => {
           refresh()
-          toastSuccess("changeLang")
           setIsLoading(false)
           setModal({ section: null, type: null })
 

@@ -4,6 +4,7 @@ import { formSectionList } from "@/config/editorFooter"
 import { useInsightStore } from "@/store/insight"
 import { SectionType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
+import { dateToString } from "@/utils/helpers/setDate"
 import { faAddressCard, faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classnames/bind"
@@ -24,11 +25,31 @@ const FilterList = ({ formSections }: { formSections?: SectionType[] }) => {
 
   const selectCurMenu = (type: string) => {
     if (type === curFilter.type) return
-    setCurFilterAll({
-      endQuery: "",
-      startQuery: "",
-      type,
-    })
+    switch (type) {
+      case "calendar":
+      case "createdAt":
+        setCurFilterAll({
+          endQuery: dateToString(new Date()),
+          startQuery: dateToString(new Date()),
+          type,
+        })
+        break
+      case "time":
+        setCurFilterAll({
+          endQuery: "00:00",
+          startQuery: "00:00",
+          type,
+        })
+        break
+
+      default:
+        setCurFilterAll({
+          endQuery: "",
+          startQuery: "",
+          type,
+        })
+        break
+    }
   }
 
   const onChangeDateTime = (key: "startQuery" | "endQuery", e: any) => {

@@ -127,9 +127,9 @@
   "noList": "Empty",
   "editList": "List",
   "putGoogleMapCode": "Put Google Map Embed Code",
-
   "confirmDataExample": "The Form will be displayed here",
   "LinkPlaceholder": "Enter link",
+  "noneSelect": "None",
 
   "options": {
     "specificDate": "Set Specific Date",

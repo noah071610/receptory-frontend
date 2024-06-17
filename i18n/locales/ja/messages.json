@@ -26,7 +26,8 @@
     "noEmptyCustomLink": "リンクに空白を含めることはできません",
     "invalidCustomLink": "リンクには英字以外の文字、特殊文字、空白などは含めることはできません",
     "alreadyUsedCustomLink": "既に他のユーザーが使用中のリンクです",
-    "maximumPage": "ページは最大2つまで登録できます"
+    "maximumPage": "ページは最大2つまで登録できます",
+    "userNameLength": "ニックネームを入力してください"
   },
   "success": {
     "deploy": "配備完了！ 🚀",
@@ -36,6 +37,7 @@
     "inactive": "ページを非公開にしました",
     "copyConfirmId": "コピーしました 🎉",
     "comingsoon": "非公開のページです",
-    "needToLogin": "テンプレートを使用するにはログインが必要です！🚀"
+    "needToLogin": "テンプレートを使用するにはログインが必要です！🚀",
+    "changeProfile": "プロファイルを変更しました"
   }
 }

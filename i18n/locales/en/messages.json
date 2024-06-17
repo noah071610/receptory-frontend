@@ -26,7 +26,8 @@
     "noEmptyCustomLink": "Custom link cannot contain spaces",
     "invalidCustomLink": "Custom link can only contain letters and numbers without spaces or special characters",
     "alreadyUsedCustomLink": "This custom link is already in use by someone else",
-    "maximumPage": "You can create up to 2 pages"
+    "maximumPage": "You can create up to 2 pages",
+    "userNameLength": "Please enter a nickname."
   },
   "success": {
     "deploy": "Deployment completed! 🚀",
@@ -36,6 +37,7 @@
     "inactive": "Page deactivated",
     "copyConfirmId": "Reservation number copied 🎉",
     "comingsoon": "Service under construction 🚀",
-    "needToLogin": "Log in to use the template! 🚀"
+    "needToLogin": "Log in to use the template! 🚀",
+    "changeProfile": "Profile has been changed!"
   }
 }

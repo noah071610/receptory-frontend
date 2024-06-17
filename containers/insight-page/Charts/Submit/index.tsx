@@ -80,7 +80,7 @@ const SubmitChart = ({ data, initialTarget }: { data: DateAnalyserType; initialT
                     onClick={() => onClickMenu(yearMonth)}
                     key={`${yearMonth}`}
                   >
-                    <span>{setDateFormat({ date: new Date(yearMonth), lang: pageLang, noDate: true })}</span>
+                    <span>{setDateFormat({ date: new Date("2024-06"), lang: pageLang, noDate: true })}</span>
                   </button>
                 </SwiperSlide>
               )

@@ -26,6 +26,7 @@
     border-radius: 30px;
     background-color: var(--blue);
     @include flex;
+    @include shadow;
 
     span {
       font-size: 17px;

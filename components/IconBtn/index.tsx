@@ -20,7 +20,7 @@ function IconBtn({
   disabled?: boolean
 }) {
   return (
-    <div className={cx("btn-wrapper", className)}>
+    <div className={cx(className, "btn-wrapper")}>
       <button onClick={onclick} className={cx(iconClassName, "icon")} disabled={disabled} type="button">
         <FontAwesomeIcon icon={icon} />
       </button>

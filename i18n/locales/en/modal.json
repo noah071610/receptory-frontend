@@ -35,6 +35,9 @@
   "setPassword": "Set Password",
   "confirmPasswordPlaceholder": "Confirm Password",
   "submitSetting": "Complete Setting",
+  "profileSetting": "Change Profile",
+  "setUserName": "Change Nickname",
+  "enterUserName": "Enter Nickname",
 
   "ko": "Korean",
   "en": "English",

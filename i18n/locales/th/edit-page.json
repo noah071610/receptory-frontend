@@ -130,6 +130,7 @@
 
   "confirmDataExample": "ฟอร์มที่ส่งจะแสดงที่นี่",
   "LinkPlaceholder": "ใส่ลิงก์",
+  "noneSelect": "ไม่มีการเลือก",
 
   "options": {
     "specificDate": "ตั้งค่าวันที่เฉพาะเจาะจง",

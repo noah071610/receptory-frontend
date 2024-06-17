@@ -19,7 +19,7 @@ export const convertContent = ({
   const thumbnailEmbedContent: { title: string; description: string; thumbnail: string } = {
     title: thumbnailSection.data.title ?? "",
     description: thumbnailSection.data.description ?? "",
-    thumbnail: thumbnailSection.style?.background ?? thumbnailSection?.src ?? "",
+    thumbnail: thumbnailSection.style?.background ?? "",
   }
   const embedContent = {
     title: content.pageOptions.embed.title,

@@ -52,3 +52,12 @@
     animation: hide-cover 500ms forwards;
   }
 }
+
+.page-loading {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-height: 100svh; // check :
+  @include flex;
+}

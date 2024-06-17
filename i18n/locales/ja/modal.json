@@ -35,6 +35,9 @@
   "setPassword": "パスワード設定",
   "confirmPasswordPlaceholder": "パスワード確認",
   "submitSetting": "設定完了",
+  "profileSetting": "プロファイル設定",
+  "setUserName": "ニックネーム",
+  "enterUserName": "テキスト入力",
 
   "ko": "韓国",
   "en": "アメリカ",

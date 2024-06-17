@@ -45,6 +45,7 @@
     height: 35px;
 
     .slide {
+      width: auto;
       border-radius: 20px;
       transition: 300ms all;
     }
@@ -69,12 +70,13 @@
     width: 100%;
     height: 100%;
     @include flex;
-    padding: 7px 15px;
+    padding: 7px 20px;
     span {
       font-size: 15px;
       font-weight: 600;
       transition: 300ms all;
       color: var(--black-soft);
+      white-space: nowrap;
     }
   }
 }

@@ -6,5 +6,6 @@ export interface UserType {
   userImage: string
   provider: Providers
   plan: number
+  color: string
   createdAt: Date
 }

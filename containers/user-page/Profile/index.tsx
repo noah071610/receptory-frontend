@@ -1,6 +1,7 @@
 "use client"
 
 import { _url, userPlan } from "@/config"
+import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
@@ -16,7 +17,7 @@ const cx = cs.bind(style)
 
 const options = {
   contents: ["template", "guide"],
-  settings: ["changeSiteLang", "deleteAccount"],
+  settings: ["changeProfile", "changeSiteLang", "deleteAccount"],
   inform: ["upgrade", "terms-and-policy", "feedback", "report"],
 }
 
@@ -57,7 +58,12 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
           window.open(`${_url.client}/terms-and-policy`, "_blank")
         }
         break
-
+      case "changeProfile":
+        setModal({
+          section: null,
+          type: "changeProfile",
+        })
+        break
       case "changeSiteLang":
         setModal({
           section: null,
@@ -69,6 +75,10 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
         })
         break
       case "template":
+        if (typeof window === "object") {
+          window.open(`${_url.client}/template`)
+        }
+        break
       case "guide":
         toastSuccess("comingsoon")
         break
@@ -81,7 +91,7 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
     <>
       <div className={cx("profile")}>
         <div className={cx("user-icon")}>
-          <div>
+          <div style={{ backgroundColor: user.color ?? colors.blue }}>
             <span>{user.userName[0]}</span>
           </div>
         </div>

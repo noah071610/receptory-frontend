@@ -2,6 +2,7 @@
 
 import { getSaves } from "@/actions/save"
 import PageLoading from "@/components/Loading/LoadingPage"
+import ChangeProfile from "@/components/Modal/ChangeProfile"
 import ConfirmHard from "@/components/Modal/ConfirmHard"
 import SelectLang from "@/components/Modal/SelectLang"
 import { queryKey } from "@/config"
@@ -106,6 +107,7 @@ const UserPage = ({ lang }: { lang: Langs }) => {
             setIsLoading={setIsLoading}
           />
         )}
+        {modal.type === "changeProfile" && <ChangeProfile user={user} setIsLoading={setIsLoading} />}
       </UserPageLayout>
     )
   )

@@ -51,7 +51,10 @@ export default function LoginPage({ lang }: { lang: Langs }) {
         <span style={getAnimation({ type: "fadeUpBig", delay: 100 })} className={cx("label")}>
           {t("login")}
         </span>
-        <h1 style={getAnimation({ type: "fadeUpBig", delay: 320 })}>{t("title")}</h1>
+        <h1
+          style={getAnimation({ type: "fadeUpBig", delay: 320 })}
+          dangerouslySetInnerHTML={{ __html: t("title") }}
+        ></h1>
         <p style={getAnimation({ type: "fadeUpBig", delay: 600 })}>{t("description")}</p>
         <ul>
           <li>

@@ -42,5 +42,9 @@
   "th": "태국",
   "selectLang": "페이지의 언어를 선택해주세요",
   "changeLanguage": "언어 변경",
-  "addSave": "페이지 만들기"
+  "addSave": "페이지 만들기",
+
+  "profileSetting": "프로필 변경",
+  "setUserName": "닉네임 변경",
+  "enterUserName": "닉네임 입력"
 }

@@ -3,14 +3,13 @@
 import Loading from "@/components/Loading"
 import ImageSelector from "@/components/Modal/ImageSelector"
 import SectionLayout from "@/components/Sections/index"
-import { initialStates, useEditorStore } from "@/store/editor"
+import { useEditorStore } from "@/store/editor"
 import cs from "classnames/bind"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useLayoutEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import style from "./style.module.scss"
 
 import { getSave } from "@/actions/save"
-import PageLoading from "@/components/Loading/LoadingPage"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
 import Header from "@/containers/edit-page/Header"
@@ -21,13 +20,45 @@ import SectionList from "@/containers/edit-page/SectionList"
 import { sectionMap } from "@/containers/edit-page/sectionMap"
 import { usePageValidator } from "@/hooks/usePageValidator"
 import { useInitTranslation } from "@/i18n/client"
-import i18next from "@/i18n/init"
 import { useMainStore } from "@/store/main"
+import { EditStage } from "@/types/Edit"
 import { Langs } from "@/types/Main"
-import { SaveType } from "@/types/Page"
+import { PageFormatType, SaveType } from "@/types/Page"
+import { createNewSection } from "@/utils/createNewSection"
 import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
+import i18n from "i18next"
 import dynamic from "next/dynamic"
 const cx = cs.bind(style)
+
+function targetT(value: string) {
+  return i18n.t(value, {
+    ns: ["edit-page"],
+  })
+}
+
+const getInitialStates = (lang: Langs) => ({
+  homeSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "simple", newId: "thumbnail" })],
+  formSections: [createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "formThumbnail" })],
+  confirmSections: [
+    createNewSection({ type: "thumbnail", index: 0, designInit: "background", newId: "rendingThumbnail" }),
+    createNewSection({ type: "confirm", index: 1, newId: "confirm" }),
+  ],
+  stage: "home" as EditStage,
+  currentUsedImages: [] as string[],
+  currentUsedColors: [] as string[],
+  pageOptions: {
+    format: "inactive" as PageFormatType,
+    lang,
+    customLink: "",
+    isUseHomeThumbnail: true,
+    isNotUseCustomLink: true,
+    embed: {
+      title: targetT("embedInitialTitle") as string,
+      description: "",
+      src: "",
+    },
+  },
+})
 
 const DatePicker = dynamic(() => import("@/components/Modal/DatePicker"), {
   ssr: true,
@@ -68,6 +99,14 @@ const EditPage = ({ lang }: { lang: Langs }) => {
   ])
 
   useEffect(() => {
+    if (typeof window === "object") {
+      window.scrollTo({
+        top: 0,
+      })
+    }
+  }, [stage])
+
+  useEffect(() => {
     if (!save && pageId && user) {
       !(async function () {
         const data = await getSave(pageId)
@@ -83,12 +122,14 @@ const EditPage = ({ lang }: { lang: Langs }) => {
         setPageLang(data.lang)
 
         if (!data.content?.homeSections || data.content?.homeSections?.length <= 0) {
+          const initContent = getInitialStates(data.lang)
           await saveContentFromEditor({
-            content: initialStates,
+            content: initContent,
             pageId,
             lang: data.lang,
             noMessage: true,
           })
+          loadSections(initContent)
           return setIsLoading(false)
         }
 
@@ -108,50 +149,52 @@ const EditPage = ({ lang }: { lang: Langs }) => {
     [confirmSections, formSections, homeSections, stage]
   )
 
-  // page의 lang이 아니라 브라우저 언어로 보여주기
-  useLayoutEffect(() => {
-    if (i18next) {
-      i18next.changeLanguage(lang)
-    }
-    setPageLang(lang)
-  }, [lang, setPageLang])
+  console.log(homeSections[0])
 
   return (
     <>
       <Header />
       <PageLayout>
-        <div className={cx("main", { isRending: stage === "rending" })}>
-          <div className={cx("loading-cover", { success: !isLoading })}>{isLoading && <Loading isFull={true} />}</div>
-          <div className={cx("editor")}>
-            {stage !== "rending" &&
-              topSections?.map((v, i) => (
-                <SectionLayout key={`top-${stage}-${i}`} pathname={pathname} isTopSection={true} section={v}>
-                  {sectionMap[v.type](v)}
-                </SectionLayout>
-              ))}
-
-            {stage === "home" && <SectionList sections={homeSections} stage={stage} />}
-            {stage === "form" && <SectionList sections={formSections} stage={stage} />}
-            {stage === "confirm" && <SectionList sections={confirmSections} stage={stage} />}
-            {stage === "rending" && <Rending isLoading={isModalLoading} setIsLoading={setIsModalLoading} />}
-
-            {stage !== "rending" && <EditorFooter lang={lang} />}
+        {isLoading ? (
+          <div className={cx("page-loading")}>
+            <Loading isFull={true} />
           </div>
-          {stage !== "rending" && <Preview />}
-        </div>
+        ) : (
+          <>
+            <div className={cx("main", { isRending: stage === "rending" })}>
+              <div className={cx("loading-cover", { success: !isLoading })}>
+                {isLoading && <Loading isFull={true} />}
+              </div>
+              <div className={cx("editor")}>
+                {stage !== "rending" &&
+                  topSections?.map((v, i) => (
+                    <SectionLayout key={`top-${stage}-${i}`} pathname={pathname} isTopSection={true} section={v}>
+                      {sectionMap[v.type](v)}
+                    </SectionLayout>
+                  ))}
 
-        {active.modal.type?.includes("image") && (
-          <ImageSelector
-            lang={lang}
-            IsUseEmoji={!!active.modal.type.match(/(callout|thumbnail)/g)?.length}
-            setIsLoading={setIsModalLoading}
-          />
+                {stage === "home" && <SectionList sections={homeSections} stage={stage} />}
+                {stage === "form" && <SectionList sections={formSections} stage={stage} />}
+                {stage === "confirm" && <SectionList sections={confirmSections} stage={stage} />}
+                {stage === "rending" && <Rending isLoading={isModalLoading} setIsLoading={setIsModalLoading} />}
+
+                {stage !== "rending" && <EditorFooter lang={lang} />}
+              </div>
+              {stage !== "rending" && <Preview />}
+            </div>
+            {active.modal.type?.includes("image") && (
+              <ImageSelector
+                lang={lang}
+                IsUseEmoji={!!active.modal.type.match(/(callout|thumbnail)/g)?.length}
+                setIsLoading={setIsModalLoading}
+              />
+            )}
+            {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
+            {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
+            {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
+            {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
+          </>
         )}
-        {modal.type === "time" && modal.section && <TimePicker section={modal.section} />}
-        {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
-        {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
-        {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
-        <PageLoading isLoading={isModalLoading} />
       </PageLayout>
     </>
   )

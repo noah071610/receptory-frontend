@@ -125,9 +125,9 @@
   "editList": "リスト",
   "putGoogleMapCode": "Google マップコードを入力",
   "selectColor": "カラー選択",
-
   "confirmDataExample": "提出されたフォームはここに表示されます",
   "LinkPlaceholder": "リンクを入力",
+  "noneSelect": "選択なし",
 
   "options": {
     "specificDate": "特定の日付を設定",

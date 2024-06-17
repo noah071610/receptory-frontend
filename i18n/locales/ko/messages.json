@@ -7,7 +7,6 @@
     "existEmail": "이미 누가 사용하고 있는 이메일이에요",
     "invalidEmail": "올바른 이메일 형식이 아니에요",
     "loginFailBadRequest": "이메일 혹은 비밀번호가 올바르지 않아요",
-
     "login": "로그인이 필요해요",
     "noFound": "페이지를 찾지 못했습니다.",
     "inactivePage": "현재 비공개 상태인 페이지에요.",
@@ -27,7 +26,9 @@
     "noEmptyCustomLink": "링크에 공백은 포함 될 수 없습니다.",
     "invalidCustomLink": "링크에 영문자가 아닌 문자 또는 특수문자, 공백은 포함 될 수 없습니다.",
     "alreadyUsedCustomLink": "다른 사람이 사용 중인 커스텀 링크에요",
-    "maximumPage": "페이지는 최대 2개까지 만들 수 있어요"
+    "maximumPage": "페이지는 최대 2개까지 만들 수 있어요",
+
+    "userNameLength": "닉네임을 입력해주세요."
   },
   "success": {
     "deploy": "배포 완료! 🚀",
@@ -37,6 +38,8 @@
     "inactive": "페이지를 비활성화 했어요.",
     "copyConfirmId": "예약번호를 복사했어요 🎉",
     "comingsoon": "준비 중인 서비스에요 🚀",
-    "needToLogin": "로그인해서 템플릿을 사용해보세요! 🚀"
+    "needToLogin": "로그인해서 템플릿을 사용해보세요! 🚀",
+
+    "changeProfile": "프로필을 변경했어요."
   }
 }

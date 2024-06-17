@@ -36,6 +36,10 @@
   "confirmPasswordPlaceholder": "ยืนยันรหัสผ่าน",
   "submitSetting": "เสร็จสิ้นการตั้งค่า",
 
+  "profileSetting": "เปลี่ยนโปรไฟล์",
+  "setUserName": "เปลี่ยนชื่อเล่น",
+  "enterUserName": "ใส่ชื่อเล่น",
+
   "ko": "เกาหลี",
   "en": "อังกฤษ",
   "ja": "ญี่ปุ่น",

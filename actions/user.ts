@@ -1,13 +1,23 @@
 import { API } from "@/config"
 import { UserType } from "@/types/User"
-import { Cookies } from "react-cookie"
-
-const cookies = new Cookies()
 
 export async function getUser() {
   if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
     // 완벽. 가져와
     const response = await API.get(`/auth`)
+
+    return response.data
+  } else {
+    // 잉? 리프레쉬 해줘야겠네
+    const user = await refreshUser()
+    return user
+  }
+}
+
+export async function profileChange(data: { userName: string; color: string }) {
+  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+    // 완벽. 가져와
+    const response = await API.post(`/auth/profile`, data)
 
     return response.data
   } else {
