@@ -13,12 +13,12 @@ import TimeChart from "@/containers/insight-page/Charts/Time"
 import ConfirmationList from "@/containers/insight-page/ConfirmationList"
 import PageInfo from "@/containers/insight-page/PageInfo"
 import { usePageValidator } from "@/hooks/usePageValidator"
-import i18next from "@/i18n/init"
+import { useInitTranslation } from "@/i18n/client"
 import { useMainStore } from "@/store/main"
 import { InsightPageType, SelectChartType } from "@/types/Insight"
 import { Langs } from "@/types/Main"
 import { useQuery } from "@tanstack/react-query"
-import { useLayoutEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 const cx = cs.bind(style)
 
 const getChartArr = (type: "choices" | "select", pageData: InsightPageType) =>
@@ -44,9 +44,10 @@ const getChartArr = (type: "choices" | "select", pageData: InsightPageType) =>
     }, [] as SelectChartType[])
 
 const InsightPage = ({ lang }: { lang: Langs }) => {
+  const {} = useInitTranslation(lang, ["insight-page", "messages", "modal"])
   const { pageId, user } = usePageValidator({ isAuth: true })
 
-  const { modal, setModal, setPageLang } = useMainStore(["modal", "setModal", "setPageLang"])
+  const { modal, setModal } = useMainStore(["modal", "setModal"])
   const [selectedSection, setSelectedSection] = useState<"insight" | "list">("insight")
 
   const onClickMain = (e: any) => {
@@ -105,14 +106,6 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
     }
   }, [isChoicesDisplay, pageData])
 
-  // page의 lang이 아니라 브라우저 언어로 보여주기
-  useLayoutEffect(() => {
-    if (i18next) {
-      i18next.changeLanguage(lang)
-    }
-    setPageLang(lang)
-  }, [lang, setPageLang])
-
   return (
     user && (
       <div onClick={onClickMain} className={cx("page")}>
@@ -133,7 +126,11 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
                 </div>
               }
             </div>
-            <ConfirmationList isVisible={selectedSection === "list"} formSections={formSections} />
+            <ConfirmationList
+              setSelectedSection={setSelectedSection}
+              isVisible={selectedSection === "list"}
+              formSections={formSections}
+            />
           </div>
         ) : (
           <PageLoading isLoading={true} />

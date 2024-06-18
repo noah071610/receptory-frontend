@@ -7,7 +7,13 @@ import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function EmojiStage({ type }: { type?: string }) {
-  const { setSrc, setActive, setOptions } = useEditorStore(["setSrc", "setActive", "setOptions"])
+  const { active, setSrc, setActive, setOptions, setList } = useEditorStore([
+    "active",
+    "setSrc",
+    "setActive",
+    "setOptions",
+    "setList",
+  ])
   const onEmojiClick = (data: EmojiClickData) => {
     switch (type) {
       case "thumbnail":
@@ -16,6 +22,21 @@ export default function EmojiStage({ type }: { type?: string }) {
           payload: data.imageUrl,
         })
         setOptions({ payload: "emoji", key: "imageStatus" })
+        break
+
+      case "select":
+      case "choices":
+        setList({
+          index: active.modal.payload,
+          key: "src",
+          payload: data.imageUrl,
+        })
+
+        setList({
+          index: active.modal.payload,
+          key: "options",
+          payload: { imageStatus: "emoji" },
+        })
         break
     }
 

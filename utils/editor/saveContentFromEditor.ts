@@ -66,7 +66,7 @@ export async function saveContentFromEditor({
   const data = convertContent({ content, pageId, lang })
 
   const isOk = await save(data)
-  if (isOk) {
+  if (isOk === "ok") {
     !noMessage && toastSuccess("saved")
     return isOk
   }

@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react"
 import style from "./style.module.scss"
 
 import { getSave } from "@/actions/save"
+import PageLoading from "@/components/Loading/LoadingPage"
 import ModalLoading from "@/components/Modal/ModalLoading"
 import EditorFooter from "@/containers/edit-page/EditorFooter"
 import Header from "@/containers/edit-page/Header"
@@ -149,8 +150,6 @@ const EditPage = ({ lang }: { lang: Langs }) => {
     [confirmSections, formSections, homeSections, stage]
   )
 
-  console.log(homeSections[0])
-
   return (
     <>
       <Header />
@@ -185,7 +184,7 @@ const EditPage = ({ lang }: { lang: Langs }) => {
             {active.modal.type?.includes("image") && (
               <ImageSelector
                 lang={lang}
-                IsUseEmoji={!!active.modal.type.match(/(callout|thumbnail)/g)?.length}
+                isUseEmoji={!!active.modal.type.match(/(callout|thumbnail|select|choices)/g)?.length}
                 setIsLoading={setIsModalLoading}
               />
             )}
@@ -193,6 +192,7 @@ const EditPage = ({ lang }: { lang: Langs }) => {
             {modal.type === "date" && modal.section && <DatePicker section={modal.section} />}
             {modal.type === "dateSelect" && modal.section && <DateSelector section={modal.section} />}
             {modal.type === "select" && modal.section && <SelectList section={modal.section} />}
+            <PageLoading isLoading={isModalLoading} />
           </>
         )}
       </PageLayout>

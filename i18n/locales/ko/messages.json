@@ -15,7 +15,7 @@
     "invalidDeleteConfirmText": "삭제 확인 텍스트가 정확하지 않습니다.",
     "unknown": "예상치 못한 에러가 발생했어요 😭",
     "invalidAccess": "잘못된 접근입니다",
-    "underThen10Images": "10개 이하의 이미지를 업로드 해주세요",
+    "underThen5Images": "5개 이하의 이미지를 업로드 해주세요",
     "notSamePassword": "패스워드가 일치하지 않아요",
     "safePassword": "영문, 숫자, 특수문자를 포함한 8자리 이상 15자리 이하로 입력해주세요",
     "safeConfirmPassword": "패스워드는 최소 5글자 이상을 입력해주세요.",
@@ -27,7 +27,6 @@
     "invalidCustomLink": "링크에 영문자가 아닌 문자 또는 특수문자, 공백은 포함 될 수 없습니다.",
     "alreadyUsedCustomLink": "다른 사람이 사용 중인 커스텀 링크에요",
     "maximumPage": "페이지는 최대 2개까지 만들 수 있어요",
-
     "userNameLength": "닉네임을 입력해주세요."
   },
   "success": {

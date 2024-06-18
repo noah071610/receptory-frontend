@@ -36,7 +36,12 @@ const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
                     const start = `${i.toString().padStart(2, "0")}:00`
                     const end = `${(i + 1).toString().padStart(2, "0")}:00`
                     return (
-                      <button onClick={() => onClickTime(start, end)} className={cx("count-btn")} key={`am-${i}`}>
+                      <button
+                        disabled={v === 0}
+                        onClick={() => onClickTime(start, end)}
+                        className={cx("count-btn")}
+                        key={`am-${i}`}
+                      >
                         <div className={cx("content", "time")}>
                           <NumberRange start={start} end={end} />
                         </div>
@@ -56,7 +61,12 @@ const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
                     const start = `${(i + 12).toString().padStart(2, "0")}:00`
                     const end = `${(i + 12 + 1).toString().padStart(2, "0")}:00`
                     return (
-                      <button onClick={() => onClickTime(start, end)} className={cx("count-btn")} key={`am-${i}`}>
+                      <button
+                        disabled={v === 0}
+                        onClick={() => onClickTime(start, end)}
+                        className={cx("count-btn")}
+                        key={`am-${i}`}
+                      >
                         <div className={cx("content", "time")}>
                           <NumberRange start={start} end={end} />
                         </div>

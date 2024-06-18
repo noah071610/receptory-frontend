@@ -48,9 +48,9 @@ function Dropzone({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     onDropRejected: (files) => {
-      if (files.length > 10) {
+      if (files.length > 5) {
         // 10개 이하의 이미지를 업로드 해주세요
-        return toastError("underThen10Images")
+        return toastError("underThen5Images")
       }
       for (let i = 0; i < files.length; i++) {
         return toastError(files[i].errors[0].code)

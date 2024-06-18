@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
+import { colors } from "@/config/colors"
 import { toastError } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import cs from "classnames/bind"
@@ -33,13 +34,21 @@ const ListEdit = ({
   section: SectionType
   onDelete: (i: number) => void
 }) => {
+  const imageStatus = list.options.imageStatus
+
   return (
     <li key={`edit-${list.id}`}>
       <div className={cx("inner")}>
         <div
           onClick={() => onClickAddImage(listIndex)}
-          style={{ background: list.src ? getImageUrl({ url: list.src }) : "none" }}
-          className={cx("image")}
+          style={{
+            background: list.src
+              ? imageStatus === "emoji"
+                ? `url('${list.src}') center no-repeat ${colors.blueSoft}`
+                : getImageUrl({ url: list.src })
+              : "none",
+          }}
+          className={cx("image", { isEmoji: imageStatus === "emoji" })}
         >
           <FontAwesomeIcon icon={faPlus} />
         </div>

@@ -4,6 +4,7 @@
   width: 100%;
   @include flex;
   padding-top: 30px;
+  padding-bottom: 20px;
   button {
     @include btn-submit-style;
     padding: 10px 15px;

@@ -71,8 +71,8 @@
     "description": "説明",
     "label": "ラベル",
     "imageSize": "画像サイズ",
-    "width": "幅",
-    "length": "長さ"
+    "width": "横に長く",
+    "length": "縦に長く"
   },
   "home": "ホームページ",
   "form": "提出ページ",

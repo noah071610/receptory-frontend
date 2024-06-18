@@ -1,11 +1,18 @@
 @import "@/styles/variables.scss";
 
 .search {
-  position: relative;
+  position: sticky;
+  top: 0;
   padding: 16px;
-  padding-bottom: 30px;
   background-color: var(--white);
   margin-bottom: 30px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
+  overflow: hidden;
+  transition: all 220ms ease-in-out;
+  height: auto;
+  @include medium {
+    height: 73px;
+    &.isFocus {
+      height: auto !important;
+    }
+  }
 }

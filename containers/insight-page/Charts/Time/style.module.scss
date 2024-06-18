@@ -49,6 +49,10 @@
       opacity: 0.5;
     }
   }
+  &:disabled {
+    cursor: unset;
+    opacity: 0.5;
+  }
 }
 
 .count {

@@ -49,6 +49,7 @@ export const SelectList = ({ section }: { section: SectionType }) => {
     setSelected({ section, value: userSelectedList })
     setModal({ section: null, type: null })
   }
+  console.log(selectList)
 
   return (
     <ModalLayout modalStyle={style.content}>
@@ -58,6 +59,7 @@ export const SelectList = ({ section }: { section: SectionType }) => {
             <ul className={cx("list-wrapper", "basic-list-wrapper")}>
               {selectList.map((v, i) => (
                 <BasicList
+                  imageStatus={v.options.imageStatus}
                   key={`basic-list-${v.id}`}
                   userSelectedList={userSelectedList}
                   v={v}
@@ -72,6 +74,7 @@ export const SelectList = ({ section }: { section: SectionType }) => {
             <ul className={cx("list-wrapper", "thumb-list-wrapper")}>
               {selectList.map((v, i) => (
                 <ThumbList
+                  imageStatus={v.options.imageStatus}
                   key={`thumb-list-${v.id}`}
                   userSelectedList={userSelectedList}
                   v={v}

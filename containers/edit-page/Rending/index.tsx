@@ -161,8 +161,6 @@ export default function Rending({
 
   const embedContent = isUseHomeThumbnail ? thumbnailEmbedContent : embed
 
-  console.log("## ", thumbnailEmbedContent)
-
   return (
     <div className={cx("layout")}>
       <section>

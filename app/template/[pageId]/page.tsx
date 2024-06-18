@@ -5,7 +5,10 @@ import TemplatePageHome from "@/containers/template-page/TemplatePage"
 import { SectionType } from "@/types/Edit"
 import { TemplatePage } from "@/types/Template"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
+import hasString from "@/utils/helpers/hasString"
 import PageError from "./error"
+
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata({ params: { pageId }, searchParams: { s } }: any) {
   const data = await getData(pageId)
@@ -14,44 +17,44 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
   }
 
   return {
-    title: data.title + " | Receptory",
+    title: data.title + " | Template",
     icons: {
       icon: `/images/favicon.png`, // /public path
     },
     description: data.description ?? "",
-    // openGraph: {
-    //   description: data.description ?? "",
-    //   images: [
-    //     {
-    //       url: hasString(data.thumbnail) ? data.thumbnail : "./images/thumbnail.jpg",
-    //       width: 600,
-    //       height: 315,
-    //       alt: `${data.title}-thumbnail`,
-    //     },
-    //   ],
-    //   type: "website",
-    //   siteName: "receptori",
-    // },
-    // twitter: {
-    //   card: "summary_large_image",
-    //   title:
-    //     data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
-    //   description: data.description ?? "",
-    //   images: [
-    //     {
-    //       url: hasString(data.thumbnail) ? data.thumbnail : "./images/thumbnail.jpg",
-    //       width: 600,
-    //       height: 315,
-    //       alt: `${data.title}-thumbnail`,
-    //     },
-    //   ],
-    // },
+    openGraph: {
+      description: data.description ?? "",
+      images: [
+        {
+          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
+          width: 600,
+          height: 315,
+          alt: `${data.title}-thumbnail`,
+        },
+      ],
+      type: "website",
+      siteName: "receptori",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data.title + " | Template",
+      description: data.description ?? "",
+      images: [
+        {
+          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
+          width: 600,
+          height: 315,
+          alt: `${data.title}-thumbnail`,
+        },
+      ],
+    },
   }
 }
 
 async function getData(pageId: string): Promise<TemplatePage | undefined> {
   const res = await fetch(`${_url.server}/website/template?pageId=${pageId}`, {
     method: "GET",
+    cache: "no-cache",
   })
 
   if (res.status === 404) return undefined

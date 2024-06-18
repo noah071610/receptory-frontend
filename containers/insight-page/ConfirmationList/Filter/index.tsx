@@ -9,9 +9,9 @@ import SortList from "./SortList"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const Filter = ({ formSections }: { formSections?: SectionType[] }) => {
+const Filter = ({ formSections, isFocus }: { formSections?: SectionType[]; isFocus: boolean }) => {
   return (
-    <div className={cx("search")}>
+    <div data-closer="search" className={cx("search", { isFocus })}>
       <SearchBar />
       <SortList formSections={formSections} />
       <FilterList formSections={formSections} />

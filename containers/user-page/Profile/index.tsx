@@ -1,6 +1,7 @@
 "use client"
 
-import { _url, userPlan } from "@/config"
+import { logout } from "@/actions/user"
+import { _url, queryKey, userPlan } from "@/config"
 import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
@@ -8,6 +9,7 @@ import { Langs } from "@/types/Main"
 import { UserType } from "@/types/User"
 import { faFlag, faGear, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -17,7 +19,7 @@ const cx = cs.bind(style)
 
 const options = {
   contents: ["template", "guide"],
-  settings: ["changeProfile", "changeSiteLang", "deleteAccount"],
+  settings: ["changeProfile", "changeSiteLang", "logout", "deleteAccount"],
   inform: ["upgrade", "terms-and-policy", "feedback", "report"],
 }
 
@@ -28,8 +30,15 @@ const menu = [
 ]
 
 const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
+  const queryClient = useQueryClient()
+  const { push, replace } = useRouter()
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKey.user })
+    },
+  })
   const { t } = useTranslation(["user-page"])
-  const { push } = useRouter()
   const { setModal } = useMainStore(["setModal"])
   const [selectedOption, setSelectedOption] = useState<null | "settings" | "inform" | "contents">(null)
 
@@ -44,7 +53,7 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
     }
   }
 
-  const onClickSubmenu = (type: any) => {
+  const onClickSubmenu = async (type: any) => {
     switch (type) {
       case "deleteAccount":
         setModal({
@@ -81,6 +90,11 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
         break
       case "guide":
         toastSuccess("comingsoon")
+        break
+      case "logout":
+        logoutMutation.mutate()
+        alert("logout")
+        replace("/login")
         break
       default:
         break

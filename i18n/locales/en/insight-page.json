@@ -15,5 +15,6 @@
   "calendar": "Date-based",
   "time": "Hour-based",
   "select": "Select List Statistics",
-  "choices": "Multiple Choice Statistics"
+  "choices": "Multiple Choice Statistics",
+  "defaultDescription": "No Description"
 }

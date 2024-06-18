@@ -1,7 +1,6 @@
 "use client"
 import { DesignTypes, SectionListType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
-import Image from "next/image"
 import style from "./style.module.scss"
 
 import { SelectedValueType } from "@/types/Main"
@@ -14,20 +13,22 @@ export const BasicList = ({
   design,
   onChangeSelect,
   userSelectedList,
+  imageStatus,
 }: {
   v: SectionListType
   i: number
   design: DesignTypes
   userSelectedList: SelectedValueType[]
   onChangeSelect: (selectedList: SectionListType) => void
+  imageStatus: "image" | "emoji"
 }) => {
   const active = userSelectedList.findIndex(({ key }) => key === v.id) >= 0
   return (
     <li className={cx("list", design, { active })} onClick={() => onChangeSelect(v)}>
       {design === "imageWithText" &&
         (v.src ? (
-          <picture className={cx("image")}>
-            <Image width={100} height={80} src={v.src} alt="image" />
+          <picture className={cx("image", { isEmoji: imageStatus === "emoji" })}>
+            <img src={v.src} alt="image" />
           </picture>
         ) : (
           <div className={cx("list-number")}>

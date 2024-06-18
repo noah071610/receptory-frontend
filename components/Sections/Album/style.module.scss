@@ -33,6 +33,10 @@
     }
   }
   &.length {
+    .photo,
+    .loading {
+      height: 100%;
+    }
     &.gridTwo {
       .photo,
       .loading {
@@ -56,6 +60,7 @@
     @include flex;
     background-color: var(--blue-soft);
     img {
+      background-color: rgba(82, 82, 82, 0.1);
       position: relative;
       z-index: 10;
       object-fit: cover;
@@ -80,5 +85,5 @@
 }
 
 .input {
-  @include input-style;
+  @include input-style(true);
 }

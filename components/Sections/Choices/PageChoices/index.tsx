@@ -43,7 +43,7 @@ function PageChoices({ section }: { section: SectionType }) {
         <p>{description}</p>
       </label>
       <div className={cx("choices")}>
-        {list?.map(({ value: text, type, src, id }, i) => (
+        {list?.map(({ value: text, type, src, id, options }, i) => (
           <div
             onClick={() => onClickBtn(text, id, src)}
             key={`${type}-${i}-display`}
@@ -63,7 +63,7 @@ function PageChoices({ section }: { section: SectionType }) {
             )}
             {design === "thumbnail" && (
               <div>
-                <picture className={cx("card-thumbnail", "display")}>
+                <picture className={cx("card-thumbnail", "display", { isEmoji: options.imageStatus === "emoji" })}>
                   <img src={hasString(src) ? src : "/images/noImage.png"} alt="image" />
                 </picture>
               </div>

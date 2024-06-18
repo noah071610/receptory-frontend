@@ -12,6 +12,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from "react"
 const cx = cs.bind(style)
 
 export default function LoginPage({ lang }: { lang: Langs }) {
@@ -22,7 +23,7 @@ export default function LoginPage({ lang }: { lang: Langs }) {
   const { push } = useRouter()
 
   const onClickSocialLogin = async (provider: Providers) => {
-    const newWindow = window.open(`${_url.server}/auth/${provider}`, "popupWindow", "width=600,height=400")
+    const newWindow = window.open(`${_url.server}/auth/${provider}`, "popup", "width=600,height=400")
 
     window.addEventListener("message", async (event) => {
       // 받은 메시지가 B페이지에서 보낸 것인지 확인합니다.
@@ -30,20 +31,33 @@ export default function LoginPage({ lang }: { lang: Langs }) {
         // B페이지에서 전달받은 정보를 처리하는 함수를 호출합니다.
 
         if (event.data.userId) {
-          await refreshUser()
+          const user = await refreshUser()
           if (templateId) {
             const newSave = await selectTemplate(templateId)
+            await queryClient.setQueryData(queryKey.user, user)
             if (newSave) {
               await queryClient.invalidateQueries({ queryKey: queryKey.save.list })
               push(`/edit/${event.data.userId}/${newSave.pageId}`)
             }
           } else {
+            await queryClient.setQueryData(queryKey.user, user)
             push(`/user/${event.data.userId}`)
           }
         }
       }
     })
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = await refreshUser()
+
+      if (user) {
+        push(`/user/${user.userId}`)
+      }
+    }
+    fetchData()
+  }, [push])
 
   return (
     <div className={cx("main")}>

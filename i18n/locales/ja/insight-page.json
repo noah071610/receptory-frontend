@@ -15,5 +15,6 @@
   "calendar": "カレンダー",
   "time": "時間",
   "select": "選択リスト統計",
-  "choices": "選択肢統計"
+  "choices": "選択肢統計",
+  "defaultDescription": "説明がありません"
 }

@@ -15,7 +15,7 @@
     "invalidDeleteConfirmText": "削除確認テキストが正しくありません",
     "unknown": "エラーが発生しました 😭",
     "invalidAccess": "正しくない接続です",
-    "underThen10Images": "イメージは10枚までアップロード出来ます",
+    "underThen5Images": "イメージは5枚までアップロード出来ます",
     "notSamePassword": "パスワードが一致しません",
     "safePassword": "英数字と特殊文字を含む8文字以上15文字以下のパスワードを入力してください",
     "safeConfirmPassword": "パスワードは5文字以上入力してください",

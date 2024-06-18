@@ -13,6 +13,7 @@ const Init: React.FC<PropsWithChildren> = ({ children }) => {
       await refreshUser()
     }
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

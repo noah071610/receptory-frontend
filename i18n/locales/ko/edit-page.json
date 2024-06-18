@@ -71,8 +71,8 @@
     "description": "설명",
     "label": "라벨",
     "imageSize": "이미지 크기",
-    "width": "너비",
-    "length": "길이"
+    "width": "넓게",
+    "length": "길게"
   },
 
   "home": "메인 페이지",

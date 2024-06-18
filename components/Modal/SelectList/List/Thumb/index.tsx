@@ -3,6 +3,7 @@ import { SectionListType } from "@/types/Edit"
 import hasString from "@/utils/helpers/hasString"
 import style from "./style.module.scss"
 
+import { colors } from "@/config/colors"
 import { SelectedValueType } from "@/types/Main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
@@ -15,11 +16,13 @@ export const ThumbList = ({
   i,
   onChangeSelect,
   userSelectedList,
+  imageStatus,
 }: {
   v: SectionListType
   i: number
   onChangeSelect: (selectedList: SectionListType) => void
   userSelectedList: SelectedValueType[]
+  imageStatus: "image" | "emoji"
 }) => {
   const active = userSelectedList.findIndex(({ key }) => key === v.id) >= 0
   return (
@@ -31,7 +34,11 @@ export const ThumbList = ({
       )}
       <div
         style={{
-          background: getImageUrl({ url: hasString(v.src) ? v.src : "/images/noImage.png" }),
+          background: hasString(v.src)
+            ? imageStatus === "emoji"
+              ? `url('${v.src}') center no-repeat ${colors.blueSoft}`
+              : getImageUrl({ url: v.src })
+            : "none",
         }}
         className={cx("list-content", { active })}
       >

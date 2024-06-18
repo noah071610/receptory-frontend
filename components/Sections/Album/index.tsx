@@ -32,6 +32,7 @@ const ImageComponent = ({
 }) => {
   const { ref, isIntersecting } = useIntersectionObserver()
   const status = useProgressiveImage(src, isIntersecting)
+
   return (
     <div ref={ref} className={cx("photo-wrapper")}>
       <div className={cx("photo-background")}>
@@ -47,7 +48,7 @@ const ImageComponent = ({
       <Input
         type="input"
         className={cx("title", !isDisplayMode && "input")}
-        inputType="album"
+        inputType="titleInput"
         displayMode={isDisplayMode && "p"}
         isOptional={true}
         listIndex={index}
@@ -68,6 +69,8 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
     }
     deleteList({ targetIndex: i })
   }
+
+  console.log(section)
 
   return (
     <div className={cx("layout")}>

@@ -158,6 +158,16 @@
     object-fit: cover;
   }
 
+  &.isEmoji {
+    background-color: var(--blue-soft);
+    @include flex;
+    img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+    }
+  }
+
   .drop-zone {
     width: 100%;
     height: 100%;

@@ -27,6 +27,7 @@
 }
 
 .slide {
+  // circle design =======
   &.circle {
     input,
     textarea,
@@ -43,6 +44,14 @@
       @include shadow;
       min-height: 190px;
 
+      .card-loading {
+        width: 80px;
+        height: 80px !important;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        border-radius: 100%;
+        box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
+      }
       .card-image {
         margin-bottom: 10px;
         overflow: visible;
@@ -70,6 +79,7 @@
     }
   }
 
+  // card design =======
   &.card {
     .slide-inner {
       border-radius: 10px;
@@ -99,21 +109,18 @@
   }
 }
 
+// basic design =======
 .slide-inner {
   width: 100%;
   height: 100%;
   position: relative;
-
-  .card-background {
-    width: 100%;
-    background-color: var(--border);
-  }
 
   .card-image {
     width: 100%;
     border-radius: 3px;
     .image {
       img {
+        background-color: rgba(82, 82, 82, 0.1);
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -121,7 +128,7 @@
     }
   }
 
-  .loading {
+  .card-loading {
     @include skeleton;
   }
   .content {

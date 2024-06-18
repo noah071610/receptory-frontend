@@ -8,20 +8,21 @@ import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import EmojiStage from "./EmojiStage"
 import ImageStage from "./ImageStage"
+import ImageUrlStage from "./ImageUrlStage"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
 export default function ImageSelector({
   setIsLoading,
   lang,
-  IsUseEmoji,
+  isUseEmoji,
 }: {
   setIsLoading: (b: boolean) => void
-  IsUseEmoji?: boolean
+  isUseEmoji?: boolean
   lang: Langs
 }) {
   const { t } = useTranslation(["modal"])
-  const [curStage, setCurStage] = useState<"emoji" | "image">(IsUseEmoji ? "emoji" : "image")
+  const [curStage, setCurStage] = useState<"emoji" | "image" | "imageUrl">(isUseEmoji ? "emoji" : "imageUrl")
 
   const { active } = useEditorStore(["active"])
 
@@ -29,28 +30,31 @@ export default function ImageSelector({
 
   const isMultiple = type === "album" || type === "slider"
 
-  const onClickStage = (type: "emoji" | "image") => {
+  const onClickStage = (type: "emoji" | "image" | "imageUrl") => {
     setCurStage(type)
   }
 
   return (
     <ModalLayout modalStyle={style.content}>
-      {IsUseEmoji && (
-        <div className={cx("menu")}>
+      <div className={cx("menu")}>
+        {isUseEmoji && (
           <button className={cx({ active: curStage === "emoji" })} onClick={() => onClickStage("emoji")}>
             <span>{t("emoji")}</span>
           </button>
-          <button className={cx({ active: curStage === "image" })} onClick={() => onClickStage("image")}>
-            <span>{t("image")}</span>
-          </button>
-        </div>
-      )}
+        )}
+        <button className={cx({ active: curStage === "imageUrl" })} onClick={() => onClickStage("imageUrl")}>
+          <span>{t("imageUrl")}</span>
+        </button>
+        <button className={cx({ active: curStage === "image" })} onClick={() => onClickStage("image")}>
+          <span>{t("image")}</span>
+        </button>
+      </div>
       <div className={cx("main")}>
-        {curStage === "emoji" ? (
-          <EmojiStage type={type} />
-        ) : (
+        {curStage === "emoji" && <EmojiStage type={type} />}
+        {curStage === "image" && (
           <ImageStage lang={lang} isMultiple={isMultiple} setIsLoading={setIsLoading} type={type} />
         )}
+        {curStage === "imageUrl" && <ImageUrlStage type={type} setIsLoading={setIsLoading} />}
       </div>
     </ModalLayout>
   )

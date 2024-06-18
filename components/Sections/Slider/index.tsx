@@ -52,13 +52,16 @@ const Card = ({
       className={cx("slide-inner")}
     >
       {!isDisplayMode && <DeleteBtn srcKey="list" deleteEvent={onDelete} listIndex={i} />}
-      <div className={cx("card-background")}>
+
+      {status === "loading" && <div style={{ height }} className={cx("card-loading")}></div>}
+      {status === "success" && (
         <div style={{ height }} className={cx("card-image")}>
           <picture className={cx("image")}>
             <img src={list.src} alt="image" />
           </picture>
         </div>
-      </div>
+      )}
+
       <div className={cx("content")}>
         {isDisplayMode ? (
           <>

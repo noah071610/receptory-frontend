@@ -8,14 +8,23 @@ import { AnalyserConfirmation } from "@/types/Insight"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import { useParams } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import Confirmation from "./ConfirmationList"
 import Filter from "./Filter"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const ConfirmationList = ({ isVisible, formSections }: { isVisible: boolean; formSections?: SectionType[] }) => {
+const ConfirmationList = ({
+  isVisible,
+  formSections,
+  setSelectedSection,
+}: {
+  isVisible: boolean
+  formSections?: SectionType[]
+  setSelectedSection: (v: "insight" | "list") => void
+}) => {
+  const [isFocus, setIsFocus] = useState(true)
   const { pageId } = useParams()
 
   const { t } = useTranslation(["insight-page"])
@@ -45,14 +54,36 @@ const ConfirmationList = ({ isVisible, formSections }: { isVisible: boolean; for
     if (isFilterUpdate) {
       refetch()
       setIsFilterUpdate(false)
+      setSelectedSection("list")
+      setIsFocus(true)
+      if (window.innerWidth < 800) {
+        window.scrollTo({
+          top: 500,
+        })
+      }
     }
-  }, [isFilterUpdate, refetch, setIsFilterUpdate])
+  }, [isFilterUpdate, refetch, setIsFilterUpdate, setSelectedSection])
 
   const lists = data?.pages.flat()
 
+  const onClickLayout = (e: any) => {
+    const closestElement = e.target.closest("[data-closer]")
+
+    if (closestElement) {
+      const dataType = closestElement.getAttribute("data-closer")
+
+      if (dataType === "search") {
+        return setIsFocus(true)
+      }
+      setIsFocus(false)
+    } else {
+      setIsFocus(false)
+    }
+  }
+
   return (
-    <div className={cx("layout", { isVisible })}>
-      <Filter formSections={formSections} />
+    <div onClick={onClickLayout} className={cx("layout", { isVisible })}>
+      <Filter isFocus={isFocus} formSections={formSections} />
       <div className={cx("list-container")}>
         {lists && lists?.length > 0 ? (
           lists.map((v: AnalyserConfirmation, i: number) => <Confirmation confirmation={v} key={`list-${i}`} />)

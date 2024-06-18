@@ -14,7 +14,7 @@
   border: 1px dashed var(--border);
   @if ($isSmall) {
     border-radius: 2px;
-    padding: 4px;
+    padding: 6px 7px;
   } @else {
     border-radius: 5px;
     padding: 10px 15px;
@@ -180,6 +180,9 @@
 @mixin skeleton {
   width: 100%;
   position: relative;
+  background-color: rgba(82, 82, 82, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
 
   &::before {
     @include full;

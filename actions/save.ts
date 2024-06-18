@@ -46,7 +46,9 @@ export async function save(payload: SaveUpdateType) {
 
       return response.data
     } catch (err) {
-      console.log(err)
+      await refreshUser()
+      await API.put(`/save`, payload)
+      return "no"
     }
   }
 }

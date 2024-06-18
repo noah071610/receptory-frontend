@@ -121,6 +121,11 @@ export default function ImageStage({
               key: "src",
               payload,
             })
+            setList({
+              index: active.modal.payload,
+              key: "options",
+              payload: { imageStatus: "image" },
+            })
             break
           case "background":
             setStyle({

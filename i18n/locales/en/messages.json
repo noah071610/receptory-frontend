@@ -15,7 +15,7 @@
     "invalidDeleteConfirmText": "The deletion confirmation text is incorrect",
     "unknown": "An unexpected error occurred 😭",
     "invalidAccess": "Invalid access",
-    "underThen10Images": "Please upload less than 10 images",
+    "underThen5Images": "Please upload less than 5 images",
     "notSamePassword": "Passwords do not match",
     "safePassword": "Please enter a password with at least 8 and at most 15 characters including letters, numbers, and special characters",
     "safeConfirmPassword": "Please enter a password with at least 5 characters",

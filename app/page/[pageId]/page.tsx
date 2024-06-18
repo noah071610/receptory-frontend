@@ -9,6 +9,8 @@ import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import hasString from "@/utils/helpers/hasString"
 import PageError from "./error"
 
+export const dynamic = "force-dynamic"
+
 export async function generateMetadata({ params: { pageId }, searchParams: { s } }: any) {
   const data = await getData(pageId)
   if (!data) {
@@ -17,7 +19,7 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
   const { t } = await ssrTranslation(data.lang, ["meta"])
 
   return {
-    title: data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
+    title: data.title,
     icons: {
       icon: `/images/favicon.png`, // /public path
     },
@@ -26,7 +28,7 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
       description: data.description ?? "",
       images: [
         {
-          url: hasString(data.thumbnail) ? data.thumbnail : "./images/thumbnail.jpg",
+          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,
@@ -42,7 +44,7 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
       description: data.description ?? "",
       images: [
         {
-          url: hasString(data.thumbnail) ? data.thumbnail : "./images/thumbnail.jpg",
+          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,
@@ -55,6 +57,7 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
 async function getData(pageId: string): Promise<PageType | undefined> {
   const res = await fetch(`${_url.server}/page?pageId=${pageId}`, {
     method: "GET",
+    cache: "no-cache",
   })
 
   if (res.status === 404) return undefined

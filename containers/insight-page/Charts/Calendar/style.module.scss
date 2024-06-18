@@ -20,14 +20,13 @@
     width: auto;
     button {
       width: auto;
-      font-size: 15px;
-      border-radius: 6px;
+      font-size: 14px;
+      border-radius: 2px;
       @include border;
-      padding: 8px 14px;
+      padding: 6px 12px;
       &.active {
-        border-color: var(--blue-soft);
-        color: var(--white);
-        background-color: var(--blue);
+        border-color: var(--blue-hard);
+        color: var(--blue-hard);
       }
     }
   }

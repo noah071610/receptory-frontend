@@ -40,7 +40,9 @@ const PageInfo = ({
           />
         </picture>
         <h1>{pageData.title}</h1>
-        {hasString(pageData.description) && <span className={cx("description")}>{pageData.description}</span>}
+        <span className={cx("description")}>
+          {hasString(pageData.description) ? pageData.description : t("defaultDescription")}
+        </span>
         <div className={cx("info-layout")}>
           <ul className={cx("info-menu")}>
             {menu.map(({ value, icon }) => (

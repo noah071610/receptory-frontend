@@ -9,6 +9,7 @@ import style from "./style.module.scss"
 
 import DeleteBtn from "@/components/DeleteBtn"
 import Input from "@/components/Input"
+import { colors } from "@/config/colors"
 import { useMainStore } from "@/store/main"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import hasString from "@/utils/helpers/hasString"
@@ -19,7 +20,7 @@ import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function Choices({ section }: { section: SectionType }) {
-  const { pageLang, selected, setSelected } = useMainStore(["pageLang", "selected", "setSelected"])
+  const { selected, setSelected } = useMainStore(["selected", "setSelected"])
   const { t } = useTranslation(["edit-page"])
   const { setActive } = useEditorStore(["setActive"])
   const {
@@ -52,7 +53,7 @@ function Choices({ section }: { section: SectionType }) {
         <p>{description}</p>
       </label>
       <div className={cx("choices")}>
-        {list?.map(({ value: text, type, src, id }, i) => (
+        {list?.map(({ value: text, type, src, id, options }, i) => (
           <div
             onClick={() => onClickBtn(text, i)}
             key={`${type}-${i}`}
@@ -71,7 +72,16 @@ function Choices({ section }: { section: SectionType }) {
               </div>
             )}
             {design === "thumbnail" && (
-              <div style={{ background: getImageUrl({ url: src }) }} className={cx("card-thumbnail")}>
+              <div
+                style={{
+                  background: src
+                    ? options.imageStatus === "emoji"
+                      ? `url('${src}') center no-repeat ${colors.blueSoft}`
+                      : getImageUrl({ url: src })
+                    : "none",
+                }}
+                className={cx("card-thumbnail")}
+              >
                 {hasString(src) && <DeleteBtn isSmall={true} listIndex={i} srcKey="choices" />}
                 <button className={cx("drop-zone")} onClick={() => onClickThumbnailUpload(i)}>
                   <FontAwesomeIcon icon={faPlus} />
