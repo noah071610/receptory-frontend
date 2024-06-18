@@ -27,7 +27,10 @@
     "invalidCustomLink": "Custom link can only contain letters and numbers without spaces or special characters",
     "alreadyUsedCustomLink": "This custom link is already in use by someone else",
     "maximumPage": "You can create up to 2 pages",
-    "userNameLength": "Please enter a nickname."
+    "userNameLength": "Please enter a nickname.",
+
+    "tooMuchLongImageUrl": "Exceeded the maximum URL character count.",
+    "unknownImage": "Failed to load the image. Please use another image."
   },
   "success": {
     "deploy": "Deployment completed! 🚀",

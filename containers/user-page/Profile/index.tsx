@@ -93,7 +93,7 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
         break
       case "logout":
         logoutMutation.mutate()
-        alert("logout")
+        alert(t("logoutSuccess"))
         replace("/login")
         break
       default:

@@ -46,5 +46,7 @@
 
   "profileSetting": "프로필 변경",
   "setUserName": "닉네임 변경",
-  "enterUserName": "닉네임 입력"
+  "enterUserName": "닉네임 입력",
+
+  "enterUrl": "URL 입력"
 }

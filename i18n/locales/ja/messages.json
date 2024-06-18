@@ -27,7 +27,10 @@
     "invalidCustomLink": "リンクには英字以外の文字、特殊文字、空白などは含めることはできません",
     "alreadyUsedCustomLink": "既に他のユーザーが使用中のリンクです",
     "maximumPage": "ページは最大2つまで登録できます",
-    "userNameLength": "ニックネームを入力してください"
+    "userNameLength": "ニックネームを入力してください",
+
+    "tooMuchLongImageUrl": "URLの文字数が最大値を超えました。",
+    "unknownImage": "画像を読み込めませんでした。別の画像を使用してください。"
   },
   "success": {
     "deploy": "配備完了！ 🚀",

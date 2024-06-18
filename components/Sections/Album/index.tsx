@@ -70,8 +70,6 @@ function Album({ section, isDisplayMode }: { section: SectionType; isDisplayMode
     deleteList({ targetIndex: i })
   }
 
-  console.log(section)
-
   return (
     <div className={cx("layout")}>
       {section.list.length > 0 ? (

@@ -22,6 +22,9 @@
   "template": "템플릿",
   "guide": "가이드",
 
+  "logout": "로그아웃",
+  "logoutSuccess": "로그아웃 했습니다.",
+
   "card": {
     "insight": "인사이트",
     "gotoPage": "페이지 바로가기",

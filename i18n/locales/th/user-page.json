@@ -22,6 +22,9 @@
   "template": "เทมเพลต",
   "guide": "คู่มือ",
 
+  "logout": "ออกจากระบบ",
+  "logoutSuccess": "ออกจากระบบสำเร็จ",
+
   "card": {
     "insight": "ข้อมูลสำคัญ",
     "gotoPage": "ไปที่หน้า",

@@ -45,5 +45,7 @@
   "th": "Thai",
   "selectLang": "Please select the language",
   "changeLanguage": "Change",
-  "addSave": "Create Page"
+  "addSave": "Create Page",
+
+  "enterUrl": "Enter URL"
 }

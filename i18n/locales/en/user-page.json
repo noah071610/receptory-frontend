@@ -22,6 +22,9 @@
   "template": "Template",
   "guide": "Guide",
 
+  "logout": "Log Out",
+  "logoutSuccess": "Successfully logged out.",
+
   "card": {
     "insight": "Insight",
     "gotoPage": "Go to Page",

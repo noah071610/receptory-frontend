@@ -45,5 +45,7 @@
   "th": "タイ",
   "selectLang": "ページの言語を選択してください。",
   "changeLanguage": "言語を変更",
-  "addSave": "ページを作る"
+  "addSave": "ページを作る",
+
+  "enterUrl": "URLを入力"
 }

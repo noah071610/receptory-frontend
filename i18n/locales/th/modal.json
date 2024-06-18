@@ -46,5 +46,7 @@
   "th": "ไทย",
   "selectLang": "กรุณาเลือกภาษา",
   "changeLanguage": "เปลี่ยน",
-  "addSave": "สร้างหน้า"
+  "addSave": "สร้างหน้า",
+
+  "enterUrl": "ป้อน URL"
 }

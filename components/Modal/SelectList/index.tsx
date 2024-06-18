@@ -49,7 +49,6 @@ export const SelectList = ({ section }: { section: SectionType }) => {
     setSelected({ section, value: userSelectedList })
     setModal({ section: null, type: null })
   }
-  console.log(selectList)
 
   return (
     <ModalLayout modalStyle={style.content}>
