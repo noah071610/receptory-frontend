@@ -55,7 +55,11 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
       )}
       {title.isActive &&
         (isDisplayMode ? (
-          hasString(title.value) && <h1 className={cx("title")}>{title.value}</h1>
+          hasString(title.value) && (
+            <h1 style={{ textAlign }} className={cx("title")}>
+              {title.value}
+            </h1>
+          )
         ) : (
           <Input
             type="input"
@@ -70,7 +74,11 @@ function Title({ section, isDisplayMode }: { section: SectionType; isDisplayMode
         ))}
       {description.isActive &&
         (isDisplayMode ? (
-          hasString(description.value) && <p className={cx("description")}>{description.value}</p>
+          hasString(description.value) && (
+            <p style={{ textAlign }} className={cx("description")}>
+              {description.value}
+            </p>
+          )
         ) : (
           <Input
             type="textarea"

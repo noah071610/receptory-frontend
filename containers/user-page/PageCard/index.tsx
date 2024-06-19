@@ -11,13 +11,13 @@ import hasString from "@/utils/helpers/hasString"
 import { setDateFormat } from "@/utils/helpers/setDate"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import {
-    faArrowUpRightFromSquare,
-    faChartLine,
-    faChevronDown,
-    faClose,
-    faGlobe,
-    faPen,
-    faTrash,
+  faArrowUpRightFromSquare,
+  faChartLine,
+  faChevronDown,
+  faClose,
+  faGlobe,
+  faPen,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQueryClient } from "@tanstack/react-query"
@@ -135,7 +135,7 @@ const PageCard = ({
         <div className={cx("label")}>
           <div className={cx("label-right")}>
             <Image src={`/images/icons/${pageLang}.png`} width={20} height={20} alt="card-flag" />
-            <span>Gather form</span>
+            <span>Receptori form</span>
           </div>
 
           <div className={cx("active")}>

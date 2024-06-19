@@ -154,7 +154,7 @@ const EditPage = ({ lang }: { lang: Langs }) => {
     <>
       <Header />
       <PageLayout>
-        {isLoading ? (
+        {!save || isLoading ? (
           <div className={cx("page-loading")}>
             <Loading isFull={true} />
           </div>

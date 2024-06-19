@@ -48,5 +48,14 @@
   "setUserName": "닉네임 변경",
   "enterUserName": "닉네임 입력",
 
-  "enterUrl": "URL 입력"
+  "enterUrl": "URL 입력",
+
+  "email": "이메일",
+  "imageUrl": "URL업로드",
+  "imageUrlUpload": "URL 이미지 업로드",
+  "selectPageType": "템플릿을 사용하시겠어요?",
+  "makeWithTemplate": "템플릿으로 만들기",
+  "makeWithTemplateDescription": "템플릿을 사용해서 더 쉽고 빠르게 나만의 페이지를 만들어보세요.",
+  "makeWithBasic": "처음부터 만들기",
+  "makeWithBasicDescription": "나만의 페이지를 직접 만들어보세요."
 }

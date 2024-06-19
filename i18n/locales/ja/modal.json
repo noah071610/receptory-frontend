@@ -47,5 +47,13 @@
   "changeLanguage": "言語を変更",
   "addSave": "ページを作る",
 
-  "enterUrl": "URLを入力"
+  "enterUrl": "URLを入力",
+  "imageUrl": "URL",
+  "imageUrlUpload": "URL画像をアップロード",
+  "email": "メールアドレス",
+  "selectPageType": "テンプレートを使用しますか？",
+  "makeWithTemplate": "テンプレートで作成",
+  "makeWithTemplateDescription": "テンプレートを使用して、より簡単かつ迅速に自分のページを作成しましょう。",
+  "makeWithBasic": "最初から作成",
+  "makeWithBasicDescription": "自分のページを最初から作成しましょう。"
 }

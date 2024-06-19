@@ -55,6 +55,11 @@
     @include action {
       background-color: var(--blue);
     }
+    @include mobile {
+      &:active {
+        background-color: var(--blue);
+      }
+    }
   }
 }
 

@@ -16,12 +16,7 @@ export async function getSaves() {
   if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
     // 완벽. 가져와
     const response = await API.get(`/save/list`)
-
     return response.data
-  } else {
-    // 잉? 리프레쉬 해줘야겠네
-    const user = await refreshUser()
-    return user
   }
 }
 
@@ -39,17 +34,12 @@ export async function getSave(pageId: string) {
 }
 
 export async function save(payload: SaveUpdateType) {
+  await refreshUser()
   if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
     // 완벽. 가져와
-    try {
-      const response = await API.put(`/save`, payload)
+    const response = await API.put(`/save`, payload)
 
-      return response.data
-    } catch (err) {
-      await refreshUser()
-      await API.put(`/save`, payload)
-      return "no"
-    }
+    return response.data
   }
 }
 

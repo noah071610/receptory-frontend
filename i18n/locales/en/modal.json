@@ -47,5 +47,14 @@
   "changeLanguage": "Change",
   "addSave": "Create Page",
 
-  "enterUrl": "Enter URL"
+  "enterUrl": "Enter URL",
+
+  "imageUrl": "URL Upload",
+  "imageUrlUpload": "Upload Image URL",
+  "email": "Email",
+  "selectPageType": "Would you like to use a template?",
+  "makeWithTemplate": "Create with Template",
+  "makeWithTemplateDescription": "Use a template to create your own page more easily and quickly.",
+  "makeWithBasic": "Create from Scratch",
+  "makeWithBasicDescription": "Create your own page from scratch."
 }

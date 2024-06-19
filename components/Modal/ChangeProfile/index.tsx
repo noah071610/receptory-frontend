@@ -10,6 +10,7 @@ import { colors } from "@/config/colors"
 import { toastError, toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
 import { UserType } from "@/types/User"
+import { getAnimation } from "@/utils/styles/getAnimation"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import { useState } from "react"
@@ -80,7 +81,7 @@ export const ChangeProfile = ({ user, setIsLoading }: { user: UserType; setIsLoa
   return (
     <ModalLayout modalStyle={style["change-profile-content"]}>
       <h1>{t("profileSetting")}</h1>
-      <div className={cx("preview")}>
+      <div style={getAnimation({ type: "fadeUp", delay: 250 })} className={cx("preview")}>
         <div className={cx("user-icon")}>
           <div style={{ backgroundColor: input.color }}>
             <span>{input.userName[0]}</span>
@@ -91,10 +92,15 @@ export const ChangeProfile = ({ user, setIsLoading }: { user: UserType; setIsLoa
         </div>
       </div>
       <form onSubmit={onSubmitForm}>
-        <label className={cx("title")}>
+        <label style={getAnimation({ type: "fadeUp", delay: 500 })} className={cx("title")}>
+          <h2>{t("email")}</h2>
+        </label>
+        <input style={getAnimation({ type: "fadeUp", delay: 550 })} disabled={true} value={user.email}></input>
+        <label style={getAnimation({ type: "fadeUp", delay: 600 })} className={cx("title")}>
           <h2>{t("setUserName")}</h2>
         </label>
         <input
+          style={getAnimation({ type: "fadeUp", delay: 650 })}
           placeholder={t("enterUserName")}
           value={input.userName}
           onChange={(e) => onChangeInput(e, "userName")}

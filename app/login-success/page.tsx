@@ -14,12 +14,6 @@ const LoginSuccess = () => {
     }
 
     if (userId && typeof window === "object") {
-      window.opener.postMessage(
-        { userId },
-        process.env.NODE_ENV === "production"
-          ? `https://${process.env.NEXT_PUBLIC_DOMAIN}:${process.env.NEXT_PUBLIC_PORT}`
-          : "*"
-      )
       window.close()
     }
   }, [userId, back])

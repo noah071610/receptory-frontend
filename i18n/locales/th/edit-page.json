@@ -131,6 +131,8 @@
   "confirmDataExample": "ฟอร์มที่ส่งจะแสดงที่นี่",
   "LinkPlaceholder": "ใส่ลิงก์",
   "noneSelect": "ไม่มีการเลือก",
+  "undeployUrl": "กรุณาเผยแพร่หน้า",
+  "deployedPageUrl": "ลิงก์หน้าที่เผยแพร่",
 
   "options": {
     "specificDate": "ตั้งค่าวันที่เฉพาะเจาะจง",

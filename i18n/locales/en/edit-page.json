@@ -130,6 +130,8 @@
   "confirmDataExample": "The Form will be displayed here",
   "LinkPlaceholder": "Enter link",
   "noneSelect": "None",
+  "undeployUrl": "Please deploy the page first",
+  "deployedPageUrl": "Deployed Page Link",
 
   "options": {
     "specificDate": "Set Specific Date",

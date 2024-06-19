@@ -47,6 +47,13 @@
   "selectLang": "กรุณาเลือกภาษา",
   "changeLanguage": "เปลี่ยน",
   "addSave": "สร้างหน้า",
-
-  "enterUrl": "ป้อน URL"
+  "enterUrl": "ป้อน URL",
+  "imageUrl": "URL",
+  "imageUrlUpload": "อัปโหลดภาพ URL",
+  "email": "อีเมล",
+  "selectPageType": "คุณต้องการใช้เทมเพลตหรือไม่?",
+  "makeWithTemplate": "สร้างด้วยเทมเพลต",
+  "makeWithTemplateDescription": "ใช้เทมเพลตเพื่อสร้างหน้าของคุณเองได้ง่ายและรวดเร็วยิ่งขึ้น",
+  "makeWithBasic": "สร้างตั้งแต่ต้น",
+  "makeWithBasicDescription": "สร้างหน้าของคุณเองตั้งแต่ต้น"
 }

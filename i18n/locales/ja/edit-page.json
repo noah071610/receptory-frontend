@@ -104,7 +104,7 @@
   "shareSettingTitle": "共有サムネイル設定",
   "shareSettingDescription": "リンクを共有する際に表示されるサムネイルや説明などを設定できます。",
   "customLink": "カスタムリンク",
-  "confirmExampleDescription": "ユーザーが提出したデータをここに表示されます",
+  "confirmExampleDescription": "提出したデータはここに表示されます",
   "confirmFailToLoadData": "データの読み込みに失敗しました",
   "submit": "提出する",
   "confirmationId": "受付番号",
@@ -113,7 +113,7 @@
   "deployingNow": "ただいま配備中！",
   "undeployNow": "ほぼ完了しました！",
   "saveAndDeploy": "保存して適用する",
-  "deploy": "配備",
+  "deploy": "配備する",
   "stopDeploy": "配備を停止する",
   "pickDate": "日付を選択",
   "pickAnyDate": "いつでも",
@@ -128,6 +128,8 @@
   "confirmDataExample": "提出されたフォームはここに表示されます",
   "LinkPlaceholder": "リンクを入力",
   "noneSelect": "選択なし",
+  "undeployUrl": "ページを配信してください",
+  "deployedPageUrl": "配信されたページリンク",
 
   "options": {
     "specificDate": "特定の日付を設定",

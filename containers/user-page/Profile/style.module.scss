@@ -35,14 +35,23 @@
     margin-bottom: 10px;
   }
   .plan {
+    position: relative;
     min-width: 50px;
-    max-width: 100px;
     text-align: center;
     font-size: 14px;
     color: #0a59aeda;
     padding-bottom: 20px;
-    border-bottom: 2px solid var(--border);
     margin-bottom: 30px;
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 2px;
+      background-color: var(--border);
+    }
   }
 
   .info-layout {

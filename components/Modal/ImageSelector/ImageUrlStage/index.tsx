@@ -1,14 +1,17 @@
 "use client"
 
 import IconBtn from "@/components/IconBtn"
+import PageLoading from "@/components/Loading/LoadingPage"
 import SwiperNavigation from "@/components/SwiperNavigation"
 import { toastError } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { SectionListTypes } from "@/types/Edit"
+import { createNewSection, createNewSectionList } from "@/utils/createNewSection"
 import hasString from "@/utils/helpers/hasString"
-import { faCheck } from "@fortawesome/free-solid-svg-icons"
+import { faCheck, faImages } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import cs from "classnames/bind"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { FreeMode } from "swiper/modules"
 import { SwiperSlide } from "swiper/react"
@@ -17,6 +20,7 @@ const cx = cs.bind(style)
 
 export default function ImageUrlStage({ type, setIsLoading }: { type?: string; setIsLoading: (b: boolean) => void }) {
   const { t } = useTranslation(["modal"])
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const {
     active,
     setStyle,
@@ -28,6 +32,8 @@ export default function ImageUrlStage({ type, setIsLoading }: { type?: string; s
     saveSectionHistory,
     addList,
     setActive,
+    homeSections,
+    addSection,
   } = useEditorStore([
     "active",
     "setStyle",
@@ -39,6 +45,8 @@ export default function ImageUrlStage({ type, setIsLoading }: { type?: string; s
     "saveSectionHistory",
     "addList",
     "setActive",
+    "homeSections",
+    "addSection",
   ])
   const [currentUsedImagesArr, setCurrentUsedImagesArr] = useState(
     currentUsedImages?.map((v) => ({ src: v, isAdd: false })) ?? []
@@ -46,6 +54,7 @@ export default function ImageUrlStage({ type, setIsLoading }: { type?: string; s
   const [imageUrl, setImageUrl] = useState("")
   const [isPickCurImage, setIsPickCurImage] = useState(false)
   const [preview, setPreview] = useState("")
+  const [isUrlLoading, setIsUrlLoading] = useState(false)
 
   const onClickUpload = () => {
     if (!type) return
@@ -54,14 +63,28 @@ export default function ImageUrlStage({ type, setIsLoading }: { type?: string; s
     switch (type) {
       case "slider":
       case "album":
-        addList({
-          type: type as SectionListTypes,
-          valueArrForNewList: [
-            {
+        if (active.modal.payload === "add") {
+          addList({
+            type: type as SectionListTypes,
+            valueArrForNewList: [
+              {
+                src: preview,
+              },
+            ],
+          })
+        } else {
+          const newSection = createNewSection({ type: type as SectionListTypes, index: homeSections.length })
+          newSection.list = [
+            createNewSectionList(type, 0, {
               src: preview,
-            },
-          ],
-        })
+            }),
+          ]
+          addSection({
+            type: type as SectionListTypes,
+            payload: newSection,
+          })
+        }
+
         break
       case "thumbnail":
       case "callout":
@@ -134,6 +157,7 @@ export default function ImageUrlStage({ type, setIsLoading }: { type?: string; s
     if (preview === imageUrl) {
       return
     }
+    setIsUrlLoading(true)
     if (imageUrl.length > 150) {
       setImageUrl("")
       setPreview("")
@@ -142,21 +166,46 @@ export default function ImageUrlStage({ type, setIsLoading }: { type?: string; s
     const image = new Image()
     image.src = imageUrl
     image.onload = () => {
-      setPreview(imageUrl)
+      setTimeout(() => {
+        setPreview(imageUrl)
+        setIsUrlLoading(false)
+      }, 700)
     }
     image.onerror = () => {
-      // todo:
-      toastError("unknownImage")
+      setTimeout(() => {
+        toastError("unknownImage")
+        setIsUrlLoading(false)
+      }, 700)
     }
   }
+
+  const onClickFocusUrlInput = () => {
+    if (inputRef?.current) {
+      inputRef?.current.focus()
+    }
+  }
+
   return (
     <>
-      <div className={cx("image")}>
-        <img src={hasString(preview) ? preview : "/images/noImage.png"} alt="preview" />
+      <div className={cx("preview-wrapper")}>
+        {!hasString(preview) ? (
+          <div onClick={onClickFocusUrlInput} className={cx("upload-zone")}>
+            <div className={cx("icon")}>
+              <FontAwesomeIcon icon={faImages} />
+              <label>{t("imageUrlUpload")}</label>
+            </div>
+          </div>
+        ) : (
+          <div className={cx("image")}>
+            <img src={preview} alt="preview" />
+          </div>
+        )}
+        <PageLoading isLoading={isUrlLoading} isAbsolute={true} />
       </div>
+
       {!isPickCurImage && (
         <div className={cx("url-input")}>
-          <input placeholder={t("enterUrl")} type="text" value={imageUrl} onChange={onChangeUrl} />
+          <input ref={inputRef} placeholder={t("enterUrl")} type="text" value={imageUrl} onChange={onChangeUrl} />
           <div className={cx("check-url")}>
             <IconBtn iconClassName={cx("icon")} icon={faCheck} onclick={checkUrl} />
           </div>

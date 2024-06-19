@@ -1,21 +1,24 @@
 "use client"
 
-import { deploy, inactivePage } from "@/actions/page"
+import { deploy, getPageLink, inactivePage } from "@/actions/page"
 import { checkCustomLink } from "@/actions/save"
 import DeleteBtn from "@/components/DeleteBtn"
+import IconBtn from "@/components/IconBtn"
 import Input from "@/components/Input"
-import { queryKey } from "@/config"
+import { _url, queryKey } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
+import { copyTextToClipboard } from "@/utils/copy"
 import { getImageUrl } from "@/utils/helpers/getImageUrl"
 import hasString from "@/utils/helpers/hasString"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faClipboard, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import { useParams } from "next/navigation"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -65,6 +68,8 @@ export default function Rending({
     src: homeSections[0].style?.background ? homeSections[0].style.background : "",
   }
 
+  const [pageUrl, setPageUrl] = useState<null | string>(null)
+
   const onChangeFormat = async (value: "inactive" | "active" | "save") => {
     if (isLoading) return
     setIsLoading(true)
@@ -75,7 +80,7 @@ export default function Rending({
       return setIsLoading(false)
     }
     if (!isNotUseCustomLink) {
-      if (customLink.trim().length !== customLink.length) {
+      if (customLink.trim().length <= 0) {
         setIsLoading(false)
         // 링크에 공백은 포함 될 수 없습니다.
         return toastError("noEmptyCustomLink")
@@ -128,6 +133,11 @@ export default function Rending({
         toastSuccess(value === "save" ? "deploy" : value === "active" ? "deploy" : "inactive")
         setPageOptions({ type: "format", payload: payload.content.pageOptions.format })
         setRevert("clear")
+        setPageUrl(
+          value === "save" || value === "active"
+            ? `${_url.client}/page/${isNotUseCustomLink ? pageId : customLink}`
+            : null
+        )
         setIsLoading(false)
       }, 1000)
 
@@ -160,6 +170,27 @@ export default function Rending({
   }
 
   const embedContent = isUseHomeThumbnail ? thumbnailEmbedContent : embed
+
+  const onClickCopyUrl = () => {
+    if (pageUrl) {
+      copyTextToClipboard(pageUrl)
+      toastSuccess("copyLink")
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (typeof pageId === "string") {
+        const pageCustomLink: string | null = await getPageLink({ pageId })
+        if (pageCustomLink) {
+          setPageUrl(`${_url.client}/page/${pageCustomLink}`)
+        } else {
+          setPageUrl(null)
+        }
+      }
+    }
+    fetchData()
+  }, [])
 
   return (
     <div className={cx("layout")}>
@@ -272,9 +303,21 @@ export default function Rending({
                 </p>
               </>
             )}
+
+            <h4>{t("deployedPageUrl")}</h4>
+            <div className={cx("page-url")}>
+              <p>{pageUrl ?? t("undeployUrl")}</p>
+              <IconBtn
+                disabled={!pageUrl}
+                icon={faClipboard}
+                iconClassName={cx("icon", { inactive: !pageUrl })}
+                onclick={onClickCopyUrl}
+              />
+            </div>
           </div>
         </div>
       </section>
+
       <div className={cx("deploy-wrapper")}>
         <div className={cx("float-message", { active: isActive })}>
           <p>{t(isActive ? "deployingNow" : "undeployNow")}</p>

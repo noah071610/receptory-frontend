@@ -12,7 +12,6 @@ import Profile from "@/containers/user-page/Profile"
 import style from "@/containers/user-page/style.module.scss"
 import { usePageValidator } from "@/hooks/usePageValidator"
 import { useInitTranslation } from "@/i18n/client"
-import i18next from "@/i18n/init"
 import UserPageLayout from "@/layout/UserPageLayout"
 import { useMainStore } from "@/store/main"
 import { Langs } from "@/types/Main"
@@ -20,7 +19,7 @@ import { SaveListType } from "@/types/Page"
 import { useQuery } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import { useParams } from "next/navigation"
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useEffect, useState } from "react"
 const cx = cs.bind(style)
 
 const UserPage = ({ lang }: { lang: Langs }) => {
@@ -54,16 +53,15 @@ const UserPage = ({ lang }: { lang: Langs }) => {
         // 페이지는 최대 {{number}}개까지 만들 수 있어요
         return toastError("maximumPage")
       }
-      setModal({ section: null, type: "selectLang" })
+      setModal({
+        section: null,
+        type: "selectLang",
+        payload: {
+          isAddPage: true,
+        },
+      })
     }
   }
-
-  useLayoutEffect(() => {
-    if (i18next) {
-      i18next.changeLanguage(lang)
-    }
-    setPageLang(lang)
-  }, [lang, setPageLang])
 
   return (
     user && (
@@ -103,6 +101,7 @@ const UserPage = ({ lang }: { lang: Langs }) => {
             targetPageId={modal?.payload?.pageId}
             initLang={modal?.payload?.lang}
             isChangeSiteLang={modal?.payload?.isChangeSiteLang}
+            isAddPage={modal?.payload?.isAddPage}
             user={user}
             setIsLoading={setIsLoading}
           />

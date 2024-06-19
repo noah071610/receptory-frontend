@@ -6,7 +6,7 @@ import { _url, queryKey } from "@/config"
 import style from "@/containers/login-page/style.module.scss"
 import { useInitTranslation } from "@/i18n/client"
 import { Langs } from "@/types/Main"
-import { Providers } from "@/types/User"
+import { Providers, UserType } from "@/types/User"
 import { getAnimation } from "@/utils/styles/getAnimation"
 import { useQueryClient } from "@tanstack/react-query"
 import cs from "classnames/bind"
@@ -23,7 +23,7 @@ export default function LoginPage({ lang }: { lang: Langs }) {
   const { push } = useRouter()
 
   const onClickSocialLogin = async (provider: Providers) => {
-    const newWindow = window.open(`${_url.server}/auth/${provider}`, "popup", "width=600,height=400")
+    const newWindow = window.open(`${_url.server}/auth/${provider}`, "_blank", "width=600,height=400")
 
     window.addEventListener("message", async (event) => {
       // 받은 메시지가 B페이지에서 보낸 것인지 확인합니다.
@@ -49,15 +49,18 @@ export default function LoginPage({ lang }: { lang: Langs }) {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const user = await refreshUser()
+    const focusEvent = async () => {
+      const existUser: UserType | null = await refreshUser()
 
-      if (user) {
-        push(`/user/${user.userId}`)
+      if (existUser) {
+        push(`/user/${existUser.userId}`)
       }
     }
-    fetchData()
-  }, [push])
+    window.addEventListener("focus", focusEvent)
+    return () => {
+      window.removeEventListener("focus", focusEvent)
+    }
+  }, [])
 
   return (
     <div className={cx("main")}>

@@ -2,9 +2,16 @@ import { API } from "@/config"
 import { Langs, SelectedType } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
 import { convertContent } from "@/utils/editor/saveContentFromEditor"
+import { refreshUser } from "./user"
 
 export async function getPage({ pageId }: { pageId: string }) {
   const response = await API.get(`/page?pageId=${pageId}`)
+
+  return response.data
+}
+
+export async function getPageLink({ pageId }: { pageId: string }) {
+  const response = await API.get(`/page/link?pageId=${pageId}`)
 
   return response.data
 }
@@ -41,6 +48,7 @@ export async function findReservation(data: { pageId: string; confirmId: string;
 
 export async function deploy({ content, pageId, lang }: { content: SaveContentType; pageId: string; lang: Langs }) {
   const data = convertContent({ content, pageId, lang })
+  await refreshUser()
   if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
     const response = await API.post(`/page`, data)
 

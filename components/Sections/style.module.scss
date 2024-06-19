@@ -40,6 +40,7 @@
     &.active {
       visibility: visible;
     }
+
     .grab {
       width: 22px;
       height: 22px;
@@ -51,10 +52,6 @@
           fill: var(--white);
           color: var(--white);
         }
-      }
-      @include mobile {
-        width: 30px;
-        height: 30px;
       }
     }
     .icon {
@@ -68,17 +65,22 @@
           color: var(--blue);
         }
       }
-      @include mobile {
+    }
+    .margin.active {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+
+    @include mobile {
+      top: -10px;
+      .grab,
+      .icon {
         width: 30px;
         height: 30px;
         svg {
           font-size: 20px;
         }
-      }
-    }
-    .margin.active {
-      svg {
-        transform: rotate(180deg);
       }
     }
   }

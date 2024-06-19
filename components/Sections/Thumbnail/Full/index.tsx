@@ -48,6 +48,8 @@ export default function Full({
     : // 풀 타입 백그라운드 컬러
       `linear-gradient(180deg, ${backgroundColor} 87%, rgba(0,0,0,0) 100%)`
 
+  const imageStatus = section.options.imageStatus
+
   return (
     <div
       style={{
@@ -58,7 +60,16 @@ export default function Full({
       {background && !isDisplayMode && <DeleteBtn srcKey={"background"} />}
       <div className={cx("main")}>
         {!isDisplayMode && (
-          <div style={{ background: getImageUrl({ url: section.src }) }} className={cx("thumbnail")}>
+          <div
+            style={{
+              background: hasString(section.src)
+                ? imageStatus === "emoji"
+                  ? `url('${section.src}') center no-repeat rgba(255,255,255,0.3)`
+                  : getImageUrl({ url: section.src })
+                : "none",
+            }}
+            className={cx("thumbnail")}
+          >
             {hasString(section.src) && <DeleteBtn srcKey={"thumbnail"} />}
             <button className={cx("drop-zone", { hidden: !!section.src })} onClick={onClickThumbnailUpload}>
               <FontAwesomeIcon icon={faPlus} />
@@ -66,7 +77,7 @@ export default function Full({
           </div>
         )}
         {isDisplayMode && hasString(section.src) && (
-          <picture className={cx("thumbnail", "display")}>
+          <picture className={cx("thumbnail", "display", { isEmoji: imageStatus === "emoji" })}>
             <img src={section.src} alt="image" />
           </picture>
         )}

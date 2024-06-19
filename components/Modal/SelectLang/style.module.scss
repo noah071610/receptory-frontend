@@ -20,6 +20,57 @@
   padding-bottom: 20px;
 }
 
+.select-page-type {
+  .card {
+    cursor: pointer;
+    width: 100%;
+    height: 140px;
+    border-radius: 10px;
+    background-color: var(--blue-soft);
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 10px;
+    border: 2px solid transparent;
+    .left {
+      background-color: var(--white);
+      border-radius: 10px;
+      height: 100%;
+      @include flex;
+      svg {
+        font-size: 30px;
+        color: var(--gray);
+      }
+    }
+    .content {
+      padding: 15px;
+      background-color: var(--white);
+      border-radius: 10px;
+      height: 100%;
+      h3 {
+        font-size: 17px;
+        margin-bottom: 12px;
+      }
+      p {
+        font-size: 15px;
+        color: rgb(7, 56, 109);
+        text-wrap: balance;
+        line-height: 1.2;
+      }
+    }
+    &:first-of-type {
+      margin-bottom: 5px;
+    }
+
+    @include action {
+      border-color: var(--blue-hard);
+      .icon svg {
+        color: var(--blue);
+      }
+    }
+  }
+}
+
 .btn {
   width: 100%;
   height: 100px;
