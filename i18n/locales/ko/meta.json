@@ -5,5 +5,11 @@
   "form": "제출",
   "confirm": "제출 확인",
   "terms-and-policy": "이용 약관",
-  "close": "창 닫기"
+  "close": "창 닫기",
+
+  "receptori": "리셉토리",
+  "login": "로그인",
+  "description": "간편하지만 우아한 홈페이지 제작툴",
+  "template": "템플릿",
+  "insight": "인사이트"
 }

@@ -33,12 +33,15 @@ const PageInfo = ({
     <>
       <div className={cx("page-info")}>
         <IconBtn onclick={() => push(`/user/${userId}`)} className={cx("back")} icon={faHome} />
-        <picture>
-          <img
-            src={hasString(pageData.thumbnail) ? pageData.thumbnail : noImageUrl}
-            alt={`${pageData.pageId}_thumbnail`}
-          />
-        </picture>
+        <div className={cx("thumbnail", { isEmoji: pageData.thumbnailType === "emoji" })}>
+          <picture>
+            <img
+              src={hasString(pageData.thumbnail) ? pageData.thumbnail : noImageUrl}
+              alt={`${pageData.pageId}_thumbnail`}
+            />
+          </picture>
+        </div>
+
         <h1>{pageData.title}</h1>
         <span className={cx("description")}>
           {hasString(pageData.description) ? pageData.description : t("defaultDescription")}

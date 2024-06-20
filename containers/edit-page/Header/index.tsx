@@ -5,6 +5,7 @@ import { useEditorStore } from "@/store/editor"
 import { EditStage } from "@/types/Edit"
 import { faHome } from "@fortawesome/free-solid-svg-icons"
 import cs from "classnames/bind"
+import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { memo, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
@@ -52,7 +53,12 @@ function Header() {
     <>
       <HeaderLayout>
         <div className={cx("nav")}>
-          <div></div>
+          <div className={cx("left")}>
+            <Link href={`/user/${userId}`} className={cx("logo")}>
+              <img src="/images/favicon.ico" alt="logo" />
+              <span>Receptori</span>
+            </Link>
+          </div>
           <div className={cx("inner")}>
             {headers.map((v) => (
               <div key={`header_${v.value}`} className={cx("list")}>

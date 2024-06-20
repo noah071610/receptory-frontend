@@ -97,6 +97,7 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
         replace("/login")
         break
       default:
+        toastSuccess("comingsoon")
         break
     }
   }

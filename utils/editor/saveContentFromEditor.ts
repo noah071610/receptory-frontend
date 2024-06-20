@@ -19,7 +19,11 @@ export const convertContent = ({
   const thumbnailEmbedContent: { title: string; description: string; thumbnail: string } = {
     title: thumbnailSection.data.title ?? "",
     description: thumbnailSection.data.description ?? "",
-    thumbnail: thumbnailSection.style?.background ?? "",
+    thumbnail: thumbnailSection.style?.background
+      ? thumbnailSection.style?.background
+      : thumbnailSection.src
+        ? thumbnailSection.src
+        : "",
   }
   const embedContent = {
     title: content.pageOptions.embed.title,
@@ -37,6 +41,13 @@ export const convertContent = ({
       pageId,
       format: content.pageOptions.format,
       lang,
+      thumbnailType: content.pageOptions.isUseHomeThumbnail
+        ? thumbnailSection.style?.background
+          ? "image"
+          : hasString(thumbnailSection.options.imageStatus)
+            ? thumbnailSection.options.imageStatus
+            : "image"
+        : "image",
       customLink: content.pageOptions.isNotUseCustomLink
         ? pageId
         : hasString(content.pageOptions.customLink)

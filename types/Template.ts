@@ -23,6 +23,7 @@ export interface TemplatePage {
   isSecret: number
   templateLang: Langs
   thumbnail?: string
+  thumbnailType?: string
   lang: Langs
   content: PageContentType
   createdAt: Date

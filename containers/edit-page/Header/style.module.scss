@@ -9,6 +9,28 @@
   top: 0;
   left: 0;
   @include z-index(header);
+  .left {
+    height: 30px;
+    @include flex-y;
+    @include medium {
+      height: 35px;
+    }
+    .logo {
+      @include flex-y;
+      gap: 7px;
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 20px;
+      }
+      span {
+        font-size: 16px;
+        font-weight: 700;
+        color: #666666f7;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
   .nav {
     display: flex;
     height: 100%;
@@ -25,7 +47,7 @@
   }
   @include medium {
     height: auto;
-    transform: translateY(-96px);
+    transform: translateY(-95px);
     .inner {
       display: none;
     }

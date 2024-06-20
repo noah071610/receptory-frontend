@@ -5,5 +5,11 @@
   "form": "Form",
   "confirm": "Confirm",
   "terms-and-policy": "Terms and Policy",
-  "close": "Close window"
+  "close": "Close window",
+
+  "receptori": "Receptori",
+  "login": "Login",
+  "description": "Simple but Elegant website Builder",
+  "template": "Template",
+  "insight": "Insight"
 }

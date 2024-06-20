@@ -15,7 +15,7 @@ export async function generateMetadata() {
   const { t } = await ssrTranslation(lang, ["meta"])
 
   return {
-    title: t("terms-and-policy") + " | " + "Receptory",
+    title: t("terms-and-policy") + " | " + "Receptori",
   }
 }
 

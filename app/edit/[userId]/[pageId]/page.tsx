@@ -13,7 +13,15 @@ export async function generateMetadata() {
   const { t } = await ssrTranslation(lang, ["meta"])
 
   return {
-    title: t("edit") + " | " + "Receptory",
+    title: t("edit") + " | " + "Receptori",
+    icons: [
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        url: `/images/favicon.ico`,
+      },
+    ],
   }
 }
 

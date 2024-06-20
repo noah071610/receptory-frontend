@@ -41,8 +41,7 @@ const prompt = Prompt({
 })
 
 export const metadata: Metadata = {
-  title: "Receptory",
-  description: "",
+  title: "Receptori",
 }
 
 async function RootLayout({

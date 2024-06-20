@@ -138,7 +138,13 @@ export const sectionMap: Record<SectionListTypes, (section: SectionType, isDispl
   qna: (section, isDisplayMode = false) => (isDisplayMode ? <PageQnA section={section} /> : <QnA section={section} />),
   calendar: (section, isDisplayMode = false) =>
     isDisplayMode ? <PageCalender section={section} /> : <Calender section={section} />,
-  thumbnail: (section, isDisplayMode = false) => <Thumbnail section={section} isDisplayMode={isDisplayMode} />,
+  thumbnail: (section, isDisplayMode = false) => (
+    <Thumbnail
+      section={section}
+      setPageStage={section.id === "thumbnail" ? () => {} : undefined}
+      isDisplayMode={isDisplayMode}
+    />
+  ),
   textInput: (section, isDisplayMode = false) =>
     !isDisplayMode ? <TextInput section={section} /> : <PageTextInput section={section} />,
   numberInput: (section, isDisplayMode = false) =>

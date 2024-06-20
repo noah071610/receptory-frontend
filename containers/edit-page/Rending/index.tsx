@@ -65,7 +65,11 @@ export default function Rending({
   const thumbnailEmbedContent: { title: string; description: string; src: string } = {
     title: homeSections[0].data.title ?? "",
     description: homeSections[0].data.description ?? "",
-    src: homeSections[0].style?.background ? homeSections[0].style.background : "",
+    src: homeSections[0].style?.background
+      ? homeSections[0].style.background
+      : homeSections[0].src
+        ? homeSections[0].src
+        : "",
   }
 
   const [pageUrl, setPageUrl] = useState<null | string>(null)
@@ -133,16 +137,19 @@ export default function Rending({
         toastSuccess(value === "save" ? "deploy" : value === "active" ? "deploy" : "inactive")
         setPageOptions({ type: "format", payload: payload.content.pageOptions.format })
         setRevert("clear")
-        setPageUrl(
-          value === "save" || value === "active"
-            ? `${_url.client}/page/${isNotUseCustomLink ? pageId : customLink}`
-            : null
-        )
+        setPageUrl(value === "save" || value === "active" ? (isNotUseCustomLink ? pageId : customLink) : null)
         setIsLoading(false)
       }, 1000)
-
       await queryClient.invalidateQueries({ queryKey: queryKey.page(pageId as string) })
+      await queryClient.invalidateQueries({ queryKey: queryKey.insight(pageId as string) })
+      if (pageUrl) {
+        await queryClient.invalidateQueries({ queryKey: queryKey.page(pageUrl) })
+        await queryClient.invalidateQueries({ queryKey: queryKey.insight(pageUrl) })
+      }
       await queryClient.refetchQueries({ queryKey: queryKey.save.list })
+    } else {
+      toastError("unknown")
+      setIsLoading(false)
     }
   }
 
@@ -173,7 +180,7 @@ export default function Rending({
 
   const onClickCopyUrl = () => {
     if (pageUrl) {
-      copyTextToClipboard(pageUrl)
+      copyTextToClipboard(`${_url.client}/page/${pageUrl}`)
       toastSuccess("copyLink")
     }
   }
@@ -183,7 +190,7 @@ export default function Rending({
       if (typeof pageId === "string") {
         const pageCustomLink: string | null = await getPageLink({ pageId })
         if (pageCustomLink) {
-          setPageUrl(`${_url.client}/page/${pageCustomLink}`)
+          setPageUrl(pageCustomLink)
         } else {
           setPageUrl(null)
         }
@@ -216,7 +223,11 @@ export default function Rending({
             </button>
             <h4>{t("footer.thumbnail")}</h4>
             {isUseHomeThumbnail ? (
-              <picture className={cx("embed-thumbnail")}>
+              <picture
+                className={cx("embed-thumbnail", {
+                  isEmoji: !homeSections[0].style.background && homeSections[0].options.imageStatus === "emoji",
+                })}
+              >
                 <img
                   src={hasString(embedContent.src) ? embedContent.src : "/images/noImage.png"}
                   alt="home-thumbnail"
@@ -306,7 +317,7 @@ export default function Rending({
 
             <h4>{t("deployedPageUrl")}</h4>
             <div className={cx("page-url")}>
-              <p>{pageUrl ?? t("undeployUrl")}</p>
+              <p>{pageUrl ? `${_url.client}/page/${pageUrl}` : t("undeployUrl")}</p>
               <IconBtn
                 disabled={!pageUrl}
                 icon={faClipboard}

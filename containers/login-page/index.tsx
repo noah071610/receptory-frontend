@@ -51,7 +51,7 @@ export default function LoginPage({ lang }: { lang: Langs }) {
   useEffect(() => {
     const focusEvent = async () => {
       const existUser: UserType | null = await refreshUser()
-
+      queryClient.setQueryData(queryKey.user, existUser)
       if (existUser) {
         push(`/user/${existUser.userId}`)
       }

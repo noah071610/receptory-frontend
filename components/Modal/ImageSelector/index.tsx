@@ -7,7 +7,6 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import ModalLayout from ".."
 import EmojiStage from "./EmojiStage"
-import ImageStage from "./ImageStage"
 import ImageUrlStage from "./ImageUrlStage"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
@@ -45,15 +44,15 @@ export default function ImageSelector({
         <button className={cx({ active: curStage === "imageUrl" })} onClick={() => onClickStage("imageUrl")}>
           <span>{t("imageUrl")}</span>
         </button>
-        <button className={cx({ active: curStage === "image" })} onClick={() => onClickStage("image")}>
+        {/* <button className={cx({ active: curStage === "image" })} onClick={() => onClickStage("image")}>
           <span>{t("image")}</span>
-        </button>
+        </button> */}
       </div>
       <div className={cx("main")}>
         {curStage === "emoji" && <EmojiStage type={type} />}
-        {curStage === "image" && (
+        {/* {curStage === "image" && (
           <ImageStage lang={lang} isMultiple={isMultiple} setIsLoading={setIsLoading} type={type} />
-        )}
+        )} */}
         {curStage === "imageUrl" && <ImageUrlStage type={type} setIsLoading={setIsLoading} />}
       </div>
     </ModalLayout>

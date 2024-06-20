@@ -61,8 +61,8 @@
 
   .thumbnail {
     width: 100%;
+    height: 100%;
     aspect-ratio: 16 / 9;
-    object-fit: cover;
     border-top-right-radius: 30px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 30px;
@@ -70,6 +70,30 @@
     margin-bottom: 10px;
     padding: 5px;
     background-color: var(--white);
+    .thumbnail-inner {
+      width: 100%;
+      height: 100%;
+      border-top-right-radius: 28px;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 5px;
+      overflow: hidden;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    &.emoji {
+      .thumbnail-inner {
+        @include flex;
+        img {
+          width: 60px;
+          height: 60px;
+          object-fit: contain;
+        }
+      }
+    }
   }
 
   .list-content {

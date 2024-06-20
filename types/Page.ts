@@ -33,6 +33,7 @@ interface _SAVE {
   description?: string
   format: PageFormatType
   thumbnail?: string
+  thumbnailType: "emoji" | "image"
   lang: Langs
 }
 

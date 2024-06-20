@@ -10,6 +10,12 @@
     padding: 20px 0 10px 0;
     margin-bottom: 20px;
     text-align: center;
+    @include flex;
+    img {
+      margin-left: 7px;
+      width: 30px;
+      height: 30px;
+    }
   }
 }
 
@@ -33,19 +39,21 @@
     gap: 10px;
     border: 2px solid transparent;
     .left {
-      background-color: var(--white);
-      border-radius: 10px;
+      background-color: var(--blue);
       height: 100%;
+      border-top-left-radius: 25px;
+      border-bottom-left-radius: 25px;
       @include flex;
       svg {
         font-size: 30px;
-        color: var(--gray);
+        color: var(--white);
       }
     }
     .content {
       padding: 15px;
+      padding-right: 25px;
       background-color: var(--white);
-      border-radius: 10px;
+      border-radius: 5px;
       height: 100%;
       h3 {
         font-size: 17px;
@@ -54,7 +62,6 @@
       p {
         font-size: 15px;
         color: rgb(7, 56, 109);
-        text-wrap: balance;
         line-height: 1.2;
       }
     }
@@ -64,9 +71,6 @@
 
     @include action {
       border-color: var(--blue-hard);
-      .icon svg {
-        color: var(--blue);
-      }
     }
   }
 }

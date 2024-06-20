@@ -2,6 +2,7 @@ import SectionLayout from "@/components/Sections/display"
 import { _url } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import TemplatePageHome from "@/containers/template-page/TemplatePage"
+import { ssrTranslation } from "@/i18n"
 import { SectionType } from "@/types/Edit"
 import { TemplatePage } from "@/types/Template"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
@@ -16,17 +17,29 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
     return {}
   }
 
+  const { t } = await ssrTranslation(data.lang, ["meta"])
+  let url = data.thumbnail
+  if (hasString(data.thumbnail) && data.thumbnailType === "emoji") {
+    const ogUrl = new URL(`${_url.client}/api/og/${encodeURIComponent(data.thumbnail ?? "")}`)
+    url = ogUrl.toString()
+  }
+
   return {
-    title: data.title + " | Template",
-    icons: {
-      icon: `/images/favicon.png`, // /public path
-    },
-    description: data.description ?? "",
+    title: data.title,
+    icons: [
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        url: `/images/favicon.ico`,
+      },
+    ],
+    description: hasString(data.description) ? data.description : t("description"),
     openGraph: {
-      description: data.description ?? "",
+      description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
+          url: hasString(url) ? url : "/images/noImage.png",
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,
@@ -37,11 +50,12 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
     },
     twitter: {
       card: "summary_large_image",
-      title: data.title + " | Template",
-      description: data.description ?? "",
+      title:
+        data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
+      description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
+          url: hasString(url) ? url : "/images/noImage.png",
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,

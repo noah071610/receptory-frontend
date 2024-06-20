@@ -13,16 +13,51 @@ async function getLang() {
 }
 export async function generateMetadata() {
   const lang = await getLang()
-  const { t } = await ssrTranslation(lang, ["login"])
+  const { t } = await ssrTranslation(lang, ["meta"])
 
   return {
-    title: t("template") + " | " + "Receptory",
+    title: t("template") + " | " + t("receptori"),
+    icons: [
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        url: `/images/favicon.ico`,
+      },
+    ],
+    description: t("description"),
+    openGraph: {
+      description: t("description"),
+      images: [
+        {
+          url: "/images/thumbnail.png",
+          width: 600,
+          height: 315,
+          alt: `receptori-thumbnail`,
+        },
+      ],
+      type: "website",
+      siteName: "receptori",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("template") + " | " + t("receptori"),
+      description: t("description"),
+      images: [
+        {
+          url: "/images/thumbnail.png",
+          width: 600,
+          height: 315,
+          alt: `receptori-thumbnail`,
+        },
+      ],
+    },
   }
 }
 
 export default async function TemplatePageLayout() {
   const lang = await getLang()
-  const { t } = await ssrTranslation(lang, ["login"])
+  const { t } = await ssrTranslation(lang, ["template-page"])
 
   const data: TemplateCategoryType[] = await getTemplates(lang)
   if (!data) return <PageError lang={lang} type="notfound" />
@@ -31,8 +66,8 @@ export default async function TemplatePageLayout() {
     <div className={cx("main")}>
       <div className={cx("content")}>
         <div className={cx("banner")}>
-          <h1>템플릿</h1>
-          <p>템플릿으로 3초만에 나만의 홈페이지 제작</p>
+          <h1>{t("template")}</h1>
+          <p>{t("templateDescription")}</p>
         </div>
         {data.map(({ category, cards }, i) => (
           <div className={cx("category-wrapper")} key={`ct-${i}`}>

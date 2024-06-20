@@ -5,5 +5,11 @@
   "form": "フォーム",
   "confirm": "受付完了",
   "terms-and-policy": "利用規約",
-  "close": "閉じる"
+  "close": "閉じる",
+
+  "receptori": "Receptori",
+  "login": "ログイン",
+  "description": "３秒でログインして無料で作って見ましょう",
+  "template": "テンプレート",
+  "insight": "インサイト"
 }

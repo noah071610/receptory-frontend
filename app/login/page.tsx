@@ -1,3 +1,4 @@
+import { _url } from "@/config"
 import LoginPage from "@/containers/login-page"
 import style from "@/containers/login-page/style.module.scss"
 import { ssrTranslation } from "@/i18n"
@@ -10,10 +11,43 @@ async function getLang() {
 }
 export async function generateMetadata() {
   const lang = await getLang()
-  const { t } = await ssrTranslation(lang, ["login"])
+  const { t } = await ssrTranslation(lang, ["meta"])
 
   return {
-    title: t("login") + " | " + "Receptory",
+    metadataBase: new URL(_url.client),
+    title: t("login") + " | " + t("receptori"),
+    icons: [
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        url: `/images/favicon.ico`,
+      },
+    ],
+    description: t("description"),
+    openGraph: {
+      title: t("login") + " | " + t("receptori"),
+      description: t("description"),
+      images: {
+        url: "/images/thumbnail.png",
+        width: 600,
+        height: 315,
+        alt: `receptori-thumbnail`,
+      },
+      type: "website",
+      siteName: "receptori",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("login") + " | " + t("receptori"),
+      description: t("description"),
+      images: {
+        url: "/images/thumbnail.png",
+        width: 600,
+        height: 315,
+        alt: `receptori-thumbnail`,
+      },
+    },
   }
 }
 

@@ -39,7 +39,7 @@ const PageCard = ({
   userId,
   i,
   lang,
-  save: { title, description, thumbnail, format, pageId, updatedAt, customLink, lang: pageLang },
+  save: { thumbnailType, title, description, thumbnail, format, pageId, updatedAt, customLink, lang: pageLang },
 }: {
   save: SaveListType
   i: number
@@ -144,9 +144,13 @@ const PageCard = ({
             </div>
           </div>
         </div>
-        <picture>
-          <img className={cx("thumbnail")} src={thumbnail ? thumbnail : "/images/noImage.png"} alt="thumbnail" />
-        </picture>
+        <div className={cx("thumbnail", thumbnailType)}>
+          <div className={cx("thumbnail-inner")}>
+            <picture>
+              <img src={thumbnail ? thumbnail : "/images/noImage.png"} alt="thumbnail" />
+            </picture>
+          </div>
+        </div>
         <div className={cx("list-content")}>
           <div className={cx("title")}>
             <h2>{hasString(title) ? title : t("defaultTitle")}</h2>

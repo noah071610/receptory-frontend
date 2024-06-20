@@ -26,7 +26,6 @@ import { EditStage } from "@/types/Edit"
 import { Langs } from "@/types/Main"
 import { PageFormatType, SaveType } from "@/types/Page"
 import { createNewSection } from "@/utils/createNewSection"
-import { saveContentFromEditor } from "@/utils/editor/saveContentFromEditor"
 import i18n from "i18next"
 import dynamic from "next/dynamic"
 const cx = cs.bind(style)
@@ -124,12 +123,6 @@ const EditPage = ({ lang }: { lang: Langs }) => {
 
         if (!data.content?.homeSections || data.content?.homeSections?.length <= 0) {
           const initContent = getInitialStates(data.lang)
-          await saveContentFromEditor({
-            content: initContent,
-            pageId,
-            lang: data.lang,
-            noMessage: true,
-          })
           loadSections(initContent)
           return setIsLoading(false)
         }
@@ -154,7 +147,7 @@ const EditPage = ({ lang }: { lang: Langs }) => {
     <>
       <Header />
       <PageLayout>
-        {!save || isLoading ? (
+        {isLoading ? (
           <div className={cx("page-loading")}>
             <Loading isFull={true} />
           </div>

@@ -17,18 +17,24 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
     return {}
   }
   const { t } = await ssrTranslation(data.lang, ["meta"])
+  let url = data.thumbnail
+  if (hasString(data.thumbnail) && data.thumbnailType === "emoji") {
+    const ogUrl = new URL(`${_url.client}/api/og/${encodeURIComponent(data.thumbnail ?? "")}`)
+    url = ogUrl.toString()
+  }
 
   return {
     title: data.title,
     icons: {
       icon: `/images/favicon.png`, // /public path
     },
-    description: data.description ?? "",
+    description: hasString(data.description) ? data.description : t("description"),
+
     openGraph: {
-      description: data.description ?? "",
+      description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
+          url: hasString(url) ? url : "/images/noImage.png",
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,
@@ -41,10 +47,10 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
       card: "summary_large_image",
       title:
         data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
-      description: data.description ?? "",
+      description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(data.thumbnail) ? data.thumbnail : "./images/noImage.png",
+          url: hasString(url) ? url : "/images/noImage.png",
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,

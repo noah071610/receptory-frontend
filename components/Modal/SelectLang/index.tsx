@@ -118,7 +118,16 @@ export const SelectLang = ({
 
   return (
     <ModalLayout modalStyle={style["add-save-content"]}>
-      <h1>{isOnPageTypeSelect ? t("selectPageType") : t("selectLang")}</h1>
+      <h1>
+        {isOnPageTypeSelect ? (
+          <>
+            {t("selectPageType")}
+            <img width={30} height={30} src="/images/icons/hello.png" alt="icon" />
+          </>
+        ) : (
+          t("selectLang")
+        )}
+      </h1>
       {isOnPageTypeSelect ? (
         <div className={cx("select-page-type")}>
           <div
