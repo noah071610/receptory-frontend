@@ -25,6 +25,7 @@ export async function GET(request: Request) {
               height: "60px",
               width: `60px`,
             }}
+            alt="receptori-thumbnail-icon"
           />
         </div>
       ),
