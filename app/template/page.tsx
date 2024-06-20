@@ -29,15 +29,14 @@ export async function generateMetadata() {
     ],
     description: t("description"),
     openGraph: {
+      title: t("template") + " | " + t("receptori"),
       description: t("description"),
-      images: [
-        {
-          url: thumbnailUrl,
-          width: 600,
-          height: 315,
-          alt: `receptori-thumbnail`,
-        },
-      ],
+      images: {
+        url: thumbnailUrl,
+        width: 600,
+        height: 315,
+        alt: `receptori-thumbnail`,
+      },
       type: "website",
       siteName: "receptori",
     },
@@ -45,14 +44,12 @@ export async function generateMetadata() {
       card: "summary_large_image",
       title: t("template") + " | " + t("receptori"),
       description: t("description"),
-      images: [
-        {
-          url: thumbnailUrl,
-          width: 600,
-          height: 315,
-          alt: `receptori-thumbnail`,
-        },
-      ],
+      images: {
+        url: thumbnailUrl,
+        width: 600,
+        height: 315,
+        alt: `receptori-thumbnail`,
+      },
     },
   }
 }

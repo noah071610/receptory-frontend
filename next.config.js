@@ -13,6 +13,7 @@ module.exports = withBundleAnalyzer({
     missingSuspenseWithCSRBailout: false,
   },
   async redirects() {
+    // todo: 너무 이상하다
     return [
       {
         source: "/en",
@@ -50,12 +51,13 @@ module.exports = withBundleAnalyzer({
         port: "",
         pathname: "**",
       },
-      {
-        protocol: "https",
-        hostname: `${process.env.NEXT_PUBLIC_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com`,
-        port: "",
-        pathname: "/images/**",
-      },
+      // todo:
+      // {
+      //   protocol: "https",
+      //   hostname: `${process.env.NEXT_PUBLIC_BUCKET_NAME}.s3.`,
+      //   port: "",
+      //   pathname: "/images/**",
+      // },
       {
         protocol: "https",
         hostname: `cdn.jsdelivr.net`,
