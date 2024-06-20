@@ -1,4 +1,5 @@
 import { save } from "@/actions/save"
+import { thumbnailUrl } from "@/config"
 import { toastSuccess } from "@/config/toast"
 import { Langs } from "@/types/Main"
 import { SaveContentType, SaveUpdateType } from "@/types/Page"
@@ -15,20 +16,23 @@ export const convertContent = ({
   lang: Langs
   isDeploy?: boolean
 }) => {
-  const thumbnailSection = content.homeSections[0]
+  const thumb = content.homeSections[0]
+  const pageOpt = content.pageOptions
   const thumbnailEmbedContent: { title: string; description: string; thumbnail: string } = {
-    title: thumbnailSection.data.title ?? "",
-    description: thumbnailSection.data.description ?? "",
-    thumbnail: thumbnailSection.style?.background
-      ? thumbnailSection.style?.background
-      : thumbnailSection.src
-        ? thumbnailSection.src
-        : "",
+    title: thumb.data.title ?? "",
+    description: thumb.data.description ?? "",
+    thumbnail: pageOpt.isUseReceptoriThumbnail
+      ? thumbnailUrl
+      : thumb.style?.background
+        ? thumb.style?.background
+        : thumb.src
+          ? thumb.src
+          : "",
   }
   const embedContent = {
-    title: content.pageOptions.embed.title,
-    description: content.pageOptions.embed.description,
-    thumbnail: content.pageOptions.embed.src,
+    title: pageOpt.embed.title,
+    description: pageOpt.embed.description,
+    thumbnail: pageOpt.isUseReceptoriThumbnail ? thumbnailUrl : pageOpt.embed.src,
   }
 
   content.homeSections = content.homeSections.slice(0, 20)
@@ -39,20 +43,18 @@ export const convertContent = ({
   return Object.assign(
     {
       pageId,
-      format: content.pageOptions.format,
+      format: pageOpt.format,
       lang,
-      thumbnailType: content.pageOptions.isUseHomeThumbnail
-        ? thumbnailSection.style?.background
-          ? "image"
-          : hasString(thumbnailSection.options.imageStatus)
-            ? thumbnailSection.options.imageStatus
-            : "image"
-        : "image",
-      customLink: content.pageOptions.isNotUseCustomLink
-        ? pageId
-        : hasString(content.pageOptions.customLink)
-          ? content.pageOptions.customLink
-          : pageId,
+      thumbnailType: pageOpt.isUseReceptoriThumbnail
+        ? "image"
+        : pageOpt.isUseHomeThumbnail
+          ? thumb.style?.background
+            ? "image"
+            : hasString(thumb.options.imageStatus)
+              ? thumb.options.imageStatus
+              : "image"
+          : "image",
+      customLink: pageOpt.isNotUseCustomLink ? pageId : hasString(pageOpt.customLink) ? pageOpt.customLink : pageId,
       content: isDeploy ? { ...rest } : content,
     },
     content.pageOptions.isUseHomeThumbnail ? thumbnailEmbedContent : embedContent

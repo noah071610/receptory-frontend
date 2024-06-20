@@ -19,6 +19,9 @@
 
 .bar-layout {
   @include option-bar;
+  margin-bottom: 5px;
+}
+.bar-layout:last-of-type {
   margin-bottom: 20px;
 }
 

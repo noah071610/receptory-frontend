@@ -52,6 +52,7 @@ export const queryKey = {
 }
 
 export const noImageUrl = "/images/noImage.png"
+export const thumbnailUrl = "/images/thumbnail.png"
 
 export const userPlan = ["free", "semiPremium", "premium"]
 

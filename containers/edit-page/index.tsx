@@ -51,6 +51,7 @@ const getInitialStates = (lang: Langs) => ({
     lang,
     customLink: "",
     isUseHomeThumbnail: true,
+    isUseReceptoriThumbnail: true,
     isNotUseCustomLink: true,
     embed: {
       title: targetT("embedInitialTitle") as string,

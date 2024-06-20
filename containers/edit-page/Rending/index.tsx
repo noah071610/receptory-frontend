@@ -5,7 +5,7 @@ import { checkCustomLink } from "@/actions/save"
 import DeleteBtn from "@/components/DeleteBtn"
 import IconBtn from "@/components/IconBtn"
 import Input from "@/components/Input"
-import { _url, queryKey } from "@/config"
+import { _url, noImageUrl, queryKey, thumbnailUrl } from "@/config"
 import { toastError, toastSuccess } from "@/config/toast"
 import { useEditorStore } from "@/store/editor"
 import { Langs } from "@/types/Main"
@@ -59,7 +59,7 @@ export default function Rending({
     "setRevert",
     "setPageEmbedOption",
   ])
-  const { format, customLink, embed, isUseHomeThumbnail, isNotUseCustomLink } = pageOptions
+  const { format, customLink, embed, isUseHomeThumbnail, isNotUseCustomLink, isUseReceptoriThumbnail } = pageOptions
   const isActive = format === "active"
 
   const thumbnailEmbedContent: { title: string; description: string; src: string } = {
@@ -165,13 +165,16 @@ export default function Rending({
     }
   }
 
-  const onClickSlider = (type: "embed" | "customLink") => {
+  const onClickSlider = (type: "embed" | "customLink" | "receptoriThumbnail") => {
     switch (type) {
       case "embed":
         setPageOptions({ type: "isUseHomeThumbnail", payload: !isUseHomeThumbnail })
         break
       case "customLink":
         setPageOptions({ type: "isNotUseCustomLink", payload: !isNotUseCustomLink })
+        break
+      case "receptoriThumbnail":
+        setPageOptions({ type: "isUseReceptoriThumbnail", payload: !isUseReceptoriThumbnail })
         break
     }
   }
@@ -221,32 +224,53 @@ export default function Rending({
               </div>
               <span>{t("useHomeThumbnail")}</span>
             </button>
+            <button
+              onClick={() => onClickSlider("receptoriThumbnail")}
+              className={cx("bar-layout", { active: !!isUseReceptoriThumbnail })}
+            >
+              <div className={cx("content")}>
+                <div className={cx("bar")}>
+                  <div className={cx("circle")}></div>
+                </div>
+              </div>
+              <span>{t("리셉토리 썸네일 사용")}</span>
+            </button>
             <h4>{t("footer.thumbnail")}</h4>
             {isUseHomeThumbnail ? (
               <picture
                 className={cx("embed-thumbnail", {
-                  isEmoji: !homeSections[0].style.background && homeSections[0].options.imageStatus === "emoji",
+                  isEmoji: isUseReceptoriThumbnail
+                    ? false
+                    : !homeSections[0].style.background && homeSections[0].options.imageStatus === "emoji",
                 })}
               >
                 <img
-                  src={hasString(embedContent.src) ? embedContent.src : "/images/noImage.png"}
+                  src={
+                    isUseReceptoriThumbnail ? thumbnailUrl : hasString(embedContent.src) ? embedContent.src : noImageUrl
+                  }
                   alt="home-thumbnail"
                 />
               </picture>
             ) : (
               <div
-                style={{ background: getImageUrl({ url: embedContent.src ?? "" }) }}
+                style={{
+                  background: getImageUrl({ url: isUseReceptoriThumbnail ? thumbnailUrl : embedContent.src ?? "" }),
+                }}
                 className={cx("embed-thumbnail", { disabled: isUseHomeThumbnail })}
               >
-                {hasString(embedContent.src) && !isUseHomeThumbnail && <DeleteBtn srcKey={"embed"} />}
-                <button
-                  data-closer="rending"
-                  className={cx("drop-zone", { hidden: !!embedContent.src })}
-                  onClick={onClickThumbnailUpload}
-                  disabled={isUseHomeThumbnail}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
+                {hasString(embedContent.src) && !isUseHomeThumbnail && !isUseReceptoriThumbnail && (
+                  <DeleteBtn srcKey={"embed"} />
+                )}
+                {!isUseReceptoriThumbnail && (
+                  <button
+                    data-closer="rending"
+                    className={cx("drop-zone", { hidden: !!embedContent.src })}
+                    onClick={onClickThumbnailUpload}
+                    disabled={isUseHomeThumbnail}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                )}
               </div>
             )}
             <h4>{t("footer.title")}</h4>

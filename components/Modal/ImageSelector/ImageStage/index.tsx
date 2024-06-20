@@ -1,6 +1,5 @@
 "use client"
 
-import { uploadImages } from "@/actions/upload"
 import DeleteBtn from "@/components/DeleteBtn"
 import SwiperNavigation from "@/components/SwiperNavigation"
 import { useEditorStore } from "@/store/editor"
@@ -73,7 +72,7 @@ export default function ImageStage({
     selectedImages.forEach(({ uploadType, file }) => uploadType === "file" && file && formData.append("files", file))
     let srcArr: string[] | undefined
     if (formData.getAll("files")?.length > 0) {
-      srcArr = await uploadImages(formData)
+      // srcArr = await uploadImages(formData)
     }
 
     let imageArr: string[] = []

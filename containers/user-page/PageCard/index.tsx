@@ -1,7 +1,7 @@
 "use client"
 
 import { inactivePage } from "@/actions/page"
-import { queryKey } from "@/config"
+import { noImageUrl, queryKey } from "@/config"
 import { colors } from "@/config/colors"
 import { toastSuccess } from "@/config/toast"
 import { useMainStore } from "@/store/main"
@@ -147,7 +147,7 @@ const PageCard = ({
         <div className={cx("thumbnail", thumbnailType)}>
           <div className={cx("thumbnail-inner")}>
             <picture>
-              <img src={thumbnail ? thumbnail : "/images/noImage.png"} alt="thumbnail" />
+              <img src={hasString(thumbnail) ? thumbnail : noImageUrl} alt="thumbnail" />
             </picture>
           </div>
         </div>

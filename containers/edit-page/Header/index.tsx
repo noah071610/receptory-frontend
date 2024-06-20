@@ -55,7 +55,7 @@ function Header() {
         <div className={cx("nav")}>
           <div className={cx("left")}>
             <Link href={`/user/${userId}`} className={cx("logo")}>
-              <img src="/images/favicon.ico" alt="logo" />
+              <img src="/images/logo.png" alt="logo" />
               <span>Receptori</span>
             </Link>
           </div>

@@ -13,6 +13,7 @@ export interface PageContentType {
     customLink: string
     isUseHomeThumbnail: boolean
     isNotUseCustomLink: boolean
+    isUseReceptoriThumbnail: boolean
     embed: {
       title: string
       description: string

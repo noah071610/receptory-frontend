@@ -1,4 +1,5 @@
 import { getTemplates } from "@/actions/website"
+import { thumbnailUrl } from "@/config"
 import TemplateCards from "@/containers/template-page/TemplateCards"
 import { ssrTranslation } from "@/i18n"
 import { TemplateCategoryType } from "@/types/Template"
@@ -30,7 +31,7 @@ export async function generateMetadata() {
       description: t("description"),
       images: [
         {
-          url: "/images/thumbnail.png",
+          url: thumbnailUrl,
           width: 600,
           height: 315,
           alt: `receptori-thumbnail`,
@@ -45,7 +46,7 @@ export async function generateMetadata() {
       description: t("description"),
       images: [
         {
-          url: "/images/thumbnail.png",
+          url: thumbnailUrl,
           width: 600,
           height: 315,
           alt: `receptori-thumbnail`,

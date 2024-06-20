@@ -12,8 +12,8 @@ export async function GET(request: Request) {
       (
         <div
           style={{
-            height: "608px",
-            width: `1080px`,
+            width: `450px`,
+            height: "250px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -29,8 +29,8 @@ export async function GET(request: Request) {
         </div>
       ),
       {
-        width: 1080,
-        height: 608,
+        width: 450,
+        height: 250,
       }
     )
   } catch (e: any) {

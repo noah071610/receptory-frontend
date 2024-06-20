@@ -1,4 +1,4 @@
-import { _url } from "@/config"
+import { _url, thumbnailUrl } from "@/config"
 import LoginPage from "@/containers/login-page"
 import style from "@/containers/login-page/style.module.scss"
 import { ssrTranslation } from "@/i18n"
@@ -29,7 +29,7 @@ export async function generateMetadata() {
       title: t("login") + " | " + t("receptori"),
       description: t("description"),
       images: {
-        url: "/images/thumbnail.png",
+        url: thumbnailUrl,
         width: 600,
         height: 315,
         alt: `receptori-thumbnail`,
@@ -42,7 +42,7 @@ export async function generateMetadata() {
       title: t("login") + " | " + t("receptori"),
       description: t("description"),
       images: {
-        url: "/images/thumbnail.png",
+        url: thumbnailUrl,
         width: 600,
         height: 315,
         alt: `receptori-thumbnail`,

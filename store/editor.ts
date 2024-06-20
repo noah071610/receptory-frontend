@@ -50,6 +50,7 @@ export const initialStates: EditStates = {
     lang: "ko",
     isUseHomeThumbnail: true,
     isNotUseCustomLink: true,
+    isUseReceptoriThumbnail: true,
     customLink: "",
     embed: {
       title: "embedInitialTitle",
@@ -81,6 +82,7 @@ export interface EditStates {
     customLink: string
     isUseHomeThumbnail: boolean
     isNotUseCustomLink: boolean
+    isUseReceptoriThumbnail: boolean
     embed: {
       title: string
       description: string
@@ -141,7 +143,7 @@ type Actions = {
     type,
     payload,
   }: {
-    type: "format" | "lang" | "customLink" | "isUseHomeThumbnail" | "isNotUseCustomLink"
+    type: "format" | "lang" | "customLink" | "isUseHomeThumbnail" | "isNotUseCustomLink" | "isUseReceptoriThumbnail"
     payload: any
   }) => void
   setPageEmbedOption: ({ type, payload }: { type: "title" | "description" | "src"; payload: string }) => void

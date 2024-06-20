@@ -93,8 +93,11 @@ const Profile = ({ user, lang }: { user: UserType; lang: Langs }) => {
         break
       case "logout":
         logoutMutation.mutate()
-        alert(t("logoutSuccess"))
-        replace("/login")
+        const ok = confirm(t("You really want logout?"))
+        if (ok) {
+          alert(t("logoutSuccess"))
+          replace("/login")
+        }
         break
       default:
         toastSuccess("comingsoon")
