@@ -1,5 +1,5 @@
 import { getTemplates } from "@/actions/website"
-import { thumbnailUrl } from "@/config"
+import { _url, thumbnailUrl } from "@/config"
 import TemplateCards from "@/containers/template-page/TemplateCards"
 import { ssrTranslation } from "@/i18n"
 import { TemplateCategoryType } from "@/types/Template"
@@ -17,6 +17,7 @@ export async function generateMetadata() {
   const { t } = await ssrTranslation(lang, ["meta"])
 
   return {
+    metadataBase: new URL(_url.client),
     title: t("template") + " | " + t("receptori"),
     icons: [
       {

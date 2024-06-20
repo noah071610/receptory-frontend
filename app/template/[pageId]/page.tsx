@@ -1,5 +1,5 @@
 import SectionLayout from "@/components/Sections/display"
-import { _url } from "@/config"
+import { _url, noImageUrl } from "@/config"
 import getSection from "@/containers/page/sectionPageMap"
 import TemplatePageHome from "@/containers/template-page/TemplatePage"
 import { ssrTranslation } from "@/i18n"
@@ -25,7 +25,8 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
   }
 
   return {
-    title: data.title,
+    metadataBase: new URL(_url.client),
+    title: data.title + " | " + t("receptori"),
     icons: [
       {
         rel: "icon",
@@ -36,10 +37,12 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
     ],
     description: hasString(data.description) ? data.description : t("description"),
     openGraph: {
+      title:
+        data.title + (s === "form" ? ` | ${t("form")}` : s === "confirm" ? ` | ${t("confirm")}` : ` | ${t("home")}`),
       description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(url) ? url : "/images/noImage.png",
+          url: hasString(url) ? url : noImageUrl,
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,
@@ -55,7 +58,7 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
       description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(url) ? url : "/images/noImage.png",
+          url: hasString(url) ? url : noImageUrl,
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,

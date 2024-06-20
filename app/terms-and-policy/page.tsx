@@ -16,6 +16,15 @@ export async function generateMetadata() {
 
   return {
     title: t("terms-and-policy") + " | " + "Receptori",
+    description: t("description"),
+    icons: [
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        url: `/images/favicon.ico`,
+      },
+    ],
   }
 }
 

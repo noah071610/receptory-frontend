@@ -1,5 +1,5 @@
 import SectionLayout from "@/components/Sections/display"
-import { _url } from "@/config"
+import { _url, noImageUrl } from "@/config"
 import PageHome from "@/containers/page/Home"
 import getSection from "@/containers/page/sectionPageMap"
 import { ssrTranslation } from "@/i18n"
@@ -24,17 +24,23 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
   }
 
   return {
+    metadataBase: new URL(_url.client),
     title: data.title,
-    icons: {
-      icon: `/images/favicon.png`, // /public path
-    },
+    icons: [
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        url: `/images/favicon.ico`,
+      },
+    ],
     description: hasString(data.description) ? data.description : t("description"),
 
     openGraph: {
       description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(url) ? url : "/images/noImage.png",
+          url: hasString(url) ? url : noImageUrl,
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,
@@ -50,7 +56,7 @@ export async function generateMetadata({ params: { pageId }, searchParams: { s }
       description: hasString(data.description) ? data.description : t("description"),
       images: [
         {
-          url: hasString(url) ? url : "/images/noImage.png",
+          url: hasString(url) ? url : noImageUrl,
           width: 600,
           height: 315,
           alt: `${data.title}-thumbnail`,

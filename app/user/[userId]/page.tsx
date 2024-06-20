@@ -13,6 +13,7 @@ export async function generateMetadata() {
 
   return {
     title: t("dashboard") + " | " + "Receptori",
+    description: t("description"),
     icons: [
       {
         rel: "icon",
