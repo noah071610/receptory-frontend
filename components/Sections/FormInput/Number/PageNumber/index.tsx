@@ -4,7 +4,6 @@ import FormUserInput from "@/components/FormUserInput"
 import { SectionType } from "@/types/Edit"
 import { onlyNumberFilter } from "@/utils/helpers/inputHelper"
 import { faListOl } from "@fortawesome/free-solid-svg-icons"
-import { useParams } from "next/navigation"
 import { memo, useRef } from "react"
 
 import style from "./style.module.scss"
@@ -14,7 +13,6 @@ import cs from "classnames/bind"
 const cx = cs.bind(style)
 
 function PageNumber({ section }: { section: SectionType }) {
-  const { lang } = useParams()
   const { setSelectedText, selected } = useMainStore(["setSelectedText", "selected"])
   const { min, max } = section.options
   const inputRef = useRef<HTMLInputElement | null>(null)

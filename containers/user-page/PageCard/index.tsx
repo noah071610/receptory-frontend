@@ -145,11 +145,9 @@ const PageCard = ({
           </div>
         </div>
         <div className={cx("thumbnail", thumbnailType)}>
-          <div className={cx("thumbnail-inner")}>
-            <picture>
-              <img src={hasString(thumbnail) ? thumbnail : noImageUrl} alt="thumbnail" />
-            </picture>
-          </div>
+          <picture>
+            <img src={hasString(thumbnail) ? thumbnail : noImageUrl} alt="thumbnail" />
+          </picture>
         </div>
         <div className={cx("list-content")}>
           <div className={cx("title")}>

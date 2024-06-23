@@ -237,17 +237,17 @@ export default function Rending({
             </button>
             <h4>{t("footer.thumbnail")}</h4>
             {isUseHomeThumbnail ? (
-              <picture
-                className={cx("embed-thumbnail", {
-                  isEmoji: isUseReceptoriThumbnail
-                    ? false
-                    : !homeSections[0].style.background && homeSections[0].options.imageStatus === "emoji",
-                })}
-              >
+              <picture className={cx("embed-thumbnail")}>
                 <img
+                  key={isUseReceptoriThumbnail ? "receptori" : "custom"}
                   src={
                     isUseReceptoriThumbnail ? thumbnailUrl : hasString(embedContent.src) ? embedContent.src : noImageUrl
                   }
+                  className={cx({
+                    isEmoji: isUseReceptoriThumbnail
+                      ? false
+                      : !homeSections[0].style.background && homeSections[0].options.imageStatus === "emoji",
+                  })}
                   alt="home-thumbnail"
                 />
               </picture>

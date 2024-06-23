@@ -2,6 +2,7 @@
 
 import { refreshUser } from "@/actions/user"
 import { selectTemplate } from "@/actions/website"
+import PageLoading from "@/components/Loading/LoadingPage"
 import { _url, queryKey } from "@/config"
 import style from "@/containers/login-page/style.module.scss"
 import { useInitTranslation } from "@/i18n/client"
@@ -12,17 +13,19 @@ import { useQueryClient } from "@tanstack/react-query"
 import cs from "classnames/bind"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 const cx = cs.bind(style)
 
 export default function LoginPage({ lang }: { lang: Langs }) {
   const queryClient = useQueryClient()
   const { t } = useInitTranslation(lang, ["login"])
+  const [isLoading, setIsLoading] = useState(false)
   const searchParams = useSearchParams()
   const templateId = searchParams.get("templateId")
   const { push } = useRouter()
 
   const onClickSocialLogin = async (provider: Providers) => {
+    setIsLoading(true)
     const newWindow = window.open(`${_url.server}/auth/${provider}`, "_blank", "width=600,height=400")
 
     window.addEventListener("message", async (event) => {
@@ -64,6 +67,7 @@ export default function LoginPage({ lang }: { lang: Langs }) {
 
   return (
     <div className={cx("main")}>
+      <PageLoading isLoading={isLoading} />
       <div className={cx("content")}>
         <span style={getAnimation({ type: "fadeUpBig", delay: 100 })} className={cx("label")}>
           {t("login")}
