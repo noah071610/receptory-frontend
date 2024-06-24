@@ -549,7 +549,20 @@ export const _useEditorStore = create<EditStates & Actions>()(
           origin.homeSections = []
         }
         if (payload.formSections?.length > 0) {
-          origin.formSections = payload.formSections
+          origin.formSections = payload.formSections.map((v) => {
+            if (v.type === "calendar" && v.options.startDate && v.options.endDate) {
+              return {
+                ...v,
+                options: {
+                  ...v.options,
+                  startDate: new Date(v.options.startDate),
+                  endDate: new Date(v.options.endDate),
+                },
+              }
+            } else {
+              return v
+            }
+          })
         } else {
           origin.formSections = []
         }

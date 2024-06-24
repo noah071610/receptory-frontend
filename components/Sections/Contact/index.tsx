@@ -97,6 +97,7 @@ function Contact({
                       onChange={(value: string) => {
                         onChangeLink(value, i, "link")
                       }}
+                      maxLength={200}
                       value={link}
                       section={section}
                     />
