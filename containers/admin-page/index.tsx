@@ -96,10 +96,10 @@ const AdminPage = () => {
             return back()
           }
         } else {
-          back()
+          // back()
         }
       } else {
-        back()
+        // back()
       }
     }
     fetchData()

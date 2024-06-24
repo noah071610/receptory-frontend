@@ -63,6 +63,7 @@ export default function LoginPage({ lang }: { lang: Langs }) {
     return () => {
       window.removeEventListener("focus", focusEvent)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

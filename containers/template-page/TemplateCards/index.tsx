@@ -38,7 +38,7 @@ export default function TemplateCards({
             <div className={cx("list-main")}>
               <div className={cx("label")}>
                 <div className={cx("label-right")}>
-                  <Image src={`/images/icons/${pageLang}.png`} width={20} height={20} alt="card-flag" />
+                  <Image src={`/images/icons/${pageLang}.png`} width={15} height={15} alt="card-flag" />
                   <span>Template</span>
                 </div>
               </div>

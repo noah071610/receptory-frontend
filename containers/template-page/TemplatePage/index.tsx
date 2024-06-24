@@ -105,7 +105,6 @@ const TemplatePageHome = ({
   }, [clearPage, initialParams])
 
   return (
-    initialData?.isSecret === 0 &&
     pageLang && (
       <div onClick={onClickPage} className={cx("body")}>
         <main className={cx("main")}>
