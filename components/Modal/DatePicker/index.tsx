@@ -34,7 +34,7 @@ export const DatePicker = ({ section }: { section: SectionType }) => {
   }, [sd, specificDate])
 
   const [selectedDates, onDatesChange] = useState<Date[]>([])
-  const [offsetDate, onOffsetChange] = useState<Date>(startDate)
+  const [offsetDate, onOffsetChange] = useState<Date>(new Date(startDate))
 
   const excludeDays: DPDayInteger[] | undefined = useMemo(() => {
     switch (interval) {
@@ -60,8 +60,8 @@ export const DatePicker = ({ section }: { section: SectionType }) => {
             onOffsetChange,
             dates: {
               mode: isRangeSelect ? "range" : "single",
-              minDate: specificDate ? startDateForSpecific : startDate,
-              maxDate: specificDate ? endDateForSpecific : endDate,
+              minDate: specificDate ? startDateForSpecific : new Date(startDate),
+              maxDate: specificDate ? endDateForSpecific : new Date(endDate),
               toggle: !isRangeSelect,
             },
             exclude: {

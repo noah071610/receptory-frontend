@@ -5,10 +5,10 @@ import { FC, ReactNode, useEffect } from "react"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
-    DPCalendar,
-    useContextCalendars,
-    useContextDatePickerOffsetPropGetters,
-    useContextDaysPropGetters,
+  DPCalendar,
+  useContextCalendars,
+  useContextDatePickerOffsetPropGetters,
+  useContextDaysPropGetters,
 } from "@rehookify/datepicker"
 import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
@@ -100,7 +100,7 @@ function CalenderMain({
   }
 
   useEffect(() => {
-    if (!isOptionCalender) setOffset(startDate)
+    if (!isOptionCalender) setOffset(new Date(startDate))
   }, [startDate, isOptionCalender, setOffset])
 
   return (
