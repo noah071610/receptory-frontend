@@ -108,7 +108,6 @@ export default async function TemplatePageLayout({ params: { pageId }, searchPar
   const siteLang = await getPreferredLanguage()
 
   if (!initialData) return <PageError lang={siteLang} type="notfound" />
-  if (initialData.isSecret === 1) return <PageError lang={siteLang} type="inactive" />
 
   const { pageOptions, ...rest } = initialData.content
 
