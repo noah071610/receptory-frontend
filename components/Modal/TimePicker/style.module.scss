@@ -23,9 +23,7 @@
 }
 
 .basic-time-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
+  @include grid-fr-3(10px);
 
   li {
     width: 100%;
@@ -64,8 +62,7 @@
   max-height: 250px;
   padding: 0;
   overflow: scroll;
-  display: flex;
-  flex-direction: column;
+  @include flex-col;
   gap: 5px;
   li {
     width: 100%;

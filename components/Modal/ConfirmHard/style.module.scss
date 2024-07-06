@@ -25,9 +25,7 @@
     width: 100%;
     padding: 14px 0 14px 12px;
     border-radius: 5px;
-    font-size: 16px;
-    line-height: 1.2;
-    letter-spacing: 1px;
+    @include font-16;
     margin-top: 5px;
     @include border;
   }

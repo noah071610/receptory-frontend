@@ -13,15 +13,12 @@
     position: relative;
     cursor: pointer;
     .icon {
-      position: absolute;
-      top: 50%;
+      @include absolute-y;
       right: 0;
       z-index: 10;
-      transform: translateY(-50%);
       @include flex;
       background-color: var(--white);
-      width: 35px;
-      height: 35px;
+      @include wh-35;
       svg {
         font-size: 22px;
         color: var(--gray);

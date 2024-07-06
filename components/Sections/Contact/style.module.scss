@@ -3,8 +3,7 @@
 
 .contact {
   .main {
-    display: flex;
-    align-items: center;
+    @include flex-y;
     flex-direction: column;
 
     .btn-list {
@@ -69,8 +68,7 @@
 }
 
 .link-input-wrapper {
-  display: flex;
-  flex-direction: column;
+  @include flex-col;
   gap: 10px;
   li {
     width: 100%;
@@ -78,8 +76,7 @@
     align-items: flex-start;
     gap: 15px;
     img {
-      width: 30px;
-      height: 30px;
+      @include wh-30;
     }
 
     .input-content {

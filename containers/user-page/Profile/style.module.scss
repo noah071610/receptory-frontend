@@ -65,8 +65,7 @@
 
   .info-menu {
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    @include grid-fr-3(10px);
     li {
       button {
         @include flex(true);
@@ -95,11 +94,9 @@
       &::before,
       &::after {
         content: "";
-        position: absolute;
-        top: 50%;
+        @include absolute-y;
         width: 2px;
         height: 30%;
-        transform: translateY(-50%);
         background-color: var(--border);
       }
       &::after {

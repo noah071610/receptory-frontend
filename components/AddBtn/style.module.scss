@@ -5,8 +5,7 @@
   @include flex;
   margin-top: 10px;
   .add {
-    width: 36px;
-    height: 36px;
+    @include wh-35;
     border-radius: 100%;
     @include border;
     @include flex;

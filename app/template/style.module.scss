@@ -63,5 +63,5 @@
 }
 
 .category-wrapper {
-  padding: 16px;
+  @include p-16;
 }

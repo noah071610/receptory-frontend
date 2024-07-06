@@ -5,11 +5,7 @@
 }
 
 .title {
-  width: auto;
-  display: flex;
-  gap: 3px;
-  align-items: flex-end;
-  margin-bottom: 7px;
+  @include input-title;
   h2 {
     font-size: 16px;
   }
@@ -39,16 +35,13 @@
       display: flex;
       gap: 5px;
       flex-wrap: wrap;
-      font-size: 16px;
-      line-height: 1.2;
-      letter-spacing: 1px;
+      @include font-16;
     }
     input,
     textarea {
       width: 100%;
       display: flex;
-      font-size: 16px;
-      line-height: 1.2;
+      @include font-16;
     }
     input {
       padding: 14px 0 14px 12px;
@@ -89,7 +82,7 @@
       @include action {
         background-color: var(--gray-soft);
       }
-      @include mobile() {
+      @include mobile {
         &:active {
           background-color: rgba($color: #000000, $alpha: 0.1);
         }

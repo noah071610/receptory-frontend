@@ -14,11 +14,8 @@
   height: 300px;
   overflow-y: scroll;
   .chart-time {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    @include wh-full;
+    @include grid-fr-2(20px);
   }
 }
 
@@ -30,9 +27,39 @@
   }
 }
 
+.anytime-wrapper {
+  padding: 10px 10px 0 10px;
+  margin-top: 18px;
+  button {
+    @include flex-y;
+
+    .circle {
+      width: 5px;
+      height: 5px;
+      background-color: var(--green);
+      border-radius: 100%;
+    }
+    .anytime-text {
+      @include flex-y;
+      gap: 5px;
+      span {
+        font-size: 16px;
+      }
+      span:first-of-type {
+        font-weight: 600;
+        padding-left: 8px;
+      }
+    }
+  }
+}
+
 .count-btn {
-  width: 100%;
-  height: 100%;
+  @include wh-full;
+  &.anytime {
+    width: auto;
+    height: auto;
+  }
+
   .content {
     width: 100%;
     padding: 10px 0 5px 0;
@@ -56,9 +83,7 @@
 }
 
 .count {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex;
   gap: 3px;
   .circle {
     width: 5px;

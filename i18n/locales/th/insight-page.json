@@ -16,5 +16,9 @@
   "time": "ตามชั่วโมง",
   "select": "สถิติรายการที่เลือก",
   "choices": "สถิติการเลือกหลายรายการ",
-  "defaultDescription": "ไม่มีคำอธิบาย"
+  "defaultDescription": "ไม่มีคำอธิบาย",
+  "anyDate": "วันที่ใดก็ได้",
+  "anytime": "เวลาใดก็ได้",
+  "specificTime": "เลือกเวลา",
+  "specificDate": "เลือกวันที่"
 }

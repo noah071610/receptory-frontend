@@ -64,6 +64,8 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
     enabled: !!user?.userId,
   })
 
+  console.log(pageData)
+
   const { isSelectDisplay, isCalendarDisplay, isTimeDisplay, isChoicesDisplay, formSections } = useMemo(() => {
     if (!pageData?.content?.formSections) return {}
     const formSections = pageData.content.formSections.filter((v) =>
@@ -85,8 +87,8 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
     if (!pageData) return {}
     const analyser = pageData.analyser
     return {
-      submitInitialTarget: analyser?.submit ? Object.keys(analyser.submit)[0] : undefined,
-      calenderInitialTarget: analyser?.calendar ? Object.keys(analyser.calendar)[0] : undefined,
+      submitInitialTarget: analyser?.submit?.map ? Object.keys(analyser.submit.map)[0] : undefined,
+      calenderInitialTarget: analyser?.calendar?.map ? Object.keys(analyser.calendar.map)[0] : undefined,
     }
   }, [pageData])
 
@@ -116,11 +118,17 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
               <PageInfo selectedSection={selectedSection} setSelectedSection={setSelectedSection} pageData={pageData} />
               {
                 <div className={cx("charts", { isHide: selectedSection !== "insight" })}>
-                  <SubmitChart data={pageData.analyser.submit} initialTarget={submitInitialTarget} />
+                  <SubmitChart data={pageData.analyser.submit.map} initialTarget={submitInitialTarget} />
                   {isCalendarDisplay && (
-                    <CalendarChart data={pageData.analyser.calendar} initialTarget={calenderInitialTarget} />
+                    <CalendarChart
+                      anyDateCount={pageData.analyser.calendar.anyDate}
+                      data={pageData.analyser.calendar.map}
+                      initialTarget={calenderInitialTarget}
+                    />
                   )}
-                  {isTimeDisplay && <TimeChart data={pageData.analyser.time} />}
+                  {isTimeDisplay && (
+                    <TimeChart anytimeCount={pageData.analyser.time.anytime} data={pageData.analyser.time.map} />
+                  )}
                   {isSelectDisplay && <SelectListChart sectionName="select" selectChartArr={selectChartArr} />}
                   {isChoicesDisplay && <SelectListChart sectionName="choices" selectChartArr={choicesChartArr} />}
                 </div>

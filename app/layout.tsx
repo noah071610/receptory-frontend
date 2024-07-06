@@ -4,7 +4,6 @@ import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import { dir } from "i18next"
-import { Metadata } from "next"
 import { Prompt } from "next/font/google"
 import localFont from "next/font/local"
 
@@ -39,10 +38,6 @@ const prompt = Prompt({
   subsets: ["thai"],
   display: "swap",
 })
-
-export const metadata: Metadata = {
-  title: "Receptori",
-}
 
 async function RootLayout({
   children,

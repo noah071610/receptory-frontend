@@ -1,10 +1,7 @@
 import { _url, thumbnailUrl } from "@/config"
 import LoginPage from "@/containers/login-page"
-import style from "@/containers/login-page/style.module.scss"
 import { ssrTranslation } from "@/i18n"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
-import cs from "classnames/bind"
-const cx = cs.bind(style)
 
 async function getLang() {
   return await getPreferredLanguage()

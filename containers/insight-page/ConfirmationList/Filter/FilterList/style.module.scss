@@ -4,7 +4,7 @@
   &.divide {
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
+    @include border-bottom;
   }
   .sort-list {
     width: 100%;
@@ -38,9 +38,8 @@
 }
 
 .date-time-filter {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  margin-top: 6px;
+  @include grid-fr-2(6px);
   input {
     padding: 8px 12px;
     font-size: 14px;

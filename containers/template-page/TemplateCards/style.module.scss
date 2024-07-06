@@ -30,9 +30,7 @@
 
     .label {
       width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @include flex-between;
       background-color: var(--blue);
       border-radius: 4px;
       padding: 8px;
@@ -68,8 +66,7 @@
       padding: 10px;
       border-radius: 4px;
       background-color: var(--white);
-      display: flex;
-      flex-direction: column;
+      @include flex-col;
       justify-content: space-between;
       .title {
         h2 {

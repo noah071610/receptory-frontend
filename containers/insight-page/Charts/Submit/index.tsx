@@ -58,6 +58,7 @@ const SubmitChart = ({ data, initialTarget }: { data: DateAnalyserType; initialT
           startQuery: filterDate,
           endQuery: filterDate,
           type: "createdAt",
+          isAnyDateOrAnytime: false,
         })
         setIsFilterUpdate(true)
       }

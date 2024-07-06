@@ -3,7 +3,7 @@
 .search {
   position: sticky;
   top: 0;
-  padding: 16px;
+  @include p-16;
   background-color: var(--white);
   margin-bottom: 30px;
   overflow: hidden;

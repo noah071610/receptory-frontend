@@ -13,8 +13,7 @@
 
 .options {
   margin-top: 15px;
-  display: flex;
-  flex-direction: column;
+  @include flex-col;
   gap: 10px;
 }
 
@@ -38,9 +37,7 @@
 .date-picker {
   .header {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-between;
     padding: 10px;
     margin-bottom: 5px;
     p {

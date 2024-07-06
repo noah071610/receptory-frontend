@@ -10,11 +10,7 @@
   }
 
   .title {
-    width: auto;
-    display: flex;
-    gap: 3px;
-    align-items: flex-end;
-    margin-bottom: 7px;
+    @include input-title;
     h2 {
       font-size: 15px;
     }
@@ -25,9 +21,7 @@
     width: 100%;
     padding: 14px 0 14px 12px;
     border-radius: 5px;
-    font-size: 16px;
-    line-height: 1.2;
-    letter-spacing: 1px;
+    @include font-16;
     margin-bottom: 10px;
     @include border;
 
@@ -50,8 +44,7 @@
   button {
     @include btn-submit-style;
     span {
-      font-size: 16px;
-      font-weight: 600;
+      @include font-bold;
     }
   }
 }

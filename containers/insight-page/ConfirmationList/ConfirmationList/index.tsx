@@ -32,7 +32,7 @@ const Confirmation = ({ confirmation }: { confirmation: AnalyserConfirmation }) 
     if (!selected?.length) return []
     return selected.map(({ value, type, title }, i) => {
       let text = value
-        .map((v) => (type === "calendar" ? stringToDate(v.text, undefined) : v.text))
+        .map((v) => (type === "calendar" && v.key !== "anyDate" ? stringToDate(v.text, undefined) : v.text))
         .join(type === "select" ? " , " : " ~ ")
       if (!hasString(text)) text = "empty"
       return {

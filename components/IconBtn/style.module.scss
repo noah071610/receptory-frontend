@@ -7,15 +7,13 @@
 .icon {
   border-radius: 100%;
   @include flex;
-  width: 30px;
-  height: 30px;
+  @include wh-30;
   svg {
     font-size: 17px;
     color: var(--gray);
   }
   @include mobile {
-    width: 35px;
-    height: 35px;
+    @include wh-35;
     svg {
       font-size: 22px;
     }

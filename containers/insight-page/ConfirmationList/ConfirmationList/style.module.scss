@@ -39,14 +39,12 @@
 }
 
 .opener {
-  position: absolute;
-  top: 50%;
+  @include absolute-y;
   right: 10px;
   width: 32px;
   height: 32px;
   background-color: var(--gray-soft);
   border-radius: 100%;
-  transform: translateY(-50%);
   @include flex;
   svg {
     font-size: 13px;

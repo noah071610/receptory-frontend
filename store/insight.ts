@@ -6,6 +6,7 @@ export interface EditStates {
   isFilterUpdate: boolean
   curFilter: {
     type: string
+    isAnyDateOrAnytime: boolean
     startQuery: string
     endQuery: string
   }
@@ -17,9 +18,15 @@ export interface EditStates {
 }
 
 type Actions = {
-  setCurFilter: ({ key, payload }: { key: "type" | "startQuery" | "endQuery"; payload: string }) => void
+  setCurFilter: ({
+    key,
+    payload,
+  }: {
+    key: "type" | "startQuery" | "endQuery" | "isAnyDateOrAnytime"
+    payload: any
+  }) => void
   setCurSort: ({ key, payload }: { key: "sort" | "orderby"; payload: string }) => void
-  setCurFilterAll: (data: { type: string; startQuery: string; endQuery: string }) => void
+  setCurFilterAll: (data: { type: string; startQuery: string; endQuery: string; isAnyDateOrAnytime: boolean }) => void
   setCurSortAll: (data: { sort: string; orderby: string }) => void
   setSearchInput: (str: string) => void
   setIsFilterUpdate: (b: boolean) => void
@@ -31,6 +38,7 @@ export const _useInsightStore = create<EditStates & Actions>()(
     curFilter: {
       type: "none",
       startQuery: "",
+      isAnyDateOrAnytime: false,
       endQuery: "",
     },
     curSort: {
@@ -42,7 +50,7 @@ export const _useInsightStore = create<EditStates & Actions>()(
     // SET
     setCurFilter: ({ key, payload }) =>
       set((origin) => {
-        origin.curFilter[key] = payload
+        origin.curFilter[key] = payload as never
       }),
     setCurSort: ({ key, payload }) =>
       set((origin) => {

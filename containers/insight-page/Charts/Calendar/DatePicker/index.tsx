@@ -39,6 +39,7 @@ export const CalenderComponent: FC<CalendarProps> = ({ calendar }) => {
         startQuery: dateToString(date),
         endQuery: "",
         type: "calendar",
+        isAnyDateOrAnytime: false,
       })
       setIsFilterUpdate(true)
     }

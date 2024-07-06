@@ -16,5 +16,9 @@
   "time": "Hour-based",
   "select": "Select List Statistics",
   "choices": "Multiple Choice Statistics",
-  "defaultDescription": "No Description"
+  "defaultDescription": "No Description",
+  "anyDate": "Any Date",
+  "anytime": "Anytime",
+  "specificTime": "Select Time",
+  "specificDate": "Select Date"
 }

@@ -25,8 +25,7 @@
     div[data-type="selected"] {
       @include center;
       @include flex;
-      width: 35px;
-      height: 35px;
+      @include wh-35;
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 100%;
       svg {
@@ -38,9 +37,7 @@
 }
 
 .thumb-list-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  @include grid-fr-2(4px);
 }
 
 .basic-list-wrapper {

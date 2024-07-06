@@ -26,7 +26,7 @@ function PageConfirm({ section, isTemplate }: { section: SectionType; isTemplate
     if (!selected?.length) return []
     return selected.map(({ value, type, title }, i) => {
       let text = value
-        .map((v) => (type === "calendar" ? stringToDate(v.text, pageLang ?? undefined) : v.text))
+        .map((v) => (type === "calendar" && v.key !== "anyDate" ? stringToDate(v.text, pageLang ?? undefined) : v.text))
         .join(type === "select" ? " , " : " ~ ")
       if (!hasString(text)) text = "empty"
       return {

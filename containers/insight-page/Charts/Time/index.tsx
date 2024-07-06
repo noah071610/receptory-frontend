@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
+const TimeChart = ({ anytimeCount, data }: { anytimeCount: number; data: TimeAnalyserType }) => {
   const { t } = useTranslation(["insight-page"])
 
   const isEmpty = [...data.AM, ...data.PM].reduce((acc, cur) => acc + cur, 0) === 0
@@ -18,6 +18,17 @@ const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
       type: "time",
       startQuery: start,
       endQuery: end,
+      isAnyDateOrAnytime: false,
+    })
+    setIsFilterUpdate(true)
+  }
+
+  const onClickAnytime = () => {
+    setCurFilterAll({
+      type: "time",
+      startQuery: "00:00",
+      endQuery: "00:00",
+      isAnyDateOrAnytime: true,
     })
     setIsFilterUpdate(true)
   }
@@ -26,7 +37,7 @@ const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
       <h2>
         <span>{t("timeTitle")}</span>
       </h2>
-      {!isEmpty ? (
+      {!isEmpty || anytimeCount > 0 ? (
         <>
           <div className={cx("chart-time-inner")}>
             <div className={cx("chart-time")}>
@@ -82,6 +93,21 @@ const TimeChart = ({ data }: { data: TimeAnalyserType }) => {
               </div>
             </div>
           </div>
+
+          {anytimeCount > 0 && (
+            <div className={cx("anytime-wrapper")}>
+              <button onClick={onClickAnytime}>
+                <div className={cx("circle")}></div>
+                <div className={cx("anytime-text")}>
+                  <span>
+                    {t("anytime")}
+                    {" : "}
+                  </span>
+                  <span>{anytimeCount}</span>
+                </div>
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className={cx("no-list")}>

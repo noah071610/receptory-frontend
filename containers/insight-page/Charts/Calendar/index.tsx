@@ -1,8 +1,9 @@
 "use client"
 
+import { useInsightStore } from "@/store/insight"
 import { useMainStore } from "@/store/main"
 import { DateAnalyserType } from "@/types/Insight"
-import { setDateFormat } from "@/utils/helpers/setDate"
+import { dateToString, setDateFormat } from "@/utils/helpers/setDate"
 import { DatePickerStateProvider } from "@rehookify/datepicker"
 import cs from "classnames/bind"
 import { useCallback, useState } from "react"
@@ -13,9 +14,18 @@ import { CalenderMain } from "./DatePicker"
 import style from "./style.module.scss"
 const cx = cs.bind(style)
 
-const CalendarChart = ({ data, initialTarget }: { data: DateAnalyserType; initialTarget?: string }) => {
+const CalendarChart = ({
+  anyDateCount,
+  data,
+  initialTarget,
+}: {
+  anyDateCount: number
+  data: DateAnalyserType
+  initialTarget?: string
+}) => {
   const { t } = useTranslation(["insight-page"])
   const { pageLang } = useMainStore(["pageLang"])
+  const { setCurFilterAll, setIsFilterUpdate } = useInsightStore(["setCurFilterAll", "setIsFilterUpdate"])
 
   const yearMonthArr = Object.keys(data)
   const [curTarget, setCurTarget] = useState<null | string>(initialTarget ?? null)
@@ -28,12 +38,23 @@ const CalendarChart = ({ data, initialTarget }: { data: DateAnalyserType; initia
     [data]
   )
 
+  const onClickAnyDate = () => {
+    const date = new Date()
+    setCurFilterAll({
+      startQuery: dateToString(date),
+      endQuery: dateToString(date),
+      type: "calendar",
+      isAnyDateOrAnytime: true,
+    })
+    setIsFilterUpdate(true)
+  }
+
   return (
     <div className={cx("chart-wrapper")}>
       <h2>
         <span>{t("calendarTitle")}</span>
       </h2>
-      {initialTarget ? (
+      {initialTarget || anyDateCount > 0 ? (
         <>
           <Swiper className={cx("slider")} spaceBetween={5} slidesPerView={"auto"} modules={[FreeMode]}>
             {yearMonthArr.map((yearMonth) => {
@@ -63,6 +84,20 @@ const CalendarChart = ({ data, initialTarget }: { data: DateAnalyserType; initia
               </DatePickerStateProvider>
             </div>
           </div>
+          {anyDateCount > 0 && (
+            <div className={cx("anyDate-wrapper")}>
+              <button onClick={onClickAnyDate}>
+                <div className={cx("circle")}></div>
+                <div className={cx("anyDate-text")}>
+                  <span>
+                    {t("anyDate")}
+                    {" : "}
+                  </span>
+                  <span>{anyDateCount}</span>
+                </div>
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className={cx("no-list")}>

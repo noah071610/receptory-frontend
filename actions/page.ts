@@ -1,4 +1,4 @@
-import { API } from "@/config"
+import { API, checkToken } from "@/config"
 import { Langs, SelectedType } from "@/types/Main"
 import { SaveContentType } from "@/types/Page"
 import { convertContent } from "@/utils/editor/saveContentFromEditor"
@@ -49,7 +49,7 @@ export async function findReservation(data: { pageId: string; confirmId: string;
 export async function deploy({ content, pageId, lang }: { content: SaveContentType; pageId: string; lang: Langs }) {
   const data = convertContent({ content, pageId, lang })
   await refreshUser()
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     const response = await API.post(`/page`, data)
 
     return response.data
@@ -57,7 +57,7 @@ export async function deploy({ content, pageId, lang }: { content: SaveContentTy
 }
 
 export async function inactivePage({ pageId }: { pageId: string }) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     const response = await API.patch(`/page/inactive?pageId=${pageId}`)
 
     return response.data
@@ -65,7 +65,7 @@ export async function inactivePage({ pageId }: { pageId: string }) {
 }
 
 export async function changeLanguage({ pageId, lang }: { pageId: string; lang: Langs }) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     const response = await API.patch(`/page/lang?pageId=${pageId}&lang=${lang}`)
 
     return response.data

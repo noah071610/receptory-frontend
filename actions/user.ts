@@ -1,8 +1,8 @@
-import { API } from "@/config"
+import { API, checkToken } from "@/config"
 import { UserType } from "@/types/User"
 
 export async function getUser() {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     // 완벽. 가져와
     const response = await API.get(`/auth`)
 
@@ -15,7 +15,7 @@ export async function getUser() {
 }
 
 export async function profileChange(data: { userName: string; color: string }) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     // 완벽. 가져와
     const response = await API.post(`/auth/profile`, data)
 
@@ -54,7 +54,7 @@ export async function login(user: { email: string; password: string }) {
 }
 
 export async function deleteUser(feedback: string) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     // 완벽. 가져와
     const response = await API.delete(`/auth?feedback=${feedback}`)
 
@@ -63,7 +63,7 @@ export async function deleteUser(feedback: string) {
 }
 
 export async function logout() {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     // 완벽. 가져와
     const response = await API.post(`/auth/logout`)
 

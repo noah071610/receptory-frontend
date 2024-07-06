@@ -16,8 +16,7 @@
 .option-time-picker {
   width: 100%;
   max-width: 300px;
-  display: flex;
-  align-items: center;
+  @include flex-y;
   justify-content: space-around;
   gap: 7px;
   margin-bottom: 30px;
@@ -53,8 +52,7 @@
   }
 
   .inner {
-    display: flex;
-    align-items: center;
+    @include flex-y;
     justify-content: space-around;
     gap: 7px;
     background-color: var(--gray-softest);

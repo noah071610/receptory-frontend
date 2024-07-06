@@ -21,8 +21,7 @@
       @include flex-y;
       gap: 7px;
       img {
-        width: 30px;
-        height: 30px;
+        @include wh-30;
       }
       span {
         font-size: 16px;
@@ -33,13 +32,11 @@
     }
   }
   .nav {
-    display: flex;
+    @include flex-between;
     height: 100%;
-    justify-content: space-between;
-    align-items: center;
   }
 
-  border-bottom: 1px solid var(--border);
+  @include border-bottom;
   background-color: var(--white);
   transform: translateY(-48px);
   transition: 300ms all;
@@ -90,8 +87,7 @@
   }
 
   button {
-    width: 100%;
-    height: 100%;
+    @include wh-full;
     @include flex;
     padding: 7px 20px;
     span {
@@ -131,8 +127,7 @@
     max-width: 130px;
     height: 32px;
     button {
-      width: 100%;
-      height: 100%;
+      @include wh-full;
       @include flex;
       border-radius: 20px;
       span {

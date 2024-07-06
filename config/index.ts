@@ -31,6 +31,15 @@ export const API = axios.create({
   },
 })
 
+export const API_AUTH = axios.create({
+  withCredentials: true,
+  baseURL: _url.server,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+})
+
 API.interceptors.response.use(
   (response) => {
     return response
@@ -39,6 +48,8 @@ API.interceptors.response.use(
     return Promise.reject(error?.response?.data ? error.response.data : { msg: "no", data: undefined })
   }
 )
+
+export const checkToken = () => API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")
 
 export const queryKey = {
   user: ["user"],

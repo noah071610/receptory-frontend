@@ -1,6 +1,7 @@
+@import "@/styles/variables.scss";
+
 .spinner {
-  width: 36px;
-  height: 36px;
+  @include wh-35;
   display: grid;
   animation: spinner 4s infinite;
   &.isFull {

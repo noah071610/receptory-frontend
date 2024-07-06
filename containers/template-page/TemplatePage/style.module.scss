@@ -32,10 +32,9 @@
     }
   }
   .bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    @include grid-fr-3;
     background-color: var(--white);
-    border-top: 1px solid var(--border);
+    @include border-top;
     button {
       padding: 15px;
       @include flex(true);

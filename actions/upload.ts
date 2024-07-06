@@ -1,7 +1,7 @@
-import { API } from "@/config"
+import { checkToken } from "@/config"
 
 export async function uploadImages(formData: FormData): Promise<string[] | undefined> {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     // 완벽. 가져와
     // const response = await axios.post(`/upload/images`, formData, {
     //   withCredentials: true,

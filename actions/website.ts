@@ -1,4 +1,4 @@
-import { API } from "@/config"
+import { API, checkToken } from "@/config"
 import { Langs } from "@/types/Main"
 
 export async function getTemplates(lang: Langs) {
@@ -8,7 +8,7 @@ export async function getTemplates(lang: Langs) {
 }
 
 export async function getTemplateText(lang: Langs, type: "template") {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     try {
       const response = await API.get(`/website/template-text?lang=${lang}&type=${type}`)
 
@@ -20,7 +20,7 @@ export async function getTemplateText(lang: Langs, type: "template") {
 }
 
 export async function setTemplate(data: { text: string; lang: Langs }) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     try {
       const response = await API.post(`/website/template`, data)
 
@@ -32,7 +32,7 @@ export async function setTemplate(data: { text: string; lang: Langs }) {
 }
 
 export async function selectTemplate(templateId: string) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     try {
       const response = await API.post(`/website/template/use?templateId=${templateId}`)
 

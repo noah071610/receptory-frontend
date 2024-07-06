@@ -9,21 +9,19 @@
   width: var(--preview-width);
   height: 100vh; // check :
   border: 2px dotted var(--border);
-  padding: 16px;
+  @include p-16;
   padding-top: 50px;
   background-color: var(--white);
   @include medium {
+    @include t-l-0;
     @include z-index(preview);
     padding: 0;
-    top: 0;
-    left: 0;
     width: 100%;
     transform: translate(100%, 0);
     .phone {
       border: none;
       border-radius: 0px;
-      width: 100%;
-      height: 100%;
+      @include wh-full;
     }
     &.active {
       transform: translate(0, 0);
@@ -32,15 +30,13 @@
 }
 
 .phone {
-  width: 100%;
-  height: 100%;
+  @include wh-full;
   background-color: var(--white);
   position: relative;
 
   .submit {
     width: 100%;
-    display: flex;
-    justify-content: center;
+    @include flex-x;
     margin-top: 40px;
     button {
       @include btn-submit-style;

@@ -1,10 +1,7 @@
-import { API } from "@/config"
-import { Cookies } from "react-cookie"
-
-const cookies = new Cookies()
+import { API, checkToken } from "@/config"
 
 export async function getInsight(pageId: string) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     try {
       const response = await API.get(`/insight?pageId=${pageId}`)
 
@@ -23,13 +20,14 @@ export async function getConfirmations(data: {
     type: string
     startQuery: string
     endQuery: string
+    isAnyDateOrAnytime: boolean
   }
   curSort: {
     orderby: string
     sort: string
   }
 }) {
-  if (API.defaults.headers.common["Authorization"]?.toString().includes("Bearer ")) {
+  if (checkToken()) {
     try {
       const response = await API.post(`/insight/confirmations`, data)
 
