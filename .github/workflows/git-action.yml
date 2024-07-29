@@ -11,12 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22.x"
-      - run: npm ci
-      - run: npm run test
+      # - name: Use Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: "22.x"
+      # - run: npm ci
+      # - run: npm run test 테스트 도입 예정 (일단 백엔드만)
 
       - name: Login Dockerhub
         env:
