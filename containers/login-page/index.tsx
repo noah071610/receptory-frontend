@@ -24,8 +24,6 @@ export default function LoginPage({ lang }: { lang: Langs }) {
   const templateId = searchParams.get("templateId")
   const { push } = useRouter()
 
-  console.log(`test ${process.env.NEXT_PUBLIC_DOMAIN}`)
-
   const onClickSocialLogin = async (provider: Providers) => {
     setIsLoading(true)
     const newWindow = window.open(`${_url.server}/auth/${provider}`, "_blank", "width=600,height=400")
