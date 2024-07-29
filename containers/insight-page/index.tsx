@@ -64,8 +64,6 @@ const InsightPage = ({ lang }: { lang: Langs }) => {
     enabled: !!user?.userId,
   })
 
-  console.log(pageData)
-
   const { isSelectDisplay, isCalendarDisplay, isTimeDisplay, isChoicesDisplay, formSections } = useMemo(() => {
     if (!pageData?.content?.formSections) return {}
     const formSections = pageData.content.formSections.filter((v) =>

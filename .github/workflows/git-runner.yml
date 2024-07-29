@@ -1,0 +1,21 @@
+name: Docker ec2 CD
+
+on:
+  workflow_run:
+    workflows: ["Docker Image CI"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: [self-hosted, label-go]
+
+    steps:
+      - name: Pull Docker image
+        run: sudo docker pull noah071610/receptori-frontend:latest
+
+      - name: Delete Old docker container
+        run: sudo docker rm -f receptori-frontend-container || true
+
+      - name: Run Docker Container
+        run: sudo docker run -d -p 3000:3000 --name receptori-frontend-container noah071610/receptori-frontend

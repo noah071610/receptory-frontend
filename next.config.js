@@ -9,6 +9,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 module.exports = withBundleAnalyzer({
   compress: true,
+  output: "standalone",
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
