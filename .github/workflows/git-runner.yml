@@ -18,4 +18,4 @@ jobs:
         run: sudo docker rm -f receptori-frontend-container || true
 
       - name: Run Docker Container
-        run: sudo docker run -d -p 3000:3000 --name receptori-frontend-container noah071610/receptori-frontend
+        run: sudo docker run -d -p 3000:3000 --env-file ./.env --name receptori-frontend-container noah071610/receptori-frontend
