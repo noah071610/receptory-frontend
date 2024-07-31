@@ -25,10 +25,10 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build the Docker image
-        run: docker build -t receptori-client .
+        run: docker build -t receptori-client-env .
 
       - name: tagging
-        run: docker tag receptori-client:latest noah071610/receptori-client:latest
+        run: docker tag receptori-client-env:latest noah071610/receptori-client-env:latest
 
       - name: Push to Dockerhub
-        run: docker push noah071610/receptori-client:latest
+        run: docker push noah071610/receptori-client-env:latest

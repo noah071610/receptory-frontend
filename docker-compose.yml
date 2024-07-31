@@ -2,19 +2,16 @@ version: "3"
 
 services:
   web:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    container_name: receptori-client-container
-    image: "noah071610/receptori-client"
+    container_name: receptori-client-env-container
+    image: "noah071610/receptori-client-env:latest"
     ports:
       - 3000:3000
     environment:
-      - NEXT_PUBLIC_COOKIE_NAME=${NEXT_PUBLIC_COOKIE_NAME}
-      - NEXT_PUBLIC_BUCKET_NAME=${NEXT_PUBLIC_BUCKET_NAME}
-      - NEXT_PUBLIC_ADMIN_ID=${NEXT_PUBLIC_ADMIN_ID}
-      - NEXT_PUBLIC_PORT=${NEXT_PUBLIC_PORT}
-      - NEXT_PUBLIC_SERVER_PORT=${NEXT_PUBLIC_SERVER_PORT}
-      - NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN}
-      - IMAGE_NAME=${IMAGE_NAME}
-      - NEXT_PUBLIC_AMPLITUDE=${NEXT_PUBLIC_AMPLITUDE}
+      NEXT_PUBLIC_COOKIE_NAME: ${NEXT_PUBLIC_COOKIE_NAME}
+      NEXT_PUBLIC_BUCKET_NAME: ${NEXT_PUBLIC_BUCKET_NAME}
+      NEXT_PUBLIC_ADMIN_ID: ${NEXT_PUBLIC_ADMIN_ID}
+      NEXT_PUBLIC_PORT: ${NEXT_PUBLIC_PORT}
+      NEXT_PUBLIC_SERVER_PORT: ${NEXT_PUBLIC_SERVER_PORT}
+      NEXT_PUBLIC_DOMAIN: ${NEXT_PUBLIC_DOMAIN}
+      IMAGE_NAME: ${IMAGE_NAME}
+      NEXT_PUBLIC_AMPLITUDE: ${NEXT_PUBLIC_AMPLITUDE}
