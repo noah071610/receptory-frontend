@@ -26,11 +26,11 @@ jobs:
 
       - name: Docker remove container
         run: |
-          sudo docker stop receptori-client-container
-          sudo docker rm receptori-client-container
-          sudo docker rmi noah071610/receptori-client:latest
+          sudo docker stop receptori-client-container || true
+          sudo docker rm receptori-client-container || true
+          sudo docker rmi noah071610/receptori-client:latest || true
 
       - name: Docker pull and Compose
         run: |
           sudo docker pull noah071610/receptori-client:latest
-          sudo docker-compose up -d
+          sudo docker compose up -d
