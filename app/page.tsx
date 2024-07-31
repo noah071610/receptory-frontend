@@ -1,4 +1,5 @@
 import { _url, thumbnailUrl } from "@/config"
+import LoginPage from "@/containers/login-page"
 import { ssrTranslation } from "@/i18n"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
 
@@ -49,8 +50,5 @@ export async function generateMetadata() {
 
 export default async function LoginPageLayout() {
   const lang = await getLang()
-  {
-    /* <LoginPage lang={lang} /> */
-  }
-  return <h1>hello world</h1>
+  return <LoginPage lang={lang} />
 }

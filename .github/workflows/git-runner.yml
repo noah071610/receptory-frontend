@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: [self-hosted, label-go]
 
+    env:
+      NEXT_PUBLIC_DOMAIN: ${{secrets.NEXT_PUBLIC_DOMAIN}}
+
     steps:
       - name: Pull Docker image
         run: sudo docker pull noah071610/receptori-frontend:latest
@@ -18,4 +21,4 @@ jobs:
         run: sudo docker rm -f receptori-frontend-container || true
 
       - name: Run Docker Container
-        run: sudo docker run -d -p 3000:3000 --env-file ./.env --name receptori-frontend-container noah071610/receptori-frontend
+        run: sudo docker run -d -p 3000:3000 --name receptori-frontend-container noah071610/receptori-frontend
