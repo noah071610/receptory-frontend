@@ -18,6 +18,19 @@ jobs:
       # - run: npm ci
       # - run: npm run test 테스트 도입 예정 (일단 백엔드만)
 
+      - name: Set .env for configuration
+        run: |
+          touch ./.env
+          echo "NEXT_PUBLIC_COOKIE_NAME=${{ secrets.NEXT_PUBLIC_COOKIE_NAME }}" >> ./.env
+          echo "NEXT_PUBLIC_BUCKET_NAME=${{ secrets.NEXT_PUBLIC_BUCKET_NAME }}" >> ./.env
+          echo "NEXT_PUBLIC_ADMIN_ID=${{ secrets.NEXT_PUBLIC_ADMIN_ID }}" >> ./.env
+          echo "NEXT_PUBLIC_PORT=${{ secrets.NEXT_PUBLIC_PORT }}" >> ./.env
+          echo "NEXT_PUBLIC_SERVER_PORT=${{ secrets.NEXT_PUBLIC_SERVER_PORT }}" >> ./.env
+          echo "NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }}" >> ./.env
+          echo "IMAGE_NAME=${{ secrets.IMAGE_NAME }}" >> ./.env
+          echo "NEXT_PUBLIC_AMPLITUDE=${{ secrets.NEXT_PUBLIC_AMPLITUDE }}" >> ./.env
+        shell: bash
+
       - name: Login Dockerhub
         env:
           DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
