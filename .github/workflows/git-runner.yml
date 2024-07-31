@@ -1,14 +1,10 @@
 name: Docker ec2 CD
 
 on:
-  push:
-    branches: ["main"]
-
-# on:
-#   workflow_run:
-#     workflows: ["Docker Image CI"]
-#     types:
-#       - completed
+  workflow_run:
+    workflows: ["Docker Image CI"]
+    types:
+      - completed
 
 jobs:
   build:
