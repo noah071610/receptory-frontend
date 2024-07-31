@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-sync-scripts */
+import { amplitude } from "@/config/amplitude"
 import Init from "@/containers/global/Init"
 import "@/styles/global.scss"
 import getPreferredLanguage from "@/utils/helpers/getPreferredLanguage"
@@ -45,12 +47,20 @@ async function RootLayout({
   children: React.ReactNode
 }>) {
   const lang = await getPreferredLanguage()
-
   return (
     <html className={lang === "th" ? prompt.className : pretendard.className} lang={lang} dir={dir(lang)}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <meta name="keywords" content="form, survey, marketing, vote, insight, analytics, chart" />
+
+        <script src="https://cdn.amplitude.com/libs/analytics-browser-2.7.4-min.js.gz"></script>
+        <script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.6.8-min.js.gz"></script>
+        <script src="https://cdn.amplitude.com/libs/plugin-autocapture-browser-0.9.0-min.js.gz"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: amplitude,
+          }}
+        ></script>
       </head>
       <body suppressHydrationWarning={true}>
         <Init>

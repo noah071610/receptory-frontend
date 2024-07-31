@@ -10,14 +10,16 @@ const Init: React.FC<PropsWithChildren> = ({ children }) => {
   const [queryClientStore] = useState(() => new QueryClient(queryClientConfig))
 
   return (
-    <CookiesProvider>
-      <QueryClientProvider client={queryClientStore}>
-        <Refresh />
-        {children}
-        {/* <ReactQueryDevtools /> */}
-        <Toaster />
-      </QueryClientProvider>
-    </CookiesProvider>
+    <>
+      <CookiesProvider>
+        <QueryClientProvider client={queryClientStore}>
+          <Refresh />
+          {children}
+          {/* <ReactQueryDevtools /> */}
+          <Toaster />
+        </QueryClientProvider>
+      </CookiesProvider>
+    </>
   )
 }
 

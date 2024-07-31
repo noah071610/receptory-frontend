@@ -1,0 +1,1 @@
+export const amplitude = `window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1})).promise.then(function() {window.amplitude.add(window.amplitudeAutocapturePlugin.plugin());window.amplitude.init('${process.env.NEXT_PUBLIC_AMPLITUDE}');});`

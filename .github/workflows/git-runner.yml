@@ -18,6 +18,7 @@ jobs:
       NEXT_PUBLIC_SERVER_PORT: ${{secrets.NEXT_PUBLIC_SERVER_PORT}}
       NEXT_PUBLIC_DOMAIN: ${{secrets.NEXT_PUBLIC_DOMAIN}}
       IMAGE_NAME: ${{secrets.IMAGE_NAME}}
+      NEXT_PUBLIC_AMPLITUDE: ${{secrets.NEXT_PUBLIC_AMPLITUDE}}
 
     steps:
       - name: Pull Docker image
