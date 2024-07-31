@@ -1,11 +1,5 @@
 FROM node:18-alpine AS base
 
-# ⭐ 'ARG' 예약어를 통해 인자로 전달 받아야 한다.
-ARG NEXT_PUBLIC_DOMAIN
-
-# ⭐ 'ENV' 예약어를 통해 전달받은 값을 실제 값과 매칭시켜야 한다.
-ENV NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN}
-
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -44,7 +38,7 @@ RUN \
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -66,8 +60,24 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ARG NEXT_PUBLIC_COOKIE_NAME \
+    NEXT_PUBLIC_BUCKET_NAME \
+    NEXT_PUBLIC_ADMIN_ID \
+    NEXT_PUBLIC_PORT \
+    NEXT_PUBLIC_SERVER_PORT \
+    NEXT_PUBLIC_DOMAIN \
+    IMAGE_NAME
+
+ENV PORT=3000 \
+    NEXT_PUBLIC_COOKIE_NAME=${NEXT_PUBLIC_COOKIE_NAME} \
+    NEXT_PUBLIC_BUCKET_NAME=${NEXT_PUBLIC_BUCKET_NAME} \
+    NEXT_PUBLIC_ADMIN_ID=${NEXT_PUBLIC_ADMIN_ID} \
+    NEXT_PUBLIC_PORT=${NEXT_PUBLIC_PORT} \
+    NEXT_PUBLIC_SERVER_PORT=${NEXT_PUBLIC_SERVER_PORT} \
+    NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN} \
+    IMAGE_NAME=${IMAGE_NAME}
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
+# dev -> delete HOSTNAME
 CMD HOSTNAME="0.0.0.0" npx pm2-runtime start 'node server.js' --name receptori
