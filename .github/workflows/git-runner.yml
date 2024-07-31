@@ -10,16 +10,6 @@ jobs:
   build:
     runs-on: [self-hosted, label-go]
 
-    env:
-      NEXT_PUBLIC_COOKIE_NAME: ${{secrets.NEXT_PUBLIC_COOKIE_NAME}}
-      NEXT_PUBLIC_BUCKET_NAME: ${{secrets.NEXT_PUBLIC_BUCKET_NAME}}
-      NEXT_PUBLIC_ADMIN_ID: ${{secrets.NEXT_PUBLIC_ADMIN_ID}}
-      NEXT_PUBLIC_PORT: ${{secrets.NEXT_PUBLIC_PORT}}
-      NEXT_PUBLIC_SERVER_PORT: ${{secrets.NEXT_PUBLIC_SERVER_PORT}}
-      NEXT_PUBLIC_DOMAIN: ${{secrets.NEXT_PUBLIC_DOMAIN}}
-      IMAGE_NAME: ${{secrets.IMAGE_NAME}}
-      NEXT_PUBLIC_AMPLITUDE: ${{secrets.NEXT_PUBLIC_AMPLITUDE}}
-
     steps:
       - name: Pull Docker image
         run: sudo docker pull noah071610/receptori-frontend:latest
