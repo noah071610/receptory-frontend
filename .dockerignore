@@ -5,6 +5,3 @@ dist
 .next
 *.pem
 *.txt
-
-
-docker-compose.yml
