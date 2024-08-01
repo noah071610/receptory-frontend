@@ -25,7 +25,7 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build the Docker image
-        run: docker build \
+        run: docker buildx build \
           --build-arg ENV_MODE=production \
           --build-arg NEXT_PUBLIC_COOKIE_NAME=${{secrets.NEXT_PUBLIC_COOKIE_NAME}} \
           --build-arg NEXT_PUBLIC_BUCKET_NAME=${{secrets.NEXT_PUBLIC_BUCKET_NAME}} \
