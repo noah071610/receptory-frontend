@@ -37,15 +37,15 @@ jobs:
           NEXT_PUBLIC_AMPLITUDE: ${{secrets.NEXT_PUBLIC_AMPLITUDE}}
         run: docker build \
           -t receptori-frontend . \
-          --build-arg ENV_MODE=$ENV_MODE \
-          --build-arg NEXT_PUBLIC_COOKIE_NAME=$NEXT_PUBLIC_COOKIE_NAME \
-          --build-arg NEXT_PUBLIC_BUCKET_NAME=$NEXT_PUBLIC_BUCKET_NAME \
-          --build-arg NEXT_PUBLIC_ADMIN_ID=$NEXT_PUBLIC_ADMIN_ID \
-          --build-arg NEXT_PUBLIC_PORT=$NEXT_PUBLIC_PORT \
-          --build-arg NEXT_PUBLIC_SERVER_PORT=$NEXT_PUBLIC_SERVER_PORT \
-          --build-arg NEXT_PUBLIC_DOMAIN=$NEXT_PUBLIC_DOMAIN \
-          --build-arg IMAGE_NAME=$IMAGE_NAME \
-          --build-arg NEXT_PUBLIC_AMPLITUDE=$NEXT_PUBLIC_AMPLITUDE
+          --build-arg ENV_MODE="$ENV_MODE" \
+          --build-arg NEXT_PUBLIC_COOKIE_NAME="$NEXT_PUBLIC_COOKIE_NAME" \
+          --build-arg NEXT_PUBLIC_BUCKET_NAME="$NEXT_PUBLIC_BUCKET_NAME" \
+          --build-arg NEXT_PUBLIC_ADMIN_ID="$NEXT_PUBLIC_ADMIN_ID" \
+          --build-arg NEXT_PUBLIC_PORT="$NEXT_PUBLIC_PORT" \
+          --build-arg NEXT_PUBLIC_SERVER_PORT="$NEXT_PUBLIC_SERVER_PORT" \
+          --build-arg NEXT_PUBLIC_DOMAIN="$NEXT_PUBLIC_DOMAIN" \
+          --build-arg IMAGE_NAME="$IMAGE_NAME" \
+          --build-arg NEXT_PUBLIC_AMPLITUDE="$NEXT_PUBLIC_AMPLITUDE"
 
       - name: tagging
         run: docker tag receptori-frontend:latest noah071610/receptori-frontend:latest
