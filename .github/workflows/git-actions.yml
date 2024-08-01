@@ -25,7 +25,7 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build the Docker image
-        run: docker buildx build \
+        run: docker build -t receptori-frontend . \
           --build-arg ENV_MODE=production \
           --build-arg NEXT_PUBLIC_COOKIE_NAME=${{secrets.NEXT_PUBLIC_COOKIE_NAME}} \
           --build-arg NEXT_PUBLIC_BUCKET_NAME=${{secrets.NEXT_PUBLIC_BUCKET_NAME}} \
@@ -34,8 +34,8 @@ jobs:
           --build-arg NEXT_PUBLIC_SERVER_PORT=${{secrets.NEXT_PUBLIC_SERVER_PORT}} \
           --build-arg NEXT_PUBLIC_DOMAIN=${{secrets.NEXT_PUBLIC_DOMAIN}} \
           --build-arg IMAGE_NAME=${{secrets.IMAGE_NAME}} \
-          --build-arg NEXT_PUBLIC_AMPLITUDE=${{secrets.NEXT_PUBLIC_AMPLITUDE}} \
-          -t receptori-frontend .
+          --build-arg NEXT_PUBLIC_AMPLITUDE=${{secrets.NEXT_PUBLIC_AMPLITUDE}}
+
       - name: tagging
         run: docker tag receptori-frontend:latest noah071610/receptori-frontend:latest
 
