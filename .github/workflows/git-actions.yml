@@ -25,7 +25,28 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build the Docker image
-        run: docker build -t receptori-frontend .
+        env:
+          ENV_MODE: production
+          NEXT_PUBLIC_COOKIE_NAME: ${{secrets.NEXT_PUBLIC_COOKIE_NAME}}
+          NEXT_PUBLIC_BUCKET_NAME: ${{secrets.NEXT_PUBLIC_BUCKET_NAME}}
+          NEXT_PUBLIC_ADMIN_ID: ${{secrets.NEXT_PUBLIC_ADMIN_ID}}
+          NEXT_PUBLIC_PORT: ${{secrets.NEXT_PUBLIC_PORT}}
+          NEXT_PUBLIC_SERVER_PORT: ${{secrets.NEXT_PUBLIC_SERVER_PORT}}
+          NEXT_PUBLIC_DOMAIN: ${{secrets.NEXT_PUBLIC_DOMAIN}}
+          IMAGE_NAME: ${{secrets.IMAGE_NAME}}
+          NEXT_PUBLIC_AMPLITUDE: ${{secrets.NEXT_PUBLIC_AMPLITUDE}}
+        run: docker build \
+          -t receptori-frontend \
+          --build-arg ENV_MODE=$ENV_MODE \
+          --build-arg NEXT_PUBLIC_COOKIE_NAME=$NEXT_PUBLIC_COOKIE_NAME \
+          --build-arg NEXT_PUBLIC_BUCKET_NAME=$NEXT_PUBLIC_BUCKET_NAME \
+          --build-arg NEXT_PUBLIC_ADMIN_ID=$NEXT_PUBLIC_ADMIN_ID \
+          --build-arg NEXT_PUBLIC_PORT=$NEXT_PUBLIC_PORT \
+          --build-arg NEXT_PUBLIC_SERVER_PORT=$NEXT_PUBLIC_SERVER_PORT \
+          --build-arg NEXT_PUBLIC_DOMAIN=$NEXT_PUBLIC_DOMAIN \
+          --build-arg IMAGE_NAME=$IMAGE_NAME \
+          --build-arg NEXT_PUBLIC_AMPLITUDE=$NEXT_PUBLIC_AMPLITUDE \
+          --no-cache .
 
       - name: tagging
         run: docker tag receptori-frontend:latest noah071610/receptori-frontend:latest
