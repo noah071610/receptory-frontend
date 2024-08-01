@@ -1,17 +1,12 @@
 version: "3"
 
 services:
-  web:
-    container_name: receptori-client-env-container
-    image: "noah071610/receptori-client-env:latest"
+  app:
+    container_name: receptori-frontend-container
+    image: "noah071610/receptori-frontend:latest"
     ports:
       - 3000:3000
+    env_file:
+      - .env
     environment:
-      NEXT_PUBLIC_COOKIE_NAME: ${NEXT_PUBLIC_COOKIE_NAME}
-      NEXT_PUBLIC_BUCKET_NAME: ${NEXT_PUBLIC_BUCKET_NAME}
-      NEXT_PUBLIC_ADMIN_ID: ${NEXT_PUBLIC_ADMIN_ID}
-      NEXT_PUBLIC_PORT: ${NEXT_PUBLIC_PORT}
-      NEXT_PUBLIC_SERVER_PORT: ${NEXT_PUBLIC_SERVER_PORT}
-      NEXT_PUBLIC_DOMAIN: ${NEXT_PUBLIC_DOMAIN}
-      IMAGE_NAME: ${IMAGE_NAME}
-      NEXT_PUBLIC_AMPLITUDE: ${NEXT_PUBLIC_AMPLITUDE}
+      NODE_ENV: production

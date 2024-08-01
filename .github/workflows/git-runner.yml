@@ -13,11 +13,10 @@ jobs:
     steps:
       - name: Docker remove container
         run: |
-          sudo docker stop receptori-client-env-container || true
-          sudo docker rm receptori-client-env-container || true
-          sudo docker rmi noah071610/receptori-client-env:latest || true
+          sudo docker compose down || true
+          sudo docker rmi noah071610/receptori-frontend:latest || true
 
       - name: Docker pull
         run: |
-          sudo docker pull noah071610/receptori-client-env:latest
-          sudo docker run -d -p 3000:3000 --name receptori-client-env-container noah071610/receptori-client-env
+          sudo docker pull noah071610/receptori-frontend:latest
+          sudo docker compose up -d
