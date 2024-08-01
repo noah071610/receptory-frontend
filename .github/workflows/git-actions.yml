@@ -26,7 +26,6 @@ jobs:
 
       - name: Build the Docker image
         env:
-          ENV_MODE: production
           NEXT_PUBLIC_COOKIE_NAME: ${{secrets.NEXT_PUBLIC_COOKIE_NAME}}
           NEXT_PUBLIC_BUCKET_NAME: ${{secrets.NEXT_PUBLIC_BUCKET_NAME}}
           NEXT_PUBLIC_ADMIN_ID: ${{secrets.NEXT_PUBLIC_ADMIN_ID}}
@@ -36,7 +35,6 @@ jobs:
           IMAGE_NAME: ${{secrets.IMAGE_NAME}}
           NEXT_PUBLIC_AMPLITUDE: ${{secrets.NEXT_PUBLIC_AMPLITUDE}}
         run: docker buildx build --platform linux/arm64 -t receptori-frontend . \
-          --build-arg ENV_MODE="$ENV_MODE" \
           --build-arg NEXT_PUBLIC_COOKIE_NAME="$NEXT_PUBLIC_COOKIE_NAME" \
           --build-arg NEXT_PUBLIC_BUCKET_NAME="$NEXT_PUBLIC_BUCKET_NAME" \
           --build-arg NEXT_PUBLIC_ADMIN_ID="$NEXT_PUBLIC_ADMIN_ID" \
